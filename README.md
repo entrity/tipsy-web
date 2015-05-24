@@ -1,12 +1,12 @@
-== README
+## README
 
-=== System dependencies
+### System dependencies
 
 * Ruby 2.2
 * Bower
 * Postgresql
 
-=== How to set up dev env
+### How to set up dev env
 
 1. git clone
 1. copy database.yml.template to database.yml
