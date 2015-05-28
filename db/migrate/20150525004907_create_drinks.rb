@@ -1,0 +1,14 @@
+class CreateDrinks < ActiveRecord::Migration
+  def change
+    create_table :drinks do |t|
+      t.string :name
+      t.integer :abv, limit:2 # alcohol by volume
+      t.text :description
+      t.text :instructions
+      t.float :score # average vote
+      t.integer :vote_ct
+      t.integer :glass_id, limit:2
+    end
+    add_index :drinks, :name
+  end
+end
