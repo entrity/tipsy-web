@@ -8,6 +8,7 @@ class CreateDrinks < ActiveRecord::Migration
       t.float :score # average vote
       t.integer :vote_ct
       t.integer :glass_id, limit:2
+      t.string :color
     end
     add_index :drinks, :name
   end

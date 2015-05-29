@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
 
+  root 'home#home'
+
   get 'sitemap.xml' => 'home#sitemap', defaults:{format: :xml}
 
   resources :drinks
   
   resources :ingredients
-
-  # root 'welcome#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

@@ -1,0 +1,14 @@
+<h1><%= @ingredient.name %></h1>
+<div><%= @ingredient.description %></div>
+<p>
+  50 or fewer randomly selected drinks made with this ingredient:
+  <br>
+  <small>Refresh to see a different list.</small>
+</p>
+<ul>
+  <% @drinks.each do |drink| %>
+    <li>
+      <%= link_to drink.name, url_for(drink) %>
+    </li>
+  <% end %>
+</ul>
