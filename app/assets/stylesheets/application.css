@@ -10,6 +10,19 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require 'angular-ui-select/dist/select.min'
  *= require_tree .
  *= require_self
  */
+
+#fuzzy-finder .ui-select-match::before {
+	font-family: 'FontAwesome';
+	content: '\f002';
+	margin-right: 0.5em;
+}
+#fuzzy-finder ul.ui-select-choices {
+	padding-left: 0;
+}
+#fuzzy-finder .dropdown:not(.open) ul.ui-select-choices {
+	display: none;
+}
