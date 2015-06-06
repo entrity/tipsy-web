@@ -15,20 +15,22 @@ ActiveRecord::Schema.define(version: 20150525005011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "dblink"
 
   create_table "drinks", force: :cascade do |t|
     t.string  "name"
-    t.integer "abv"
+    t.integer "abv",          limit: 2
     t.text    "description"
     t.text    "instructions"
     t.float   "score"
     t.integer "vote_ct"
-    t.integer "glass_id"
+    t.integer "glass_id",     limit: 2
+    t.string  "color",        limit: 16
   end
 
   add_index "drinks", ["name"], name: "index_drinks_on_name", using: :btree
 
-  create_table "drinks_ingredients", force: :cascade do |t|
+  create_table "drinks_ingredients", id: false, force: :cascade do |t|
     t.integer "drink_id"
     t.integer "ingredient_id"
     t.string  "qty"
