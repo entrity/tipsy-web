@@ -3,21 +3,12 @@ class DrinksController < ApplicationController
   MAX_RESULTS = 50
 
   def index
-    @drinks = Drink.limit(MAX_RESULTS)
-    @drinks = @drinks.where("name LIKE '%#{params[:q]}%'") if params[:q].present?
-    @drinks = @drinks.offset(params[:offset]) if params[:offset].present?
-    if params[:ingredient_id].present?
-      # Scope results to Drinks which include all of the indicated ingredients
-      @drinks = @drinks.join(:ingredients)
-        .where('drinks_ingredients.ingredient_id IN ?', params[:ingredient_id])
-        .distinct
-        .order('ingredient_ct')
-    end
-    if params[:select].present?
-      @drinks = @drinks.select(params[:select])
-    elsif request.format.json?
-      @drinks = @drinks.select([:id, :name, :ingredient_ct])
-    end
+    @drinks = Drink.default_scoped
+    @drinks = @drinks.fuzzy_find(params[:fuzzy]) if params[:fuzzy].present?
+    @drinks = @drinks.for_ingredients(params[:ingredient_id]) if params[:ingredient_id].present?
+    @drinks = @drinks.select(params[:select]) if params[:select].present?
+    @drinks = @drinks.paginate page:params[:page], per_page:MAX_RESULTS
+    set_pagination_headers @drinks
     respond_with @drinks
   end
 
@@ -35,12 +26,11 @@ class DrinksController < ApplicationController
   end
 
   def ingredients
+    @ingredients = saved_drink.ingredients
+    respond_with @ingredients.as_json(methods:[:name])
   end
 
-  def ingredient_ids
-  end
-
-  private
+private
 
   def saved_drink
     @drink ||= Drink.find params[:id]

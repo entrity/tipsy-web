@@ -4,7 +4,11 @@ Rails.application.routes.draw do
 
   get 'sitemap.xml' => 'home#sitemap', defaults:{format: :xml}
 
-  resources :drinks
+  resources :drinks do
+    collection do
+      get :ingredients
+    end
+  end
   
   resources :ingredients
 
