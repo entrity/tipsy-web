@@ -1,0 +1,15 @@
+<h1><%= @drink.name %></h1>
+<div><%= @drink.instructions %></div>
+<div><%= @drink.description %></div>
+<div><%= @drink.abv %>%</div>
+<div><%= @drink.score %></div>
+<div><%= @drink.vote_ct %></div>
+<div><%= glass_image_tag @drink.glass_id, @drink.color %></div>
+<ul>
+  <% @ingredients.each do |ingredient| %>
+    <li>
+      <%= ingredient.name %>
+      <%= ingredient.qty %>
+    </li>
+  <% end %>
+</ul>

@@ -10,7 +10,42 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery_ujs
+//= require 'angular/angular.min'
+//= require 'angular-resource/angular-resource.min'
+//= require 'angular-sanitize/angular-sanitize.min'
+//= require 'angular-ui-select/dist/select.min'
 //= require turbolinks
 //= require_tree .
+
+angular.module('tipsy', [
+	'ngResource',
+	'ngSanitize',
+	'tipsy.find',
+	'ui.select'
+])
+.filter('tipsyFindableClass', function () {
+	return function (type) {
+		switch (parseInt(type)) {
+			case window.DRINK:
+				return 'drink'; break;
+			case window.INGREDIENT:
+				return 'ingredient'; break;
+			default:
+				console.error('Bad type for findable: '+type);
+		}
+	}
+})
+;
+
+Object.defineProperties(window, {
+	DRINK: {
+		value: 0,
+		writable: false,
+		configurable: false,
+	},
+	INGREDIENT: {
+		value: 1,
+		writable: false,
+		configurable: false,
+	},
+});

@@ -1,5 +1,9 @@
 {
   "name": "tipsy-rails",
   "dependencies": {
+    "angular": "1.4.0",
+  	"angular-resource": "1.4.0",
+  	"angular-sanitize": "1.4.0",
+	"angular-ui-select": "git://github.com/angular-ui/ui-select.git#v0.8.3"
   }
 }

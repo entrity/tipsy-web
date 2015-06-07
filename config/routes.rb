@@ -1,9 +1,18 @@
 Rails.application.routes.draw do
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
 
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  root 'home#home'
+
+  get 'sitemap.xml' => 'home#sitemap', defaults:{format: :xml}
+
+  get '/fuzzy_find.json' => 'home#fuzzy_find', defaults:{format: :json}
+
+  resources :drinks do
+    collection do
+      get :ingredients
+    end
+  end
+  
+  resources :ingredients
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

@@ -8,6 +8,9 @@ Bundler.require(*Rails.groups)
 
 module TipsyWeb
   class Application < Rails::Application
+
+    config.assets.paths << Rails.root.join("vendor","assets","bower")
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -22,5 +25,14 @@ module TipsyWeb
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    #to skip assets, scaffolds.css, test framework, helpers, view
+    config.generators do |g|
+      g.template_engine nil #to skip views
+      g.test_framework  nil #to skip test framework
+      g.assets  false
+      g.helper false
+      g.stylesheets false
+    end
   end
 end
