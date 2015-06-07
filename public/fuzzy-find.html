@@ -1,11 +1,40 @@
 <div ng-controller="FindCtrl">
 	<div id="fuzzy-finder">
 		<div>Tipsyology</div>
-		<ui-select theme="bootstrap" ng-model="fuzzyFind.record">
-			<ui-select-match data-placeholder="Search drinks and ingredients"></ui-select-match>
+		<ui-select theme="bootstrap" ng-model="fuzzyFind.record" on-select="fuzzyFindSelected($item, $model)" reset-search-input="true" search-enabled="true">
+			<ui-select-match data-placeholder="Search drinks and ingredients" allow-clear="true"></ui-select-match>
 			<ui-select-choices repeat="item in findables" refresh-delay="300" refresh="fetchFindables($select.search)">
 				<div class="{{item.type | tipsyFindableClass }}" ng-bind-html="item.name | highlight: $select.search"></div>
 			</ui-select-choices>
 		</ui-select>
+		<input type=checkbox ng-model="findOptions.noProfanity" id="no-profanity">
+		<label for="no-profanity">Omit profane names</label>
+	</div>
+	<div>
+		<span ng-repeat="ingredient in ingredients">
+			{{ingredient.name}}
+			<a ng-click="removeIngredient($index)"><i class="fa fa-remove"></i></a>
+		</span>
+	</div>
+	<ol>
+		<li ng-repeat="drink in drinks">
+			<input type=checkbox>
+			<a ng-click="navigateToDrink(drink)">{{drink.name}}</a>
+			<span class="badge" ng-show="drink._moreIngredients > 0" title="You need {{drink._moreIngredients}} more ingredients">{{drink._moreIngredients}}</span>
+			<i class="fa {{klass}}" ng-repeat="klass in drink._stars track by $index" title="Avg vote: {{drink.score}}"></i>
+			{{drink.vote_ct}}
+			&nbsp;
+			<i class="fa fa-comment-o"></i>
+			{{drink.comment_ct}}
+			&nbsp;
+			<a title="Add to favourites" ng-click="addToFavourites(drink)"><i class="fa fa-heart-o"></i></a>
+		</li>
+	</ol>
+	<div>
+		<span ng-show="drinks.left">{{drinks.left}} more search results</span>
+		<br>
+		<span ng-show="drinks.pagesLeft">
+			<a ng-click="loadNextPage()">Load Next Page: {{drinks.page + 1}} of {{drinks.pages}}</a>
+		</span>
 	</div>
 </div>

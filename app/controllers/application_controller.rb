@@ -6,8 +6,9 @@ class ApplicationController < ActionController::Base
 private
 
   def set_pagination_headers paginated_array
-    response.headers['Tipsy-page'] = paginated_array.current_page
-    response.headers['Tipsy-total_pages'] = paginated_array.total_pages
+    response.headers['Tipsy-page'] = paginated_array.current_page.to_i.to_s
+    response.headers['Tipsy-total_pages'] = paginated_array.total_pages.to_s
+    response.headers['Tipsy-count'] = paginated_array.total_entries.to_s
   end
 
 end

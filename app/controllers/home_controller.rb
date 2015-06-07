@@ -4,7 +4,7 @@ class HomeController < ApplicationController
     if params[:fuzzy].blank?
       render json:{errors:['Missing search parameter']}, status:406
     else
-      hashes = FuzzyFindable.autocomplete(params[:fuzzy])
+      hashes = FuzzyFindable.autocomplete(params[:fuzzy], params[:profane])
       render json:hashes
     end
   end

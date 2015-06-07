@@ -25,10 +25,27 @@ angular.module('tipsy', [
 ])
 .filter('tipsyFindableClass', function () {
 	return function (type) {
-		switch (type) {
-			case 0: 'drink'; break;
-			case 1: 'ingredient'; break;
+		switch (parseInt(type)) {
+			case window.DRINK:
+				return 'drink'; break;
+			case window.INGREDIENT:
+				return 'ingredient'; break;
+			default:
+				console.error('Bad type for findable: '+type);
 		}
 	}
 })
 ;
+
+Object.defineProperties(window, {
+	DRINK: {
+		value: 0,
+		writable: false,
+		configurable: false,
+	},
+	INGREDIENT: {
+		value: 1,
+		writable: false,
+		configurable: false,
+	},
+});
