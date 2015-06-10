@@ -7,8 +7,13 @@
 				<div class="{{item.type | tipsyFindableClass }}" ng-bind-html="item.name | highlight: $select.search"></div>
 			</ui-select-choices>
 		</ui-select>
-		<input type=checkbox ng-model="findOptions.noProfanity" id="no-profanity">
-		<label for="no-profanity">Omit profane names</label>
+		<div data-no-turbolink>
+			<a ng-hide="isLoggedIn()" href="/users/sign_in.html">Login</a>
+			<span ng-show="isLoggedIn()">
+				<a href="/users/sign_out.html">Logout</a>
+				<a href="/users/edit.html">Profile</a>
+			</span>
+		</div>
 	</div>
 	<div>
 		<span ng-repeat="ingredient in ingredients">

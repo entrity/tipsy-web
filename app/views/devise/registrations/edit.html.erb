@@ -32,6 +32,16 @@
     <%= f.text_field :name %>
   </div>
 
+  <div class="field">
+    <%= f.label :no_profanity %><br />
+    <%= f.check_box :no_profanity %>
+  </div>
+
+  <div class="field">
+    <%= f.label :no_alcohol %><br />
+    <%= f.check_box :no_alcohol %>
+  </div>
+
   <div class="actions">
     <%= f.submit "Update" %>
   </div>
@@ -41,4 +51,6 @@
 
 <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
 
-<%= link_to "Back", :back %>
+<div data-no-turbolink>
+  <%= link_to "Home", '/' %>
+</div>

@@ -1,16 +1,12 @@
 Rails.application.routes.draw do
 
-  devise_for :users
+  devise_for :users, sign_out_via: [:get, :post, :delete]
   
   root 'home#home'
 
   get 'sitemap.xml' => 'home#sitemap', defaults:{format: :xml}
 
-  get '/fuzzy_find.json' => 'home#fuzzy_find', defaults:{format: :json}
-
-  devise_scope :user do
-    get "sign_out" => "devise/sessions#destroy"
-  end
+  get 'fuzzy_find.json' => 'home#fuzzy_find', defaults:{format: :json}
 
   resources :drinks do
     collection do
@@ -19,6 +15,8 @@ Rails.application.routes.draw do
   end
   
   resources :ingredients
+
+  resources :users, only: [:show]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

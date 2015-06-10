@@ -31,6 +31,8 @@ class DeviseCreateUsers < ActiveRecord::Migration
       # t.datetime :locked_at
 
       t.string :name
+      t.boolean :no_alcohol, default: false
+      t.boolean :no_profanity, default: false
 
       t.timestamps null: false
     end

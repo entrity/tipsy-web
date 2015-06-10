@@ -23,6 +23,28 @@ angular.module('tipsy', [
 	'tipsy.find',
 	'ui.select'
 ])
+.run(['$rootScope', '$resource', function ($rootScope, $resource) {
+	Object.defineProperties($rootScope, {
+		getUser: {
+			writable: false,
+			configurable: false,
+			value: function (forceReload) {
+				if (forceReload || !$rootScope.currentUser)
+					$rootScope.currentUser = $resource('/users/0.json').get();
+				window.user = $rootScope.currentUser;
+				return $rootScope.currentUser;
+			}
+		},
+		isLoggedIn: {
+			writable: false,
+			configurable: false,
+			value: function (forceReload) {
+				return $rootScope.getUser(forceReload).id;
+			}
+		},
+	});
+	$rootScope.getUser();
+}])
 .filter('tipsyFindableClass', function () {
 	return function (type) {
 		switch (parseInt(type)) {
