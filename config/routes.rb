@@ -1,10 +1,16 @@
 Rails.application.routes.draw do
 
+  devise_for :users
+  
   root 'home#home'
 
   get 'sitemap.xml' => 'home#sitemap', defaults:{format: :xml}
 
   get '/fuzzy_find.json' => 'home#fuzzy_find', defaults:{format: :json}
+
+  devise_scope :user do
+    get "sign_out" => "devise/sessions#destroy"
+  end
 
   resources :drinks do
     collection do

@@ -36,3 +36,13 @@
 #fuzzy-finder .dropdown:not(.open) ul.ui-select-choices {
 	display: none;
 }
+
+.flash-notice {
+	background: #cfc;
+}
+.flash-alert {
+	background: #eec;
+}
+.flash-error {
+	background: #fcc;
+}

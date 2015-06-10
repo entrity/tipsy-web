@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'devise'
 gem 'responders', '~> 2.0'
 gem 'will_paginate', '~> 3.0.6'
 
