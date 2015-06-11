@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  devise_for :users, sign_out_via: [:get, :post, :delete]
+  devise_for :users, sign_out_via: [:get, :post, :delete], controllers: { :omniauth_callbacks => "users/omniauth_callbacks" }
   
   root 'home#home'
 

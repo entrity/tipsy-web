@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'devise'
+gem 'omniauth-facebook'
 gem 'responders', '~> 2.0'
 gem 'will_paginate', '~> 3.0.6'
 
