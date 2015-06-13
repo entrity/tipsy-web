@@ -9,9 +9,14 @@
 </head>
 <body ng-app='tipsy'>
 
-<ng-include src="'/fuzzy-find.html'"></ng-include>
-<%= yield %>
+<div class="flash-notice">
+	<%= flash[:notice] %>
+</div>
+<div class="flash-alert">
+	<%= flash[:alert] %>
+</div>
 
+<%= yield %>
 
 </body>
 </html>

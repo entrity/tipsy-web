@@ -1,12 +1,22 @@
 Rails.application.routes.draw do
 
+  devise_for :users, sign_out_via: [:get, :post, :delete], controllers: { :omniauth_callbacks => "users/omniauth_callbacks" }
+  
   root 'home#home'
 
   get 'sitemap.xml' => 'home#sitemap', defaults:{format: :xml}
 
-  resources :drinks
+  get 'fuzzy_find.json' => 'home#fuzzy_find', defaults:{format: :json}
+
+  resources :drinks do
+    collection do
+      get :ingredients
+    end
+  end
   
   resources :ingredients
+
+  resources :users, only: [:show]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

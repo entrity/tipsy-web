@@ -10,7 +10,64 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery_ujs
+//= require 'angular/angular.min'
+//= require 'angular-resource/angular-resource.min'
+//= require 'angular-sanitize/angular-sanitize.min'
+//= require 'angular-ui-select/dist/select.min'
 //= require turbolinks
 //= require_tree .
+
+angular.module('tipsy', [
+	'ngResource',
+	'ngSanitize',
+	'tipsy.find',
+	'ui.select'
+])
+.run(['$rootScope', '$resource', function ($rootScope, $resource) {
+	Object.defineProperties($rootScope, {
+		getUser: {
+			writable: false,
+			configurable: false,
+			value: function (forceReload) {
+				if (forceReload || !$rootScope.currentUser)
+					$rootScope.currentUser = $resource('/users/0.json').get();
+				window.user = $rootScope.currentUser;
+				return $rootScope.currentUser;
+			}
+		},
+		isLoggedIn: {
+			writable: false,
+			configurable: false,
+			value: function (forceReload) {
+				return $rootScope.getUser(forceReload).id;
+			}
+		},
+	});
+	$rootScope.getUser();
+}])
+.filter('tipsyFindableClass', function () {
+	return function (type) {
+		switch (parseInt(type)) {
+			case window.DRINK:
+				return 'drink'; break;
+			case window.INGREDIENT:
+				return 'ingredient'; break;
+			default:
+				console.error('Bad type for findable: '+type);
+		}
+	}
+})
+;
+
+Object.defineProperties(window, {
+	DRINK: {
+		value: 0,
+		writable: false,
+		configurable: false,
+	},
+	INGREDIENT: {
+		value: 1,
+		writable: false,
+		configurable: false,
+	},
+});
