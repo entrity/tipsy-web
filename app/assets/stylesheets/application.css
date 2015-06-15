@@ -15,6 +15,15 @@
  *= require_self
  */
 
+
+body {
+  background-image: url(../img/noise.png);
+  background-color: #ebebeb;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  margin: 0;
+}
+
 #fuzzy-finder .ui-select-match::before {
 	font-family: 'FontAwesome';
 	content: '\f002';
@@ -45,4 +54,475 @@
 }
 .flash-error {
 	background: #fcc;
+}
+
+
+/* ==========================================================================
+   Tipsyology
+   ========================================================================== */
+
+a {
+  color: #0091ce;
+  text-decoration: none;
+}
+a:hover {
+  color: #0074a5;
+}
+.wrapper {
+  margin: 0 auto;
+}
+header {
+  clear: both;
+  height: 56px;
+  background: #177fab;
+}
+header .wrapper {
+    max-width: 1020px;
+}
+header .input-group {
+  width: 100%;
+}
+header .input-group .form-control {
+  border-radius: 4px !important;
+}
+.logo {
+  max-width: 140px;
+  padding: 0 30px 0 20px;
+}
+.logo a img {
+    width: 100%;
+}
+.search .input-group-btn > .btn {
+  border-color: #fff;
+  border-radius: 0 4px 4px 0;
+}
+.search .form-control {
+  border: none;
+  border-radius: 4px;
+  -webkit-box-shadow: none;
+      box-shadow: none;
+}
+nav {
+  height: 56px;
+  max-width: 380px;
+  color: #fff;
+  font-size: 13px;
+  padding-right: 20px;
+}
+nav > div {
+  padding-left: 16px;
+  text-align: center;
+}
+nav div .dropdown > .btn,
+nav div .dropdown > .btn:active,
+nav div .dropdown .open > .dropdown-toggle.btn {
+  background-color: transparent !important;
+  color: #fff !important;
+  border: none;
+  font-size: 13px;
+  box-shadow: none;
+}
+nav div .dropdown > .dropdown-menu a {
+  font-size: 13px;
+}
+nav .nav > li > a {
+  padding: 0;
+}
+nav .nav > li > a:hover, 
+nav .nav > li > a:focus,
+nav .nav .open > a,
+nav .nav .open > a:hover,
+nav .nav .open > a:focus {
+  background-color: transparent;
+  color: #fff;
+}
+nav > div:last-child {
+  padding-right: 0;
+}
+nav .nav.sign-in > li.dropdown.open > a {
+  color: #555;
+  background: #fff;
+  border-radius: 4px 4px 0 0;
+  padding: 6px 0;
+}
+nav div .nav.sign-in .dropdown-menu {
+  border-radius: 4px 0 4px 4px;
+  padding: 15px;
+  min-width: 250px;
+  margin-top: 0;
+  right: 0;
+  left: inherit;  
+  border: none;
+}
+nav div .nav.sign-in .dropdown-menu .checkbox {
+  color: #555;
+}
+nav div .nav.sign-in .dropdown-menu .btn-primary {
+  color: #fff;  
+  padding: 6px 12px;
+  border: none;
+  line-height: 1.42857143;
+  font-size: 14px;
+}
+nav div .nav.sign-in .dropdown-menu .btn-primary:hover {
+    background: #337ab7;
+}
+nav > div a,
+nav > div a:focus {
+  color: #fff;
+  text-decoration: none;
+}
+nav div a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+#register-modal .control-group .checkbox,
+#register-modal .control-group .radio {
+  padding-left: 20px;
+}
+#register-modal .control-group .form-control {
+  border-color: #fff;
+  background: rgba(0,0,0,0.07);
+}
+#register-modal .control-group .control-label {
+  font-weight: normal;
+}
+#main-cont {
+  min-height: 100vh;
+  max-width: 1020px;
+  margin: 0 auto;
+}
+.content {
+  min-height: 100vh;
+  padding:20px;
+  background-color:#fff;
+}
+.content > p {
+    font-size: 18px;
+}
+.content > p > .bold {
+    font-weight: bold;
+}
+.results-filters {
+  padding: 0 0 20px 0;
+  border-bottom:solid 1px #d2d2d2;  
+  align-items: center;
+}
+.results-filters .item {
+  border-radius: 4px;
+  color: #fff;
+  background: #f38630;
+  line-height: 26px;
+  padding-right: 8px;
+  padding-left: 8px;
+  margin-right: 5px;
+  cursor: pointer;
+
+}
+.results-filters .item:hover {
+  background: #E87E29;
+}
+.results-filters .item.first {
+  max-width: 60px;
+  min-width: 60px;
+  background: transparent;
+  color: #939393;
+  cursor: default;
+}
+.results-filters .item.last {
+  max-width: 93px;
+  min-width: 93px;
+  background: transparent;
+  color: #939393;
+  margin-left: auto;
+  padding-right: 0;
+  margin-right: 0;
+}
+.results-filters .item.last .btn {
+  font-size: 12px;
+  line-height: 26px;
+  padding: 0 8px;
+}
+.results-filters .item.last .dropdown-menu {
+  font-size: 12px;
+  min-width: 86px;
+}
+.results-filters .item.last .dropdown-menu li a {
+  padding: 0 10px;
+}
+.results-filters .item.ingredient {
+  overflow: hidden;
+  -webkit-transition: padding-right ease-in-out .15s;
+     -o-transition: padding-right ease-in-out .15s;
+      transition: padding-right ease-in-out .15s;
+}
+.results-filters .item.ingredient:hover {
+  padding-right: 27px;
+}
+.results-filters .item span.filter-item {
+  position: relative;
+}
+.results-filters .item .fa-times-circle {
+  color: #A85617;
+  margin-left: 4px;
+  position: absolute;
+  top: 3px;
+  right: -20px;
+}
+.results-filters .item .fa-times-circle:hover {
+  color: #9B4909;
+}
+.results-sort {
+  padding:14px;
+  height:16px;
+}
+.results-sort .item {
+  padding:0 12px 0 12px;
+  text-align: center;
+  max-width: 30%;
+}
+.results-list {
+    padding-top: 10px;
+}
+.results-list .item {
+  height:40px;
+  margin:5px 0;
+  background:#fff;
+  border-radius: 4px;
+  border:dashed 1px #fff;
+  transition:border 100ms ease-in-out;
+}
+.results-list .item:hover {
+  border:dashed 1px gray;
+  cursor:pointer;
+}
+.results-list .item .checkmark {
+  max-width:40px;
+  text-align: center;
+}
+.results-list .item .checkmark .fa-check-square {
+  color: #5cb85c;
+}
+.results-list .item .name {
+  max-width:490px;
+  font-size:14px;
+}
+.results-list .item .comments {
+  max-width:74px;
+  font-size:13px;
+  color:#939393;
+  text-align: center;
+}
+.results-list .item .rating {
+  max-width:120px;
+  font-size:13px;
+  color:#939393;
+  text-align: center;
+}
+.results-list .item .favorite {
+  max-width:17px;
+  margin:0 0 0 8px;
+  color:#939393;
+  text-align: center;
+}
+.fancy-sidebar {
+  max-width:200px;
+  min-height: 100vh;
+  background-color: #f38630;
+  float:right;
+  padding:10px;
+}
+.sidebar-controls {
+  height:40px;
+}
+.ingredients-list ul,
+.shopping-list ul {
+  margin:0 0 18px 0;
+  padding:0;
+  list-style:none;
+  color:#fff;
+  border-radius: 4px;
+}
+.sidebar-list-first {
+  font-size:14px !important;
+  font-weight:600;
+  margin:0 10px;
+  padding:5px 0 !important;
+  border-bottom:1px solid #fa9b50;
+}
+.ingredients-list ul li,
+.shopping-list ul li {
+  font-size:12px;
+  padding:5px 10px;
+}
+.sidebar-list-first i {
+  float: right;
+}
+.grid {
+  display: flex;
+}
+.grid-cell {
+  flex: 1;
+}
+/* With gutters */
+.grid--gutters {
+  margin: -1em 0 0 -1em;
+}
+.grid--gutters > .grid-cell {
+  padding: 1em 0 0 1em;
+}
+/* Alignment per row */
+.grid--top {
+  align-items: flex-start;
+}
+.grid--bottom {
+  align-items: flex-end;
+}
+.grid--center {
+  align-items: center;
+}
+/* Alignment per cell */
+.grid-cell--top {
+  align-self: flex-start;
+}
+.grid-cell--bottom {
+  align-self: flex-end;
+}
+.grid-cell--center {
+  align-self: center;
+}
+.aligner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.aligner-item {
+  max-width: 50%;
+}
+.aligner-item--top {
+  align-self: flex-start;
+}
+.aligner-item--bottom {
+  align-self: flex-end;
+}
+
+/*** DRINK PAGE STYLES ***/
+
+#drink-details .content .row-one,
+#drink-details .content .row-two,
+#drink-details .content .row-three {
+  padding: 0 0 30px 0;
+}
+#drink-details .content .row-one .left {
+  max-width: 264px;
+  padding: 0 20px 0 0;
+}
+#drink-details .content .row-one .left a {
+  max-width: 100%;
+  min-width: 100%;
+  height: 264px;
+  display: block;
+  border: solid 1px #cdcdcd;
+}
+#drink-details .content .row-one .right h2 {
+  font-size: 19px;
+  font-weight: 600;
+  margin: 0;
+  padding: 0 0 6px 0;
+}
+#drink-details .content .row-one .right .votes {
+  max-width: 34px;
+  text-align: center;
+}
+#drink-details .content .row-one .right .votes .votes-container .fa {
+  font-size: 16px;
+}
+#drink-details .content .row-one .right .votes .votes-container .arrow:hover .fa {
+  color: orange;
+}
+#drink-details .content .row-one .right .rating {
+  display: inline-block;
+  padding: 2px 0 6px 0;
+}
+#drink-details .content .row-one .right .rating a.star {
+  color: #FFA500;
+}
+#drink-details .content .row-one .right .drink-info {
+  margin-bottom: 10px;
+}
+#drink-details .content .row-one .right .social-share-bar {
+  display: block;
+  height: 24px;
+  font-size: 11px;
+  padding: 3px;
+  border: solid 1px #cdcdcd;
+  margin: 20px 0 20px 0;
+}
+#drink-details .content .row-one .right .tags .grid-cell {
+  font-size: 11px;
+}
+#drink-details .content .row-one .right .tags .grid-cell a {
+  margin-left: 5px;
+}
+#drink-details .content .row-one .right .tags .grid-cell a:first-of-type {
+  margin-left: 0;
+}
+#drink-details .content .row-one .right .author .user-tips-count {
+  font-size: 11px;
+}
+#drink-details .content .row-one .right .drink-info {
+
+}
+#drink-details .content .row-one .right .drink-info .prep-time span,
+#drink-details .content .row-one .right .drink-info .calorie-count span {
+  font-size: 16px;
+  font-weight: 600;
+  color: #FFA500;
+}
+#drink-details .content .row-two .ingredients {
+  max-width: 50%;
+  margin-right: 60px;
+}
+#drink-details .content .row-two h3,
+#drink-details .content .row-three h3,
+#drink-details .content .row-four h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+#drink-details .content .row-two .servings {
+  text-align: right;
+}
+#drink-details .content .row-two .servings label {
+  margin: 0 3px 0 0;
+  font-size: 11px;
+}
+#drink-details .content .row-two .servings input {
+  max-width: 40px;
+  padding: 0 0 0 3px;
+}
+#drink-details .content .row-two .ingredients .ingredient {
+  padding: 6px 0;
+}
+#drink-details .content .row-two .ingredients .ingredient .name,
+#drink-details .content .row-two .ingredients .ingredient .amount {
+  font-size: 11px;
+}
+#drink-details .content .row-two .ingredients .ingredient .amount {
+  text-align: right;
+}
+#drink-details .content .row-two .ingredients .ingredient .actions {
+  max-width: 60px;
+}
+#drink-details .content .row-two .directions h3,
+#drink-details .content .row-three h3 {
+  margin-bottom: 8px;
+}
+#drink-details .content .row-four.similar-drinks {
+  background-color: #f4f4f4;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding: 20px;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
 }
