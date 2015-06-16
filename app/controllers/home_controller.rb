@@ -1,5 +1,13 @@
 class HomeController < ApplicationController
 
+  def home
+    if user_signed_in?
+      return render 'logged_in_home'
+    else
+      render layout: nil
+    end
+  end
+
   def fuzzy_find
     if params[:fuzzy].blank?
       render json:{errors:['Missing search parameter']}, status:406
