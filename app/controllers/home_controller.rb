@@ -1,4 +1,5 @@
 class HomeController < ApplicationController
+layout nil
 
   def home
     if user_signed_in?

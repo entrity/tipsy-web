@@ -9,7 +9,7 @@
 ### How to set up dev env
 
 1. git clone
-1. copy database.yml.template to database.yml
+1. make a copy of database.yml.template and rename it to database.yml (remove .template)
 1. configure database.yml
 1. rake db:create
 1. rake db:schema:load
