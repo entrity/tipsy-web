@@ -105,6 +105,12 @@ header .logo {
 label {
   vertical-align: middle;
 }
+img.hr {
+  display: block;
+  margin: 0 auto;
+  margin: 20px 0 12px 0;
+  width: 100%;
+}
 nav {
   height: 56px;
   max-width: 380px;
@@ -321,37 +327,62 @@ nav div a:hover {
 .sidebar-list-first i {
   float: right;
 }
-.signin.grid {
+.signin.grid,
+.splash.grid {
   height:100vh; 
   background: url(/images/drinks-blue-bg.jpg); 
   background-size: cover;
+  color: #fff;
 }
-.signin.grid .grid-cell {
+.signin.grid .grid-cell,
+.splash.grid .grid-cell {
   margin: 0 auto 10% auto; 
   max-width: 260px;
   border-radius: 4px; 
-  background-color: #fff; 
-  padding: 30px; 
   box-sizing: border-box;
 }
-.signin.grid .grid-cell .logo {
+.signin.grid .grid-cell .logo,
+.splash.grid .grid-cell .logo {
   display: block;
-  margin: 0 auto 20px auto;
+  margin: 0 auto 40px auto;
 }
-.signin.grid .grid-cell h2 {
-  margin: 0 0 20px 0;
+.signin.grid .grid-cell .btn-primary,
+.splash.grid .grid-cell .btn-primary {
+  background-color: #0c7daf;
+  border-color: #0c7dafs;
 }
-.signin.grid .grid-cell form {
+.signin.grid .grid-cell form,
+.splash.grid .grid-cell form {
   padding: 10px 0;
+}
+.signin.grid .grid-cell a {
+  color: #fff;
+}
+.signin.grid .grid-cell .links a {
+  font-size: 12px;
+}
+.signin.grid .grid-cell label {
+  font-size: 11px;
+  margin-left: 4px;
 }
 .signin.grid .grid-cell .input-group {
   margin-bottom: 10px;
 }
 .signin.grid .grid-cell .input-group-addon {
   min-width: 39px;
+  border: none;
+  background-color: #fff;
+}
+.signin.grid .grid-cell .input {
+
 }
 .signin.grid .grid-cell .input-group-addon .fa {
   font-size: 12px;
+}
+.signin.grid .grid-cell input[type="password"],
+.signin.grid .grid-cell input[type="email"] {
+  border: none;
+  background-color: #fff;
 }
 .signin.grid .grid-cell input[type="password"],
 .signin.grid .grid-cell input[type="email"],

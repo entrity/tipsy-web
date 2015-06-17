@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tipsyology</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <%= csrf_meta_tags %>
+</head>
+<body ng-app='tipsy'>
+
+	<div class="grid grid--center splash">
+	  <div class="search grid-cell">
+    	<img class="logo" src="/images/tipsyology-logo.png">
+	    <div ng-controller="FindCtrl">
+			<div id="fuzzy-finder">
+				<ui-select theme="bootstrap" ng-model="fuzzyFind.record" on-select="fuzzyFindSelected($item, $model)" reset-search-input="true" search-enabled="true">
+					<ui-select-match data-placeholder="Search drinks and ingredients" allow-clear="true"></ui-select-match>
+					<ui-select-choices repeat="item in findables" refresh-delay="300" refresh="fetchFindables($select.search)">
+						<div class="{{item.type | tipsyFindableClass }}" ng-bind-html="item.name | highlight: $select.search"></div>
+					</ui-select-choices>
+				</ui-select>
+			</div>
+	    </div>
+	  </div>
+	</div>
+
+</div>
+</html>
