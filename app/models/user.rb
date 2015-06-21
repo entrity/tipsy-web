@@ -9,6 +9,12 @@ class User < ActiveRecord::Base
   validates :name, uniqueness: true
 
   has_many :identities, inverse_of: :user
+  has_many :revisions, as: :user
+
+  # @return order of magnitude of `self.points`
+  def log_points
+    Math.log(1 + points, 10).ceil
+  end
 
   def self.from_omniauth(auth, signed_in_resource=nil)
     # Get the identity and user if they exist
@@ -31,9 +37,13 @@ class User < ActiveRecord::Base
 
       # Create the user if it's a new registration
       if user.nil?
+        name = nil
+        begin
+          auth.info.nickname || auth.extra.raw_info.name || auth.uid
+        rescue => ex
+        end
         user = User.new(
-          name: auth.extra.raw_info.name,
-          name: auth.info.nickname || auth.uid,
+          name: name,
           email: email,
           password: Devise.friendly_token[0,20]
         )

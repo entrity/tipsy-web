@@ -3,6 +3,17 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   before_action :set_xsrf_token_cookie
 
+  respond_to :json, :html
+
+  def flag
+    @record = controller_path.classify.find(params[:id])
+    if @record.flag!(current_user)
+      render nothing:true, status:200
+    else
+      respond_with @record
+    end
+  end
+
 private
 
   def set_pagination_headers paginated_array

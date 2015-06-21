@@ -14,7 +14,20 @@ Rails.application.routes.draw do
     end
   end
   
+  resources :flags, only: :create
+
   resources :ingredients
+  
+  resources :reviews do
+    collection do
+      get  :count
+    end
+    member do
+      post :vote
+    end
+  end
+
+  resources :revisions, only: :create
 
   resources :users, only: [:show]
 
