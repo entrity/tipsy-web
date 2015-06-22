@@ -1,4 +1,4 @@
-require 'shared_examples/drinks_or_ingredients_controller.rb'
+require 'shared_examples/drinks_or_ingredients_controller_examples.rb'
 
 describe IngredientsController, :type => :controller do
 

@@ -29,9 +29,8 @@ module Flaggable
     revision.increment_flag_points!(flag.points, flag.user_id) if revisable?
     # Set flag_pts & flagger_ids
     increment_flag_points!(flag.points, flag.user_id)
-    if overflagged?
-      create_review!
-      # Unpublish (revision or self)
+    # Unpublish (revision or self) if needs review
+    if create_review_if_needed
       unpublishable = revisable? ? revision : self
       unpublishable.unpublish! # unpublishable could be nil if a bug led to a Revisable being flagged even if it lacks a Revision
     end
@@ -40,8 +39,13 @@ module Flaggable
 
   private
 
-    def overflagged?
-      flag_pts > FLAG_PTS_LIMIT
+    # @return - boolean for whether a Review was created in the db
+    def create_review_if_needed
+      res = self.class.connection.raw_connection.exec_params(
+        "select create_review_if_needed($1, $2, $3)",
+        [self.class.table_name, id, self.class.name]
+      )
+      return res.getvalue(0,0) == 't'
     end
 
     # @return whether this object includes Revisable
@@ -51,9 +55,10 @@ module Flaggable
       self.class < Revisable
     end
 
+  protected
+
     def unpublish!
-      self.status = NEEDS_REVIEW
-      create_review! points:0, open:true
+      update_attributes status:NEEDS_REVIEW
     end
 
 end

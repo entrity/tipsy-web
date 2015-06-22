@@ -7,9 +7,6 @@ describe ReviewsController, :type => :controller do
         expect(subject).to redirect_to '/users/sign_in'
       end
     end
-    # context 'with json format' do
-    #   let(:params){{format: :json}}
-    # end
   end
 
 end

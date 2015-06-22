@@ -17,4 +17,11 @@ class Revision < ActiveRecord::Base
     end
   end
 
+  # Set status, and rollback flaggable's revision
+  def unpublish!
+    update_attributes! status:Flaggable::NEEDS_REVIEW
+    replacement = flaggable.revisions.where(status:Flaggable::APPROVED).last
+    flaggable.update_attributes! revision:replacement
+  end
+
 end

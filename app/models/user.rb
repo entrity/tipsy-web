@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
 
   # @return order of magnitude of `self.points`
   def log_points
-    Math.log(1 + points, 10).ceil
+    Math.log([1 + points, 2].max, 10).ceil
   end
 
   def self.from_omniauth(auth, signed_in_resource=nil)

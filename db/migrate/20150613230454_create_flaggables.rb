@@ -18,7 +18,7 @@ class CreateFlaggables < ActiveRecord::Migration
       t.text    :text
       t.integer :flag_pts, :limit => 1, :default => 0
       t.integer :flagger_ids, array: true, default: []
-      t.integer :status, :default => 0, :limit => 1
+      t.integer :status, :default => 1, :limit => 1
       t.timestamps
     end
     add_index :comments, [:commentable_id, :commentable_type]
