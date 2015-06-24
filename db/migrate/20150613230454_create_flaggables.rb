@@ -28,28 +28,32 @@ class CreateFlaggables < ActiveRecord::Migration
       t.integer :user_id
       t.integer :flaggable_id
       t.string  :flaggable_type # revision, comment, photo
-      t.integer :points, :limit => 1, :null => false
+      t.integer :flag_bits, :limit => 1, :default => 0
+      t.integer :flag_pts, :limit => 1, :null => false
       t.timestamp :created_at
     end
 
     create_table :revisions do |t|
       t.integer :user_id
-      t.integer :flaggable_id
-      t.string  :flaggable_type # drink, ingredient
+      t.integer :revisable_id
+      t.string  :revisable_type # drink, ingredient
       t.text    :text
       t.integer :flag_pts, :limit => 1, :default => 0
       t.integer :flagger_ids, array: true, default: []
       t.integer :status, :default => 0, :limit => 1
       t.timestamps
     end
-    add_index :revisions, [:flaggable_id, :flaggable_type]
+    add_index :revisions, [:revisable_id, :revisable_type]
     add_index :revisions, :user_id
     
     create_table :reviews do |t|
       t.integer :reviewable_id
       t.string  :reviewable_type # revision, comment, photo
       t.boolean :open, :default => true
+      t.integer :contributor_id
       t.integer :points, :limit => 1, :default => 0
+      t.integer :flag_bits, :limit => 1, :default => 0
+      t.integer :flagger_ids, array: true, default: []
       t.timestamp :created_at
     end
     add_index :reviews, [:reviewable_id, :reviewable_type]

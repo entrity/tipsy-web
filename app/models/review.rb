@@ -1,4 +1,5 @@
 class Review < ActiveRecord::Base
+  include HasFlagBits
 
   POINTS_TO_CLOSE = 4
 

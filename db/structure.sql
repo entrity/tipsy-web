@@ -172,7 +172,8 @@ CREATE TABLE flags (
     user_id integer,
     flaggable_id integer,
     flaggable_type character varying,
-    points smallint NOT NULL,
+    flag_bits smallint DEFAULT 0,
+    flag_pts smallint NOT NULL,
     created_at timestamp without time zone
 );
 
@@ -303,7 +304,10 @@ CREATE TABLE reviews (
     reviewable_id integer,
     reviewable_type character varying,
     open boolean DEFAULT true,
+    contributor_id integer,
     points smallint DEFAULT 0,
+    flag_bits smallint DEFAULT 0,
+    flagger_ids integer[] DEFAULT '{}'::integer[],
     created_at timestamp without time zone
 );
 
@@ -334,8 +338,8 @@ ALTER SEQUENCE reviews_id_seq OWNED BY reviews.id;
 CREATE TABLE revisions (
     id integer NOT NULL,
     user_id integer,
-    flaggable_id integer,
-    flaggable_type character varying,
+    revisable_id integer,
+    revisable_type character varying,
     text text,
     flag_pts smallint DEFAULT 0,
     flagger_ids integer[] DEFAULT '{}'::integer[],
@@ -610,10 +614,10 @@ CREATE INDEX index_reviews_on_reviewable_id_and_reviewable_type ON reviews USING
 
 
 --
--- Name: index_revisions_on_flaggable_id_and_flaggable_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_revisions_on_revisable_id_and_revisable_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_revisions_on_flaggable_id_and_flaggable_type ON revisions USING btree (flaggable_id, flaggable_type);
+CREATE INDEX index_revisions_on_revisable_id_and_revisable_type ON revisions USING btree (revisable_id, revisable_type);
 
 
 --

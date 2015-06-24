@@ -4,8 +4,12 @@ module Revisable
     unless base.attribute_method?(:text)
       raise "No text column on class #{base.name}"
     end
-    base.belongs_to :revision, dependent: :destroy, inverse_of: :flaggable
-    base.has_many :revisions, as: :flaggable, dependent: :destroy
+    base.belongs_to :revision, dependent: :destroy, inverse_of: :revisable
+    base.has_many :revisions, dependent: :destroy, inverse_of: :revisable, as: :revisable
+  end
+
+  def flag!
+    revision.try(:flag!)
   end
 
   # Sets flags on self.revision
