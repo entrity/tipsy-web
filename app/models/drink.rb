@@ -1,6 +1,5 @@
 class Drink < ActiveRecord::Base
   include FuzzyFindable
-  include HasFlagPts
   include Revisable
   
   has_many :ingredients, class_name:'DrinkIngredient', dependent: :destroy

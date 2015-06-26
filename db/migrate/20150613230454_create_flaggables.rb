@@ -17,7 +17,6 @@ class CreateFlaggables < ActiveRecord::Migration
       t.string  :commentable_type # drink, ingredient
       t.text    :text
       t.integer :flag_pts, :limit => 1, :default => 0
-      t.integer :flagger_ids, array: true, default: []
       t.integer :status, :default => 1, :limit => 1
       t.timestamps
     end
@@ -39,7 +38,6 @@ class CreateFlaggables < ActiveRecord::Migration
       t.string  :revisable_type # drink, ingredient
       t.text    :text
       t.integer :flag_pts, :limit => 1, :default => 0
-      t.integer :flagger_ids, array: true, default: []
       t.integer :status, :default => 0, :limit => 1
       t.timestamps
     end
@@ -66,11 +64,9 @@ class CreateFlaggables < ActiveRecord::Migration
     end
 
     change_table :drinks do |t|
-      t.integer :flag_pts, :limit => 1, :default => 0
       t.integer :revision_id
     end
     change_table :ingredients do |t|
-      t.integer :flag_pts, :limit => 1, :default => 0
       t.integer :revision_id
     end
   end
