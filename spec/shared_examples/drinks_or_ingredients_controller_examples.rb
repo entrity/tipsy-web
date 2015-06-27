@@ -2,14 +2,6 @@ shared_examples "drinks or ingredients controller" do
 
   describe '#index' do
     subject{ get :index, params }
-    context 'with html format' do
-      let(:params){{format: :html}}
-      it 'should return 200' do
-        pending
-        subject
-        assert_response 200
-      end
-    end
     context 'with json format' do
       let(:params){{format: :json}}
       it 'should return 200' do

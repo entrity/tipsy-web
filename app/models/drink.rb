@@ -1,5 +1,7 @@
 class Drink < ActiveRecord::Base
   include FuzzyFindable
+  include Revisable
+  
   has_many :ingredients, class_name:'DrinkIngredient', dependent: :destroy
 
   # Scope results to Drinks which include all of the indicated ingredients
