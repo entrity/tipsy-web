@@ -11,10 +11,9 @@
   <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800'>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <%= csrf_meta_tags %>
 </head>
-<body ng-app='tipsy'>
+<body ng-app="tipsy">
 
 	<div class="grid grid--center splash">
 	  <div class="search grid-cell">
@@ -29,6 +28,8 @@
 				</ui-select>
 			</div>
 	    </div>
+	    <br>
+		<p class="text-center"><a href="/users/sign_in" class="btn btn-primary">Sign in / Sign up</a></p>
 	  </div>
 	</div>
 
