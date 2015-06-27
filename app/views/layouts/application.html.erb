@@ -11,6 +11,7 @@
   <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800'>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <%= csrf_meta_tags %>
 </head>
@@ -36,13 +37,39 @@
       </div>
       <nav class="grid grid--center grid-cell">
         <div class="grid-cell"><a href="#">Browse</a></div>
-        <div class="grid-cell"><a href="#">Store</a></div>
-        <div class="grid-cell"><a href="#">Sign up</a></div>
-        <div class="grid-cell" ng-hide="isLoggedIn()"><a href="/users/sign_in.html">Sign in</a></div>
+        <div class="grid-cell" ng-hide="isLoggedIn()"><a href="/users/sign_up/">Sign up</a></div>
+        <div class="grid-cell"><a href="#">Review</a></div>
+        <div class="grid-cell" ng-hide="isLoggedIn()"><a href="/users/sign_in/">Sign in</a></div>
+        <div class="grid-cell user">
+        	<div class="grid grid--center">
+        		<div class="grid-cell dropdown">
+        			<div class="rep-cont dropdown-toggle" id="rep-alerts" data-toggle="dropdown" aria-haspopup="true">
+        				<span class="reputation">100</span> <span class="rep-change">+6</span>
+        			</div>
+						  <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="rep-alerts">
+						    <li><a href="#"><span class="rep-change">+1</span> User has liked your picture</a></li>
+						    <li><a href="#"><span class="rep-change">+1</span> User has liked your picture</a></li>
+						    <li><a href="#"><span class="rep-change">+1</span> User has liked your picture</a></li>
+						    <li><a href="#"><span class="rep-change">+1</span> User has liked your picture</a></li>
+						    <li><a href="#"><span class="rep-change">+1</span> User has liked your picture</a></li>
+						    <li><a href="#"><span class="rep-change">+1</span> User has liked your picture</a></li>
+						  </ul>
+        		</div>
+        		<div class="grid-cell dropdown">
+        			<div class="grid dropdown-toggle" id="avatar-dropdown" data-toggle="dropdown" aria-haspopup="true">
+								<a class="avatar"></a>
+							</div>
+						  <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="avatar-dropdown">
+						    <li><a href="#">Profile & Settings</a></li>
+						    <li><a href="#">Log out</a></li>
+						  </ul>
+        		</div>
+        	</div>
+        </div>
       </nav>
 	  </div>
 	</header>
-	<div id="main-cont" class="grid grid--top">
+	<div id="main-cont" class="grid">
     <div class="content grid-cell">
 			<%= yield %>
     </div>
