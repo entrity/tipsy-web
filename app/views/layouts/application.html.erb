@@ -6,8 +6,8 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tipsyology</title>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800'>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
@@ -16,60 +16,10 @@
 <body ng-app='tipsy'>
 
 <div class="wrapper">
-	<header>
-    <div class="wrapper grid grid--center">
-      <div class="logo grid-cell">
-        <a href="/"><img src="/images/tipsyology-logo.png" /></a>
-      </div>
-      <div class="search grid-cell">
-        <div class="input-group"  ng-controller="FindCtrl">
-					<div id="fuzzy-finder">
-						<ui-select theme="bootstrap" ng-model="fuzzyFind.record" on-select="fuzzyFindSelected($item, $model)" reset-search-input="true" search-enabled="true">
-							<ui-select-match data-placeholder="Search drinks and ingredients" allow-clear="true"></ui-select-match>
-							<ui-select-choices repeat="item in findables" refresh-delay="300" refresh="fetchFindables($select.search)">
-								<div class="{{item.type | tipsyFindableClass }}" ng-bind-html="item.name | highlight: $select.search"></div>
-							</ui-select-choices>
-						</ui-select>
-					</div>
-        </div>
-      </div>
-      <nav class="grid grid--center grid-cell">
-        <div class="grid-cell"><a href="#">Browse</a></div>
-        <div class="grid-cell" ng-hide="isLoggedIn()"><a href="/users/sign_up/">Sign up</a></div>
-        <div class="grid-cell"><a href="#">Review</a></div>
-        <div class="grid-cell" ng-hide="isLoggedIn()"><a href="/users/sign_in/">Sign in</a></div>
-        <div class="grid-cell user">
-        	<div class="grid grid--center">
-        		<div class="grid-cell dropdown">
-        			<div class="rep-cont dropdown-toggle" id="rep-alerts" data-toggle="dropdown" aria-haspopup="true">
-        				<span class="reputation">100</span> <span class="rep-change">+6</span>
-        			</div>
-						  <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="rep-alerts">
-						    <li><a href="#"><span class="rep-change">+1</span> User has liked your picture</a></li>
-						    <li><a href="#"><span class="rep-change">+1</span> User has liked your picture</a></li>
-						    <li><a href="#"><span class="rep-change">+1</span> User has liked your picture</a></li>
-						    <li><a href="#"><span class="rep-change">+1</span> User has liked your picture</a></li>
-						    <li><a href="#"><span class="rep-change">+1</span> User has liked your picture</a></li>
-						    <li><a href="#"><span class="rep-change">+1</span> User has liked your picture</a></li>
-						  </ul>
-        		</div>
-        		<div class="grid-cell dropdown">
-        			<div class="grid dropdown-toggle" id="avatar-dropdown" data-toggle="dropdown" aria-haspopup="true">
-								<a class="avatar"></a>
-							</div>
-						  <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="avatar-dropdown">
-						    <li><a href="#">Profile & Settings</a></li>
-						    <li><a href="#">Log out</a></li>
-						  </ul>
-        		</div>
-        	</div>
-        </div>
-      </nav>
-	  </div>
-	</header>
-	<div id="main-cont" class="grid">
+  <%= render 'toolbar' %>
+  <div id="main-cont" class="grid">
     <div class="content grid-cell">
-			<%= yield %>
+      <%= yield %>
     </div>
     <aside class="fancy-sidebar grid-cell">
       <div class="sidebar-controls"></div>

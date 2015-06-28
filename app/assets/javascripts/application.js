@@ -21,6 +21,7 @@ angular.module('tipsy', [
 	'ngResource',
 	'ngSanitize',
 	'tipsy.find',
+	'tipsy.toolbar',
 	'ui.select'
 ])
 .run(['$rootScope', '$resource', function ($rootScope, $resource) {

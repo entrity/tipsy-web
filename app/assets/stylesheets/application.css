@@ -55,6 +55,17 @@ body {
 	background: #fcc;
 }
 
+/* Colours */
+.gold {
+  color: #ffd700;
+}
+.silver {
+  color: #c0c0c0;
+}
+.bronze {
+  color: #c87533;
+}
+
 
 /* ==========================================================================
    Tipsyology
@@ -188,6 +199,7 @@ nav > .user li .rep-change {
   margin-right: 5px;
 }
 .dropdown-menu {
+  display: initial !important;
   font-size: 11px;
   min-width: 134px;
   margin:10px 0 0;
