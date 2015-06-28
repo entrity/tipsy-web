@@ -21,6 +21,7 @@ angular.module('tipsy', [
 	'ngResource',
 	'ngSanitize',
 	'tipsy.find',
+	'tipsy.toolbar',
 	'ui.select'
 ])
 .run(['$rootScope', '$resource', function ($rootScope, $resource) {
@@ -58,6 +59,20 @@ angular.module('tipsy', [
 	}
 })
 ;
+
+// Bootstrap AngularJS on page load
+(function(){
+	function boostrapAngularJS () {
+		angular.bootstrap(document.body, ['tipsy']);
+		attachBootstrapAngularJSCbToPageChange();
+	}
+	function attachBootstrapAngularJSCbToPageChange () {
+		angular.element(document).one('page:change', function () {
+			angular.element(this).one('page:load', boostrapAngularJS);
+		});
+	}
+	attachBootstrapAngularJSCbToPageChange();
+})();
 
 Object.defineProperties(window, {
 	DRINK: {

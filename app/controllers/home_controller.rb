@@ -3,7 +3,7 @@ layout nil
 
   def home
     if user_signed_in?
-      return render 'logged_in_home'
+      render html: nil, layout: 'application'
     else
       render layout: nil
     end

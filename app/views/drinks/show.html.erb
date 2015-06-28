@@ -58,7 +58,7 @@
       <div class="grid grid--center">
         <div class="grid-cell">
           <h3>Recipe Directions</h3>
-          <p><%= @drink.instructions %> <br><br><a href="#">Were these directions helpful?</a></p>
+          <p><%= @drink.text %> <br><br><a href="#">Were these directions helpful?</a></p>
         </div>
       </div>
     </div>
@@ -80,8 +80,7 @@
   </div>
 
   <h1><%= @drink.name %></h1>
-  <div><%= @drink.instructions %></div>
-  <div><%= @drink.description %></div>
+  <div><%= @drink.text %></div>
   <div><%= @drink.abv %>%</div>
   <div><%= @drink.score %></div>
   <div><%= @drink.vote_ct %></div>

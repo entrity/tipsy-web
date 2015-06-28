@@ -17,7 +17,6 @@
 
 
 body {
-  background-image: url(../img/noise.png);
   background-color: #ebebeb;
   font-family: 'Open Sans', sans-serif;
   font-size: 13px;
@@ -54,6 +53,17 @@ body {
 }
 .flash-error {
 	background: #fcc;
+}
+
+/* Colours */
+.gold {
+  color: #ffd700;
+}
+.silver {
+  color: #c0c0c0;
+}
+.bronze {
+  color: #c87533;
 }
 
 
@@ -189,6 +199,7 @@ nav > .user li .rep-change {
   margin-right: 5px;
 }
 .dropdown-menu {
+  display: initial !important;
   font-size: 11px;
   min-width: 134px;
   margin:10px 0 0;
