@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800'>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/whhg-font/css/whhg.css">
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
@@ -25,16 +26,23 @@
       <div class="sidebar-controls"></div>
       <div class="ingredients-list">
         <ul>
-          <li class="sidebar-list-first">My Ingredients <i class="fa fa-flask"></i></li>
-          <li>Food item</li>
-          <li>Food item</li>
+          <li class="sidebar-list-first">My Cabinet <i class="icon-fridge"></i></li>
+          <li ng-repeat="item in cabinet">
+            {{item.name}}
+            <a ng-click="removeFromCabinet(item)"><i class="fa fa-times-circle"></i></a>
+          </li>
+          <li ng-show="!cabinet || !cabinet.length" style="font-style:italic">(empty)</li>
         </ul>
+        <a><i class="icon-circlefork"></i> What can I make?</a>
       </div>
       <div class="shopping-list">
         <ul>
           <li class="sidebar-list-first">Shopping List <i class="fa fa-shopping-cart"></i></li>
-          <li>Food item</li>
-          <li>Food item</li>
+          <li ng-repeat="item in shoppingList">
+            {{item.name}}
+            <a ng-click="removeFromShoppingList(item)"><i class="fa fa-times-circle"></i></a>
+          </li>
+          <li ng-show="!shoppingList || !shoppingList.length" style="font-style:italic">(empty)</li>
         </ul>
       </div>
     </aside>

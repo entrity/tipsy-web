@@ -31,11 +31,6 @@
           <p>Author:<br><a href="#">Sirtastic <span class="user-tips-count">(2344 tips)</span></a>
         </div>
       </div>
-      <div class="grid tags">
-        <div class="grid-cell">
-          <p>Tags: <br><a href="#">Healthy</a>, <a href="#">Simple</a>, <a href="#">Inexpensive</a>, <a href="#">Remixable</a></p>
-        </div>
-      </div>
     </div>
   </div>
   <div class="grid row-two">
@@ -48,7 +43,14 @@
       </div>
       <% @ingredients.each do |ingredient| %>
         <div class="grid grid--center ingredient">
-          <div class="grid-cell actions"><i class="fa fa-star"></i> <i class="fa fa-star"></i></div>
+          <div class="grid-cell actions">
+            <a ng-click="addToCabinet(<%= drink_ingredient_json ingredient %>)" title="Add to My Cabinet">
+              <i class="icon-fridge"><i class="fa fa-plus-circle red"></i></i>
+            </a>
+            <a ng-click="addToShoppingList(<%= drink_ingredient_json ingredient %>)" title="Add to Shopping List">
+              <i class="fa fa-shopping-cart"><i class="fa fa-plus-circle red"></i></i>
+            </a>
+          </div>
           <div class="grid-cell name"><%= ingredient.name %></div>
           <div class="grid-cell amount"><%= ingredient.qty %></div>
         </div>
