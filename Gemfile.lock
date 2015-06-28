@@ -237,7 +237,7 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rvm
   coffee-rails (~> 4.1.0)
-  devise
+  devise (~> 3.5.1)
   factory_girl_rails
   jbuilder (~> 2.0)
   jquery-rails
