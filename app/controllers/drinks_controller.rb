@@ -24,6 +24,7 @@ class DrinksController < ApplicationController
     respond_to do |format|
       format.html {
         @ingredients = saved_drink.ingredients
+          .includes(:ingredient)
           .order('random()')
           .limit(MAX_RESULTS)
       }

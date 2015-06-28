@@ -17,48 +17,133 @@
 //= require turbolinks
 //= require_tree .
 
-angular.module('tipsy', [
-	'ngResource',
-	'ngSanitize',
-	'tipsy.find',
-	'tipsy.toolbar',
-	'ui.select'
-])
-.run(['$rootScope', '$resource', function ($rootScope, $resource) {
-	Object.defineProperties($rootScope, {
-		getUser: {
-			writable: false,
-			configurable: false,
-			value: function (forceReload) {
-				if (forceReload || !$rootScope.currentUser)
-					$rootScope.currentUser = $resource('/users/0.json').get();
-				window.user = $rootScope.currentUser;
-				return $rootScope.currentUser;
+(function(){
+
+	angular.module('tipsy', [
+		'ngResource',
+		'ngSanitize',
+		'tipsy.find',
+		'tipsy.toolbar',
+		'ui.select'
+	])
+	.run(['$rootScope', '$resource', function ($rootScope, $resource) {
+		Object.defineProperties($rootScope, {
+			addToCabinet: {
+				configurable: false,
+				value: function (ingredient) {
+					addIngredientToAside(ingredient, 'cabinet');
+				}
+			},
+			addToShoppingList: {
+				configurable: false,
+				value: function (ingredient) {
+					addIngredientToAside(ingredient, 'shoppingList');
+				}
+			},
+			cabinet: {
+				configurable: false,
+				value: JSON.parse(localStorage.getItem('cabinet')) || []
+			},
+			getUser: {
+				configurable: false,
+				value: function (forceReload) {
+					if (forceReload || !$rootScope.currentUser)
+						$rootScope.currentUser = $resource('/users/0.json').get();
+					window.user = $rootScope.currentUser;
+					return $rootScope.currentUser;
+				}
+			},
+			isLoggedIn: {
+				configurable: false,
+				value: function (forceReload) {
+					return $rootScope.getUser(forceReload).id;
+				}
+			},
+			removeFromCabinet:{
+				configurable: false,
+				value: function (ingredient) {
+					removeIngredientFromAside(ingredient, 'cabinet');
+				}
+			},
+			removeFromShoppingList:{
+				configurable: false,
+				value: function (ingredient) {
+					removeIngredientFromAside(ingredient, 'shoppingList');
+				}
+			},
+			shoppingList: {
+				configurable: false,
+				value: JSON.parse(localStorage.getItem('shoppingList')) || []
+			},
+		});
+		/* Support fns */
+		function addIngredientToAside (ingredient, arrayName) {
+			var arr = $rootScope[arrayName];
+			if (findObjIndex(ingredient, arr) == -1) {
+				arr.push(ingredient);
+				arr.sort(sortByName);
+				localStorage.setItem(arrayName, JSON.stringify(arr));
+				return true;
 			}
-		},
-		isLoggedIn: {
-			writable: false,
-			configurable: false,
-			value: function (forceReload) {
-				return $rootScope.getUser(forceReload).id;
-			}
-		},
-	});
-	$rootScope.getUser();
-}])
-.filter('tipsyFindableClass', function () {
-	return function (type) {
-		switch (parseInt(type)) {
-			case window.DRINK:
-				return 'drink'; break;
-			case window.INGREDIENT:
-				return 'ingredient'; break;
-			default:
-				console.error('Bad type for findable: '+type);
 		}
+		function removeIngredientFromAside (ingredient, arrayName) {
+			var arr = $rootScope[arrayName];
+			var index = findObjIndex(ingredient, arr);
+			if (index != -1) {
+				arr.splice(index, 1);
+				localStorage.setItem(arrayName, JSON.stringify(arr));
+				return true;
+			}
+			console.warn('Ingredient not found in '+arrayName, ingredient);
+		}
+		/* Initialization calls */
+		while (removeDuplicatesFromAside($rootScope.cabinet)) {}
+		while (removeDuplicatesFromAside($rootScope.shoppingList)) {}
+	}])
+	.filter('tipsyFindableClass', function () {
+		return function (type) {
+			switch (parseInt(type)) {
+				case window.DRINK:
+					return 'drink'; break;
+				case window.INGREDIENT:
+					return 'ingredient'; break;
+				default:
+					console.error('Bad type for findable: '+type);
+			}
+		}
+	})
+	;
+
+	function removeDuplicatesFromAside (ingredients) {
+		var map = {};
+		for (var i in ingredients) {
+			var ingredient = ingredients[i];
+			if (map[ingredient.id]) {
+				ingredients.splice(i,1);
+				return true;
+			}
+			map[ingredient.id] = true;
+		}
+		return false;
 	}
-})
-;
+	function findObjIndex (ingredient, array) {
+		for (var i in array) {
+			if (array[i].id == ingredient.id)
+				return i;
+		}
+		return -1;
+	}
+	function sortByName (a, b) {
+		var nameA = a.name || '';
+		var nameB = b.name || '';
+		if (nameA < nameB)
+			return -1;
+		else if (nameA > nameB)
+			return 1;
+		else
+			return 0;
+	}
+})();
 
 // Bootstrap AngularJS on page load
 (function(){

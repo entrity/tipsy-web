@@ -15,14 +15,14 @@
         </div>
       </div>
     </div>
-    <nav class="grid grid--center grid-cell" ng-hide="isLoggedIn()">
+    <nav class="grid grid--center grid-cell" ng-cloak ng-hide="isLoggedIn()">
       <div class="grid-cell"><a ng-click="openSignInModal()">Browse</a></div>
       <div class="grid-cell user">
         <a href="/users/sign_up/">Sign up</a>
         <a href="/users/sign_in/">Sign in</a>
       </div>
     </nav>
-    <nav class="grid grid--center grid-cell" ng-show="isLoggedIn()">
+    <nav class="grid grid--center grid-cell" ng-cloak ng-show="isLoggedIn()">
       <div class="grid-cell"><a href="/drinks">Browse</a></div>
       <div class="grid-cell"><a ng-show="toolbar.availableReviewCt" href="/reviews/show">Review <span class="badge">{{toolbar.availableReviewCt}}</span></a></div>
       <div class="grid-cell user">

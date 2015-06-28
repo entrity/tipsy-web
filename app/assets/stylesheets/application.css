@@ -71,6 +71,12 @@ body .input-group .form-control {
   color: #c87533;
 }
 
+i i::before {
+  font-size: 6pt;
+  left: -2px;
+  bottom: -2px;
+  position: relative;
+}
 
 /* ==========================================================================
    Tipsyology
@@ -254,6 +260,9 @@ nav div a:hover {
 }
 .content > p > .bold {
     font-weight: bold;
+}
+.red {
+  color: red;
 }
 .results-filters {
   padding: 0 0 20px 0;
@@ -651,4 +660,11 @@ nav div a:hover {
   padding: 20px;
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
+}
+
+aside li .fa {
+  display:none;
+}
+aside li:hover .fa {
+  display:initial;
 }
