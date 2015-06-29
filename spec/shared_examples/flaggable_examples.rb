@@ -8,7 +8,7 @@ shared_examples "flaggable" do
 
   describe '#flag!' do
     let(:user){ build_stubbed :user }
-    let(:bits){ HasFlagBits::INDECENT }
+    let(:bits){ Flag::INDECENT }
     let(:log_points){Flaggable::FLAG_PTS_LIMIT}
     subject{flaggable.flag!(user, bits)}
 
@@ -30,38 +30,6 @@ shared_examples "flaggable" do
         expect(flaggable.status).to eq(Flaggable::NEEDS_REVIEW)
       end
 
-      context 'when there are two Flags with flag_bits' do
-        let(:user_2){ build_stubbed :user }
-        let(:log_points){Flaggable::FLAG_PTS_LIMIT - 1}
-        let(:flag_a){build_stubbed :flag, flag_bits:HasFlagBits::COPYRIGHT}
-        subject{
-          flaggable.flag!(user, flag_a.flag_bits)
-          flaggable.flag!(user_2, flag_b.flag_bits)
-        }
-        before do
-          expect(user_2).to receive(:log_points).and_return(log_points)
-        end
-        context 'of values INDECENT & COPYRIGHT' do
-          let(:flag_b){build_stubbed :flag, flag_bits:HasFlagBits::INDECENT}
-          it 'the Review created has both flags' do
-            subject
-            review = flaggable.review
-            expect(review.indecent_flag?).to be true
-            expect(review.copyright_flag?).to be true
-            expect(review.spam_flag?).to be false
-          end
-        end
-        context 'with both values bein COPYRIGHT' do
-          let(:flag_b){build_stubbed :flag, flag_bits:HasFlagBits::COPYRIGHT}
-          it 'the Review created has both flags' do
-            subject
-            review = flaggable.review
-            expect(review.indecent_flag?).to be false
-            expect(review.copyright_flag?).to be true
-            expect(review.spam_flag?).to be false
-          end
-        end
-      end
     end
 
   end

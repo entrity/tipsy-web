@@ -23,20 +23,6 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
---
--- Name: dblink; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS dblink WITH SCHEMA public;
-
-
---
--- Name: EXTENSION dblink; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION dblink IS 'connect to other PostgreSQL databases from within a database';
-
-
 SET search_path = public, pg_catalog;
 
 --
@@ -48,7 +34,6 @@ CREATE FUNCTION flag_comments(i_user_id integer, i_flaggable_id integer, s_flagg
     AS $$
         DECLARE duplicate_flag_ct INT;
         DECLARE open_review_ct INT;
-        DECLARE aggregate_flag_bits SMALLINT;
         DECLARE aggregate_flagger_ids INT[];
         BEGIN
           -- check for existing flag with the same user and flaggable
@@ -75,19 +60,15 @@ CREATE FUNCTION flag_comments(i_user_id integer, i_flaggable_id integer, s_flagg
                 LIMIT 1
                 INTO open_review_ct;
               IF (SELECT open_review_ct) = 0 THEN
-                -- calc aggregate flag_bits
-                SELECT BIT_OR(flag_bits) FROM flags WHERE flaggable_id = i_flaggable_id AND flaggable_type = s_flaggable_type INTO aggregate_flag_bits;
-                SELECT aggregate_flag_bits|i_flag_bits INTO aggregate_flag_bits;
                 -- calc aggregate flagger_ids
                 SELECT ARRAY(SELECT user_id FROM flags WHERE flaggable_id = i_flaggable_id AND flaggable_type = s_flaggable_type) INTO aggregate_flagger_ids;
                 -- create review
-                INSERT INTO reviews (reviewable_id, reviewable_type, open, contributor_id, flag_bits, flagger_ids, created_at)
+                INSERT INTO reviews (reviewable_id, reviewable_type, open, contributor_id, flagger_ids, created_at)
                   VALUES (
                       i_flaggable_id,
                       s_flaggable_type,
                       TRUE,
                       (SELECT user_id FROM comments WHERE id = i_flaggable_id LIMIT 1),
-                      aggregate_flag_bits,
                       aggregate_flagger_ids,
                       dt_timestamp
                   );
@@ -110,7 +91,6 @@ CREATE FUNCTION flag_revisions(i_user_id integer, i_flaggable_id integer, s_flag
     AS $$
         DECLARE duplicate_flag_ct INT;
         DECLARE open_review_ct INT;
-        DECLARE aggregate_flag_bits SMALLINT;
         DECLARE aggregate_flagger_ids INT[];
         BEGIN
           -- check for existing flag with the same user and flaggable
@@ -137,19 +117,15 @@ CREATE FUNCTION flag_revisions(i_user_id integer, i_flaggable_id integer, s_flag
                 LIMIT 1
                 INTO open_review_ct;
               IF (SELECT open_review_ct) = 0 THEN
-                -- calc aggregate flag_bits
-                SELECT BIT_OR(flag_bits) FROM flags WHERE flaggable_id = i_flaggable_id AND flaggable_type = s_flaggable_type INTO aggregate_flag_bits;
-                SELECT aggregate_flag_bits|i_flag_bits INTO aggregate_flag_bits;
                 -- calc aggregate flagger_ids
                 SELECT ARRAY(SELECT user_id FROM flags WHERE flaggable_id = i_flaggable_id AND flaggable_type = s_flaggable_type) INTO aggregate_flagger_ids;
                 -- create review
-                INSERT INTO reviews (reviewable_id, reviewable_type, open, contributor_id, flag_bits, flagger_ids, created_at)
+                INSERT INTO reviews (reviewable_id, reviewable_type, open, contributor_id, flagger_ids, created_at)
                   VALUES (
                       i_flaggable_id,
                       s_flaggable_type,
                       TRUE,
                       (SELECT user_id FROM revisions WHERE id = i_flaggable_id LIMIT 1),
-                      aggregate_flag_bits,
                       aggregate_flagger_ids,
                       dt_timestamp
                   );
@@ -209,19 +185,20 @@ ALTER SEQUENCE comments_id_seq OWNED BY comments.id;
 
 CREATE TABLE drinks (
     id integer NOT NULL,
-    name character varying,
+    name text NOT NULL,
+    instructions text,
+    glass_id smallint,
     abv smallint,
     description text,
-    text text,
-    score double precision,
-    vote_ct integer DEFAULT 0,
-    glass_id smallint,
-    color character varying(16),
+    up_vote_ct integer DEFAULT 0,
+    dn_vote_ct integer DEFAULT 0,
+    score double precision DEFAULT 0.0,
+    color character varying,
+    revision_id integer,
     comment_ct integer DEFAULT 0,
     ingredient_ct integer DEFAULT 0,
     profane boolean DEFAULT false,
-    non_alcoholic boolean DEFAULT false,
-    revision_id integer
+    non_alcoholic boolean DEFAULT false
 );
 
 
@@ -251,7 +228,8 @@ ALTER SEQUENCE drinks_id_seq OWNED BY drinks.id;
 CREATE TABLE drinks_ingredients (
     drink_id integer,
     ingredient_id integer,
-    qty character varying
+    qty character varying,
+    optional boolean DEFAULT false
 );
 
 
@@ -287,6 +265,16 @@ CREATE SEQUENCE flags_id_seq
 --
 
 ALTER SEQUENCE flags_id_seq OWNED BY flags.id;
+
+
+--
+-- Name: glasses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE glasses (
+    glass_id integer NOT NULL,
+    name text NOT NULL
+);
 
 
 --
@@ -328,8 +316,8 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 CREATE TABLE ingredients (
     id integer NOT NULL,
-    name character varying,
-    text text,
+    name text NOT NULL,
+    description text,
     revision_id integer
 );
 
@@ -396,7 +384,6 @@ CREATE TABLE reviews (
     open boolean DEFAULT true,
     contributor_id integer,
     points smallint DEFAULT 0,
-    flag_bits smallint DEFAULT 0,
     flagger_ids integer[] DEFAULT '{}'::integer[],
     created_at timestamp without time zone
 );
@@ -487,10 +474,10 @@ CREATE TABLE users (
     confirmation_sent_at timestamp without time zone,
     unconfirmed_email character varying,
     name character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
     no_alcohol boolean DEFAULT false,
     no_profanity boolean DEFAULT false,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     helpful_flags integer DEFAULT 0,
     unhelpful_flags integer DEFAULT 0,
     majority_review_votes integer DEFAULT 0,
@@ -603,6 +590,14 @@ ALTER TABLE ONLY drinks
 
 ALTER TABLE ONLY flags
     ADD CONSTRAINT flags_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: glasses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY glasses
+    ADD CONSTRAINT glasses_pkey PRIMARY KEY (glass_id);
 
 
 --
@@ -743,7 +738,7 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 SET search_path TO "$user",public;
 
-INSERT INTO schema_migrations (version) VALUES ('20150525000943');
+INSERT INTO schema_migrations (version) VALUES ('20150525000000');
 
 INSERT INTO schema_migrations (version) VALUES ('20150525004907');
 
@@ -751,9 +746,7 @@ INSERT INTO schema_migrations (version) VALUES ('20150525004945');
 
 INSERT INTO schema_migrations (version) VALUES ('20150525005011');
 
-INSERT INTO schema_migrations (version) VALUES ('20150606022252');
-
-INSERT INTO schema_migrations (version) VALUES ('20150609014731');
+INSERT INTO schema_migrations (version) VALUES ('20150525005012');
 
 INSERT INTO schema_migrations (version) VALUES ('20150609043501');
 

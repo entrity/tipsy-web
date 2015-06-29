@@ -1,6 +1,4 @@
 class Review < ActiveRecord::Base
-  include HasFlagBits
-
   POINTS_TO_CLOSE = 4
 
   belongs_to :reviewable, polymorphic: true

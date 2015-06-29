@@ -7,7 +7,6 @@ module PostgresFunctions
       RETURNS BOOLEAN AS $$
         DECLARE duplicate_flag_ct INT;
         DECLARE open_review_ct INT;
-        DECLARE aggregate_flag_bits SMALLINT;
         DECLARE aggregate_flagger_ids INT[];
         BEGIN
           -- check for existing flag with the same user and flaggable
@@ -34,19 +33,15 @@ module PostgresFunctions
                 LIMIT 1
                 INTO open_review_ct;
               IF (SELECT open_review_ct) = 0 THEN
-                -- calc aggregate flag_bits
-                SELECT BIT_OR(flag_bits) FROM flags WHERE flaggable_id = i_flaggable_id AND flaggable_type = s_flaggable_type INTO aggregate_flag_bits;
-                SELECT aggregate_flag_bits|i_flag_bits INTO aggregate_flag_bits;
                 -- calc aggregate flagger_ids
                 SELECT ARRAY(SELECT user_id FROM flags WHERE flaggable_id = i_flaggable_id AND flaggable_type = s_flaggable_type) INTO aggregate_flagger_ids;
                 -- create review
-                INSERT INTO reviews (reviewable_id, reviewable_type, open, contributor_id, flag_bits, flagger_ids, created_at)
+                INSERT INTO reviews (reviewable_id, reviewable_type, open, contributor_id, flagger_ids, created_at)
                   VALUES (
                       i_flaggable_id,
                       s_flaggable_type,
                       TRUE,
                       (SELECT user_id FROM #{table_name} WHERE id = i_flaggable_id LIMIT 1),
-                      aggregate_flag_bits,
                       aggregate_flagger_ids,
                       dt_timestamp
                   );

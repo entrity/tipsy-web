@@ -1,7 +1,5 @@
 class CreateFlaggables < ActiveRecord::Migration
   def change
-    rename_column :drinks, :instructions, :text
-    rename_column :ingredients, :description, :text
 
     change_table :users do |t|
       t.integer :helpful_flags, :default => 0
@@ -50,7 +48,6 @@ class CreateFlaggables < ActiveRecord::Migration
       t.boolean :open, :default => true
       t.integer :contributor_id
       t.integer :points, :limit => 1, :default => 0
-      t.integer :flag_bits, :limit => 1, :default => 0
       t.integer :flagger_ids, array: true, default: []
       t.timestamp :created_at
     end
@@ -63,11 +60,5 @@ class CreateFlaggables < ActiveRecord::Migration
       t.timestamp :created_at
     end
 
-    change_table :drinks do |t|
-      t.integer :revision_id
-    end
-    change_table :ingredients do |t|
-      t.integer :revision_id
-    end
   end
 end
