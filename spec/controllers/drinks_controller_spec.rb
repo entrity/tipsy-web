@@ -2,7 +2,7 @@ require 'shared_examples/drinks_or_ingredients_controller_examples.rb'
 
 describe DrinksController, :type => :controller do
 
-  let(:drink) { build_stubbed :drink, id:1, name:'tom collins', text:'foo', ingredients:drink_ingredients }
+  let(:drink) { build_stubbed :drink, id:1, name:'tom collins', description:'foo', ingredients:drink_ingredients }
   let(:drink_ingredients) { build_list :drink_ingredient, 3 }
 
   include_examples 'drinks or ingredients controller'
