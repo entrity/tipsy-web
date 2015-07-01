@@ -1,4 +1,4 @@
-require 'shared_examples/fuzzy_findable.rb'
+require 'shared_examples/fuzzy_findable_examples.rb'
 
 describe Drink do
 

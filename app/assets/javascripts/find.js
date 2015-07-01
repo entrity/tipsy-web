@@ -24,7 +24,9 @@
 				case window.DRINK:
 					window.location.href = '/drinks/'+model.id; break;
 				case window.INGREDIENT:
-					$scope.addIngredient(model); break;
+					$scope.addIngredient(model);
+					$scope.findables = [];
+					break;
 				default:
 					console.error('Bad type for findable: '+type);
 			}
