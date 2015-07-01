@@ -1,4 +1,4 @@
-<div id="drink-page">
+<div id="drink-page" ng-controller="DrinkCtrl">
   <div class="grid row-one">
     <div class="grid-cell left"><a href="#"></a></div>
     <div class="grid-cell right">
@@ -6,29 +6,71 @@
         <div class="grid-cell name">
           <h1><%= @drink.name %></h1>
           <div class="rating">
-            <a href="#">Reviews (66)</a>
+            <a href="#">Comments (<%= @drink.comment_ct %>)</a>
           </div>
         </div>
         <div class="grid-cell votes">
-          <div class="votes-container"><div class="arrow up" role="button" aria-label="upvote" tabindex="0"><i class="fa fa-caret-up"></i></div><div class="score"><%= @drink.score %></div><div class="arrow down" role="button" aria-label="downvote" tabindex="0"><i class="fa fa-caret-down"></i></div></div>
+          <div class="votes-container">
+            <div class="arrow up" role="button" aria-label="upvote" tabindex="0"><i class="fa fa-caret-up"></i></div>
+            <div class="score"><%= @drink.vote_sum %></div>
+            <div class="arrow down" role="button" aria-label="downvote" tabindex="0"><i class="fa fa-caret-down"></i></div></div>
         </div>
       </div>
       <div class="social-share-bar">Social share bar goes here</div>
       <div class="grid description">
         <div class="grid-cell prep-time">
-          <h3>Description</h3>
-          <p><%= @drink.description %> <a href="#">How would you describe this drink?</a></p>
+          <h3>Description <a ng-click="loadEditView()" class="fa fa-edit"></a></h3>
+          <div>
+            <% if @drink.description.present? %>
+              <%= @drink.description %>
+            <% else %>
+              <p>
+                <em>No description has been recorded for this drink yet.</em>
+                <br>
+                <a ng-click="loadEditView()">How would you describe this drink?</a>
+              </p>
+            <% end %>
+          </div>
         </div>
       </div>
       <div class="grid drink-info">
         <div class="grid-cell prep-time">
-          <p>Prep time:<br><span>10 minutes</span></p>
+          <p>
+            Prep time:
+            <a ng-click="loadEditView()"><i class="fa fa-pencil-square-o"></i></a>
+            <br>
+            <span>
+              <% if @drink.prep_time %>
+                <%= @drink.prep_time %>
+              <% else %>
+                <em>unknown</em>
+              <% end -%>
+            </span>
+          </p>
         </div>
         <div class="grid-cell calorie-count">
-          <p>Calories:<br><span>160</span>
+          <p>Calories:
+          <a ng-click="loadEditView()"><i class="fa fa-pencil-square-o"></i></a>
+          <br>
+          <span>
+            <% if @drink.calories %>
+              <%= @drink.calories %>
+            <% else %>
+              <em>unknown</em>
+            <% end -%>
+          </span>
         </div>
         <div class="grid-cell author">
-          <p>Author:<br><a href="#">Sirtastic <span class="user-tips-count">(2344 tips)</span></a>
+          <% if @drink.author %>
+            <p>
+              Author:
+              <br>
+              <a href="#">
+                <img>
+                <%= @drink.author.name %>
+                <span class="user-tips-count">(<%= @drink.author.points %> in tips)</span>
+              </a>
+          <% end -%>
         </div>
       </div>
     </div>
@@ -37,9 +79,6 @@
     <div class="grid-cell ingredients">
       <div class="grid grid--center">
         <div class="grid-cell"><h3>Ingredients</h3></div>
-        <div class="grid-cell servings">
-          <label for="servings">Servings: </label><input id="servings" type="number" value="1" min="1" max="30"/>
-        </div>
       </div>
       <% @ingredients.each do |ingredient| %>
         <div class="grid grid--center ingredient">
@@ -52,32 +91,45 @@
             </a>
           </div>
           <div class="grid-cell name"><%= ingredient.name %></div>
-          <div class="grid-cell amount"><%= ingredient.qty %></div>
+          <div class="grid-cell amount">
+            <% if ingredient.optional %><em>(optional)</em><% end -%>
+            <%= ingredient.qty %>
+          </div>
         </div>
       <% end %>
     </div>
     <div class="grid-cell directions">
       <div class="grid grid--center">
-        <div class="grid-cell">
-          <h3>Recipe Directions</h3>
-          <p><%= @drink.instructions %> <br><br><a href="#">Were these directions helpful?</a></p>
+        <div class="grid-cell">              
+          <h3>Recipe Directions <a ng-click="loadEditView()" class="fa fa-edit"></a></h3>
+          <% if @drink.instructions.present? %>
+            <div><%= @drink.instructions %></div>
+            <p>
+              <em>Were these directions helpful?</em><br>
+              <a ng-click="loadEditView()">Improve them!</a>
+            </p>
+          <% else %>
+            <p>
+              <em>No instructions have been writtem yet.</em>
+              <br>
+              <a ng-click="loadEditView()">How would you prepare this drink?</a>
+            </p>
+          <% end %>
         </div>
       </div>
     </div>
   </div>
+  <!-- TIPS (COMMENTS) -->
   <div class="grid row-three">
     <div class="grid-cell">
-      <h3>Tips for mixing a Screwdriver</h3>
-      <p>With a drink this simple, quality of ingredients is everything. There’s no magic shortcut. The smoother your vodka, the easier a Screwdriver will go down. Avoid pulpy orange juice, and go with either a premium brand of orange juice or fresh squeezed.</p>
-
-      <p>A Screwdriver goes with any food orange juice goes with. The first meal that comes to mind is, of course, breakfast. But you don’t have to start drinking at 6 am to enjoy a screwdriver with breakfast: just have breakfast foods for dinner or lunch! Omelet, bacon, sausage, ham, pancakes, French toast – good, heavy, stick-to-your-ribs food.</p>
-
-      <p>Ever versatile Screwdrivers are also tasty with smoky foods, like a pulled pork sandwich or steaks from the smoker. Smoked almonds and cheeses make a nice munchie to snack along on with a screwdriver. Salty snacks work well, too, especially if they have a strong flavor. Try pretzels or flavorful crackers. <br><br><a href="#">Have a few tips of your own?</a></p>
+      <p>Have a tip for <%= @drink.name %>? Join the discussion!</p>
+      <textarea ng-model="comment.text"></textarea>
+      <a ng-click="createNote()">Save</a>
     </div>
   </div>
   <div class="grid row-four similar-drinks">
     <div class="grid-cell">
-      <h3>Drinks similar to a Screwdriver</h3>
+      <h3>Drinks similar to a <%= @drink.name %></h3>
     </div>
   </div>
 

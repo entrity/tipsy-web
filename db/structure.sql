@@ -198,7 +198,10 @@ CREATE TABLE drinks (
     comment_ct integer DEFAULT 0,
     ingredient_ct integer DEFAULT 0,
     profane boolean DEFAULT false,
-    non_alcoholic boolean DEFAULT false
+    non_alcoholic boolean DEFAULT false,
+    author_id integer,
+    calories smallint,
+    prep_time text
 );
 
 
@@ -755,4 +758,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150611031813');
 INSERT INTO schema_migrations (version) VALUES ('20150613230454');
 
 INSERT INTO schema_migrations (version) VALUES ('20150626002933');
+
+INSERT INTO schema_migrations (version) VALUES ('20150629032253');
+
+INSERT INTO schema_migrations (version) VALUES ('20150629034153');
 

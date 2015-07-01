@@ -419,6 +419,10 @@ nav div a:hover {
 .sidebar-list-first i {
   float: right;
 }
+.signin.grid.modal-content {
+  height: initial;
+  padding: 32px;
+}
 .signin.grid,
 .splash.grid {
   height:100vh; 
@@ -662,9 +666,9 @@ nav div a:hover {
   border-bottom: 1px solid lightgray;
 }
 
-aside li .fa {
+aside li a .fa {
   display:none;
 }
-aside li:hover .fa {
+aside li:hover a .fa {
   display:initial;
 }
