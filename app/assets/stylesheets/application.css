@@ -144,6 +144,10 @@ nav > div {
   padding-left: 16px;
   text-align: center;
 }
+nav > div:first-child {
+  text-align: left;
+  max-width: 100px;
+}
 nav > div:last-child {
   padding-right: 0;
 }
@@ -154,17 +158,28 @@ nav > div a:focus {
 }
 nav .rep-cont {
   text-align: right;
+}
+nav .rep-cont #rep-alerts,
+nav .trophie-cont a {
+  text-align: right;
   display: inline-block;
   padding: 5px;
   border-radius: 3px;
 }
-nav .open .rep-cont,
-nav .open .rep-cont:hover {
+nav .open .rep-cont #rep-alerts,
+nav .open .rep-cont #rep-alerts:hover {
   background-color: #fff;
   color: #555;
 }
-nav .rep-cont:hover {
+nav .rep-cont #rep-alerts:hover,
+nav .trophie-cont a:hover {
   background-color: #0A6B94;
+}
+nav .trophie-cont a i {
+  margin-left: 6px;
+}
+nav .trophie-cont a i:first-child {
+  margin-left: 0;
 }
 nav > .user {
   cursor: pointer;
@@ -389,12 +404,15 @@ nav div a:hover {
 .fancy-sidebar {
   max-width:200px;
   min-height: 100vh;
-  background-color: #f38630;
+  background-color: #16242A;
   float:right;
   padding:10px;
 }
 .sidebar-controls {
   height:40px;
+}
+.ingredients-list {
+  padding-bottom: 10px;
 }
 .ingredients-list ul,
 .shopping-list ul {
@@ -409,15 +427,23 @@ nav div a:hover {
   font-weight:600;
   margin:0 10px;
   padding:5px 0 !important;
-  border-bottom:1px solid #fa9b50;
+  border-bottom:1px solid #0091CE;
 }
 .ingredients-list ul li,
 .shopping-list ul li {
   font-size:12px;
   padding:5px 10px;
 }
+.ingredients-list ul li.item,
+.shopping-list ul li.item {
+  text-transform: capitalize;
+}
 .sidebar-list-first i {
   float: right;
+}
+.ingredients-list a {
+  text-decoration: none;
+  cursor: pointer;
 }
 .signin.grid,
 .splash.grid {
@@ -634,6 +660,7 @@ nav div a:hover {
 }
 #drink-page .row-two .ingredients .ingredient {
   padding: 6px 0;
+  text-transform: capitalize;
 }
 #drink-page .row-two .ingredients .ingredient .name,
 #drink-page .row-two .ingredients .ingredient .amount {
@@ -647,6 +674,19 @@ nav div a:hover {
 }
 #drink-page .description {
   margin-bottom: 10px;
+}
+#drink-page .grid-cell.actions a {
+  text-decoration: none;
+  cursor: pointer;
+}
+#drink-page .grid-cell.actions a > i.icon-fridge > i:before {
+  left: -4px;
+}
+#drink-page .grid-cell.actions a > i.fa-shopping-cart:before {
+  font-size: 16px;
+}
+#drink-page .grid-cell.actions a > i > i:before {
+  font-size: 11px;
 }
 #drink-page .description h3,
 #drink-page .directions h3,
@@ -662,9 +702,9 @@ nav div a:hover {
   border-bottom: 1px solid lightgray;
 }
 
-aside li .fa {
+aside li.item .fa {
   display:none;
 }
-aside li:hover .fa {
+aside li.item:hover .fa {
   display:initial;
 }

@@ -6,20 +6,21 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tipsyology</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800'>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="/whhg-font/css/whhg.css">
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body ng-app='tipsy'>
+<body ng-app='tipsy' ng-controller="FindCtrl">
 
 <div class="wrapper">
   <%= render 'toolbar' %>
   <div id="main-cont" class="grid">
     <div class="content grid-cell">
+      <ng-include src="'/find-results.html'"></ng-include>
       <%= yield %>
     </div>
     <aside class="fancy-sidebar grid-cell">
@@ -27,18 +28,18 @@
       <div class="ingredients-list">
         <ul>
           <li class="sidebar-list-first">My Cabinet <i class="icon-fridge"></i></li>
-          <li ng-repeat="item in cabinet">
-            {{item.name}}
+          <li ng-repeat="item in cabinet" class="item">
+            {{item.name}} 
             <a ng-click="removeFromCabinet(item)"><i class="fa fa-times-circle"></i></a>
           </li>
           <li ng-show="!cabinet || !cabinet.length" style="font-style:italic">(empty)</li>
+          <li><a><i class="icon-circlefork"></i> What can I make?</a></li>
         </ul>
-        <a><i class="icon-circlefork"></i> What can I make?</a>
       </div>
       <div class="shopping-list">
         <ul>
           <li class="sidebar-list-first">Shopping List <i class="fa fa-shopping-cart"></i></li>
-          <li ng-repeat="item in shoppingList">
+          <li ng-repeat="item in shoppingList" class="item">
             {{item.name}}
             <a ng-click="removeFromShoppingList(item)"><i class="fa fa-times-circle"></i></a>
           </li>

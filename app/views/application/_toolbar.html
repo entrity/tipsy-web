@@ -1,4 +1,4 @@
-<header ng-controller="FindCtrl">
+<header>
   <div class="wrapper grid grid--center" ng-controller="ToolbarCtrl">
     <div class="logo grid-cell">
       <a href="/"><img src="/images/tipsyology-logo.png" /></a>
@@ -16,19 +16,25 @@
       </div>
     </div>
     <nav class="grid grid--center grid-cell" ng-cloak ng-hide="isLoggedIn()">
-      <div class="grid-cell"><a ng-click="openSignInModal()">Browse</a></div>
+      <div class="grid-cell">
+        <a ng-click="openSignInModal()">Browse</a>
+      </div>
       <div class="grid-cell user">
         <a href="/users/sign_up/">Sign up</a>
         <a href="/users/sign_in/">Sign in</a>
       </div>
     </nav>
-    <nav class="grid grid--center grid-cell" ng-cloak ng-show="isLoggedIn()">
-      <div class="grid-cell"><a href="/drinks">Browse</a></div>
-      <div class="grid-cell"><a ng-show="toolbar.availableReviewCt" href="/reviews/show">Review <span class="badge">{{toolbar.availableReviewCt}}</span></a></div>
+    <nav class="grid grid--center" ng-cloak ng-show="isLoggedIn()">
+      <div class="grid-cell">
+        <a href="/drinks">Browse</a>
+      </div>
+      <div ng-show="toolbar.availableReviewCt" class="grid-cell">
+        <a href="/reviews/show">Review <span class="badge">{{toolbar.availableReviewCt}}</span></a>
+      </div>
       <div class="grid-cell user">
         <div class="grid grid--center">
-          <div class="grid-cell dropdown">
-            <div class="rep-cont" id="rep-alerts">
+          <div class="grid-cell rep-cont dropdown">
+            <div id="rep-alerts">
               <a ng-click="openToolbarMenu($event, 'repChanges')">
                 <span class="reputation" title="{{getUser().points}} points of reputation ('tips')">{{getUser().points}}</span>
                 <span class="rep-change" ng-if="getUser().newPointChanges">{{getUser().newPointChanges < 0 ? '-' : '+'}}{{getUser().newPointChanges}}</span>
@@ -40,11 +46,11 @@
               </li>
             </ul>
           </div>
-          <div class="grid-cell">
+          <div class="grid-cell trophie-cont">
             <a href="#">
-              <i class="fa fa-trophy gold"></i>{{getUser().goldBadgeCt||0}}
-              <i class="fa fa-trophy silver"></i>{{getUser().silverBadgeCt||0}}
-              <i class="fa fa-trophy bronze"></i>{{getUser().bronzeBadgeCt||0}}
+              <i class="fa fa-trophy gold"></i> {{getUser().goldBadgeCt||0}}
+              <i class="fa fa-trophy silver"></i> {{getUser().silverBadgeCt||0}}
+              <i class="fa fa-trophy bronze"></i> {{getUser().bronzeBadgeCt||0}}
             </a>
           </div>
           <div class="grid-cell dropdown">
@@ -60,5 +66,4 @@
       </div>
     </nav>
   </div>
-  <ng-include src="'/find-results.html'"></ng-include>
 </header>
