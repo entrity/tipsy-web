@@ -1,6 +1,8 @@
 class Drink < ActiveRecord::Base
   include FuzzyFindable
   include Revisable
+
+  belongs_to :author, class_name:'User'
   
   has_many :ingredients, class_name:'DrinkIngredient', dependent: :destroy
 
@@ -13,4 +15,9 @@ class Drink < ActiveRecord::Base
       .distinct
       .order('ingredient_ct')
   }
+
+  def vote_sum
+    up_vote_ct - dn_vote_ct
+  end
+  
 end

@@ -28,7 +28,7 @@
       <div class="ingredients-list">
         <ul>
           <li class="sidebar-list-first">My Cabinet <i class="icon-fridge"></i></li>
-          <li ng-repeat="item in cabinet" class="item">
+          <li ng-repeat="item in cabinet track by item.id" class="item">
             {{item.name}} 
             <a ng-click="removeFromCabinet(item)"><i class="fa fa-times-circle"></i></a>
           </li>
@@ -39,7 +39,7 @@
       <div class="shopping-list">
         <ul>
           <li class="sidebar-list-first">Shopping List <i class="fa fa-shopping-cart"></i></li>
-          <li ng-repeat="item in shoppingList" class="item">
+          <li ng-repeat="item in shoppingList track by item.id" class="item">
             {{item.name}}
             <a ng-click="removeFromShoppingList(item)"><i class="fa fa-times-circle"></i></a>
           </li>

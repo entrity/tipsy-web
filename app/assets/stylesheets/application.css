@@ -445,6 +445,10 @@ nav div a:hover {
   text-decoration: none;
   cursor: pointer;
 }
+.signin.grid.modal-content {
+  height: initial;
+  padding: 32px;
+}
 .signin.grid,
 .splash.grid {
   height:100vh; 

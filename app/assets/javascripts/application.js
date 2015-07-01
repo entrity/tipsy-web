@@ -11,6 +11,9 @@
 // about supported directives.
 //
 //= require 'angular/angular.min'
+//= require 'angular-aria/angular-aria.min'
+//= require 'angular-bootstrap/ui-bootstrap.min'
+//= require 'angular-bootstrap/ui-bootstrap-tpls.min'
 //= require 'angular-resource/angular-resource.min'
 //= require 'angular-sanitize/angular-sanitize.min'
 //= require 'angular-ui-select/dist/select.min'
@@ -20,13 +23,17 @@
 (function(){
 
 	angular.module('tipsy', [
+		'ngAria',
 		'ngResource',
 		'ngSanitize',
+		'tipsy.drink',
 		'tipsy.find',
+		'tipsy.modals',
 		'tipsy.toolbar',
+		'ui.bootstrap',
 		'ui.select'
 	])
-	.run(['$rootScope', '$resource', function ($rootScope, $resource) {
+	.run(['$rootScope', '$resource', '$modal', function ($rootScope, $resource, $modal) {
 		Object.defineProperties($rootScope, {
 			addToCabinet: {
 				configurable: false,
@@ -59,6 +66,22 @@
 					return $rootScope.getUser(forceReload).id;
 				}
 			},
+			openLoginModal: {
+				configurable: false,
+				value: function (modalMessage) {
+					this.loginModal = $modal.open({
+						animation: true,
+						templateUrl: '/login-modal.html',
+						controller: 'LoginModalCtrl',
+						size: 'sm',
+						resolve: {
+							message: function () {
+								return modalMessage;
+							}
+						}
+					});
+				}
+			},
 			removeFromCabinet:{
 				configurable: false,
 				value: function (ingredient) {
@@ -69,6 +92,15 @@
 				configurable: false,
 				value: function (ingredient) {
 					removeIngredientFromAside(ingredient, 'shoppingList');
+				}
+			},
+			requireLoggedIn: {
+				configurable: false,
+				value: function () {
+					if (this.isLoggedIn())
+						return true;
+					else
+						this.openLoginModal('This action requires you to log in.');
 				}
 			},
 			shoppingList: {
