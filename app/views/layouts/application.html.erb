@@ -30,7 +30,7 @@
           <li class="sidebar-list-first">My Cabinet <i class="icon-fridge"></i></li>
           <li ng-repeat="item in cabinet track by item.id" class="item">
             {{item.name}} 
-            <a ng-click="removeFromCabinet(item)"><i class="fa fa-times-circle"></i></a>
+            <a ng-click="removeFromCabinet(item)"><i class="fa fa-times"></i></a>
           </li>
           <li ng-show="!cabinet || !cabinet.length" style="font-style:italic">(empty)</li>
           <li><a><i class="icon-circlefork"></i> What can I make?</a></li>
@@ -41,7 +41,7 @@
           <li class="sidebar-list-first">Shopping List <i class="fa fa-shopping-cart"></i></li>
           <li ng-repeat="item in shoppingList track by item.id" class="item">
             {{item.name}}
-            <a ng-click="removeFromShoppingList(item)"><i class="fa fa-times-circle"></i></a>
+            <a ng-click="removeFromShoppingList(item)"><i class="fa fa-times"></i></a>
           </li>
           <li ng-show="!shoppingList || !shoppingList.length" style="font-style:italic">(empty)</li>
         </ul>

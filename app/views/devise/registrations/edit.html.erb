@@ -14,13 +14,14 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body ng-app='tipsy'>
+<body ng-app="tipsy" ng-controller="FindCtrl">
 
 <div class="wrapper">
   <%= render 'toolbar' %>
   <div id="main-cont" class="grid">
-    <div class="content grid-cell">
-      <h2>Edit <%= resource_name.to_s.humanize %></h2>
+    <div class="content grid-cell account-settings">
+      <h1>Account Settings</h2>
+      <h3>Edit <%= resource_name.to_s.humanize %></h3>
 
 
       <%- if devise_mapping.omniauthable? %>
@@ -33,43 +34,45 @@
       <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
         <%= devise_error_messages! %>
 
-        <div class="field">
-          <%= f.label :email %><br />
-          <%= f.email_field :email, autofocus: true %>
+        <div class="grid grid--center field">
+          <div class="grid-cell"><%= f.label :email %></div>
+          <div class="grid-cell form-item"><%= f.email_field :email, autofocus: true %></div>
         </div>
 
         <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
           <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
         <% end %>
 
-        <div class="field">
-          <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-          <%= f.password_field :password, autocomplete: "off" %>
+        <div class="grid grid--center field">
+          <div class="grid-cell"><%= f.label :password %></div>
+          <div class="grid-cell form-item"><%= f.password_field :password, autocomplete: "off" %></div>
+          <div class="grid-cell"><small><i>(leave blank if you don't want to change it)</i></small></div>
         </div>
 
-        <div class="field">
-          <%= f.label :password_confirmation %><br />
-          <%= f.password_field :password_confirmation, autocomplete: "off" %>
+        <div class="grid grid--center field">
+          <div class="grid-cell"><%= f.label :password_confirmation %></div>
+          <div class="grid-cell form-item"><%= f.password_field :password_confirmation, autocomplete: "off" %></div>
         </div>
 
-        <div class="field">
-          <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-          <%= f.password_field :current_password, autocomplete: "off" %>
+        <div class="grid grid--center field">
+          <div class="grid-cell"><%= f.label :current_password %></div>
+          <div class="grid-cell form-item"><%= f.password_field :current_password, autocomplete: "off" %></div>
+          <div class="grid-cell"><small><i>(we need your current password to confirm your changes)</i></small></div>
         </div>
 
-        <div class="field">
-          <%= f.label :name %><br />
-          <%= f.text_field :name %>
+        <div class="grid grid--center field">
+          <div class="grid-cell"><%= f.label :name %></div>
+          <div class="grid-cell form-item"><%= f.text_field :name %></div>
         </div>
 
-        <div class="field">
-          <%= f.check_box :no_profanity %> 
-          <%= f.label :no_profanity %> 
+        <div class="grid grid--center field">
+          <div class="grid-cell"><%= f.label :no_profanity %></div>
+          <div class="grid-cell form-item"><%= f.check_box :no_profanity %></div>
         </div>
 
-        <div class="field">
-          <%= f.check_box :no_alcohol %> 
-          <%= f.label :no_alcohol %> 
+        <div class="grid grid--center field">
+          <div class="grid-cell"><%= f.label :no_alcohol %></div>
+          <div class="grid-cell form-item"><%= f.check_box :no_alcohol %></div>
         </div>
 
         <div class="actions">

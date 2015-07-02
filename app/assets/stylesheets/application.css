@@ -50,6 +50,10 @@ body .input-group .form-control {
 }
 
 
+:focus,
+a:focus {
+  outline: none;
+}
 .flash-notice {
 	background: #cfc;
 }
@@ -441,7 +445,8 @@ nav div a:hover {
 .sidebar-list-first i {
   float: right;
 }
-.ingredients-list a {
+.ingredients-list a,
+.shopping-list a {
   text-decoration: none;
   cursor: pointer;
 }
@@ -590,14 +595,14 @@ nav div a:hover {
   margin: 0;
   padding: 0 0 6px 0;
 }
-#drink-page .row-one .right .votes {
+#drink-page .votes {
   max-width: 34px;
   text-align: center;
 }
-#drink-page .row-one .right .votes .votes-container .fa {
+#drink-page .votes .fa {
   font-size: 16px;
 }
-#drink-page .row-one .right .votes .votes-container .arrow:hover .fa {
+#drink-page .votes .arrow:hover .fa {
   color: orange;
 }
 #drink-page .row-one .right .rating {
@@ -643,10 +648,7 @@ nav div a:hover {
   max-width: 50%;
   margin-right: 60px;
 }
-#drink-page .row-one h3,
-#drink-page .row-two h3,
-#drink-page .row-three h3,
-#drink-page .row-four h3 {
+#drink-page h3 {
   font-size: 14px;
   font-weight: 600;
   margin: 0;
@@ -692,23 +694,42 @@ nav div a:hover {
 #drink-page .grid-cell.actions a > i > i:before {
   font-size: 11px;
 }
-#drink-page .description h3,
-#drink-page .directions h3,
 #drink-page h3 {
   margin-bottom: 8px;
 }
 #drink-page .row-four.similar-drinks {
   background-color: #f4f4f4;
-  margin-left: -20px;
-  margin-right: -20px;
+  margin: 20px -20px 20px -20px;
   padding: 20px;
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
 }
-
+.account-settings .grid .grid-cell {
+  padding: 6px 0;
+}
+.account-settings .grid .grid-cell:first-child {
+  max-width: 200px;
+}
+.account-settings .grid .grid-cell.form-item {
+  max-width: 186px;
+}
 aside li.item .fa {
+  color: red;
+  float: right;
+  padding-top: 2px;
   display:none;
+  opacity: .7;
+  transition: .3s;
 }
 aside li.item:hover .fa {
   display:initial;
+}
+aside li.item .fa:hover {
+  opacity: 1;
+}
+.content .fa-pencil {
+  margin-left: 6px;
+  font-size: 88%;
+  cursor: pointer;
+  text-decoration: none;
 }

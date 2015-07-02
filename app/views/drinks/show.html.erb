@@ -18,13 +18,13 @@
       <div class="social-share-bar">Social share bar goes here</div>
       <div class="grid description">
         <div class="grid-cell prep-time">
-          <h3>Description <a ng-click="loadEditView()" class="fa fa-edit"></a></h3>
+          <h3>Description <a ng-click="loadEditView()" class="fa fa-pencil"></a></h3>
           <div>
             <% if @drink.description.present? %>
               <%= @drink.description %>
             <% else %>
               <p>
-                <em>No description has been recorded for this drink yet.</em>
+                <em>No description has been submitted for this drink yet.</em>
                 <br>
                 <a ng-click="loadEditView()">How would you describe this drink?</a>
               </p>
@@ -36,7 +36,7 @@
         <div class="grid-cell prep-time">
           <p>
             Prep time:
-            <a ng-click="loadEditView()"><i class="fa fa-pencil-square-o"></i></a>
+            <a ng-click="loadEditView()"><i class="fa fa-pencil"></i></a>
             <br>
             <span>
               <% if @drink.prep_time %>
@@ -49,7 +49,7 @@
         </div>
         <div class="grid-cell calorie-count">
           <p>Calories:
-          <a ng-click="loadEditView()"><i class="fa fa-pencil-square-o"></i></a>
+          <a ng-click="loadEditView()"><i class="fa fa-pencil"></i></a>
           <br>
           <span>
             <% if @drink.calories %>
@@ -100,7 +100,7 @@
     <div class="grid-cell directions">
       <div class="grid grid--center">
         <div class="grid-cell">              
-          <h3>Recipe Directions <a ng-click="loadEditView()" class="fa fa-edit"></a></h3>
+          <h3>Recipe Directions <a ng-click="loadEditView()" class="fa fa-pencil"></a></h3>
           <% if @drink.instructions.present? %>
             <div><%= @drink.instructions %></div>
             <p>
@@ -109,7 +109,7 @@
             </p>
           <% else %>
             <p>
-              <em>No instructions have been writtem yet.</em>
+              <em>No instructions have been written yet.</em>
               <br>
               <a ng-click="loadEditView()">How would you prepare this drink?</a>
             </p>
@@ -119,10 +119,12 @@
     </div>
   </div>
   <!-- TIPS (COMMENTS) -->
-  <div>
-    <p>Have a tip for <%= @drink.name %>? Join the discussion!</p>
-    <textarea ng-model="comment.text"></textarea>
-    <a ng-click="createNote()">Save</a>
+  <div class="grid grid--center tips">
+    <div class="grid-cell">              
+      <h3><%= @drink.name %> tips? Comments? Join the discussion!</h3>
+      <textarea ng-model="comment.text"></textarea>
+      <a ng-click="createNote()">Save</a>
+    </div>
   </div>
   <div class="grid row-four similar-drinks">
     <div class="grid-cell">
