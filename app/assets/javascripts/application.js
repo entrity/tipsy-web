@@ -20,6 +20,8 @@
 //= require turbolinks
 //= require_tree .
 
+window.$ = angular.element;
+
 (function(){
 
 	angular.module('tipsy', [
