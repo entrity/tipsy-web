@@ -14,71 +14,129 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body ng-app="tipsy" ng-controller="FindCtrl">
+<body ng-app="tipsy">
 
 <div class="wrapper">
-  <%= render 'toolbar' %>
+  <ng-include src="'/toolbar.html'"></ng-include>
   <div id="main-cont" class="grid">
     <div class="content grid-cell account-settings">
-      <h1>Account Settings</h2>
-      <h3>Edit <%= resource_name.to_s.humanize %></h3>
-
-
-      <%- if devise_mapping.omniauthable? %>
-        <%- resource_class.omniauth_providers.each do |provider| %>
-          <%= link_to "Link #{provider.to_s.titleize} Account", user_omniauth_authorize_path(provider) unless current_user.identities.pluck(:provider).include?(provider.to_s) %><br />
-        <% end -%>
-      <% end -%>
-
-
-      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-        <%= devise_error_messages! %>
-
-        <div class="grid grid--center field">
-          <div class="grid-cell"><%= f.label :email %></div>
-          <div class="grid-cell form-item"><%= f.email_field :email, autofocus: true %></div>
+      <div class="grid grid--center profile">
+        <div class="grid-cell avatar">
+          <img ng-src="{{getUser().avatar_url || '/images/anonymous-thumb.jpg'}}">
         </div>
-
-        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-          <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-        <% end %>
-
-        <div class="grid grid--center field">
-          <div class="grid-cell"><%= f.label :password %></div>
-          <div class="grid-cell form-item"><%= f.password_field :password, autocomplete: "off" %></div>
-          <div class="grid-cell"><small><i>(leave blank if you don't want to change it)</i></small></div>
+        <div class="grid-cell">
+          <h1><a href="#">Markham Anderson</a> / Profile</h1>
+          <h2>Edit your name, avatar, etc</h2>
         </div>
+      </div>
 
-        <div class="grid grid--center field">
-          <div class="grid-cell"><%= f.label :password_confirmation %></div>
-          <div class="grid-cell form-item"><%= f.password_field :password_confirmation, autocomplete: "off" %></div>
-        </div>
+      <div class="grid">
+        <div class="grid-cell main gen">
+          <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+            <%= devise_error_messages! %>
+            <div class="grid grid--center field">
+              <div class="grid-cell">Avatar</div>
+              <div class="grid-cell form-item avatar">
+                <img ng-src="{{getUser().avatar_url || '/images/anonymous-thumb.jpg'}}"><a class="action edit-avatar" href="#">Change Avatar</a>
+              </div>
+            </div>
+            <div class="grid grid--top field">
+              <div class="grid-cell"><%= f.label :name %></div>
+              <div class="grid-cell form-item">
+                <%= f.text_field :name %>
+                <small><small>We're big on real names around here, so people know who's who</small></small>
+              </div>
+            </div>
+            <div class="grid grid--top field">
+              <div class="grid-cell">Username</div>
+              <div class="grid-cell form-item">
+                <input type="text" name="user[name]" id="user_name">
+                <small><small>Your Tipsyology URL: http://tipsyology.com/<strong>quinesquines</strong></small></small>
+              </div>
+            </div>
+            <div class="grid grid--center field">
+              <div class="grid-cell"><%= f.label :email %></div>
+              <div class="grid-cell form-item"><%= f.email_field :email, autofocus: true %></div>
+            </div>
+            <div class="grid grid--center field">
+              <div class="grid-cell">Location</div>
+              <div class="grid-cell form-item"><input type="text" name="user[name]" id="user_name"></div>
+            </div>
+            <div class="grid grid--top field">
+              <div class="grid-cell">Twitter</div>
+              <div class="grid-cell form-item">
+                <input type="text" name="user[name]" id="user_name">
+                <small><small>Enter your username so fans can find you on Twitter.</small></small>
+              </div>
+            </div>
+            <div class="grid grid--center field">
+              <div class="grid-cell">Bio</div>
+              <div class="grid-cell form-item"><input type="text" name="user[name]" id="user_name"></div>
+            </div>
 
-        <div class="grid grid--center field">
-          <div class="grid-cell"><%= f.label :current_password %></div>
-          <div class="grid-cell form-item"><%= f.password_field :current_password, autocomplete: "off" %></div>
-          <div class="grid-cell"><small><i>(we need your current password to confirm your changes)</i></small></div>
-        </div>
+            
 
-        <div class="grid grid--center field">
-          <div class="grid-cell"><%= f.label :name %></div>
-          <div class="grid-cell form-item"><%= f.text_field :name %></div>
+            <div class="actions">
+            </div>
         </div>
+      </div>
 
-        <div class="grid grid--center field">
-          <div class="grid-cell"><%= f.label :no_profanity %></div>
-          <div class="grid-cell form-item"><%= f.check_box :no_profanity %></div>
-        </div>
+      <div class="grid">
+        <div class="grid-cell main gen">
+          <%- if devise_mapping.omniauthable? %>
+            <%- resource_class.omniauth_providers.each do |provider| %>
+              <%= link_to "Link #{provider.to_s.titleize} Account", user_omniauth_authorize_path(provider) unless current_user.identities.pluck(:provider).include?(provider.to_s) %><br />
+            <% end -%>
+          <% end -%>
 
-        <div class="grid grid--center field">
-          <div class="grid-cell"><%= f.label :no_alcohol %></div>
-          <div class="grid-cell form-item"><%= f.check_box :no_alcohol %></div>
-        </div>
+            <div class="grid grid--center field">
+              <div class="grid-cell"><%= f.label :email %></div>
+              <div class="grid-cell form-item"><%= f.email_field :email, autofocus: true %></div>
+            </div>
 
-        <div class="actions">
-          <%= f.submit "Update" %>
+            <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+              <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+            <% end %>
+
+            <div class="grid grid--center field">
+              <div class="grid-cell"><%= f.label :current_password %></div>
+              <div class="grid-cell form-item"><%= f.password_field :current_password, autocomplete: "off" %></div>
+              <div class="grid-cell"><small><i>(we need your current password to confirm your changes)</i></small></div>
+            </div>
+
+            <div class="grid grid--center field">
+              <div class="grid-cell"><%= f.label :password %></div>
+              <div class="grid-cell form-item"><%= f.password_field :password, autocomplete: "off" %></div>
+              <div class="grid-cell"><small><i>(leave blank if you don't want to change it)</i></small></div>
+            </div>
+
+            <div class="grid grid--center field">
+              <div class="grid-cell"><%= f.label :password_confirmation %></div>
+              <div class="grid-cell form-item"><%= f.password_field :password_confirmation, autocomplete: "off" %></div>
+            </div>
+
+            <div class="grid grid--center field">
+              <div class="grid-cell"><%= f.label :name %></div>
+              <div class="grid-cell form-item"><%= f.text_field :name %></div>
+            </div>
+
+            <div class="grid grid--center field">
+              <div class="grid-cell"><%= f.label :no_profanity %></div>
+              <div class="grid-cell form-item"><%= f.check_box :no_profanity %></div>
+            </div>
+
+            <div class="grid grid--center field">
+              <div class="grid-cell"><%= f.label :no_alcohol %></div>
+              <div class="grid-cell form-item"><%= f.check_box :no_alcohol %></div>
+            </div>
+
+            <div class="actions">
+              <%= f.submit "Update" %>
+            </div>
+          <% end %>
         </div>
-      <% end %>
+      </div>
+      
 
       <h3>Cancel my account</h3>
 

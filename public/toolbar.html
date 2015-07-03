@@ -49,11 +49,12 @@
           <div class="grid-cell dropdown">
             <div class="grid" id="avatar-dropdown">
               <a class="avatar" ng-click="openToolbarMenu($event, 'avatar')">
-                <img ng-src="{{getUser().avatar_url || '/images/anonymous-thumb.jpg'}}"></a>
+                <img ng-src="{{getUser().avatar_url || '/images/anonymous-thumb.jpg'}}">
               </a>
             </div>
             <ul class="dropdown-menu dropdown-menu-right" ng-show="toolbar.avatar">
-              <li><a href="/users/edit"><i class="fa fa-cog"></i> Profile &amp; Settings</a></li>
+              <li><a href="/users/edit"><i class="fa fa-user"></i> Markham Anderson</a></li>
+              <li><a href="/users/edit"><i class="fa fa-cog"></i> Account Settings</a></li>
               <li><a href="/users/sign_out"><i class="fa fa-sign-out"></i> Log out</a></li>
             </ul>
           </div>

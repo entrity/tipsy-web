@@ -195,6 +195,11 @@ nav > .user > .grid .grid-cell:last-child {
 nav > .user .avatar {
   height: 28px;
   width: 28px;
+  overflow: hidden;
+}
+nav > .user .avatar img {
+  height: 28px;
+  width: 28px;
   position: relative;
   display: block;
   border-radius: 50%;
@@ -203,7 +208,7 @@ nav > .user .avatar {
 nav > .user .avatar:after {
   content:'\f0d7';
   position: absolute;
-  right: -15px;
+  right: 0;
   top: 50%;
   margin-top: -5px;
   font: normal normal normal 14px/1 FontAwesome;
@@ -704,14 +709,64 @@ nav div a:hover {
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
 }
-.account-settings .grid .grid-cell {
+.account-settings .grid .grid-cell .grid .grid-cell {
   padding: 6px 0;
 }
-.account-settings .grid .grid-cell:first-child {
+.account-settings .grid .grid-cell .grid .grid-cell:first-child {
   max-width: 200px;
 }
 .account-settings .grid .grid-cell.form-item {
   max-width: 186px;
+}
+.account-settings .grid .grid-cell.avatar {
+  max-width: 48px;
+  height: 48px;
+  margin-right: 10px;
+  padding: 0;
+}
+.account-settings .profile {
+  margin-bottom: 20px;
+}
+.account-settings .main .grid .grid-cell:first-child {
+  padding-right: 14px;
+  text-align: right;
+}
+.account-settings .main .grid .avatar {
+  max-width: 88px;
+  height: inherit;
+  text-align: center;
+  box-sizing: content-box;
+}
+.account-settings .main .grid .avatar a {
+  font-size: 11px;
+}
+.account-settings .main .grid .avatar img {
+  width: 68px;
+  height: 68px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 1px solid #fff;
+}
+.account-settings .avatar img {
+  width: 48px;
+  height: 48px;
+  position: relative;
+  display: block;
+  border-radius: 50%;
+  border: 1px solid #fff;
+}
+.account-settings h1 {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0;
+}
+.account-settings h2 {  
+  font-size: 14px;
+  font-weight: normal;
+  color: #999999;
+  margin: 0;
 }
 aside li.item .fa {
   color: red;
