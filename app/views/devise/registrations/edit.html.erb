@@ -26,18 +26,22 @@
         </div>
         <div class="grid-cell">
           <h1><a href="#">Markham Anderson</a> / Profile</h1>
-          <h2>Edit your name, avatar, etc</h2>
+          <h2>Edit your name, picture, etc</h2>
         </div>
       </div>
-
+      <div class="grid nav">
+        <div class="grid-cell active"><a href="#">Profile</a></div>
+        <div class="grid-cell"><a href="#">Password</a></div>
+        <div class="grid-cell"><a href="#">Email / Notifications</a></div>
+      </div>
       <div class="grid">
         <div class="grid-cell main gen">
           <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
             <%= devise_error_messages! %>
             <div class="grid grid--center field">
-              <div class="grid-cell">Avatar</div>
+              <div class="grid-cell"><label>Profile Picture</label></div>
               <div class="grid-cell form-item avatar">
-                <img ng-src="{{getUser().avatar_url || '/images/anonymous-thumb.jpg'}}"><a class="action edit-avatar" href="#">Change Avatar</a>
+                <img ng-src="{{getUser().avatar_url || '/images/anonymous-thumb.jpg'}}"><a class="action edit-avatar" href="#">Change Profile Picture</a>
               </div>
             </div>
             <div class="grid grid--top field">
@@ -48,7 +52,7 @@
               </div>
             </div>
             <div class="grid grid--top field">
-              <div class="grid-cell">Username</div>
+              <div class="grid-cell"><label>Username</label></div>
               <div class="grid-cell form-item">
                 <input type="text" name="user[name]" id="user_name">
                 <small><small>Your Tipsyology URL: http://tipsyology.com/<strong>quinesquines</strong></small></small>
@@ -59,23 +63,20 @@
               <div class="grid-cell form-item"><%= f.email_field :email, autofocus: true %></div>
             </div>
             <div class="grid grid--center field">
-              <div class="grid-cell">Location</div>
+              <div class="grid-cell"><label>Location</label></div>
               <div class="grid-cell form-item"><input type="text" name="user[name]" id="user_name"></div>
             </div>
             <div class="grid grid--top field">
-              <div class="grid-cell">Twitter</div>
+              <div class="grid-cell"><label>Twitter</label></div>
               <div class="grid-cell form-item">
                 <input type="text" name="user[name]" id="user_name">
                 <small><small>Enter your username so fans can find you on Twitter.</small></small>
               </div>
             </div>
             <div class="grid grid--center field">
-              <div class="grid-cell">Bio</div>
+              <div class="grid-cell"><label>Bio</label></div>
               <div class="grid-cell form-item"><input type="text" name="user[name]" id="user_name"></div>
             </div>
-
-            
-
             <div class="actions">
             </div>
         </div>
@@ -98,16 +99,20 @@
               <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
             <% end %>
 
-            <div class="grid grid--center field">
+            <div class="grid grid--top field">
               <div class="grid-cell"><%= f.label :current_password %></div>
-              <div class="grid-cell form-item"><%= f.password_field :current_password, autocomplete: "off" %></div>
-              <div class="grid-cell"><small><i>(we need your current password to confirm your changes)</i></small></div>
+              <div class="grid-cell form-item">
+                <%= f.password_field :current_password, autocomplete: "off" %>
+                <small><small>We need your current password to confirm your changes</small></small>
+              </div>
             </div>
 
-            <div class="grid grid--center field">
+            <div class="grid grid--top field">
               <div class="grid-cell"><%= f.label :password %></div>
-              <div class="grid-cell form-item"><%= f.password_field :password, autocomplete: "off" %></div>
-              <div class="grid-cell"><small><i>(leave blank if you don't want to change it)</i></small></div>
+              <div class="grid-cell form-item">
+                <%= f.password_field :password, autocomplete: "off" %>
+                <small><small>Leave blank if you don't want to change it</small></small>
+              </div>
             </div>
 
             <div class="grid grid--center field">
@@ -146,6 +151,30 @@
         <%= link_to "Home", '/' %>
       </div>
     </div>
+    <aside class="fancy-sidebar grid-cell">
+      <div class="sidebar-controls"></div>
+      <div class="ingredients-list">
+        <ul>
+          <li class="sidebar-list-first">My Cabinet <i class="icon-fridge"></i></li>
+          <li ng-repeat="item in cabinet track by item.id" class="item">
+            {{item.name}} 
+            <a ng-click="removeFromCabinet(item)"><i class="fa fa-times"></i></a>
+          </li>
+          <li ng-show="!cabinet || !cabinet.length" style="font-style:italic">(empty)</li>
+          <li><a><i class="icon-circlefork"></i> What can I make?</a></li>
+        </ul>
+      </div>
+      <div class="shopping-list">
+        <ul>
+          <li class="sidebar-list-first">Shopping List <i class="fa fa-shopping-cart"></i></li>
+          <li ng-repeat="item in shoppingList track by item.id" class="item">
+            {{item.name}}
+            <a ng-click="removeFromShoppingList(item)"><i class="fa fa-times"></i></a>
+          </li>
+          <li ng-show="!shoppingList || !shoppingList.length" style="font-style:italic">(empty)</li>
+        </ul>
+      </div>
+    </aside>
 </div>
 
 </body>

@@ -709,6 +709,28 @@ nav div a:hover {
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
 }
+.account-settings .nav {
+  border-bottom: 1px solid lightgray;
+  margin-bottom: 10px;
+  justify-content: flex-start;
+}
+.account-settings .nav .grid-cell {
+  flex: 0 1 auto;
+  padding: 0 8px 10px 10px;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.account-settings .nav .grid-cell a {
+  text-decoration: none;
+  color: black;
+}
+.account-settings .nav .grid-cell:hover,
+.account-settings .nav .grid-cell.active {
+  border-bottom: 2px solid black;
+}
+.account-settings .nav .grid-cell.active a {
+  font-weight: bold;
+}
 .account-settings .grid .grid-cell .grid .grid-cell {
   padding: 6px 0;
 }
