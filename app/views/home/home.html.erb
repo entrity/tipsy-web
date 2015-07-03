@@ -21,15 +21,8 @@
 	<div class="grid grid--center splash">
 	  <div class="search grid-cell">
     	<img class="logo" src="/images/tipsyology-logo.png">
-	    <div ng-controller="FindCtrl">
-			<div id="fuzzy-finder">
-				<ui-select theme="bootstrap" ng-model="fuzzyFind.record" on-select="fuzzyFindSelected($item, $model)" reset-search-input="true" search-enabled="true">
-					<ui-select-match data-placeholder="Search drinks and ingredients" allow-clear="true"></ui-select-match>
-					<ui-select-choices repeat="item in findables" refresh-delay="300" refresh="fetchFindables($select.search)">
-						<div class="{{item.type | tipsyFindableClass }}" ng-bind-html="item.name | highlight: $select.search"></div>
-					</ui-select-choices>
-				</ui-select>
-			</div>
+	    <div>
+		    <ng-include src="'/fuzzy-finder.html'"></ng-include>
 		    <ng-include src="'/find-results.html'"></ng-include>
 	    </div>
 		<p class="text-center"><a href="/users/sign_in" class="btn btn-primary">Sign in / Sign up</a></p>
