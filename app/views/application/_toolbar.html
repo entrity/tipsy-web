@@ -55,7 +55,9 @@
           </div>
           <div class="grid-cell dropdown">
             <div class="grid" id="avatar-dropdown">
-              <a class="avatar" ng-click="openToolbarMenu($event, 'avatar')"></a>
+              <a class="avatar" ng-click="openToolbarMenu($event, 'avatar')">
+                <img ng-src="{{getUser().avatar_url || '/images/anonymous-thumb.jpg'}}"></a>
+              </a>
             </div>
             <ul class="dropdown-menu dropdown-menu-right" ng-show="toolbar.avatar">
               <li><a href="/users/edit">Profile &amp; Settings</a></li>
