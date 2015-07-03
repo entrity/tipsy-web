@@ -14,10 +14,10 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body ng-app='tipsy' ng-controller="FindCtrl">
+<body ng-app='tipsy'>
 
 <div class="wrapper">
-  <%= render 'toolbar' %>
+  <ng-include src="'/toolbar.html'"></ng-include>
   <div id="main-cont" class="grid">
     <div class="content grid-cell">
       <ng-include src="'/find-results.html'"></ng-include>
