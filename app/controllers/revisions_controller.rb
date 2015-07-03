@@ -4,8 +4,8 @@ class RevisionsController < ApplicationController
   def create
     @revision = Revision.new revision_params
     @revision.user = current_user
-    @revision.status = @revision.publishable_without_review? ? Flaggable::APPROVED : Flaggable::NEEDS_REVIEW
-    if @revision.save && !@revision.publishable_without_review?
+    @revision.status = Flaggable::NEEDS_REVIEW
+    if @revision.save
       Review.create! reviewable:@revision
     end
     respond_with @revision
@@ -14,6 +14,6 @@ class RevisionsController < ApplicationController
   private
 
     def revision_params
-      params.require(:flaggable_id, :flaggable_type, :text)
+      params.require([:drink_id]).permit([:parent_id, :ingredients, :description, :instructions, :non_alcoholic, :profane, :prep_time, :calories, :name])
     end
 end

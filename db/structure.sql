@@ -23,6 +23,20 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
+--
+-- Name: hstore; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS hstore WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION hstore; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs';
+
+
 SET search_path = public, pg_catalog;
 
 --
@@ -418,13 +432,16 @@ ALTER SEQUENCE reviews_id_seq OWNED BY reviews.id;
 CREATE TABLE revisions (
     id integer NOT NULL,
     user_id integer,
-    revisable_id integer,
-    revisable_type character varying,
-    text text,
+    drink_id integer,
+    instructions text,
     flag_pts smallint DEFAULT 0,
     status smallint DEFAULT 0,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    description text,
+    prep_time text,
+    calories integer,
+    parent_id integer,
+    ingredients hstore[] DEFAULT '{}'::hstore[]
 );
 
 
@@ -701,13 +718,6 @@ CREATE INDEX index_reviews_on_reviewable_id_and_reviewable_type ON reviews USING
 
 
 --
--- Name: index_revisions_on_revisable_id_and_revisable_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_revisions_on_revisable_id_and_revisable_type ON revisions USING btree (revisable_id, revisable_type);
-
-
---
 -- Name: index_revisions_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -762,4 +772,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150626002933');
 INSERT INTO schema_migrations (version) VALUES ('20150629032253');
 
 INSERT INTO schema_migrations (version) VALUES ('20150629034153');
+
+INSERT INTO schema_migrations (version) VALUES ('20150703032217');
 

@@ -17,6 +17,9 @@
 //= require 'angular-resource/angular-resource.min'
 //= require 'angular-sanitize/angular-sanitize.min'
 //= require 'angular-ui-select/dist/select.min'
+//= require pagedown/Markdown.Converter
+//= require pagedown/Markdown.Sanitizer
+//= require pagedown/Markdown.Editor
 //= require turbolinks
 //= require_tree .
 
@@ -52,6 +55,12 @@ window.$ = angular.element;
 			cabinet: {
 				configurable: false,
 				value: JSON.parse(localStorage.getItem('cabinet')) || []
+			},
+			getConstant: {
+				configurable: false,
+				value: function (name) {
+					return window[name];
+				}
 			},
 			getUser: {
 				configurable: false,
@@ -202,6 +211,10 @@ Object.defineProperties(window, {
 	INGREDIENT: {
 		value: 1,
 		writable: false,
+		configurable: false,
+	},
+	POINTS_FOR_REVISION: {
+		value: 5,
 		configurable: false,
 	},
 });
