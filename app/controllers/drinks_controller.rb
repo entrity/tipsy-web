@@ -34,6 +34,10 @@ class DrinksController < ApplicationController
     end
   end
 
+  def edit
+    render layout:'application', text:%q(<ng-include src="'/drinks/edit.html'"></ng-include>)
+  end
+
   def ingredients
     @ingredients = saved_drink.ingredients
     respond_with @ingredients.as_json(methods:[:name])

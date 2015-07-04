@@ -11,6 +11,7 @@
  * file per style scope.
  *
  *= require 'angular-ui-select/dist/select.min'
+ *= require pagedown/Markdown.css
  *= require_tree .
  *= require_self
  */
@@ -575,6 +576,14 @@ nav div a:hover {
 .aligner-item--bottom {
   align-self: flex-end;
 }
+/* Make angularjs ui-select work with bootstrap css */
+.ui-select-bootstrap.dropdown .ui-select-choices {
+  display: none;
+}
+.ui-select-bootstrap.dropdown.open .ui-select-choices {
+  display: initial;
+}
+
 
 /*** DRINK PAGE STYLES ***/
 

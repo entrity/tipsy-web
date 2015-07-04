@@ -2,30 +2,22 @@ class Revision < ActiveRecord::Base
   include Flaggable
 
   belongs_to :user
-  belongs_to :revisable, polymorphic: true
+  belongs_to :drink
+  belongs_to :parent, class_name: 'Revision'
 
-  has_one :review, as: :reviewable, dependent: :destroy
+  has_one :review, -> { order id:'DESC' }, as: :reviewable, dependent: :destroy
 
   has_many :flags, as: :flaggable, dependent: :destroy, inverse_of: :flaggable
 
   validates :user, presence: true
-  validates :revisable, presence: true
-  validates :text, presence: true
+  validates :drink, presence: true
+  validates :ingredients, presence: true
 
-  def publishable_without_review?
-    case reviewable_type
-    when 'Revision', 'Photo'
-      false
-    when 'Comment'
-      true
-    end
-  end
+  before_save -> { self.ingredients = ingredients.map(&:as_json) }
 
-  # Set status, and rollback revisable's revision
+  # Set status and rollback revisable's revision
   def unpublish!
     update_attributes! status:Flaggable::NEEDS_REVIEW
-    replacement = revisable.revisions.where(status:Flaggable::APPROVED).last
-    revisable.update_attributes! revision:replacement
   end
 
 end

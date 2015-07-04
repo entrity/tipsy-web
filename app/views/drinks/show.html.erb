@@ -48,16 +48,18 @@
           </p>
         </div>
         <div class="grid-cell calorie-count">
-          <p>Calories:
-          <a ng-click="loadEditView()"><i class="fa fa-pencil"></i></a>
-          <br>
-          <span>
-            <% if @drink.calories %>
-              <%= @drink.calories %>
-            <% else %>
-              <em>unknown</em>
-            <% end -%>
-          </span>
+          <p>
+            Calories:
+            <a ng-click="loadEditView()"><i class="fa fa-pencil"></i></a>
+            <br>
+            <span>
+              <% if @drink.calories %>
+                <%= @drink.calories %>
+              <% else %>
+                <em>unknown</em>
+              <% end -%>
+            </span>
+          </p>
         </div>
         <div class="grid-cell author">
           <% if @drink.author %>
@@ -69,6 +71,7 @@
                 <%= @drink.author.name %>
                 <span class="user-tips-count">(<%= @drink.author.points %> in tips)</span>
               </a>
+            </p>
           <% end -%>
         </div>
       </div>

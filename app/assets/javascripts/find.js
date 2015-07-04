@@ -23,7 +23,7 @@
 		$rootScope.finder.selected = function (item, model) {
 			switch (parseInt(model.type)) {
 				case window.DRINK:
-					window.location.href = '/drinks/'+model.id; break;
+					Turbolinks.visit('/drinks/'+model.id); break;
 				case window.INGREDIENT:
 					$rootScope.finder.addIngredient(model);
 					$rootScope.finder.findables = [];

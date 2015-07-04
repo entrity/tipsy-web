@@ -77,6 +77,7 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
+    diffy (3.0.7)
     erubis (2.7.0)
     execjs (2.5.2)
     factory_girl (4.5.0)
@@ -238,6 +239,7 @@ DEPENDENCIES
   capistrano-rvm
   coffee-rails (~> 4.1.0)
   devise (~> 3.5.1)
+  diffy (~> 3.0.7)
   factory_girl_rails
   jbuilder (~> 2.0)
   jquery-rails

@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   get 'fuzzy_find.json' => 'home#fuzzy_find', defaults:{format: :json}
 
   resources :drinks do
-    collection do
+    member do
       get :ingredients
     end
   end
@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :revisions, only: :create
+  resources :revisions, only: [:create, :show]
 
   resources :users, only: [:show]
 
