@@ -437,10 +437,13 @@ CREATE TABLE revisions (
     flag_pts smallint DEFAULT 0,
     status smallint DEFAULT 0,
     created_at timestamp without time zone,
+    name text,
     description text,
     prep_time text,
     calories integer,
     parent_id integer,
+    non_alcoholic boolean DEFAULT false,
+    profane boolean DEFAULT false,
     ingredients hstore[] DEFAULT '{}'::hstore[]
 );
 

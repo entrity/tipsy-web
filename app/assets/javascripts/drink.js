@@ -16,7 +16,7 @@
 			loadDrink: {
 				configurable: false,
 				value: function (drink) {
-					var sharedAttrs = ['description', 'ingredients', 'abv', 'calories', 'prep_time'];
+					var sharedAttrs = ['name', 'description', 'ingredients', 'abv', 'calories', 'prep_time', 'profane', 'non_alcoholic'];
 					for (var i = 0; i < sharedAttrs.length; i++) {
 						var key = sharedAttrs[i];
 						this[key] = drink[key];
@@ -24,10 +24,12 @@
 					Object.defineProperties(this, {
 						drink_id: {
 							configurable: false,
+							enumerable: true,
 							value: drink.id
 						},
 						parent_id: {
 							configurable: false,
+							enumerable: true,
 							value: drink.revision_id
 						},
 					});
@@ -49,8 +51,8 @@
 		var id = getDrinkId($scope);
 		$scope.drink = Drink.get({id:id});
 		$scope.revision = new Revision();
-		$scope.revision.loadDrink($scope.drink);
 		$scope.drink.$promise.then(function () {
+			$scope.revision.loadDrink($scope.drink);
 			$scope.revision.ingredients = Drink.ingredients({id:id});
 		});
 		$scope.addIngredient = function () {
@@ -60,7 +62,7 @@
 			if (!isNaN(index) && index >= 0) $scope.revision.ingredients.splice(index, 1);
 		}
 		$scope.save = function () {
-			$scope.revision.$save(null, function () {
+			$scope.revision.$save(null, function (data) {
 				// success
 			}, function () {
 				// failure
@@ -70,11 +72,9 @@
 			Turbolinks.visit('/drinks/'+id);
 		}
 		// Start description text editor
-		var converter1 = Markdown.getSanitizingConverter();
-		new Markdown.Editor(converter1).run();
+		new Markdown.Editor(Markdown.getSanitizingConverter()).run();
 		// Start instructions text editor
-		var converter1 = Markdown.getSanitizingConverter();
-		new Markdown.Editor(converter1, '-instructions').run();
+		new Markdown.Editor(Markdown.getSanitizingConverter(), '-instructions').run();
 	}])
 	;
 

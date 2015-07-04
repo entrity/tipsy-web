@@ -14,6 +14,6 @@ class RevisionsController < ApplicationController
   private
 
     def revision_params
-      params.require([:drink_id]).permit([:parent_id, :ingredients, :description, :instructions, :non_alcoholic, :profane, :prep_time, :calories, :name])
+      params.permit(:drink_id, :parent_id, :ingredients, :description, :instructions, :non_alcoholic, :profane, :prep_time, :calories, :name)
     end
 end

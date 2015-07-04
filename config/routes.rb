@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :revisions, only: :create
+  resources :revisions, only: [:create, :show]
 
   resources :users, only: [:show]
 

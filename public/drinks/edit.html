@@ -15,13 +15,13 @@
 	<div id="wmd-preview-instructions"></div>
 	<h3>Ingredients</h3>
 	<div ng-repeat="ingredient in revision.ingredients">
-		<input type=text ng-model="ingredient.name">
+		<ingredient-finder data-ingredient="ingredient"></ingredient-finder>
 		<input type=text ng-model="ingredient.qty">
 		<label><input type=checkbox ng-model="ingredient.optional"> optional</label>
 		<a class="btn btn-warning" ng-click="removeIngredient($index)"><i class="fa fa-times"></i></a>
 	</div>
 	<a class="btn btn-info" ng-click="addIngredient()">Add Ingredient</a>
-	<div ng-cloak ng-show="$scope.revision.id">
+	<div ng-cloak ng-show="revision.id">
 		<p>Thank you. Your changes will be reviewed. If approved, they shall be published, and you shall be awarded {{getConstant('POINTS_FOR_REVISION')}} points in tips.</p>
 		<p><a class="btn btn-primary" ng-click="visitDrink()">Back to {{drink.name}}</a></p>
 	</div>

@@ -33,6 +33,7 @@ window.$ = angular.element;
 		'ngSanitize',
 		'tipsy.drink',
 		'tipsy.find',
+		'tipsy.ingredient',
 		'tipsy.modals',
 		'tipsy.toolbar',
 		'ui.bootstrap',
