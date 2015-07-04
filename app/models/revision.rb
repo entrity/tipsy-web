@@ -13,6 +13,8 @@ class Revision < ActiveRecord::Base
   validates :drink, presence: true
   validates :ingredients, presence: true
 
+  before_save -> { self.ingredients = ingredients.map(&:as_json) }
+
   # Set status and rollback revisable's revision
   def unpublish!
     update_attributes! status:Flaggable::NEEDS_REVIEW

@@ -9,7 +9,7 @@ class MakeRevisionsCreatable < ActiveRecord::Migration
       t.integer :parent_id
       t.boolean :non_alcoholic, default: false
       t.boolean :profane, default: false
-      t.hstore  :ingredients, array: true, default: '{}'
+      t.hstore  :ingredients, array: true
       t.rename  :revisable_id, :drink_id
       t.rename  :text, :instructions
       t.remove :revisable_type

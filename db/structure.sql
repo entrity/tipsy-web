@@ -444,7 +444,7 @@ CREATE TABLE revisions (
     parent_id integer,
     non_alcoholic boolean DEFAULT false,
     profane boolean DEFAULT false,
-    ingredients hstore[] DEFAULT '{}'::hstore[]
+    ingredients hstore[]
 );
 
 

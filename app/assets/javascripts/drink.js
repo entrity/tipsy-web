@@ -21,18 +21,8 @@
 						var key = sharedAttrs[i];
 						this[key] = drink[key];
 					}
-					Object.defineProperties(this, {
-						drink_id: {
-							configurable: false,
-							enumerable: true,
-							value: drink.id
-						},
-						parent_id: {
-							configurable: false,
-							enumerable: true,
-							value: drink.revision_id
-						},
-					});
+					this.drink_id = drink.id;
+					this.revision_id = drink.revision_id;
 				},
 			}
 		});
@@ -64,6 +54,7 @@
 		$scope.save = function () {
 			$scope.revision.$save(null, function (data) {
 				// success
+
 			}, function () {
 				// failure
 			});
