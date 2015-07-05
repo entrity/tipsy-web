@@ -402,7 +402,9 @@ CREATE TABLE reviews (
     contributor_id integer,
     points smallint DEFAULT 0,
     flagger_ids integer[] DEFAULT '{}'::integer[],
-    created_at timestamp without time zone
+    created_at timestamp without time zone,
+    last_hold timestamp without time zone,
+    last_hold_user_id integer
 );
 
 
@@ -714,6 +716,13 @@ CREATE INDEX index_ingredients_on_name ON ingredients USING btree (name);
 
 
 --
+-- Name: index_reviews_on_open_and_contributor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_reviews_on_open_and_contributor_id ON reviews USING btree (open, contributor_id);
+
+
+--
 -- Name: index_reviews_on_reviewable_id_and_reviewable_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -777,4 +786,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150629032253');
 INSERT INTO schema_migrations (version) VALUES ('20150629034153');
 
 INSERT INTO schema_migrations (version) VALUES ('20150703032217');
+
+INSERT INTO schema_migrations (version) VALUES ('20150705022114');
 

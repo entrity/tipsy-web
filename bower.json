@@ -4,7 +4,8 @@
     "angular": "1.4.0",
     "angular-aria": "1.4.1",
     "angular-bootstrap": "0.13.0",
-  	"angular-resource": "1.4.0",
+    "angular-resource": "1.4.0",
+  	"angular-route": "1.4.1",
   	"angular-sanitize": "1.4.0",
 	"angular-ui-select": "git://github.com/angular-ui/ui-select.git#v0.8.3",
 	"pagedown": "1.1.0"

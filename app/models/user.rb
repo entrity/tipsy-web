@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   validates :name, uniqueness: true
 
   has_many :identities, inverse_of: :user
+  has_many :review_votes, inverse_of: :user
   has_many :revisions, as: :user
 
   # @return order of magnitude of `self.points`

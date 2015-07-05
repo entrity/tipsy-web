@@ -11,6 +11,7 @@
 			evt.stopPropagation();
 			evt.preventDefault();
 		};
+		$scope.fetchOpenReviewCt();
 	}])
 	;
 })();

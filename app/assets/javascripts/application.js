@@ -15,6 +15,7 @@
 //= require 'angular-bootstrap/ui-bootstrap.min'
 //= require 'angular-bootstrap/ui-bootstrap-tpls.min'
 //= require 'angular-resource/angular-resource.min'
+//= require 'angular-route/angular-route.min'
 //= require 'angular-sanitize/angular-sanitize.min'
 //= require 'angular-ui-select/dist/select.min'
 //= require pagedown/Markdown.Converter
@@ -35,11 +36,14 @@ window.$ = angular.element;
 		'tipsy.find',
 		'tipsy.ingredient',
 		'tipsy.modals',
+		'tipsy.rails',
+		'tipsy.review',
+		'tipsy.routes',
 		'tipsy.toolbar',
 		'ui.bootstrap',
 		'ui.select'
 	])
-	.run(['$rootScope', '$resource', '$modal', function ($rootScope, $resource, $modal) {
+	.run(['$rootScope', '$resource', '$modal', '$http', function ($rootScope, $resource, $modal, $http) {
 		Object.defineProperties($rootScope, {
 			addToCabinet: {
 				configurable: false,
@@ -70,6 +74,20 @@ window.$ = angular.element;
 						$rootScope.currentUser = $resource('/users/0.json').get();
 					window.user = $rootScope.currentUser;
 					return $rootScope.currentUser;
+				}
+			},
+			fetchOpenReviewCt: {
+				configurable: false,
+				value: function () {
+					$http.get('/reviews/count')
+					.success(function (data, status, headers, config) {
+						var count = parseInt(data);
+						$rootScope.openReviewCt = count > 50 ? '50+' : count;
+					})
+					.error(function (data, status, headers, config) {
+						console.error('Failed to fetch open review count');
+						console.error(data, status, headers, config);
+					});
 				}
 			},
 			isLoggedIn: {
@@ -218,4 +236,8 @@ Object.defineProperties(window, {
 		value: 5,
 		configurable: false,
 	},
+	POINTS_FOR_WINNING_VOTE: {
+		value: 3,
+		configurable: false,
+	}
 });

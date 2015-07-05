@@ -6,7 +6,7 @@ class RevisionsController < ApplicationController
     @revision.user = current_user
     @revision.status = Flaggable::NEEDS_REVIEW
     if @revision.save
-      Review.create! reviewable:@revision
+      Review.create! reviewable:@revision, contributor:current_user
     end
     respond_with @revision
   end
@@ -14,6 +14,6 @@ class RevisionsController < ApplicationController
   private
 
     def revision_params
-      params.permit(:drink_id, :parent_id, {:ingredients => DrinkIngredient.column_names}, :description, :instructions, :non_alcoholic, :profane, :prep_time, :calories, :name)
+      params.permit(:drink_id, :parent_id, :base_id, {:ingredients => DrinkIngredient.column_names}, :description, :instructions, :non_alcoholic, :profane, :prep_time, :calories, :name)
     end
 end
