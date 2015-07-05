@@ -11,7 +11,6 @@
  * file per style scope.
  *
  *= require 'angular-ui-select/dist/select.min'
- *= require pagedown/Markdown.css
  *= require_tree .
  *= require_self
  */
@@ -49,8 +48,6 @@ body .dropdown-menu {
 body .input-group .form-control {
   float: initial;
 }
-
-
 :focus,
 a:focus {
   outline: none;
@@ -63,6 +60,9 @@ a:focus {
 }
 .flash-error {
 	background: #fcc;
+}
+label {
+  margin-bottom: 0;
 }
 
 /* Colours */

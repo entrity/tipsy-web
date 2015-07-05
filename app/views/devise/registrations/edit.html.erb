@@ -29,15 +29,26 @@
           <h2>Edit your name, picture, etc</h2>
         </div>
       </div>
-      <div class="grid nav">
-        <div class="grid-cell active"><a href="#">Profile</a></div>
-        <div class="grid-cell"><a href="#">Password</a></div>
-        <div class="grid-cell"><a href="#">Email / Notifications</a></div>
+      <div class="grid nav" ng-init="tab = 1">
+        <div class="grid-cell active" ng-class="{active:tab===1}"><a href="" ng-click="tab = 1">Profile</a></div>
+        <div class="grid-cell" ng-class="{active:tab===2}"><a href="" ng-click="tab = 2">Password</a></div>
+        <div class="grid-cell" ng-class="{active:tab===3}"><a href="" ng-click="tab = 3">Notifications</a></div>
+        <div class="grid-cell" ng-class="{active:tab===4}"><a href="" ng-click="tab = 4">Cancel Account</a></div>
       </div>
-      <div class="grid">
+      <div class="grid" ng-show="tab === 1">
         <div class="grid-cell main gen">
           <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
             <%= devise_error_messages! %>
+            <div class="grid grid--center field">
+              <div class="grid-cell"><label>Link Account</label></div>
+              <div class="grid-cell">
+                <%- if devise_mapping.omniauthable? %>
+                  <%- resource_class.omniauth_providers.each do |provider| %>
+                    <%= link_to "Link #{provider.to_s.titleize} Account", user_omniauth_authorize_path(provider) unless current_user.identities.pluck(:provider).include?(provider.to_s) %>
+                  <% end -%>
+                <% end -%>
+              </div>
+            </div>
             <div class="grid grid--center field">
               <div class="grid-cell"><label>Profile Picture</label></div>
               <div class="grid-cell form-item avatar">
@@ -77,53 +88,6 @@
               <div class="grid-cell"><label>Bio</label></div>
               <div class="grid-cell form-item"><input type="text" name="user[name]" id="user_name"></div>
             </div>
-            <div class="actions">
-            </div>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="grid-cell main gen">
-          <%- if devise_mapping.omniauthable? %>
-            <%- resource_class.omniauth_providers.each do |provider| %>
-              <%= link_to "Link #{provider.to_s.titleize} Account", user_omniauth_authorize_path(provider) unless current_user.identities.pluck(:provider).include?(provider.to_s) %><br />
-            <% end -%>
-          <% end -%>
-
-            <div class="grid grid--center field">
-              <div class="grid-cell"><%= f.label :email %></div>
-              <div class="grid-cell form-item"><%= f.email_field :email, autofocus: true %></div>
-            </div>
-
-            <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-              <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-            <% end %>
-
-            <div class="grid grid--top field">
-              <div class="grid-cell"><%= f.label :current_password %></div>
-              <div class="grid-cell form-item">
-                <%= f.password_field :current_password, autocomplete: "off" %>
-                <small><small>We need your current password to confirm your changes</small></small>
-              </div>
-            </div>
-
-            <div class="grid grid--top field">
-              <div class="grid-cell"><%= f.label :password %></div>
-              <div class="grid-cell form-item">
-                <%= f.password_field :password, autocomplete: "off" %>
-                <small><small>Leave blank if you don't want to change it</small></small>
-              </div>
-            </div>
-
-            <div class="grid grid--center field">
-              <div class="grid-cell"><%= f.label :password_confirmation %></div>
-              <div class="grid-cell form-item"><%= f.password_field :password_confirmation, autocomplete: "off" %></div>
-            </div>
-
-            <div class="grid grid--center field">
-              <div class="grid-cell"><%= f.label :name %></div>
-              <div class="grid-cell form-item"><%= f.text_field :name %></div>
-            </div>
 
             <div class="grid grid--center field">
               <div class="grid-cell"><%= f.label :no_profanity %></div>
@@ -135,21 +99,71 @@
               <div class="grid-cell form-item"><%= f.check_box :no_alcohol %></div>
             </div>
 
-            <div class="actions">
-              <%= f.submit "Update" %>
+            <div class="grid grid--center field">
+              <div class="grid-cell"></div>
+              <div class="grid-cell">
+                <div class="actions"><%= f.submit "Update" %></div>
+              </div>
             </div>
-          <% end %>
+
+            <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+              <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+            <% end %>
+
         </div>
       </div>
-      
 
-      <h3>Cancel my account</h3>
+      <div class="grid" ng-show="tab === 2">
+        <div class="grid-cell main gen">
 
-      <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
+          <div class="grid grid--top field">
+            <div class="grid-cell"><%= f.label :current_password %></div>
+            <div class="grid-cell form-item">
+              <%= f.password_field :current_password, autocomplete: "off" %>
+              <small><small>We need your current password to confirm your changes</small></small>
+            </div>
+          </div>
+          <div class="grid grid--top field">
+            <div class="grid-cell"><%= f.label :new_password %></div>
+            <div class="grid-cell form-item">
+              <%= f.password_field :password, autocomplete: "off" %>
+              <small><small>Leave blank if you don't want to change it</small></small>
+            </div>
+          </div>
 
-      <div data-no-turbolink>
-        <%= link_to "Home", '/' %>
+          <div class="grid grid--center field">
+            <div class="grid-cell"><%= f.label :password_confirmation %></div>
+            <div class="grid-cell form-item"><%= f.password_field :password_confirmation, autocomplete: "off" %></div>
+          </div>
+
+          <div class="grid grid--center field">
+            <div class="grid-cell"></div>
+            <div class="grid-cell">
+              <div class="actions"><%= f.submit "Update" %></div>
+            </div>
+          </div>
+
+        </div>
       </div>
+
+      <div class="grid" ng-show="tab === 3">
+        <div class="grid-cell main gen">
+          tab3
+        </div>
+      </div>
+
+      <div class="grid" ng-show="tab === 4">
+        <div class="grid-cell main gen">
+          <div class="grid grid--center field">
+            <div class="grid-cell"><label>Unhappy?</label></div>
+            <div class="grid-cell">
+              <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+          <% end %>
     </div>
     <aside class="fancy-sidebar grid-cell">
       <div class="sidebar-controls"></div>
