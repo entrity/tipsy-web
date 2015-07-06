@@ -755,6 +755,15 @@ nav div a:hover {
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
 }
+#drink-page a.fa-flag:hover {
+  color: red;
+  cursor: pointer;
+}
+#drink-page a .fa-pencil:hover,
+#drink-page a.fa-pencil:hover {
+  color: yellow;
+  text-shadow: 1px 0 rgba(0,0,0,0.5), -1px 0 rgba(0,0,0,0.5), 0 1px rgba(0,0,0,0.5), 0 -1px rgba(0,0,0,0.5);
+}
 .account-settings .nav {
   border-bottom: 1px solid lightgray;
   margin-bottom: 10px;

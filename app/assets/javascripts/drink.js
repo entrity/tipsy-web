@@ -54,7 +54,6 @@
 		$scope.save = function () {
 			$scope.revision.$save(null, function (data) {
 				// success
-
 			}, function () {
 				// failure
 			});
