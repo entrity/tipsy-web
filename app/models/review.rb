@@ -4,11 +4,23 @@ class Review < ActiveRecord::Base
   belongs_to :contributor, class_name: 'User'
   belongs_to :reviewable, polymorphic: true
 
+  has_many :votes, class_name: 'ReviewVotes'
+
   validates :contributor, presence: true
 
   default_scope { where(open:true) }
 
   scope :open, -> user { where(open:true).where('contributor_id != ?', user.id).where('NOT (? = ANY(flagger_ids))', user.id) }
+
+  def award_points
+    if points == 0
+      raise 'Points are not to be awarded when Review.points is zero'
+    end
+    operator = points > 0 ? '>' : '<'
+    votes.where("points #{operator} 0").each do |vote|
+      vote.award_points!
+    end
+  end
 
   def diff
     base = reviewable.try(:base)
@@ -58,10 +70,11 @@ class Review < ActiveRecord::Base
           flagger_ids = array_append(flagger_ids, $3) 
         WHERE id = $2), [vote.points, id, vote.user_id]
     )
-    # If this Review is closed, set status of reviewable
+    # If this Review is closed, set status of reviewable, distribute points to voters
     unless reload.open
       status = points <=> 0
       reviewable.update_attributes! status:status
+      award_points
     end
   end
 

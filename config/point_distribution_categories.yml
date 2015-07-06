@@ -1,0 +1,48 @@
+-
+  name: 'REVISION_APPROVED_50'
+  points: 10
+  message: 'Drink edit approved (level 50)'
+-
+  name: 'REVISION_APPROVED_30'
+  points: 5
+  message: 'Drink edit approved (level 30)'
+-
+  name: 'REVISION_APPROVED_10'
+  points: 1
+  message: 'Drink edit approved (level 1)'
+-
+  name: 'PHOTO_UPVOTE'
+  points: 5
+  message: Receive an upvote on a photo
+-
+  name: 'COMMENT_UPVOTE'
+  points: 3
+  message: Receive an upvote on a comment
+-
+  name: 'PHOTO_PUBLISHED'
+  points: 5
+  message: Have photo published
+-
+  name: 'WINNING_VOTE'
+  points: 1
+  message: 'Voted with the winning side on a review'
+-
+  name: 'COMMENT_DOWNVOTE'
+  points: -1
+  message: Receive downvote on comment
+-
+  name: 'PHOTO_DOWNVOTE'
+  points: -1
+  message: Receive downvote on photo
+-
+  name: 'COMMENT_REJECTED'
+  points: -2
+  message: Comment voted out in a review
+-
+  name: 'PHOTO_REJECTED'
+  points: -2
+  message: Photo voted out in a review
+-
+  name: 'REVISION_REJECTED'
+  points: -2
+  message: Drink edit voted out in a review

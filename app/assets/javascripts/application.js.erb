@@ -233,11 +233,11 @@ Object.defineProperties(window, {
 		configurable: false,
 	},
 	POINTS_FOR_REVISION: {
-		value: 5,
+		value: <%= PointDistribution::REVISION_APPROVED_50.points %>,
 		configurable: false,
 	},
 	POINTS_FOR_WINNING_VOTE: {
-		value: 3,
+		value: <%= PointDistribution::WINNING_VOTE.points %>,
 		configurable: false,
 	}
 });
