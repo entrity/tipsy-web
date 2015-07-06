@@ -19,4 +19,14 @@ class IngredientsController < ApplicationController
       .limit(MAX_RESULTS)
   end
 
+  def names
+    if params[:id].blank?
+      respond_with Hash.new
+    else
+      sql = Ingredient.where(id:params[:id]).select([:id,:name]).to_sql
+      res = Ingredient.connection.execute(sql)
+      map = Hash[res.map{|x| [x['id'], x['name']] }]
+      respond_with map
+    end
+  end
 end
