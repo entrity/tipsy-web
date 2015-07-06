@@ -90,6 +90,7 @@ i i::before {
 a {
   color: #0091ce;
   text-decoration: none;
+  cursor: pointer;
 }
 a:hover {
   color: #0074a5;
@@ -436,17 +437,37 @@ nav div a:hover {
   font-size:14px !important;
   font-weight:600;
   margin:0 10px;
-  padding:5px 0 !important;
+  padding: 3px 5px;
   border-bottom:1px solid #0091CE;
 }
 .ingredients-list ul li,
 .shopping-list ul li {
   font-size:12px;
-  padding:5px 10px;
+  padding: 3px 5px;
+  margin: 2px 5px;
 }
 .ingredients-list ul li.item,
 .shopping-list ul li.item {
   text-transform: capitalize;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.ingredients-list ul li.item:hover,
+.shopping-list ul li.item:hover {
+  background: #0091CE;
+}
+aside li.item .fa {
+  color: white;
+  float: right;
+  padding-top: 2px;
+  display:none;
+  transition: .3s;
+}
+aside li.item:hover .fa {
+  display:initial;
+}
+aside li.item .fa:hover {
+  color: red;
 }
 .sidebar-list-first i {
   float: right;
@@ -798,20 +819,6 @@ nav div a:hover {
   font-weight: normal;
   color: #999999;
   margin: 0;
-}
-aside li.item .fa {
-  color: red;
-  float: right;
-  padding-top: 2px;
-  display:none;
-  opacity: .7;
-  transition: .3s;
-}
-aside li.item:hover .fa {
-  display:initial;
-}
-aside li.item .fa:hover {
-  opacity: 1;
 }
 .content .fa-pencil {
   margin-left: 6px;
