@@ -13,7 +13,7 @@ class ReviewVote < ActiveRecord::Base
     unless points_awarded
       conn = self.class.connection.raw_connection
       res = conn.exec "UPDATE #{self.class.table_name} SET points_awarded = TRUE WHERE id = #{id} AND points_awarded = FALSE"
-      PointDistribution.award_winning_vote(user_id) if res.cmd_tuples > 0
+      PointDistribution.award_winning_vote(user_id, self) if res.cmd_tuples > 0
     end
   end
 

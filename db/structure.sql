@@ -366,7 +366,10 @@ CREATE TABLE point_distributions (
     id integer NOT NULL,
     user_id integer,
     points integer,
-    category_id integer
+    category_id integer,
+    pointable_id integer,
+    pointable_type character varying,
+    created_at timestamp without time zone
 );
 
 
@@ -837,4 +840,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150703032217');
 INSERT INTO schema_migrations (version) VALUES ('20150705022114');
 
 INSERT INTO schema_migrations (version) VALUES ('20150706040344');
+
+INSERT INTO schema_migrations (version) VALUES ('20150706224543');
 
