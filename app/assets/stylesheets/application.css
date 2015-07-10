@@ -116,7 +116,7 @@ a:hover {
   top: 10px;
   right: 10px;
 }
-.btn-white {
+.btn.btn-white {
   color: #337ab7;
   background-color: #fff;
   border-color: transparent;
@@ -175,6 +175,9 @@ nav {
   color: #fff;
   font-size: 13px;
   padding-right: 20px;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
 }
 nav > div {
   padding-left: 16px;
@@ -182,7 +185,7 @@ nav > div {
 }
 nav > div:first-child {
   text-align: left;
-  max-width: 100px;
+  flex: 1 1 auto;
 }
 nav > div:last-child {
   padding-right: 0;
@@ -219,7 +222,8 @@ nav .trophie-cont a i:first-child {
 }
 nav > .user {
   cursor: pointer;
-  min-width: 160px;
+  padding: 0 16px;
+  flex: 0 1 auto;
 }
 nav > .user > .grid .grid-cell:last-child {
   max-width: 46px;
@@ -227,6 +231,7 @@ nav > .user > .grid .grid-cell:last-child {
 nav > .user .avatar {
   height: 28px;
   width: 28px;
+  margin-right: 27px;
   overflow: hidden;
 }
 nav > .user .avatar img {
@@ -240,7 +245,7 @@ nav > .user .avatar img {
 nav > .user .avatar:after {
   content:'\f0d7';
   position: absolute;
-  right: 0;
+  right: 7px;
   top: 50%;
   margin-top: -5px;
   font: normal normal normal 14px/1 FontAwesome;
@@ -249,9 +254,6 @@ nav > .user .avatar:after {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transform: translate(0, 0);
-}
-nav > .user .reputation {
-
 }
 nav > .user .rep-change {
   background: #8fc77e;
@@ -272,6 +274,10 @@ nav > .user li .rep-change {
   font-size: 11px;
   min-width: 134px;
   margin:10px 0 0;
+  right: 6px;
+}
+.avatar-cont .dropdown-menu {
+  right: 10px;
 }
 .dropdown-menu:before {
   position: absolute;
@@ -513,11 +519,12 @@ aside li.item .fa:hover {
   height: initial;
   padding: 32px;
 }
-.signin.grid,
-.splash.grid {
-  height:100vh; 
-  background: url(/images/drinks-blue-bg.jpg); 
-  background-size: cover;
+.signin.grid {
+  height: calc(100% - 40px);
+  height: -o-calc(100% - 40px);
+  height: -webkit-calc(100% - 40px);
+  height: -moz-calc(100% - 40px);
+  background-color: #2b334f;
   color: #fff;
 }
 .signin.grid .grid-cell,
@@ -539,8 +546,8 @@ aside li.item .fa:hover {
 }
 .signin.grid .grid-cell .btn-primary,
 .splash.grid .grid-cell .btn-primary {
-  background-color: #0c7daf;
-  border-color: #0c7dafs;
+  background-color: #2380af;
+  border-color: #2380af;
 }
 .signin.grid .grid-cell form,
 .splash.grid .grid-cell form {
@@ -550,8 +557,9 @@ aside li.item .fa:hover {
   min-width: 128px;
 }
 .splash.grid .btn:hover {
-  background-color: #0E5B7E;
-  border-color: #0E5471;
+  background-color: #fcb052;
+  border-color: #fcb052;
+  color: #fff;
 }
 .signin.grid .grid-cell a {
   color: #fff;
@@ -877,7 +885,7 @@ footer {
   text-align: center;
 }
 footer.fixed {
-  position: fixed;
+  /*position: fixed;*/
   max-width: 100%;
   width: 100%;
   bottom: 0;
@@ -886,7 +894,7 @@ footer.fixed {
   background: transparent;
   color: #fff;
 }
-#landing footer.fixed {
+footer.fixed {
   background: #181a1a;
 }
 footer.fixed .grid .grid-cell.socials,

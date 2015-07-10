@@ -14,6 +14,8 @@
       </div>
       <div class="grid-cell user">
         <a href="/users/sign_up/">Sign up</a>
+      </div>
+      <div class="grid-cell user">
         <a href="/users/sign_in/">Sign in</a>
       </div>
     </nav>
@@ -24,7 +26,39 @@
       <div ng-show="toolbar.availableReviewCt" class="grid-cell">
         <a href="/reviews/show">Review <span class="badge">{{toolbar.availableReviewCt}}</span></a>
       </div>
-      <div class="grid-cell user">
+      <div class="grid-cell user rep-cont dropdown">
+        <div id="rep-alerts">
+          <a ng-click="openToolbarMenu($event, 'repChanges')">
+            <span class="reputation" title="{{getUser().points}} points of reputation ('tips')">{{getUser().points}}</span>
+            <span class="rep-change" ng-if="getUser().newPointChanges">{{getUser().newPointChanges < 0 ? '-' : '+'}}{{getUser().newPointChanges}}</span>
+          </a>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-right" ng-if="toolbar.repChanges">
+          <li ng-repeat="change in recentRepChanges">
+            <a href="#"><span class="rep-change">+1</span> User has liked your picture</a>
+          </li>
+        </ul>
+      </div>
+      <div class="grid-cell user trophie-cont">
+        <a href="#">
+          <i class="fa fa-trophy gold"></i> {{getUser().goldBadgeCt||0}}
+          <i class="fa fa-trophy silver"></i> {{getUser().silverBadgeCt||0}}
+          <i class="fa fa-trophy bronze"></i> {{getUser().bronzeBadgeCt||0}}
+        </a>
+      </div>
+      <div class="grid-cell user avatar-cont dropdown">
+        <div class="grid" id="avatar-dropdown">
+          <a class="avatar" ng-click="openToolbarMenu($event, 'avatar')">
+            <img ng-src="{{getUser().avatar_url || '/images/anonymous-thumb.jpg'}}">
+          </a>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-right" ng-show="toolbar.avatar">
+          <li><a href="/users/edit"><i class="fa fa-user"></i> Markham Anderson</a></li>
+          <li><a href="/users/edit"><i class="fa fa-cog"></i> Account Settings</a></li>
+          <li><a href="/users/sign_out"><i class="fa fa-sign-out"></i> Log out</a></li>
+        </ul>
+      </div>
+      <!-- <div class="grid-cell user">
         <div class="grid grid--center">
           <div class="grid-cell rep-cont dropdown">
             <div id="rep-alerts">
@@ -59,7 +93,7 @@
             </ul>
           </div>
         </div>
-      </div>
+      </div> -->
     </nav>
   </div>
 </header>
