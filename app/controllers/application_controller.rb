@@ -30,6 +30,16 @@ private
     request.referrer.nil? || URI::parse(request.referrer).host == request.host
   end
 
+  def require_signed_in
+    unless user_signed_in?
+      if request.format.html?
+        redirect_to :root
+      else
+        render status: 401, text: 'User session required. Please authenticate'
+      end
+    end
+  end
+
   def require_ssl_if_signed_in
     if user_signed_in? && !request.ssl? && Rails.env.production?
       flash[:error] = 'You must use an encrypted connection'

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :drinks do
     member do
       get :ingredients
+      get :revisions
     end
   end
   

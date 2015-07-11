@@ -18,6 +18,7 @@
 //= require 'angular-route/angular-route.min'
 //= require 'angular-sanitize/angular-sanitize.min'
 //= require 'angular-ui-select/dist/select.min'
+//= require google-diff-match-patch/diff_match_patch
 //= require pagedown/Markdown.Converter
 //= require pagedown/Markdown.Sanitizer
 //= require pagedown/Markdown.Editor
@@ -222,6 +223,10 @@ window.$ = angular.element;
 })();
 
 Object.defineProperties(window, {
+	Tipsy: {
+		value: new Object,
+		configurable: false,
+	},
 	DRINK: {
 		value: 0,
 		writable: false,
@@ -239,5 +244,11 @@ Object.defineProperties(window, {
 	POINTS_FOR_WINNING_VOTE: {
 		value: <%= PointDistribution::WINNING_VOTE.points %>,
 		configurable: false,
-	}
+	},
 });
+
+(function(){
+	window.Tipsy.writeMarkdown = function (text) {
+		document.write(Markdown.getSanitizingConverter().makeHtml(text));
+	}
+})();

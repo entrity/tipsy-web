@@ -481,7 +481,10 @@ CREATE TABLE revisions (
     parent_id integer,
     non_alcoholic boolean DEFAULT false,
     profane boolean DEFAULT false,
-    ingredients hstore[]
+    ingredients hstore[],
+    prev_description text,
+    prev_instruction text,
+    prev_ingredients hstore[]
 );
 
 
@@ -842,4 +845,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150705022114');
 INSERT INTO schema_migrations (version) VALUES ('20150706040344');
 
 INSERT INTO schema_migrations (version) VALUES ('20150706224543');
+
+INSERT INTO schema_migrations (version) VALUES ('20150709025400');
 

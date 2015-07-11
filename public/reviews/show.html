@@ -36,17 +36,13 @@
 
 		<h2>Directions</h2>
 		<div class="grid">
-			<div class="grid-cell" ng-bind-html="diff.instructions"></div>
+			<div class="grid-cell" ng-bind-html="diff.instruction"></div>
 			<div class="grid-cell" ng-bind-html="converter.makeHtml(reviewable.instructions || '') || '(empty)'"></div>
 		</div>
 
 		<h2>Ingredients</h2>
 		<div class="grid ingredient-diff">
-			<div class="grid-cell">
-				<div ng-repeat="ingredient in diff.ingredients" class="{{ingredient.klass}}">
-					{{ingredient.qty}} {{ingredient.name}} {{ingredient.optional ? '(optional)' : ''}}
-				</div>
-			</div>
+			<div class="grid-cell" ng-bind-html="diff.ingredients"></div>
 			<div class="grid-cell">
 				<div ng-repeat="ingredient in reviewable.ingredients">
 					{{ingredient.qty}} {{ingredient.name}} {{ingredient.optional ? '(optional)' : ''}}

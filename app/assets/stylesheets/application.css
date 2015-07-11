@@ -11,7 +11,6 @@
  * file per style scope.
  *
  *= require 'angular-ui-select/dist/select.min'
- *= require pagedown/Markdown.css
  *= require_tree .
  *= require_self
  */
@@ -85,40 +84,15 @@ i i::before {
 }
 
 /* ==========================================================================
-   Diffy::Diff
+   Diffing
    ========================================================================== */
 
-.diff ul {
-  list-style: none;
-  padding: 0;
+del {
+  background: #faa;
+  text-decoration: line-through;
 }
-.ingredient-diff .ins,
-.diff .ins {
+ins {
   background: #afa;
-}
-.ingredient-diff ins,
-.diff ins {
-  text-decoration: none;
-}
-.ingredient-diff .ins::before,
-.diff .ins::before {
-  content: '\f196';
-  font-family: 'FontAwesome';
-  margin-right: 4px;
-}
-.ingredient-diff .del,
-.diff .del {
-  background: #faa;  
-}
-.ingredient-diff del,
-.diff del {
-  text-decoration: none;
-}
-.ingredient-diff .del::before,
-.diff .del::before {
-  content: '\f147';
-  font-family: 'FontAwesome';
-  margin-right: 4px;
 }
 
 /* ==========================================================================
