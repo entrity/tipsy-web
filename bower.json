@@ -3,12 +3,13 @@
   "dependencies": {
     "angular": "~1.4.1",
     "angular-aria": "~1.4.1",
-    "angular-bootstrap": "0.13.0",
+    "angular-bootstrap": "~0.13.0",
+    "angular-diff-match-patch": "~0.1.0",
     "angular-resource": "~1.4.1",
     "angular-route": "~1.4.1",
     "angular-sanitize": "~1.4.1",
     "angular-ui-select": "git://github.com/angular-ui/ui-select.git#v0.8.3",
-    "pagedown": "1.1.0"
+    "pagedown": "~1.1.0"
   },
   "resolutions": {
     "angular": "1.4.1"

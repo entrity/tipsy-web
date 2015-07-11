@@ -22,29 +22,13 @@ class Review < ActiveRecord::Base
     end
   end
 
-  def diff
-    base = reviewable.try(:base)
-    diff = Hash.new
-    if base
-      reviewable.attributes.each do |key, curval|
-        prev = base[key]
-        if curval.is_a? Array
-          diff[key] = prev
-        else
-          diff[key] = Diffy::Diff.new(prev.to_s, curval.to_s).to_s(:html)
-        end
-      end
-    end
-    diff
-  end
-
   # Returns a Review if successful, else nil
   def self.next! user
     res = connection.raw_connection.exec_params(%Q(UPDATE #{table_name} topquery
       SET last_hold = current_timestamp, last_hold_user_id = $2
       FROM (
         SELECT id FROM reviews
-        WHERE last_hold IS NULL OR last_hold < $1 OR last_hold_user_id = $2
+        WHERE (last_hold IS NULL OR last_hold < $1 OR last_hold_user_id = $2)
         AND open IS TRUE
         AND contributor_id != $2
         AND NOT $2 = ANY(flagger_ids)
@@ -72,8 +56,11 @@ class Review < ActiveRecord::Base
     )
     # If this Review is closed, set status of reviewable, distribute points to voters
     unless reload.open
-      status = points <=> 0
-      reviewable.update_attributes! status:status
+      if points > 0
+        reviewable.publish!
+      else
+        reviewable.update_attributes! status:status
+      end
       award_points
     end
   end

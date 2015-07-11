@@ -11,7 +11,6 @@
  * file per style scope.
  *
  *= require 'angular-ui-select/dist/select.min'
- *= require pagedown/Markdown.css
  *= require_tree .
  *= require_self
  */
@@ -85,40 +84,15 @@ i i::before {
 }
 
 /* ==========================================================================
-   Diffy::Diff
+   Diffing
    ========================================================================== */
 
-.diff ul {
-  list-style: none;
-  padding: 0;
+del {
+  background: #faa;
+  text-decoration: line-through;
 }
-.ingredient-diff .ins,
-.diff .ins {
+ins {
   background: #afa;
-}
-.ingredient-diff ins,
-.diff ins {
-  text-decoration: none;
-}
-.ingredient-diff .ins::before,
-.diff .ins::before {
-  content: '\f196';
-  font-family: 'FontAwesome';
-  margin-right: 4px;
-}
-.ingredient-diff .del,
-.diff .del {
-  background: #faa;  
-}
-.ingredient-diff del,
-.diff del {
-  text-decoration: none;
-}
-.ingredient-diff .del::before,
-.diff .del::before {
-  content: '\f147';
-  font-family: 'FontAwesome';
-  margin-right: 4px;
 }
 
 /* ==========================================================================
@@ -820,6 +794,15 @@ aside li.item .fa:hover {
   padding: 20px;
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
+}
+#drink-page a.fa-flag:hover {
+  color: red;
+  cursor: pointer;
+}
+#drink-page a .fa-pencil:hover,
+#drink-page a.fa-pencil:hover {
+  color: yellow;
+  text-shadow: 1px 0 rgba(0,0,0,0.5), -1px 0 rgba(0,0,0,0.5), 0 1px rgba(0,0,0,0.5), 0 -1px rgba(0,0,0,0.5);
 }
 .account-settings .nav {
   border-bottom: 1px solid lightgray;

@@ -10,13 +10,13 @@ end
 # Defines a new sequence
 FactoryGirl.define do
   sequence :email do |n|
-    "person#{n}@example.com"
+    "person#{Time.now.to_i}-#{n}@example.com"
   end
 end
 
 # Defines a new sequence
 FactoryGirl.define do
   sequence :name do |n|
-    "name#{n}"
+    "name#{Time.now.to_i}-#{n}"
   end
 end

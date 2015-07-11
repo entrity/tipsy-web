@@ -14,7 +14,7 @@ class ReviewsController < ApplicationController
   def next
     @review = Review.next!(current_user)
     if @review
-      respond_with @review.as_json(methods: [:reviewable, :diff])
+      respond_with @review.as_json(methods: [:reviewable])
     else
       respond_with nil, status: 423
     end
