@@ -8,7 +8,7 @@
     "angular-resource": "~1.4.1",
     "angular-route": "~1.4.1",
     "angular-sanitize": "~1.4.1",
-    "angular-ui-select": "git://github.com/angular-ui/ui-select.git#v0.8.3",
+    "angular-ui-select": "git://github.com/angular-ui/ui-select.git#v0.11.2",
     "pagedown": "~1.1.0"
   },
   "resolutions": {

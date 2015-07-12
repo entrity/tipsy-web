@@ -1,8 +1,13 @@
 <div id="fuzzy-finder">
-	<ui-select theme="bootstrap" ng-model="finder.record" on-select="finder.selected($item, $model)" reset-search-input="true" search-enabled="true" >
-		<ui-select-match data-placeholder="Search drinks and ingredients" allow-clear="true"></ui-select-match>
-		<ui-select-choices repeat="item in finder.findables" refresh-delay="100" refresh="finder.fetchFindables($select.search)">
-			<div class="{{item.type | tipsyFindableClass }}" ng-bind-html="item.name | highlight: $select.search"></div>
+	<ui-select multiple tagging theme="bootstrap" ng-model="finder.records" on-select="finder.selected($item, $model)" reset-search-input="true" search-enabled="true" close-on-select="true">
+		<ui-select-match data-placeholder="Search drinks and ingredients" allow-clear="true">
+			{{$item.name}}
+			<a href="/ingredients/{{$item.id}}"><i class="fa fa-link"></i></a>
+			<a ng-click="addToShoppingList($item)"><i class="fa fa-shopping-cart"></i></a>
+			<a ng-click="addToCabinet($item)"><i class="icon-fridge"></i></a>
+		</ui-select-match>
+		<ui-select-choices repeat="item in finder.findables" refresh-delay="100" refresh="finder.fetchFindables($select)">
+			<div class="{{item | tipsyFindableClass }}" ng-bind-html="item.name | highlight: $select.search"></div>
 		</ui-select-choices>
 	</ui-select>
 </div>
