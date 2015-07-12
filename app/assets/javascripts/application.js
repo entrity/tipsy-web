@@ -44,7 +44,7 @@ window.$ = angular.element;
 		'ui.bootstrap',
 		'ui.select'
 	])
-	.run(['$rootScope', '$resource', '$modal', '$http', function ($rootScope, $resource, $modal, $http) {
+	.run(['$rootScope', '$resource', '$modal', '$http', '$templateCache', function ($rootScope, $resource, $modal, $http, $templateCache) {
 		Object.defineProperties($rootScope, {
 			addToCabinet: {
 				configurable: false,
@@ -164,14 +164,14 @@ window.$ = angular.element;
 		while (removeDuplicatesFromAside($rootScope.shoppingList)) {}
 	}])
 	.filter('tipsyFindableClass', function () {
-		return function (type) {
-			switch (parseInt(type)) {
+		return function (item) {
+			switch (parseInt(item.type)) {
 				case window.DRINK:
 					return 'drink'; break;
 				case window.INGREDIENT:
 					return 'ingredient'; break;
 				default:
-					console.error('Bad type for findable: '+type);
+					if (typeof item !== 'string') console.error('Bad type for findable: '+JSON.stringify(item));
 			}
 		}
 	})
@@ -221,31 +221,6 @@ window.$ = angular.element;
 	}
 	attachBootstrapAngularJSCbToPageChange();
 })();
-
-Object.defineProperties(window, {
-	Tipsy: {
-		value: new Object,
-		configurable: false,
-	},
-	DRINK: {
-		value: 0,
-		writable: false,
-		configurable: false,
-	},
-	INGREDIENT: {
-		value: 1,
-		writable: false,
-		configurable: false,
-	},
-	POINTS_FOR_REVISION: {
-		value: <%= PointDistribution::REVISION_APPROVED_50.points %>,
-		configurable: false,
-	},
-	POINTS_FOR_WINNING_VOTE: {
-		value: <%= PointDistribution::WINNING_VOTE.points %>,
-		configurable: false,
-	},
-});
 
 (function(){
 	window.Tipsy.writeMarkdown = function (text) {

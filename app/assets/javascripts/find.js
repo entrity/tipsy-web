@@ -1,17 +1,22 @@
 (function () {
 	angular.module('tipsy.find', [])
 	.run(['$rootScope', '$resource', function ($rootScope, $resource) {
-		$rootScope.finder = new Object;
+		$rootScope.finder = {records:[], findables:[]};
 		$rootScope.finder.ingredients = [];
 		$rootScope.finder.options = new Object;
 		$rootScope.finder.options.noProfanity = !!parseInt(localStorage.getItem('noProfanity'));
 		$rootScope.$watch('finder.options.noProfanity', function (newVal, oldVal) {
 			localStorage.setItem('noProfanity', newVal ? 1 : 0);
 		});
-		$rootScope.finder.fetchFindables = function (searchTerm) {
+		$rootScope.finder.fetchFindables = function ($select) {
+			var searchTerm = $select.search;
 			if (searchTerm && searchTerm.length > 0) {
-				var profanity = $rootScope.finder.options.noProfanity ? false : null;
-				$rootScope.finder.findables = $resource('/fuzzy_find.json').query({fuzzy:searchTerm, profane:profanity},
+				var params = {
+					fuzzy: searchTerm,
+					profane: !$rootScope.finder.options.noProfanity,
+					drinks: !($select.selected && $select.selected.length)
+				}
+				$rootScope.finder.findables = $resource('/fuzzy_find.json').query(params,
 					function (data, responseHeaders) {
 						$rootScope.finder.findables = $rootScope.finder.findables.sort(function (a,b) {
 							var downcasedSearchTerm = searchTerm.toLowerCase();
@@ -25,8 +30,6 @@
 				case window.DRINK:
 					Turbolinks.visit('/drinks/'+model.id); break;
 				case window.INGREDIENT:
-					$rootScope.finder.addIngredient(model);
-					$rootScope.finder.findables = [];
 					break;
 				default:
 					console.error('Bad type for findable: '+type);
