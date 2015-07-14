@@ -23,8 +23,8 @@
       <div class="grid-cell">
         <a href="/drinks">Browse</a>
       </div>
-      <div ng-show="toolbar.availableReviewCt" class="grid-cell">
-        <a href="/reviews/show">Review <span class="badge">{{toolbar.availableReviewCt}}</span></a>
+      <div ng-show="openReviewCt" class="grid-cell">
+        <a href="#review"><small>Review</small> <span class="badge">{{openReviewCt}}</span></a>
       </div>
       <div class="grid-cell user rep-cont dropdown">
         <div id="rep-alerts">
@@ -63,7 +63,7 @@
           <div class="grid-cell rep-cont dropdown">
             <div id="rep-alerts">
               <a ng-click="openToolbarMenu($event, 'repChanges')">
-                <span class="reputation" title="{{getUser().points}} points of reputation ('tips')">{{getUser().points}}</span>
+                <span class="reputation" title="{{getUser().points}} points of reputation ('tips')"><i class="icon-pixelpotion"></i>{{getUser().points}}</span>
                 <span class="rep-change" ng-if="getUser().newPointChanges">{{getUser().newPointChanges < 0 ? '-' : '+'}}{{getUser().newPointChanges}}</span>
               </a>
             </div>

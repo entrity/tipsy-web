@@ -13,7 +13,8 @@ layout nil
     if params[:fuzzy].blank?
       render json:{errors:['Missing search parameter']}, status:406
     else
-      hashes = FuzzyFindable.autocomplete(params[:fuzzy], params[:profane])
+      opts = {profane:parse_bool(:profane), drinks:parse_bool(:drinks)}
+      hashes = FuzzyFindable.autocomplete(params[:fuzzy], opts)
       render json:hashes
     end
   end
@@ -25,5 +26,21 @@ layout nil
       format.xml
     end
   end
+
+  private
+
+    def parse_bool symbol
+      if params[symbol].is_a?(String)
+        if params[symbol] =~ /1|true|t/i
+          true
+        elsif params[symbol] =~ /0|false|f/i
+          false
+        end
+      elsif params[symbol] == true
+        true
+      elsif params[symbol] == false
+        false
+      end
+    end
 
 end

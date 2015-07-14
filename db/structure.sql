@@ -359,6 +359,40 @@ ALTER SEQUENCE ingredients_id_seq OWNED BY ingredients.id;
 
 
 --
+-- Name: point_distributions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE point_distributions (
+    id integer NOT NULL,
+    user_id integer,
+    points integer,
+    category_id integer,
+    pointable_id integer,
+    pointable_type character varying,
+    created_at timestamp without time zone
+);
+
+
+--
+-- Name: point_distributions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE point_distributions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: point_distributions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE point_distributions_id_seq OWNED BY point_distributions.id;
+
+
+--
 -- Name: review_votes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -367,7 +401,8 @@ CREATE TABLE review_votes (
     user_id integer,
     review_id integer,
     points smallint NOT NULL,
-    created_at timestamp without time zone
+    created_at timestamp without time zone,
+    points_awarded boolean DEFAULT false
 );
 
 
@@ -402,7 +437,9 @@ CREATE TABLE reviews (
     contributor_id integer,
     points smallint DEFAULT 0,
     flagger_ids integer[] DEFAULT '{}'::integer[],
-    created_at timestamp without time zone
+    created_at timestamp without time zone,
+    last_hold timestamp without time zone,
+    last_hold_user_id integer
 );
 
 
@@ -444,7 +481,10 @@ CREATE TABLE revisions (
     parent_id integer,
     non_alcoholic boolean DEFAULT false,
     profane boolean DEFAULT false,
-    ingredients hstore[]
+    ingredients hstore[],
+    prev_description text,
+    prev_instruction text,
+    prev_ingredients hstore[]
 );
 
 
@@ -567,6 +607,13 @@ ALTER TABLE ONLY ingredients ALTER COLUMN id SET DEFAULT nextval('ingredients_id
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY point_distributions ALTER COLUMN id SET DEFAULT nextval('point_distributions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY review_votes ALTER COLUMN id SET DEFAULT nextval('review_votes_id_seq'::regclass);
 
 
@@ -637,6 +684,14 @@ ALTER TABLE ONLY identities
 
 ALTER TABLE ONLY ingredients
     ADD CONSTRAINT ingredients_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: point_distributions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY point_distributions
+    ADD CONSTRAINT point_distributions_pkey PRIMARY KEY (id);
 
 
 --
@@ -714,6 +769,13 @@ CREATE INDEX index_ingredients_on_name ON ingredients USING btree (name);
 
 
 --
+-- Name: index_reviews_on_open_and_contributor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_reviews_on_open_and_contributor_id ON reviews USING btree (open, contributor_id);
+
+
+--
 -- Name: index_reviews_on_reviewable_id_and_reviewable_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -777,4 +839,12 @@ INSERT INTO schema_migrations (version) VALUES ('20150629032253');
 INSERT INTO schema_migrations (version) VALUES ('20150629034153');
 
 INSERT INTO schema_migrations (version) VALUES ('20150703032217');
+
+INSERT INTO schema_migrations (version) VALUES ('20150705022114');
+
+INSERT INTO schema_migrations (version) VALUES ('20150706040344');
+
+INSERT INTO schema_migrations (version) VALUES ('20150706224543');
+
+INSERT INTO schema_migrations (version) VALUES ('20150709025400');
 

@@ -1,0 +1,57 @@
+<h1 title="Review {{review.id}}">Review</h1>
+<style>
+	#review .comparison .grid-cell {
+		border: 1px dotted gray;
+		margin: 4px;
+		padding: 4px;
+	}
+</style>
+<div ng-switch="review.reviewable_type" id="review">
+	<!-- REVISION -->
+	<div ng-switch-when="Revision" class="comparison">
+
+		<h2>Name</h2>
+		<div class="grid">
+			<div class="grid-cell" ng-bind-html="diff.name || '(no change)'"></div>
+			<div class="grid-cell" ng-bind-html="reviewable.name"></div>
+		</div>
+
+		<h2>Description</h2>
+		<div class="grid">
+			<div class="grid-cell" ng-bind-html="diff.description"></div>
+			<div class="grid-cell" ng-bind-html="converter.makeHtml(reviewable.description || '') || '(empty)'"></div>
+		</div>
+
+		<h2>Prep Time</h2>
+		<div class="grid">
+			<div class="grid-cell" ng-bind-html="diff.prep_time"></div>
+			<div class="grid-cell">{{reviewable.prep_time || '(empty)'}}</div>
+		</div>
+
+		<h2>Calories</h2>
+		<div class="grid">
+			<div class="grid-cell" ng-bind-html="diff.calories"></div>
+			<div class="grid-cell" ng-bind-html="reviewable.calories || '(empty)'"></div>
+		</div>
+
+		<h2>Directions</h2>
+		<div class="grid">
+			<div class="grid-cell" ng-bind-html="diff.instruction"></div>
+			<div class="grid-cell" ng-bind-html="converter.makeHtml(reviewable.instructions || '') || '(empty)'"></div>
+		</div>
+
+		<h2>Ingredients</h2>
+		<div class="grid ingredient-diff">
+			<div class="grid-cell" ng-bind-html="diff.ingredients"></div>
+			<div class="grid-cell">
+				<div ng-repeat="ingredient in reviewable.ingredients">
+					{{ingredient.qty}} {{ingredient.name}} {{ingredient.optional ? '(optional)' : ''}}
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+<a class="btn btn-default" ng-click="vote(-1)"><i class="icon-panda"></i> Reject</a>
+<a class="btn btn-default" ng-click="vote(0)"><i class="icon-lips"></i> Abstain</a>
+<a class="btn btn-default" ng-click="vote(1)"><i class="fa fa-check-circle"></i> Approve</a>

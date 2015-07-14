@@ -1,3 +1,4 @@
+require 'rails_helper.rb'
 require 'shared_examples/flaggable_examples.rb'
 
 describe Comment do

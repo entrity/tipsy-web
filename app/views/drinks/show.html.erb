@@ -1,3 +1,6 @@
+<script>
+  window.drink = <%= @drink.to_json.html_safe %>;
+</script>
 <div id="drink-page" ng-controller="DrinkCtrl">
   <div class="grid row-one">
     <div class="grid-cell left"><a href="#"></a></div>
@@ -18,10 +21,15 @@
       <div class="social-share-bar">Social share bar goes here</div>
       <div class="grid description">
         <div class="grid-cell prep-time">
-          <h3>Description <a ng-click="loadEditView()" class="fa fa-pencil"></a></h3>
+          <h3>
+            Description
+            <a ng-click="loadEditView()" class="fa fa-pencil"></a>
+            <a ng-click="flag()" class="fa fa-flag"></a>
+          </h3>
           <div>
             <% if @drink.description.present? %>
-              <%= @drink.description %>
+              <noscript><%= @drink.description %></noscript>
+              <script>Tipsy.writeMarkdown(window.drink.description)</script>
             <% else %>
               <p>
                 <em>No description has been submitted for this drink yet.</em>
@@ -80,7 +88,12 @@
   <div class="grid row-two">
     <div class="grid-cell ingredients">
       <div class="grid grid--center">
-        <div class="grid-cell"><h3>Ingredients</h3></div>
+        <div class="grid-cell">
+          <h3>
+            Ingredients
+            <a ng-click="loadEditView()" class="fa fa-pencil"></a>
+          </h3>
+        </div>
       </div>
       <% @ingredients.each do |ingredient| %>
         <div class="grid grid--center ingredient">
@@ -102,10 +115,17 @@
     </div>
     <div class="grid-cell directions">
       <div class="grid grid--center">
-        <div class="grid-cell">              
-          <h3>Recipe Directions <a ng-click="loadEditView()" class="fa fa-pencil"></a></h3>
+        <div class="grid-cell">
+          <h3>
+            Recipe Directions
+            <a ng-click="loadEditView()" class="fa fa-pencil"></a>
+            <a ng-click="flag()" class="fa fa-flag"></a>
+          </h3>
           <% if @drink.instructions.present? %>
-            <div><%= @drink.instructions %></div>
+            <div>
+              <noscript><%= @drink.instructions %></noscript>
+              <script type="text/javascript">Tipsy.writeMarkdown(window.drink.instructions);</script>
+            </div>
             <p>
               <em>Were these directions helpful?</em><br>
               <a ng-click="loadEditView()">Improve them!</a>

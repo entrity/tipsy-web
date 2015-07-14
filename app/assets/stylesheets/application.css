@@ -17,7 +17,7 @@
 
 
 body {
-  background-color: #ebebeb;
+  background-color: #2b334f;
   font-family: 'Open Sans', sans-serif;
   font-size: 13px;
   margin: 0;
@@ -44,9 +44,6 @@ body {
 /* Override Bootstrap to facilitate AngularJS */
 body .dropdown-menu {
   display: initial;
-}
-body .input-group .form-control {
-  float: initial;
 }
 :focus,
 a:focus {
@@ -81,6 +78,18 @@ i i::before {
   left: -2px;
   bottom: -2px;
   position: relative;
+}
+
+/* ==========================================================================
+   Diffing
+   ========================================================================== */
+
+del {
+  background: #faa;
+  text-decoration: line-through;
+}
+ins {
+  background: #afa;
 }
 
 /* ==========================================================================
@@ -131,7 +140,6 @@ a:hover {
 header {
   clear: both;
   height: 56px;
-  background: #177fab;
 }
 header .wrapper {
     max-width: 1020px;
@@ -174,7 +182,7 @@ nav {
   min-width: 540px;
   color: #fff;
   font-size: 13px;
-  padding-right: 20px;
+  padding-right: 220px;
   -webkit-justify-content: flex-end;
   -ms-flex-pack: end;
   justify-content: flex-end;
@@ -316,7 +324,7 @@ nav div a:hover {
   min-height: 100vh;
   padding:20px;
   background-color:#fff;
-  border-bottom-left-radius: 4px;
+  border-radius: 4px;
 }
 .content > p {
     font-size: 18px;
@@ -452,13 +460,13 @@ nav div a:hover {
 .fancy-sidebar {
   max-width:200px;
   min-height: 100vh;
-  background-color: #16242A;
   float:right;
   padding:10px;
   border-bottom-right-radius: 4px;
 }
 .sidebar-controls {
   height:40px;
+  display: none;
 }
 .ingredients-list {
   padding-bottom: 10px;
@@ -476,7 +484,7 @@ nav div a:hover {
   font-weight:600;
   margin:0 10px;
   padding: 3px 5px;
-  border-bottom:1px solid #0091CE;
+  border-bottom: 1px dashed #585F77;
 }
 .ingredients-list ul li,
 .shopping-list ul li {
@@ -656,7 +664,9 @@ aside li.item .fa:hover {
 .ui-select-bootstrap.dropdown.open .ui-select-choices {
   display: initial;
 }
-
+#fuzzy-finder .ui-select-match a .fa {
+  font-size: 13px;
+}
 
 /*** DRINK PAGE STYLES ***/
 
@@ -791,6 +801,15 @@ aside li.item .fa:hover {
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
 }
+#drink-page a.fa-flag:hover {
+  color: red;
+  cursor: pointer;
+}
+#drink-page a .fa-pencil:hover,
+#drink-page a.fa-pencil:hover {
+  color: yellow;
+  text-shadow: 1px 0 rgba(0,0,0,0.5), -1px 0 rgba(0,0,0,0.5), 0 1px rgba(0,0,0,0.5), 0 -1px rgba(0,0,0,0.5);
+}
 .account-settings .nav {
   border-bottom: 1px solid lightgray;
   margin-bottom: 10px;
@@ -864,7 +883,7 @@ aside li.item .fa:hover {
   font-size: 18px;
   font-weight: 500;
   line-height: 1.5;
-  margin: 0;flash-notice
+  margin: 0;
 }
 .account-settings h2 {  
   font-size: 14px;
@@ -909,6 +928,7 @@ footer.in-app .grid .grid-cell.socials .fa {
 }
 footer.fixed .grid .grid-cell.copyright,
 footer.in-app .grid .grid-cell.copyright {
-  padding-right: 97px;
+  padding-right: 317px;
   opacity: 0.5;
+  color: #fff;
 }

@@ -20,8 +20,8 @@
   <ng-include src="'/toolbar.html'"></ng-include>
   <div id="main-cont" class="grid">
     <div class="content grid-cell">
-      <ng-include src="'/find-results.html'"></ng-include>
-      <%= yield %>
+      <ng-view></ng-view>
+      <div ng-hide="hideRailsContent"><%= yield %></div>
     </div>
     <aside class="fancy-sidebar grid-cell">
       <div class="sidebar-controls"></div>
@@ -33,7 +33,7 @@
             <a ng-click="removeFromCabinet(item)"><i class="fa fa-times"></i></a>
           </li>
           <li ng-show="!cabinet || !cabinet.length" style="font-style:italic">(empty)</li>
-          <li><a><i class="icon-circlefork"></i> What can I make?</a></li>
+          <li><a><i class="fa fa-glass"></i> What can I make?</a></li>
         </ul>
       </div>
       <div class="shopping-list">
@@ -44,6 +44,7 @@
             <a ng-click="removeFromShoppingList(item)"><i class="fa fa-times"></i></a>
           </li>
           <li ng-show="!shoppingList || !shoppingList.length" style="font-style:italic">(empty)</li>
+          <li><a><i class="fa fa-share-square"></i> Export shopping list</a></li>
         </ul>
       </div>
     </aside>

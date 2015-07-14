@@ -11,16 +11,22 @@ Rails.application.routes.draw do
   resources :drinks do
     member do
       get :ingredients
+      get :revisions
     end
   end
   
   resources :flags, only: :create
 
-  resources :ingredients
+  resources :ingredients do
+    collection do
+      get :names
+    end
+  end
   
   resources :reviews do
     collection do
-      get  :count
+      get :count
+      get :next
     end
     member do
       post :vote
