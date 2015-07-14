@@ -4,10 +4,11 @@ module PostgresFunctions
     raw_connection.exec %Q(
       CREATE #{overwrite ? 'OR REPLACE' : nil} FUNCTION flag_#{table_name}
       (i_user_id INT, i_flaggable_id INT, s_flaggable_type TEXT, i_flag_limit INT, i_flag_bits INT, i_flag_pts INT, dt_timestamp TIMESTAMP)
-      RETURNS BOOLEAN AS $$
+      RETURNS INT AS $$
         DECLARE duplicate_flag_ct INT;
         DECLARE open_review_ct INT;
         DECLARE aggregate_flagger_ids INT[];
+        DECLARE return_value INT := #{Flaggable::DB_INITIAL};
         BEGIN
           -- check for existing flag with the same user and flaggable
           LOCK ONLY flags IN SHARE MODE;
@@ -22,6 +23,8 @@ module PostgresFunctions
             INSERT INTO flags (user_id, flaggable_id, flaggable_type, flag_bits, flag_pts, created_at) VALUES (i_user_id, i_flaggable_id, s_flaggable_type, i_flag_bits, i_flag_pts, dt_timestamp);
             -- increment flaggable's flag_pts
             UPDATE #{table_name} SET flag_pts = flag_pts + i_flag_pts WHERE id = i_flaggable_id;
+            -- set return value
+            return_value := #{Flaggable::DB_FLAG_INSERTED};
             -- check whether flaggable exceeds FLAG_POINTS_LIMIT
             IF ((SELECT flag_pts FROM #{table_name} WHERE id = i_flaggable_id) >= i_flag_limit) THEN
               -- check whether an open review exists for the flaggable
@@ -45,12 +48,11 @@ module PostgresFunctions
                       aggregate_flagger_ids,
                       dt_timestamp
                   );
-                -- return true
-                RETURN TRUE;
+                return_value := #{Flaggable::DB_REVIEW_INSERTED};
               END IF;
             END IF;
           END IF;
-          RETURN FALSE;
+          RETURN return_value;
         END;
       $$ LANGUAGE plpgsql
     )

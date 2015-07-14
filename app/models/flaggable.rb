@@ -4,6 +4,10 @@ module Flaggable
   REJECTED     = -1
   NEEDS_REVIEW = 0
   APPROVED     = 1
+  # Values for db response in #flag!
+  DB_INITIAL = 0
+  DB_FLAG_INSERTED = 1
+  DB_REVIEW_INSERTED = 2
 
   def self.included(base)
     unless base.attribute_method?(:status)
@@ -28,18 +32,24 @@ module Flaggable
     res = conn.exec_params("SELECT flag_#{self.class.table_name}($1, $2, $3, $4, $5, $6, $7)",
       [user.id, id, self.class.name, FLAG_PTS_LIMIT, flag_bits, user.log_points, Time.now]
     )
-    case res.getvalue(0,0) # Indicates whether a review was created
-    when 't'
-      unpublish!
-      true
-    when 'f'
-      false
-    else
-      raise TipsyError.new "Unexpected output from db in #{self.class.name}#flag! - #{res} for #{inspect}"
+    db_status_string = res.getvalue(0,0) # Indicates whether a review was created
+    unless db_status_string =~ /\d+/
+      raise TipsyException.new db_flag_err_string(db_status_string)
     end
+    db_status = db_status_string.to_i
+    if db_status < DB_INITIAL || db_status > DB_REVIEW_INSERTED
+      raise TipsyException.new db_flag_err_string(db_status_string)
+    end
+    unpublish! if db_status >= DB_REVIEW_INSERTED
+    # Indicates whether a Flag was created
+    return db_status >= DB_FLAG_INSERTED
   end
 
   private
+
+    def db_flag_err_string db_status
+      "Unexpected output from db in #{self.class.name}#flag! \"#{db_status}\" for #{inspect}"
+    end
 
     # This is overridden for Revision
     def unpublish!

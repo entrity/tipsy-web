@@ -810,6 +810,16 @@ aside li.item .fa:hover {
   color: yellow;
   text-shadow: 1px 0 rgba(0,0,0,0.5), -1px 0 rgba(0,0,0,0.5), 0 1px rgba(0,0,0,0.5), 0 -1px rgba(0,0,0,0.5);
 }
+
+#drink-flag-modal {
+  padding: 32px;
+}
+#drink-flag-modal .diff del,
+#drink-flag-modal .diff span {
+  background: #ddd;
+  color: #888;
+}
+
 .account-settings .nav {
   border-bottom: 1px solid lightgray;
   margin-bottom: 10px;

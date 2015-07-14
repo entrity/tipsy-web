@@ -1,37 +1,5 @@
 (function () {
 	angular.module('tipsy.review', [])
-	.factory('Differ', [function () {
-		return {
-			prettyHtml: function (prev, post) {
-				var differ = new diff_match_patch();
-				var diffs = differ.diff_main(prev||'', post||'');
-				differ.diff_cleanupEfficiency(diffs);
-				var html = [];
-				diffs.forEach(function (diff) {
-					var op = diff[0];    // Operation (insert, delete, equal)
-					var text = diff[1];  // Text of change.
-					switch (op) {
-						case DIFF_INSERT:
-							html.push('<ins>' + text + '</ins>');
-							break;
-						case DIFF_DELETE:
-							html.push('<del>' + text + '</del>');
-							break;
-						case DIFF_EQUAL:
-							html.push('<span>' + text + '</span>');
-							break;
-					}
-				});
-				return html.join('');
-			},
-			prettyMarkdown: function (prev, post) {
-				var converter = Markdown.getSanitizingConverter();
-				prev = converter.makeHtml(prev||'');
-				post = converter.makeHtml(post||'');
-				return this.prettyHtml(prev, post);
-			},
-		};
-	}])
 	.controller('ReviewCtrl', ['$scope', '$resource', '$http', '$location', 'Differ', 'RailsSupport', function ($scope, $resource, $http, $location, Differ, RailsSupport) {
 		$scope.review = $resource('/reviews/next.json').get(function (data) {
 			// Create diff for holding diff html
@@ -39,8 +7,8 @@
 			// Get reference to reviewable
 			var reviewable = $scope.reviewable = data.reviewable;
 			// Make diff html for description
-			$scope.diff.description = Differ.prettyMarkdown(reviewable.prev_description, reviewable.description);
-			$scope.diff.instruction = Differ.prettyMarkdown(reviewable.prev_instruction, reviewable.instructions);
+			$scope.diff.description = new Differ(reviewable.prev_description, reviewable.description).prettyMarkdown();
+			$scope.diff.instruction = new Differ(reviewable.prev_instruction, reviewable.instructions).prettyMarkdown();
 			// Get unified list of ingredients (prev & current)
 			if (!reviewable.ingredients) reviewable.ingredients = [];
 			if (!reviewable.prev_ingredients) reviewable.prev_ingredients = [];
@@ -62,7 +30,7 @@
 				// Build prev & post ingredient texts for diffing
 				var prevIngredients = reviewable.prev_ingredients.map(ingredientToText).sort().join("<br>");
 				var postIngredients = reviewable.ingredients.map(ingredientToText).sort().join("<br>");
-				$scope.diff.ingredients = Differ.prettyHtml(prevIngredients, postIngredients);
+				$scope.diff.ingredients = new Differ(prevIngredients, postIngredients).prettyHtml();
 			});
 		}, function () {
 			console.error('Failed to fetch review');

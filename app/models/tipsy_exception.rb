@@ -1,2 +1,2 @@
-module TipsyException
+class TipsyException < Exception
 end

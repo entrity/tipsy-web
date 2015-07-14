@@ -6,8 +6,9 @@ class Flag < ActiveRecord::Base
   belongs_to :user
   belongs_to :flaggable, polymorphic: true
 
-  validates :user, presence: true
+  validates :user, presence: true, uniqueness:{scope: :flaggable}
   validates :flaggable, presence: true
+  validates :description, presence: true
 
   before_create -> { self.flag_pts = user.try(:log_points) }
   
