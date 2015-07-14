@@ -43,12 +43,13 @@ SET search_path = public, pg_catalog;
 -- Name: flag_comments(integer, integer, text, integer, integer, integer, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION flag_comments(i_user_id integer, i_flaggable_id integer, s_flaggable_type text, i_flag_limit integer, i_flag_bits integer, i_flag_pts integer, dt_timestamp timestamp without time zone) RETURNS boolean
+CREATE FUNCTION flag_comments(i_user_id integer, i_flaggable_id integer, s_flaggable_type text, i_flag_limit integer, i_flag_bits integer, i_flag_pts integer, dt_timestamp timestamp without time zone) RETURNS integer
     LANGUAGE plpgsql
     AS $$
         DECLARE duplicate_flag_ct INT;
         DECLARE open_review_ct INT;
         DECLARE aggregate_flagger_ids INT[];
+        DECLARE return_value INT := 0;
         BEGIN
           -- check for existing flag with the same user and flaggable
           LOCK ONLY flags IN SHARE MODE;
@@ -63,6 +64,8 @@ CREATE FUNCTION flag_comments(i_user_id integer, i_flaggable_id integer, s_flagg
             INSERT INTO flags (user_id, flaggable_id, flaggable_type, flag_bits, flag_pts, created_at) VALUES (i_user_id, i_flaggable_id, s_flaggable_type, i_flag_bits, i_flag_pts, dt_timestamp);
             -- increment flaggable's flag_pts
             UPDATE comments SET flag_pts = flag_pts + i_flag_pts WHERE id = i_flaggable_id;
+            -- set return value
+            return_value := 1;
             -- check whether flaggable exceeds FLAG_POINTS_LIMIT
             IF ((SELECT flag_pts FROM comments WHERE id = i_flaggable_id) >= i_flag_limit) THEN
               -- check whether an open review exists for the flaggable
@@ -86,12 +89,11 @@ CREATE FUNCTION flag_comments(i_user_id integer, i_flaggable_id integer, s_flagg
                       aggregate_flagger_ids,
                       dt_timestamp
                   );
-                -- return true
-                RETURN TRUE;
+                return_value := 2;
               END IF;
             END IF;
           END IF;
-          RETURN FALSE;
+          RETURN return_value;
         END;
       $$;
 
@@ -100,12 +102,13 @@ CREATE FUNCTION flag_comments(i_user_id integer, i_flaggable_id integer, s_flagg
 -- Name: flag_revisions(integer, integer, text, integer, integer, integer, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION flag_revisions(i_user_id integer, i_flaggable_id integer, s_flaggable_type text, i_flag_limit integer, i_flag_bits integer, i_flag_pts integer, dt_timestamp timestamp without time zone) RETURNS boolean
+CREATE FUNCTION flag_revisions(i_user_id integer, i_flaggable_id integer, s_flaggable_type text, i_flag_limit integer, i_flag_bits integer, i_flag_pts integer, dt_timestamp timestamp without time zone) RETURNS integer
     LANGUAGE plpgsql
     AS $$
         DECLARE duplicate_flag_ct INT;
         DECLARE open_review_ct INT;
         DECLARE aggregate_flagger_ids INT[];
+        DECLARE return_value INT := 0;
         BEGIN
           -- check for existing flag with the same user and flaggable
           LOCK ONLY flags IN SHARE MODE;
@@ -120,6 +123,8 @@ CREATE FUNCTION flag_revisions(i_user_id integer, i_flaggable_id integer, s_flag
             INSERT INTO flags (user_id, flaggable_id, flaggable_type, flag_bits, flag_pts, created_at) VALUES (i_user_id, i_flaggable_id, s_flaggable_type, i_flag_bits, i_flag_pts, dt_timestamp);
             -- increment flaggable's flag_pts
             UPDATE revisions SET flag_pts = flag_pts + i_flag_pts WHERE id = i_flaggable_id;
+            -- set return value
+            return_value := 1;
             -- check whether flaggable exceeds FLAG_POINTS_LIMIT
             IF ((SELECT flag_pts FROM revisions WHERE id = i_flaggable_id) >= i_flag_limit) THEN
               -- check whether an open review exists for the flaggable
@@ -143,12 +148,11 @@ CREATE FUNCTION flag_revisions(i_user_id integer, i_flaggable_id integer, s_flag
                       aggregate_flagger_ids,
                       dt_timestamp
                   );
-                -- return true
-                RETURN TRUE;
+                return_value := 2;
               END IF;
             END IF;
           END IF;
-          RETURN FALSE;
+          RETURN return_value;
         END;
       $$;
 
@@ -261,7 +265,8 @@ CREATE TABLE flags (
     flaggable_type character varying,
     flag_bits smallint DEFAULT 0,
     flag_pts smallint NOT NULL,
-    created_at timestamp without time zone
+    created_at timestamp without time zone,
+    description text
 );
 
 
@@ -847,4 +852,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150706040344');
 INSERT INTO schema_migrations (version) VALUES ('20150706224543');
 
 INSERT INTO schema_migrations (version) VALUES ('20150709025400');
+
+INSERT INTO schema_migrations (version) VALUES ('20150714041127');
 

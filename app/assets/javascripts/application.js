@@ -34,6 +34,7 @@ window.$ = angular.element;
 		'ngResource',
 		'ngSanitize',
 		'tipsy.drink',
+		'tipsy.factories',
 		'tipsy.find',
 		'tipsy.ingredient',
 		'tipsy.modals',

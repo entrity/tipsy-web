@@ -81,8 +81,40 @@
 		// Start instructions text editor
 		new Markdown.Editor(Markdown.getSanitizingConverter(), '-instructions').run();
 	}])
-	.controller('Drink.FlagModalCtrl', ['$scope', '$resource', function ($scope, $resource) {
-		$scope.revisions = $resource('/drinks/'+getDrinkId($scope)+'/revisions.json').query();
+	.controller('Drink.FlagModalCtrl', ['$scope', '$resource', 'Differ', function ($scope, $resource, Differ) {
+		$scope.revisions = $resource('/drinks/'+getDrinkId($scope)+'/revisions.json').query(null, function (data) {
+			data.forEach(function(revision){
+				revision.$descriptionDiff = new Differ(revision.prev_description, revision.description).prettyHtml();
+				revision.$instructionDiff = new Differ(revision.prev_instruction, revision.instructions).prettyHtml();
+			});
+		});
+		$scope.submitFlag = function (revision) {
+			if (!revision.$flagMotivation || !revision.$flagMotivation.trim().length) {
+				alert('Please supply text for your flag.');
+			}
+			else if (confirm("Are you sure you want to submit this flag?")) {
+				$resource('/flags.json').save({
+					description: revision.$flagMotivation,
+					flaggable_id: revision.id,
+					flaggable_type: 'Revision',
+				},
+				function (data, headers) {
+					$scope.$close();
+				},
+				function (response) {
+					console.error(response);
+					var alertMsg = "Unspecified error. See javascript console for details.";
+					// alert on duplicate
+					if (response.data.errors && response.data.errors.user) {
+						response.data.errors.user.forEach(function (str) {
+							if (str == 'has already been taken') return alertMsg = "You have already flagged this input";
+						});
+					}
+					// alert on unspecified failure
+					alert(alertMsg);
+				});
+			}
+		}
 	}])
 	;
 

@@ -2,17 +2,21 @@ class FlagsController < ApplicationController
   respond_to :json
 
   def create
-    @flag = Flag.new flag_params
-    @flag.user = current_user
-    if @flag.save
-      @flag.flaggable.increment_flag_points!(@flag.points)
+    @flag = Flag.new flag_params.merge(user:current_user)
+    if @flag.flaggable && @flag.flaggable.flag!(current_user, 0)
+      render nothing:true, status:201
+    elsif @flag.valid?
+      raise "Flag appears to be valid but did not save in flags#create: #{@flag.inspect}"
+    elsif @flag.errors[:user].try(:include?, 'has already been taken')
+      render json:{errors:@flag.errors}, status:409
+    else
+      render json:{errors:@flag.errors}, status:422
     end
-    respond_with @flag
   end
 
   private
 
     def flag_params
-      params.require(:flaggable_id, :flaggable_type)
+      params.permit(:flaggable_id, :flaggable_type, :description)
     end
 end
