@@ -1,80 +1,86 @@
 (function () {
 	angular.module('tipsy.find', [])
-	.run(['$rootScope', '$resource', function ($rootScope, $resource) {
-		$rootScope.finder = {records:[], findables:[]};
-		$rootScope.finder.ingredients = [];
-		$rootScope.finder.options = new Object;
-		$rootScope.finder.options.noProfanity = !!parseInt(localStorage.getItem('noProfanity'));
-		$rootScope.$watch('finder.options.noProfanity', function (newVal, oldVal) {
+	.controller('FindCtrl', ['$rootScope', '$scope', '$resource', '$location', function ($rootScope, $scope, $resource, $location) {
+		$rootScope.finder = {findables:[]};
+		$scope.finder.ingredients = [];
+		$scope.finder.options = new Object;
+		$scope.finder.options.noProfanity = !!parseInt(localStorage.getItem('noProfanity'));
+		$scope.$watch('finder.options.noProfanity', function (newVal, oldVal) {
 			localStorage.setItem('noProfanity', newVal ? 1 : 0);
 		});
-		$rootScope.finder.fetchFindables = function ($select) {
+		$scope.finder.fetchFindables = function ($select) {
 			var searchTerm = $select.search;
 			if (searchTerm && searchTerm.length > 0) {
 				var params = {
 					fuzzy: searchTerm,
-					profane: !$rootScope.finder.options.noProfanity,
-					drinks: !($select.selected && $select.selected.length)
+					profane: !$scope.finder.options.noProfanity,
+					drinks: !(this.ingredients && this.ingredients.length)
 				}
-				$rootScope.finder.findables = $resource('/fuzzy_find.json').query(params,
+				$scope.finder.findables = $resource('/fuzzy_find.json').query(params,
 					function (data, responseHeaders) {
-						$rootScope.finder.findables = $rootScope.finder.findables.sort(function (a,b) {
+						$scope.finder.findables = $scope.finder.findables.sort(function (a,b) {
 							var downcasedSearchTerm = searchTerm.toLowerCase();
 							return compareFuzzyFindResults(a.name.toLowerCase(),b.name.toLowerCase(),downcasedSearchTerm);
 						});
 					});
 			}
 		}
-		$rootScope.finder.selected = function (item, model) {
-			switch (parseInt(model.type)) {
-				case window.DRINK:
-					Turbolinks.visit('/drinks/'+model.id); break;
-				case window.INGREDIENT:
-					break;
-				default:
-					console.error('Bad type for findable: '+type);
+		// callback when a selection is made
+		$scope.finder.selected = function ($item, $select) {
+			delete $select.selected;
+			if ($item) {
+				switch (parseInt($item.type)) {
+					case window.DRINK:
+						Turbolinks.visit('/drinks/'+$item.id); break;
+					case window.INGREDIENT:
+						if ($scope.onSplashScreen) Turbolinks.visit('/?ingredient_id='+$item.id);
+						else $scope.finder.addIngredient($item);
+						break;
+					default:
+						console.error('Bad type for findable: '+type);
+				}
 			}
 		}
-		// Add ingredient to $rootScope.finder.ingredients and fetch drink results
-		$rootScope.finder.addIngredient = function (ingredient) {
-			$rootScope.finder.ingredients.push(ingredient);
-			fetchDrinksForIngredients();
+		// Add ingredient to $scope.finder.ingredients and fetch drink results
+		$scope.finder.addIngredient = function (ingredient) {
+			this.ingredients.push(ingredient);
+			this.fetchDrinksForIngredients();
 		}
-		$rootScope.finder.removeIngredient = function (index) {
-			$rootScope.finder.ingredients.splice(index, 1);
-			fetchDrinksForIngredients();
+		$scope.finder.removeIngredient = function (index) {
+			this.ingredients.splice(index, 1);
+			this.fetchDrinksForIngredients();
 		}
-		$rootScope.finder.loadNextPage = function () {
-			var pageNumber = ($rootScope.finder.drinks.page || 0) + 1;
-			fetchDrinksForIngredients(pageNumber);
+		$scope.finder.loadNextPage = function () {
+			var pageNumber = (this.drinks.page || 0) + 1;
+			this.fetchDrinksForIngredients(pageNumber, true);
 		}
-		$rootScope.finder.navigateToDrink = function (drink) {
+		$scope.finder.navigateToDrink = function (drink) {
 			window.location.href = '/drinks/'+drink.id;
 		}
-		// Define array or (append if array already exists) $rootScope.finder.drinks
-		function fetchDrinksForIngredients (pageNumber) {
-			if (!$rootScope.finder.ingredients.length) return;
-			var ingredientIds = $rootScope.finder.ingredients.map(function (ingredient) {
+		// Define array or (append if array already exists) $scope.finder.drinks
+		$scope.finder.fetchDrinksForIngredients = function (pageNumber, append) {
+			if (!($scope.finder.ingredients && $scope.finder.ingredients.length && $scope.finder.ingredients.length > 1)) return;
+			var ingredientIds = $scope.finder.ingredients.map(function (ingredient) {
 				return ingredient.id;
 			});
 			var drinks = $resource('/drinks/:id.json').query({
-				ingredient_id:ingredientIds,
+				'ingredient_id[]':ingredientIds,
 				'select[]':['id', 'name', 'comment_ct', 'score'],
 				page: (pageNumber || 1),
-				profane: ($rootScope.finder.options.noProfanity ? false : null),
+				profane: ($scope.finder.options.noProfanity ? false : null),
 			}, function (data, responseHeaders) {
-				if (!$rootScope.finder.drinks)
-					$rootScope.finder.drinks = drinks;
+				if (append && $scope.finder.drinks)
+					$scope.finder.drinks = $scope.finder.drinks.concat(drinks);
 				else
-					$rootScope.finder.drinks = $rootScope.finder.drinks.concat(drinks);
-				$rootScope.finder.drinks.total     = parseInt(responseHeaders()['tipsy-count']);
-				$rootScope.finder.drinks.page      = parseInt(responseHeaders()['tipsy-page']);
-				$rootScope.finder.drinks.pages     = parseInt(responseHeaders()['tipsy-total_pages']);
-				$rootScope.finder.drinks.pagesLeft = $rootScope.finder.drinks.pages - $rootScope.finder.drinks.page;
-				$rootScope.finder.drinks.left      = $rootScope.finder.drinks.total - $rootScope.finder.drinks.length;
-				var ingredientsCt = $rootScope.finder.ingredients.length;
-				for (var i = 0; i < $rootScope.finder.drinks.length; i++) {
-					var drink = $rootScope.finder.drinks[i];
+					$scope.finder.drinks = drinks;
+				$scope.finder.drinks.total     = parseInt(responseHeaders()['tipsy-count']);
+				$scope.finder.drinks.page      = parseInt(responseHeaders()['tipsy-page']);
+				$scope.finder.drinks.pages     = parseInt(responseHeaders()['tipsy-total_pages']);
+				$scope.finder.drinks.pagesLeft = $scope.finder.drinks.pages - $scope.finder.drinks.page;
+				$scope.finder.drinks.left      = $scope.finder.drinks.total - $scope.finder.drinks.length;
+				var ingredientsCt = $scope.finder.ingredients.length;
+				for (var i = 0; i < $scope.finder.drinks.length; i++) {
+					var drink = $scope.finder.drinks[i];
 					// calculate how many more ingredients the user needs for each search result
 					drink._moreIngredients =  drink.ingredient_ct - ingredientsCt;
 					// calculate classes for vote stars for each drink
@@ -89,6 +95,16 @@
 					}
 				}
 			});
+		}
+		// Fetch ingredient and drinks if ingredient_id in params
+		if (window.location.search) {
+			var match = /ingredient_id=(\d+)/.exec(window.location.search);
+			if (match) {
+				var id = match[1];
+				$resource('/ingredients/:id.json', {id:'@id'}).get({id:id},
+					function (data) { $scope.finder.addIngredient(data) }
+				);
+			}
 		}
 	}])
 	;

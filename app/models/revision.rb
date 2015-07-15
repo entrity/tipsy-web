@@ -19,6 +19,7 @@ class Revision < ActiveRecord::Base
 
   def publish!
     update_attributes! status:Flaggable::APPROVED
+    required_ingredient_ids = ingredients.select{|ing| !ing['optional'] }.map{|ing| ing['id'] }
     if drink.revision.nil?
       drink.update_attributes!(
         revision_id:id,
@@ -27,7 +28,8 @@ class Revision < ActiveRecord::Base
         calories:calories,
         prep_time:prep_time,
         name:name,
-        ingredient_ct:ingredients.length
+        ingredient_ct:ingredients.length,
+        required_ingredient_ids:required_ingredient_ids,
       )
       ingredients.each{|ing| drink.ingredients.create!(ing) }
     else

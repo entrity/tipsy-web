@@ -14,9 +14,13 @@ class IngredientsController < ApplicationController
 
   def show
     @ingredient = Ingredient.find params[:id]
-    @drinks = @ingredient.drinks
-      .order('random()')
-      .limit(MAX_RESULTS)
+    if request.format.json?
+      respond_with @ingredient
+    else
+      @drinks = @ingredient.drinks
+        .order('random()')
+        .limit(MAX_RESULTS)
+    end
   end
 
   def names

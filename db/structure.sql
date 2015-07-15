@@ -219,7 +219,8 @@ CREATE TABLE drinks (
     non_alcoholic boolean DEFAULT false,
     author_id integer,
     calories smallint,
-    prep_time text
+    prep_time text,
+    required_ingredient_ids integer[]
 );
 
 
@@ -854,4 +855,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150706224543');
 INSERT INTO schema_migrations (version) VALUES ('20150709025400');
 
 INSERT INTO schema_migrations (version) VALUES ('20150714041127');
+
+INSERT INTO schema_migrations (version) VALUES ('20150714200552');
+
+INSERT INTO schema_migrations (version) VALUES ('20150714200713');
 
