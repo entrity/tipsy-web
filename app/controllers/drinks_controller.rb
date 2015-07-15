@@ -8,8 +8,7 @@ class DrinksController < ApplicationController
     @drinks = @drinks.select(params[:select]) if params[:select].present?
     @drinks = @drinks.where(profane:params[:profane]) if params[:profane].present?
     if params[:ingredient_id].present?
-      @drinks.select_values << 'ingredient_ct' if @drinks.select_values.present? # for_ingredients scope attempts to order by ingredient_ct, so it must be selected
-      @drinks = @drinks.for_ingredients(params[:ingredient_id])
+      @drinks = @drinks.for_exclusive_ingredients(params[:ingredient_id])
     end
     if params[:no_paginate]
       @drinks = @drinks.limit(MAX_RESULTS)

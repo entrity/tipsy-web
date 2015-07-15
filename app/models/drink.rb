@@ -17,8 +17,25 @@ class Drink < ActiveRecord::Base
       .order('ingredient_ct')
   }
 
+  scope :for_exclusive_ingredients, -> ingredient_ids {
+    first_pass_drink_ids = DrinkIngredient.where(ingredient_id:ingredient_ids).distinct.pluck(:drink_id)
+    where(id:first_pass_drink_ids).where('ingredient_ids <@ \'{?}\'', Array.wrap(ingredient_ids).map(&:to_i))
+  }
+
   def flag!
     revision.try(:flag!)
+  end
+
+  # @override
+  def serializable_hash(options=nil)
+    options = options.try(:clone) || {except: :ingredient_ids}
+    super(options)
+  end
+
+  # @override
+  def to_json(options=nil)
+    options = options.try(:clone) || {except: :ingredient_ids}
+    super(options)
   end
 
   def vote_sum

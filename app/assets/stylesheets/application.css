@@ -139,7 +139,7 @@ a:hover {
 }
 header {
   clear: both;
-  height: 56px;
+  min-height: 56px;
 }
 header .wrapper {
     max-width: 1020px;
@@ -153,6 +153,11 @@ header .input-group .form-control {
 header .logo {
   max-width: 140px;
   padding: 0 30px 0 20px;
+}
+header #find-results {
+  color: white;
+  margin: 0 auto;
+  max-width: 800px;
 }
 .logo a img {
     width: 100%;

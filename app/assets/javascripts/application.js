@@ -176,6 +176,9 @@ window.$ = angular.element;
 			}
 		}
 	})
+	.controller('SplashCtrl', ['$scope', function ($scope) {
+		$scope.onSplashScreen = true;
+	}])
 	;
 
 	function removeDuplicatesFromAside (ingredients) {
