@@ -1,3 +1,4 @@
+require 'rails_helper'
 require 'shared_examples/drinks_or_ingredients_controller_examples.rb'
 
 describe DrinksController, :type => :controller do
@@ -30,7 +31,7 @@ describe DrinksController, :type => :controller do
       let(:params){{format: :json}}
       context 'with ingredient_id[] param' do
         it 'should return 200' do
-          expect_any_instance_of(ActiveRecord::Relation).to receive(:joins).with(:ingredients).and_call_original
+          expect(Drink).to receive(:for_exclusive_ingredients).and_call_original
           params[:ingredient_id] = 1
           subject
           assert_response 200
@@ -39,7 +40,7 @@ describe DrinksController, :type => :controller do
       context 'with ingredient_id[] param' do
         context 'of multiple values' do
           it 'should return 200' do
-            expect_any_instance_of(ActiveRecord::Relation).to receive(:joins).with(:ingredients).and_call_original
+            expect(Drink).to receive(:for_exclusive_ingredients).and_call_original
             params[:ingredient_id] = [1,2,3]
             subject
             assert_response 200
@@ -47,7 +48,7 @@ describe DrinksController, :type => :controller do
         end
         context 'of one value' do
           it 'should return 200' do
-            expect_any_instance_of(ActiveRecord::Relation).to receive(:joins).with(:ingredients).and_call_original
+            expect(Drink).to receive(:for_exclusive_ingredients).and_call_original
             params[:ingredient_id] = [1]
             subject
             assert_response 200
@@ -56,7 +57,7 @@ describe DrinksController, :type => :controller do
       end
       context 'with select[] param of :ingredient_ct' do
         it 'should return 200' do
-          expect_any_instance_of(ActiveRecord::Relation).to receive(:select).with([:id, :name, :ingredient_ct]).and_call_original
+          expect_any_instance_of(Drink::ActiveRecord_Relation).to receive(:select).with([:id, :name, :ingredient_ct]).and_call_original
           params[:select] = [:id, :name, :ingredient_ct]
           subject
           assert_response 200

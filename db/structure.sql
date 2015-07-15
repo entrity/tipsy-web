@@ -220,7 +220,7 @@ CREATE TABLE drinks (
     author_id integer,
     calories smallint,
     prep_time text,
-    ingredient_ids integer[]
+    required_ingredient_ids integer[]
 );
 
 
