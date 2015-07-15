@@ -33,7 +33,7 @@
             <a ng-click="removeFromCabinet(item)"><i class="fa fa-times"></i></a>
           </li>
           <li ng-show="!cabinet || !cabinet.length" style="font-style:italic">(empty)</li>
-          <li><a><i class="fa fa-glass"></i> What can I make?</a></li>
+          <li><a ng-click="loadCabinetToFuzzyFindResults()"><i class="fa fa-glass"></i> What can I make?</a></li>
         </ul>
       </div>
       <div class="shopping-list">

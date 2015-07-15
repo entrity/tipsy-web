@@ -98,6 +98,13 @@ window.$ = angular.element;
 					return $rootScope.getUser(forceReload).id;
 				}
 			},
+			loadCabinetToFuzzyFindResults: {
+				configurable: false,
+				value: function () {
+					this.finder.ingredients = angular.copy(this.cabinet);
+					this.finder.fetchDrinksForIngredients();
+				}
+			},
 			openLoginModal: {
 				configurable: false,
 				value: function (modalMessage) {

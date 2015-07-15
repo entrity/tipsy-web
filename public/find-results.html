@@ -13,7 +13,7 @@
 	<ol>
 		<li ng-repeat="drink in finder.drinks">
 			{{drink.name}}
-			<a ng-click="navigateToDrink(drink)"><i class="fa fa-link"></i></a>
+			<a href="/drinks/{{drink.id}}"><i class="fa fa-link"></i></a>
 		</li>
 	</ol>
 	<div ng-show="!finder.drinks || !finder.drinks.length">

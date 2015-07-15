@@ -44,21 +44,21 @@
 		// Add ingredient to $scope.finder.ingredients and fetch drink results
 		$scope.finder.addIngredient = function (ingredient) {
 			this.ingredients.push(ingredient);
-			fetchDrinksForIngredients();
+			this.fetchDrinksForIngredients();
 		}
 		$scope.finder.removeIngredient = function (index) {
 			this.ingredients.splice(index, 1);
-			fetchDrinksForIngredients();
+			this.fetchDrinksForIngredients();
 		}
 		$scope.finder.loadNextPage = function () {
 			var pageNumber = (this.drinks.page || 0) + 1;
-			fetchDrinksForIngredients(pageNumber, true);
+			this.fetchDrinksForIngredients(pageNumber, true);
 		}
 		$scope.finder.navigateToDrink = function (drink) {
 			window.location.href = '/drinks/'+drink.id;
 		}
 		// Define array or (append if array already exists) $scope.finder.drinks
-		function fetchDrinksForIngredients (pageNumber, append) {
+		$scope.finder.fetchDrinksForIngredients = function (pageNumber, append) {
 			if (!($scope.finder.ingredients && $scope.finder.ingredients.length && $scope.finder.ingredients.length > 1)) return;
 			var ingredientIds = $scope.finder.ingredients.map(function (ingredient) {
 				return ingredient.id;
