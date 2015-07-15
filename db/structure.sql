@@ -24,6 +24,20 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
+-- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION fuzzystrmatch; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION fuzzystrmatch IS 'determine similarities and distance between strings';
+
+
+--
 -- Name: hstore; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -859,4 +873,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150714041127');
 INSERT INTO schema_migrations (version) VALUES ('20150714200552');
 
 INSERT INTO schema_migrations (version) VALUES ('20150714200713');
+
+INSERT INTO schema_migrations (version) VALUES ('20150715143929');
 

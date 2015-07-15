@@ -28,6 +28,7 @@
 		// callback when a selection is made
 		$scope.finder.selected = function ($item, $select) {
 			delete $select.selected;
+			delete this.findables;
 			if ($item) {
 				switch (parseInt($item.type)) {
 					case window.DRINK:
