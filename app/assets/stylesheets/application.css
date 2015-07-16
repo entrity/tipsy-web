@@ -181,6 +181,27 @@ header #find-results {
   -webkit-box-shadow: none;
       box-shadow: none;
 }
+.sprite {
+  background-image: url(/images/sprites.png);
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+.sprite-fridge {
+  width: 13px;
+  height: 17px;
+  background-position: -5px -5px;
+}
+a .sprite-fridge:hover {
+  background-position: -28px -5px;
+}
+.sprite-shopping-cart {
+  width: 23px;
+  height: 17px;
+  background-position: -5px -32px;
+}
+a .sprite-shopping-cart:hover {
+  background-position: -51px -5px;
+}
 label {
   vertical-align: middle;
 }
@@ -800,15 +821,10 @@ aside li.item .fa:hover {
 #drink-page .grid-cell.actions a {
   text-decoration: none;
   cursor: pointer;
+  margin-right: 8px;
 }
-#drink-page .grid-cell.actions a > i.icon-fridge > i:before {
-  left: -4px;
-}
-#drink-page .grid-cell.actions a > i.fa-shopping-cart:before {
-  font-size: 16px;
-}
-#drink-page .grid-cell.actions a > i > i:before {
-  font-size: 11px;
+#drink-page .grid-cell.actions a i {
+  margin-bottom: -5px;
 }
 #drink-page h3 {
   margin-bottom: 8px;
