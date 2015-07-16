@@ -24,6 +24,20 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
+-- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION fuzzystrmatch; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION fuzzystrmatch IS 'determine similarities and distance between strings';
+
+
+--
 -- Name: hstore; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -219,7 +233,8 @@ CREATE TABLE drinks (
     non_alcoholic boolean DEFAULT false,
     author_id integer,
     calories smallint,
-    prep_time text
+    prep_time text,
+    required_ingredient_ids integer[]
 );
 
 
@@ -854,4 +869,10 @@ INSERT INTO schema_migrations (version) VALUES ('20150706224543');
 INSERT INTO schema_migrations (version) VALUES ('20150709025400');
 
 INSERT INTO schema_migrations (version) VALUES ('20150714041127');
+
+INSERT INTO schema_migrations (version) VALUES ('20150714200552');
+
+INSERT INTO schema_migrations (version) VALUES ('20150714200713');
+
+INSERT INTO schema_migrations (version) VALUES ('20150715143929');
 

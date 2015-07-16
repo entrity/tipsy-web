@@ -2,7 +2,9 @@ class HomeController < ApplicationController
 layout nil
 
   def home
-    if user_signed_in?
+    # Presence of params[:ingredient_id] indicates that this request comes as a consequence
+    # of the user selecting an ingredient from the fuzzy finder on the splash screen.
+    if user_signed_in? || params[:ingredient_id].present?
       render html: nil, layout: 'application'
     else
       render layout: nil
