@@ -206,6 +206,9 @@ nav > div a:focus {
 nav .rep-cont {
   text-align: right;
 }
+nav .rep-cont .dropdown-menu {
+  right: -7px;
+}
 nav .rep-cont #rep-alerts,
 nav .trophie-cont a {
   text-align: right;
@@ -901,11 +904,18 @@ aside li.item .fa:hover {
   color: #999999;
   margin: 0;
 }
-.content .fa-pencil {
+.content a.fa-pencil,
+.content a.fa-flag {
+  color: #000;
+  opacity: 0.15;
   margin-left: 6px;
   font-size: 88%;
   cursor: pointer;
   text-decoration: none;
+}
+.content a.fa-pencil:hover,
+.content a.fa-flag:hover {
+  opacity: 1;
 }
 footer {
   max-width: 1020px;
