@@ -192,7 +192,6 @@ img.hr {
 }
 nav {
   height: 56px;
-  max-width: 540px;
   min-width: 540px;
   color: #fff;
   font-size: 13px;
@@ -244,6 +243,9 @@ nav .trophie-cont a i {
 }
 nav .trophie-cont a i:first-child {
   margin-left: 0;
+}
+nav > .review {
+  flex: 0 1 auto;
 }
 nav > .user {
   cursor: pointer;
@@ -566,7 +568,7 @@ aside li.item .fa:hover {
 }
 .signin.grid .grid-cell p,
 .splash.grid .grid-cell p {
-  margin-bottom: 14px;
+  margin: 14px 0 14px 0;
   text-align: center;
 }
 .signin.grid .grid-cell .btn-primary,
