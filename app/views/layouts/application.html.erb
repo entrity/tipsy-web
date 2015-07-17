@@ -21,6 +21,7 @@
   <div id="main-cont" class="grid">
     <div class="content grid-cell">
       <ng-view></ng-view>
+      <ng-include src="'/find-results.html'" ng-if="finder.ingredients.length"></ng-include>
       <div ng-hide="hideRailsContent"><%= yield %></div>
     </div>
     <aside class="fancy-sidebar grid-cell">

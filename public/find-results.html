@@ -1,15 +1,21 @@
 <div id="find-results">
-	<div>
-		<strong>Ingredients:</strong>
-		<span class="label label-info" ng-repeat="ingredient in finder.ingredients">
-			{{ingredient.name}}
-			<a ng-click="finder.removeIngredient($index)"><i class="fa fa-remove"></i></a>
-			<a ng-click="addToCabinet(ingredient)"><i class="icon-fridge"></i></a>
-			<a ng-click="addToShoppingList(ingredient)"><i class="fa fa-shopping-cart"></i></a>
-			<a href="/ingredients/{{ingredient.id}}"><i class="fa fa-link"></i></a>
-		</span>
+	<div class="grid grid--center filters">
+		<div class="grid-cell">Ingredients:</div>
+      	<div class="btn-group" ng-repeat="ingredient in finder.ingredients" dropdown>
+	      	<button type="button" class="btn btn-primary">{{ingredient.name}}</button>
+	      	<button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
+	        	<span class="caret"></span>
+	        	<span class="sr-only">Split button!</span>
+	      	</button>
+	      	<ul class="dropdown-menu dropdown-menu-right" role="menu">
+	        	<li><a ng-click="finder.removeIngredient($index)"><i class="fa fa-remove"></i></a></li>
+	        	<li><a ng-click="addToCabinet(ingredient)"><i class="icon-fridge"></i></a></li>
+	        	<li><a ng-click="addToShoppingList(ingredient)"><i class="fa fa-shopping-cart"></i></a></li>
+	        	<li><a href="/ingredients/{{ingredient.id}}"><i class="fa fa-link"></i></a></li>
+	      	</ul>
+	    </div>
 	</div>
-	<strong>What can I make?</strong>
+	<div class="grid grid--center">What can I make?</div>
 	<ol>
 		<li ng-repeat="drink in finder.drinks">
 			{{drink.name}}
