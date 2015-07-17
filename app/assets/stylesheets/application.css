@@ -185,25 +185,28 @@ header .logo {
   min-width: 40px;
   left: inherit;
   right: -6px;
-  background-color: orange;
+  padding: 3px 0;
+  background-color: rgb(74, 176, 176);
   border: none;
   box-shadow: none;
+  font-size: 12px;
+  
 }
 #find-results .dropdown-menu:after {
-  right: 13px;
-  border-bottom-color: orange;
+  right: 14px;
+  border-bottom-color: rgb(74, 176, 176);
 }
 #find-results .dropdown-menu:before {
   display: none;
 }
 #find-results .dropdown-menu>li>a {
-  padding: 3px 0;
+  padding: 6px 0;
   text-align: center;
   color: #fff;
 }
 #find-results .dropdown-menu>li>a:focus,
 #find-results .dropdown-menu>li>a:hover {
-  background-color: darkorange;
+  background-color: rgb(53, 148, 148);
 }
 .logo a img {
     width: 100%;
