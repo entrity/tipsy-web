@@ -35,6 +35,7 @@
 		return Revision;
 	}])
 	.controller('DrinkCtrl', ['$scope', '$modal', 'Drink', function ($scope, $modal, Drink) {
+		$scope.drink = window.drink;
 		$scope.drinkCtrl = new Object;
 		$scope.flag = function () {
 			if ($scope.requireLoggedIn()) {
@@ -50,6 +51,19 @@
 			if ($scope.requireLoggedIn()) {
 				var id = getDrinkId($scope);
 				Turbolinks.visit('/drinks/'+id+'/edit.html');
+			}
+		};
+		$scope.openPhotoUploadModal = function () {
+			if ($scope.requireLoggedIn()) {
+				var modalInstance = $modal.open({
+					animation: true,
+					controller: 'Drink.PhotoUploadCtrl',
+					templateUrl: '/drinks/photo-upload-modal.html',
+					size: 'medium',
+					resolve: {
+						drink: function () { return $scope.drink }
+					},
+				});
 			}
 		};
 	}])
@@ -115,6 +129,8 @@
 				});
 			}
 		}
+	}])
+	.controller('Drink.PhotoUploadCtrl', ['$scope', '$resource', function ($scope, $resource) {
 	}])
 	;
 

@@ -24,8 +24,8 @@ class DrinksController < ApplicationController
       format.html {
         @ingredients = saved_drink.ingredients
           .includes(:ingredient)
-          .order('random()')
           .limit(MAX_RESULTS)
+        @photos = @drink.photos.where(status:Flaggable::APPROVED).order(:score)
       }
       format.json {
         respond_with saved_drink

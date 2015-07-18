@@ -11,6 +11,7 @@
  * file per style scope.
  *
  *= require 'angular-ui-select/dist/select.min'
+ *= require image-resize-crop-canvas/component
  *= require_tree .
  *= require_self
  */
@@ -698,7 +699,18 @@ aside li.item .fa:hover {
   min-width: 100%;
   height: 264px;
   display: block;
+}
+#drink-page .photo {
   border: solid 1px #cdcdcd;
+}
+#drink-page #selected-photo #selected-photo-ctrl {
+  display: none;
+}
+#drink-page #selected-photo:hover #selected-photo-ctrl {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  z-index: 11;
 }
 #drink-page .row-one .right h1 {
   font-size: 19px;
@@ -833,6 +845,28 @@ aside li.item .fa:hover {
   background: #ddd;
   color: #888;
 }
+
+/* IMAGE EDITOR / UPLOADER */
+
+tipsy-image-editor > div {
+  padding: 16px;
+}
+tipsy-image-editor a.btn {
+  top: 12px;
+  left: 12px;
+  opacity: 0.4;
+  position: absolute;
+}
+tipsy-image-editor a.btn:hover {
+  opacity: 1;
+}
+.modal-max {
+  margin: 5%;
+  min-height: 90%;
+  width: 90%;
+}
+
+/* ACCOUNT SETTINGS */
 
 .account-settings .nav {
   border-bottom: 1px solid lightgray;
