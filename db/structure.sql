@@ -669,7 +669,11 @@ CREATE TABLE users (
     photo_file_name character varying,
     photo_content_type character varying,
     photo_file_size integer,
-    photo_updated_at timestamp without time zone
+    photo_updated_at timestamp without time zone,
+    nickname character varying,
+    bio text,
+    twitter character varying,
+    location character varying
 );
 
 
@@ -1005,4 +1009,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150715143929');
 INSERT INTO schema_migrations (version) VALUES ('20150715225937');
 
 INSERT INTO schema_migrations (version) VALUES ('20150718171031');
+
+INSERT INTO schema_migrations (version) VALUES ('20150719231022');
 

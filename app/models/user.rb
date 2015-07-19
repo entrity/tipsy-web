@@ -11,9 +11,9 @@ class User < ActiveRecord::Base
   has_many :review_votes, inverse_of: :user
   has_many :revisions, as: :user
 
-  has_attached_file :photo, :styles => { :large => "600x600>", :medium => "128x128>", :thumb => "32x32>" }
+  has_attached_file :photo, :styles => { :thumb => "128x128>", :tiny => "32x32>" }
 
-  validates_with AttachmentPresenceValidator, :attributes => :photo
+  validates :nickname, uniqueness: true, allow_blank: true
   validates_with AttachmentContentTypeValidator, :attributes => :photo, :content_type => ["image/jpeg", "image/png"]
   validates_with AttachmentSizeValidator, :attributes => :photo, :less_than => 5.megabytes
   validates_attachment_file_name :photo, :matches => [/png\Z/, /jpe?g\Z/]

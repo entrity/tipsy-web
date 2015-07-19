@@ -1,7 +1,13 @@
 Rails.application.routes.draw do
 
-  devise_for :users, sign_out_via: [:get, :post, :delete], controllers: { :omniauth_callbacks => "users/omniauth_callbacks" }
-  
+  devise_for :users, sign_out_via: [:get, :post, :delete], controllers: {
+    :registrations => "users/registrations",
+    :omniauth_callbacks => "users/omniauth_callbacks"
+  }
+  as :user do
+    get 'users', :to => 'users/registrations#edit', :as => :user_root # Rails 3
+  end
+
   root 'home#home'
 
   get 'sitemap.xml' => 'home#sitemap', defaults:{format: :xml}
