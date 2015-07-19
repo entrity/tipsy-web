@@ -1,6 +1,6 @@
 (function () {
 	angular.module('tipsy.image', [
-		// 'ngAnimate',
+		'ngAnimate',
 		'ngFileUpload',
 		'ngTouch',
 	])

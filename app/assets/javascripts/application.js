@@ -13,7 +13,6 @@
 //= require 'angular/angular'
 //= require 'angular-animate/angular-animate'
 //= require 'angular-aria/angular-aria.min'
-//= require 'angular-bootstrap/ui-bootstrap'
 //= require 'angular-bootstrap/ui-bootstrap-tpls.min'
 //= require 'angular-resource/angular-resource.min'
 //= require 'angular-route/angular-route.min'
@@ -27,6 +26,7 @@
 //= require pagedown/Markdown.Editor
 //= require image-resize-crop-canvas/component
 //= require turbolinks
+//= require ui-bootstrap
 //= require_tree .
 
 window.$ = angular.element;
