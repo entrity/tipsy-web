@@ -10,13 +10,14 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require 'angular/angular.min'
+//= require 'angular/angular'
+//= require 'angular-animate/angular-animate'
 //= require 'angular-aria/angular-aria.min'
-//= require 'angular-bootstrap/ui-bootstrap.min'
 //= require 'angular-bootstrap/ui-bootstrap-tpls.min'
 //= require 'angular-resource/angular-resource.min'
 //= require 'angular-route/angular-route.min'
 //= require 'angular-sanitize/angular-sanitize.min'
+//= require 'angular-touch/angular-touch.min'
 //= require 'angular-ui-select/dist/select.min'
 //= require google-diff-match-patch/diff_match_patch
 //= require ng-file-upload/ng-file-upload.min
@@ -25,6 +26,7 @@
 //= require pagedown/Markdown.Editor
 //= require image-resize-crop-canvas/component
 //= require turbolinks
+//= require ui-bootstrap
 //= require_tree .
 
 window.$ = angular.element;
@@ -48,7 +50,7 @@ window.$ = angular.element;
 		'ui.bootstrap',
 		'ui.select'
 	])
-	.run(['$rootScope', '$resource', '$modal', '$http', '$templateCache', function ($rootScope, $resource, $modal, $http, $templateCache) {
+	.run(['$rootScope', '$resource', '$modal', '$http', '$templateCache', '$q', function ($rootScope, $resource, $modal, $http, $templateCache, $q) {
 		Object.defineProperties($rootScope, {
 			addToCabinet: {
 				configurable: false,
@@ -65,6 +67,14 @@ window.$ = angular.element;
 			cabinet: {
 				configurable: false,
 				value: JSON.parse(localStorage.getItem('cabinet')) || []
+			},
+			createResolvedPromise: {
+				configurable: false,
+				value: function (val) {
+					var deferred = $q.defer();
+					deferred.resolve(val);
+					return deferred.promise;
+				}
 			},
 			getConstant: {
 				configurable: false,
@@ -122,6 +132,17 @@ window.$ = angular.element;
 							}
 						}
 					});
+				}
+			},
+			openReviewModal: {
+				configurable: false,
+				value: function openReviewModal () {
+					$modal.open({
+						animation: true,
+						templateUrl: '/reviews/modal.html',
+						controller: 'ReviewCtrl',
+						size: 'max',
+					})
 				}
 			},
 			removeFromCabinet:{

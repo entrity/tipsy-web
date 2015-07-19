@@ -97,6 +97,11 @@
 				}
 			});
 		}
+		$scope.finder.hideIngredientCtls = function hideIngredientCtls () {
+			this.ingredients.forEach(function (ingredient) {
+				delete ingredient._ctlToggled;
+			});
+		}
 		// Fetch ingredient and drinks if ingredient_id in params
 		if (window.location.search) {
 			var match = /ingredient_id=(\d+)/.exec(window.location.search);

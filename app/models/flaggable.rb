@@ -45,15 +45,19 @@ module Flaggable
     return db_status >= DB_FLAG_INSERTED
   end
 
+  def publish!
+    update_attributes! status:APPROVED
+  end
+
+  # Set status to NEEDS_REVIEW, which should create a review in a db callback
+  def unpublish!
+    update_attributes! status:NEEDS_REVIEW
+  end
+
   private
 
     def db_flag_err_string db_status
       "Unexpected output from db in #{self.class.name}#flag! \"#{db_status}\" for #{inspect}"
-    end
-
-    # This is overridden for Revision
-    def unpublish!
-      update_attributes! status:NEEDS_REVIEW
     end
 
 end

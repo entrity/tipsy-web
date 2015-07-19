@@ -828,18 +828,6 @@ aside .btn-primary:hover,
   height: 264px;
   display: block;
 }
-#drink-page .photo {
-  border: solid 1px #cdcdcd;
-}
-#drink-page #selected-photo #selected-photo-ctrl {
-  display: none;
-}
-#drink-page #selected-photo:hover #selected-photo-ctrl {
-  display: block;
-  position: absolute;
-  bottom: 0;
-  z-index: 11;
-}
 #drink-page .row-one .right h1 {
   font-size: 19px;
   font-weight: 600;

@@ -7,6 +7,10 @@
 	}
 </style>
 <div ng-switch="review.reviewable_type" id="review">
+	<div ng-if="flags && flags.length">
+		<h2>Motivation for Flag(s)</h2>
+		<div ng-repeat="flag in flags" ng-bind="flag.foo"></div>
+	</div>
 	<!-- REVISION -->
 	<div ng-switch-when="Revision" class="comparison">
 
@@ -50,6 +54,14 @@
 			</div>
 		</div>
 
+	</div>
+	<div ng-switch-when="Photo" class="comparison">
+		<div>
+			<img src="{{reviewable.mediumUrl}}">
+			<a href="{{reviewable.url}}" target="_blank"><i class="fa fa-search-plus"></i> View Full Size</a>
+		</div>
+		<div>
+		</div>
 	</div>
 </div>
 <a class="btn btn-default" ng-click="vote(-1)"><i class="icon-panda"></i> Reject</a>

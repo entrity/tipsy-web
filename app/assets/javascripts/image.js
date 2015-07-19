@@ -1,6 +1,8 @@
 (function () {
 	angular.module('tipsy.image', [
-		'ngFileUpload'
+		'ngAnimate',
+		'ngFileUpload',
+		'ngTouch',
 	])
 	.directive('tipsyImageEditor', [function () {
 		return {
@@ -109,6 +111,61 @@
 			delete $scope.uploader.errors;
 			var files;
 			$scope.uploader.run($scope.imgFiles);
+		}
+	}])
+	.controller('Drink.PhotoGalleryCtrl', ['$scope', '$modal', 'Flagger', function ($scope, $modal, Flagger) {
+		if (!$scope.drink.$promise) $scope.drink.$promise = $scope.createResolvedPromise();
+		$scope.drink.$promise.then(function () {
+			if ($scope.drink.photos && $scope.drink.photos.length) {
+				// set $scope.photos
+				$scope.photos = $scope.drink.photos;
+				// set mediumUrl for each photo
+				$scope.photos.forEach(function (photo) {
+					photo.mediumUrl = photo.thumb.replace(/thumb/, 'medium');
+					photo.originalUrl = photo.thumb.replace(/thumb/, 'original');
+				});
+				// initilize activeIndex
+				$scope.photos.activeIndex = 0;
+			}
+		});
+		// if a current image is the same as requested image
+		$scope.isActive = function (index) {
+			return $scope.photos.activeIndex == index;
+		}
+		$scope.getActivePhoto = function getActivePhoto () {
+			return $scope.photos[$scope.photos.activeIndex];			
+		}
+		// show prev image
+		$scope.showPrevPhoto = function () {
+			$scope.photos.activeIndex = ($scope.photos.activeIndex > 0) ? --$scope.photos.activeIndex : $scope.photos.length - 1;
+		};
+		// show next image
+		$scope.showNextPhoto = function () {
+			$scope.photos.activeIndex = ($scope.photos.activeIndex < $scope.photos.length - 1) ? ++$scope.photos.activeIndex : 0;
+		};
+		// show a certain image
+		$scope.showPhoto = function (index) {
+			$scope.photos.activeIndex = index;
+		};
+		// flag active photo
+		$scope.flagPhoto = function flagPhoto () {
+			if ($scope.getActivePhoto()) {
+				$modal.open({
+					animation: true,
+					templateUrl: '/photos/flag-modal.html',
+					size: 'med',
+					controller: 'Photo.FlagModalCtrl',
+					resolve: {
+						photo: function () { return $scope.getActivePhoto() }
+					}
+				});
+			}
+		}
+	}])
+	.controller('Photo.FlagModalCtrl', ['$scope', 'photo', 'Flagger', function ($scope, photo, Flagger) {
+		$scope.photo = photo;
+		$scope.flagPhoto = function flagPhoto () {
+			new Flagger($scope).submitFlag(photo, 'Photo');
 		}
 	}])
 	;

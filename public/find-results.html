@@ -1,20 +1,20 @@
 <div id="find-results">
-	<div class="grid grid--center filters">
+	<div class="grid grid--center filters" ng-mouseleave="finder.hideIngredientCtls()">
 		<div class="grid-cell">Ingredients:</div>
-      	<div class="btn-group" ng-repeat="ingredient in finder.ingredients" dropdown>
-	      	<button type="button" class="btn btn-primary btn-xs">{{ingredient.name}}</button>
-	      	<button type="button" class="btn btn-primary btn-xs dropdown-toggle" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
-	        	<span class="caret"></span>
-	        	<span class="sr-only">Split button!</span>
-	      	</button>
-	      	<ul class="dropdown-menu dropdown-menu-right" role="menu">
-	        	<li><a ng-click="finder.removeIngredient($index)"><i class="fa fa-remove"></i></a></li>
-	        	<li><a ng-click="addToCabinet(ingredient)"><i class="icon-fridge"></i></a></li>
-	        	<li><a ng-click="addToShoppingList(ingredient)"><i class="fa fa-shopping-cart"></i></a></li>
-	        	<li><a href="/ingredients/{{ingredient.id}}"><i class="fa fa-link"></i></a></li>
-	      	</ul>
-	    </div>
-	    <div class="grid-cell clear"><small><a ng-click="finder.removeIngredient($all)"><i class="fa fa-times-circle"></i> Clear all</a></small></div>
+		<div class="btn-group" ng-repeat="ingredient in finder.ingredients" dropdown>
+			<button type="button" ng-click="ingredient._ctlToggled=!ingredient._ctlToggled" class="btn btn-primary btn-xs">{{ingredient.name}}</button>
+			<button type="button" ng-click="ingredient._ctlToggled=!ingredient._ctlToggled" class="btn btn-primary btn-xs dropdown-toggle" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
+				<span class="caret"></span>
+				<span class="sr-only">Split button!</span>
+			</button>
+			<ul ng-show="ingredient._ctlToggled" class="dropdown-menu dropdown-menu-right" role="menu">
+				<li><a ng-click="finder.removeIngredient($index)"><i class="fa fa-remove"></i></a></li>
+				<li><a ng-click="addToCabinet(ingredient)"><i class="icon-fridge"></i></a></li>
+				<li><a ng-click="addToShoppingList(ingredient)"><i class="fa fa-shopping-cart"></i></a></li>
+				<li><a href="/ingredients/{{ingredient.id}}"><i class="fa fa-link"></i></a></li>
+			</ul>
+		</div>
+		<div class="grid-cell clear"><small><a ng-click="finder.removeIngredient($all)"><i class="fa fa-times-circle"></i> Clear all</a></small></div>
 	</div>
 	<div class="grid grid--center">What can I make?</div>
 	<ol>
