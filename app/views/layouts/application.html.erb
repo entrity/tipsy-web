@@ -25,10 +25,13 @@
       <div ng-hide="hideRailsContent"><%= yield %></div>
     </div>
     <aside class="fancy-sidebar grid-cell">
-      <div class="sidebar-controls"></div>
+      <div class="sidebar-controls">
+        <a class="btn btn-primary" title="Create a cocktail"><i class="fa fa-plus-square"></i></a>
+        <a class="btn btn-primary" title="Collections"><i class="fa fa-th-list"></i></a>
+      </div>
       <div class="ingredients-list">
         <ul>
-          <li class="sidebar-list-first">My Cabinet <i class="icon-fridge"></i></li>
+          <li class="sidebar-list-first">My Fridge <i class="icon-fridge"></i></li>
           <li ng-repeat="item in cabinet track by item.id" class="item">
             {{item.name}} 
             <a ng-click="removeFromCabinet(item)"><i class="fa fa-times"></i></a>
@@ -45,7 +48,7 @@
             <a ng-click="removeFromShoppingList(item)"><i class="fa fa-times"></i></a>
           </li>
           <li ng-show="!shoppingList || !shoppingList.length" style="font-style:italic">(empty)</li>
-          <li><a><i class="fa fa-share-square"></i> Export shopping list</a></li>
+          <li><a><i class="fa fa-cart-arrow-down"></i> Export shopping list</a></li>
         </ul>
       </div>
     </aside>

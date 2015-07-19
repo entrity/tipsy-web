@@ -10,7 +10,7 @@
     </div>
     <nav class="grid grid--center grid-cell" ng-cloak ng-hide="isLoggedIn()">
       <div class="grid-cell">
-        <a ng-click="openSignInModal()"><small>Browse</small></a>
+        <a ng-click="openSignInModal()"><small>Browse <i class="fa fa-caret-down"></i></small></a>
       </div>
       <div class="grid-cell user">
         <a href="/users/sign_up/"><small>Sign up</small></a>
@@ -21,7 +21,7 @@
     </nav>
     <nav class="grid grid--center" ng-cloak ng-show="isLoggedIn()">
       <div class="grid-cell">
-        <a href="/drinks"><small>Browse</small></a>
+        <a href="/drinks"><small>Browse <i class="fa fa-caret-down"></i></small></a>
       </div>
       <div ng-show="openReviewCt" class="grid-cell review">
         <a href="#review"><small>Review</small> <span class="badge">{{openReviewCt}}</span></a>
