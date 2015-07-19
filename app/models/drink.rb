@@ -5,6 +5,7 @@ class Drink < ActiveRecord::Base
   belongs_to :revision
   
   has_many :ingredients, class_name:'DrinkIngredient', dependent: :destroy, foreign_key: :drink_id, inverse_of: :drink
+  has_many :photos, inverse_of: :drink
   has_many :revisions, inverse_of: :drink
 
   # Scope results to Drinks which include all of the indicated ingredients

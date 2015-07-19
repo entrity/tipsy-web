@@ -1,9 +1,39 @@
 <script>
   window.drink = <%= @drink.to_json.html_safe %>;
+  window.drink.photos = <%= @photos.to_json(methods:[:thumb]).html_safe %>;
 </script>
 <div id="drink-page" ng-controller="DrinkCtrl">
   <div class="grid row-one">
-    <div class="grid-cell left"><a href="#"></a></div>
+    <div class="grid-cell left" ng-controller="Drink.PhotoGalleryCtrl">
+      <noscript>
+        <% @photos.each do |photo| %>
+          <%= image_tag photo.file.url, alt:"#{photo.alt}" %>
+        <% end -%>
+      </noscript>
+      <div id="gallery" class="slider" ng-if="photos.length">
+        <img ng-repeat="photo in photos" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{photo.mediumUrl}}" />
+        <div id="gallery-ctrl">
+          <a ng-click="upvotePhoto()"><i class="fa fa-thumbs-up"></i></a>
+          <a ng-click="downvotePhoto()"><i class="fa fa-thumbs-down"></i></a>
+          <br>
+          <a ng-click="flagPhoto()"><i class="fa fa-flag"></i></a>
+          <a ng-href="{{photos[photos.activeIndex].originalUrl}}" target="_blank"><i class="fa fa-search-plus"></i></a>
+          <a><i class="fa fa-share-alt"></i></a>
+          <br>
+          <a ng-click="openPhotoUploadModal()"><i class="fa fa-plus-square"></i> Upload your own photo!</a>
+        </div>
+        <a class="arrow prev" ng-click="showPrevPhoto()"><i class="fa fa-arrow-left"></i></a>
+        <a class="arrow next" ng-click="showNextPhoto()"><i class="fa fa-arrow-right"></i></a>
+        <ul class="nav">
+          <li ng-repeat="photo in photos" ng-class="{'active':isActive($index)}">
+            <img src="{{photo.thumb}}" alt="{{photo.alt}}" title="{{photo.alt}}" ng-click="showPhoto($index);" />
+          </li>
+        </ul>
+      </div>
+      <div ng-hide="photos.length">
+        No photos have been posted for this drink. <a ng-click="openPhotoUploadModal()">Add your own!</a>
+      </div>
+    </div>
     <div class="grid-cell right">
       <div class="grid grid--center">
         <div class="grid-cell name">

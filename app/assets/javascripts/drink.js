@@ -35,10 +35,10 @@
 		return Revision;
 	}])
 	.controller('DrinkCtrl', ['$scope', '$modal', 'Drink', function ($scope, $modal, Drink) {
+		$scope.drink = window.drink;
 		$scope.drinkCtrl = new Object;
 		$scope.flag = function () {
 			if ($scope.requireLoggedIn()) {
-				var id = getDrinkId($scope);
 				$modal.open({
 					animation: true,
 					templateUrl: '/drinks/flag-modal.html',
@@ -50,6 +50,19 @@
 			if ($scope.requireLoggedIn()) {
 				var id = getDrinkId($scope);
 				Turbolinks.visit('/drinks/'+id+'/edit.html');
+			}
+		};
+		$scope.openPhotoUploadModal = function () {
+			if ($scope.requireLoggedIn()) {
+				var modalInstance = $modal.open({
+					animation: true,
+					controller: 'Drink.PhotoUploadCtrl',
+					templateUrl: '/drinks/photo-upload-modal.html',
+					size: 'medium',
+					resolve: {
+						drink: function () { return $scope.drink }
+					},
+				});
 			}
 		};
 	}])
@@ -81,7 +94,7 @@
 		// Start instructions text editor
 		new Markdown.Editor(Markdown.getSanitizingConverter(), '-instructions').run();
 	}])
-	.controller('Drink.FlagModalCtrl', ['$scope', '$resource', 'Differ', function ($scope, $resource, Differ) {
+	.controller('Drink.FlagModalCtrl', ['$scope', '$resource', 'Differ', 'Flagger', function ($scope, $resource, Differ, Flagger) {
 		$scope.revisions = $resource('/drinks/'+getDrinkId($scope)+'/revisions.json').query(null, function (data) {
 			data.forEach(function(revision){
 				revision.$descriptionDiff = new Differ(revision.prev_description, revision.description).prettyHtml();
@@ -89,32 +102,10 @@
 			});
 		});
 		$scope.submitFlag = function (revision) {
-			if (!revision.$flagMotivation || !revision.$flagMotivation.trim().length) {
-				alert('Please supply text for your flag.');
-			}
-			else if (confirm("Are you sure you want to submit this flag?")) {
-				$resource('/flags.json').save({
-					description: revision.$flagMotivation,
-					flaggable_id: revision.id,
-					flaggable_type: 'Revision',
-				},
-				function (data, headers) {
-					$scope.$close();
-				},
-				function (response) {
-					console.error(response);
-					var alertMsg = "Unspecified error. See javascript console for details.";
-					// alert on duplicate
-					if (response.data.errors && response.data.errors.user) {
-						response.data.errors.user.forEach(function (str) {
-							if (str == 'has already been taken') return alertMsg = "You have already flagged this input";
-						});
-					}
-					// alert on unspecified failure
-					alert(alertMsg);
-				});
-			}
+			new Flagger($scope).submitFlag(revision, 'Revision');
 		}
+	}])
+	.controller('Drink.PhotoUploadCtrl', ['$scope', '$resource', function ($scope, $resource) {
 	}])
 	;
 
@@ -122,7 +113,7 @@
 		var id;
 		var match;
 		if (scope.drink && scope.drink.id)
-			id = $scope.drink.id;
+			id = scope.drink.id;
 		else if (window.drink && window.drink.id)
 			id = window.drink.id;
 		else if (match = /\/drinks\/(\d+)/.exec(window.location.pathname))
