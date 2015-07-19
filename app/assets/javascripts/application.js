@@ -19,9 +19,11 @@
 //= require 'angular-sanitize/angular-sanitize.min'
 //= require 'angular-ui-select/dist/select.min'
 //= require google-diff-match-patch/diff_match_patch
+//= require ng-file-upload/ng-file-upload.min
 //= require pagedown/Markdown.Converter
 //= require pagedown/Markdown.Sanitizer
 //= require pagedown/Markdown.Editor
+//= require image-resize-crop-canvas/component
 //= require turbolinks
 //= require_tree .
 
@@ -36,6 +38,7 @@ window.$ = angular.element;
 		'tipsy.drink',
 		'tipsy.factories',
 		'tipsy.find',
+		'tipsy.image',
 		'tipsy.ingredient',
 		'tipsy.modals',
 		'tipsy.rails',

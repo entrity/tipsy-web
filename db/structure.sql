@@ -379,6 +379,47 @@ ALTER SEQUENCE ingredients_id_seq OWNED BY ingredients.id;
 
 
 --
+-- Name: photos; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE photos (
+    id integer NOT NULL,
+    drink_id integer,
+    upvote_ct smallint DEFAULT 0,
+    dnvote_ct smallint DEFAULT 0,
+    score smallint DEFAULT 0,
+    flag_pts smallint DEFAULT 0,
+    status smallint DEFAULT 1,
+    created_at timestamp without time zone,
+    user_id integer,
+    alt character varying,
+    file_file_name character varying,
+    file_content_type character varying,
+    file_file_size integer,
+    file_updated_at timestamp without time zone
+);
+
+
+--
+-- Name: photos_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE photos_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: photos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE photos_id_seq OWNED BY photos.id;
+
+
+--
 -- Name: point_distributions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -565,7 +606,11 @@ CREATE TABLE users (
     unhelpful_flags integer DEFAULT 0,
     majority_review_votes integer DEFAULT 0,
     minority_review_votes integer DEFAULT 0,
-    points integer DEFAULT 0
+    points integer DEFAULT 0,
+    photo_file_name character varying,
+    photo_content_type character varying,
+    photo_file_size integer,
+    photo_updated_at timestamp without time zone
 );
 
 
@@ -621,6 +666,13 @@ ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_s
 --
 
 ALTER TABLE ONLY ingredients ALTER COLUMN id SET DEFAULT nextval('ingredients_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY photos ALTER COLUMN id SET DEFAULT nextval('photos_id_seq'::regclass);
 
 
 --
@@ -707,6 +759,14 @@ ALTER TABLE ONLY ingredients
 
 
 --
+-- Name: photos_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY photos
+    ADD CONSTRAINT photos_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: point_distributions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -786,6 +846,13 @@ CREATE INDEX index_drinks_on_name ON drinks USING btree (name);
 --
 
 CREATE INDEX index_ingredients_on_name ON ingredients USING btree (name);
+
+
+--
+-- Name: index_photos_on_drink_id_and_status; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_photos_on_drink_id_and_status ON photos USING btree (drink_id, status);
 
 
 --
@@ -875,4 +942,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150714200552');
 INSERT INTO schema_migrations (version) VALUES ('20150714200713');
 
 INSERT INTO schema_migrations (version) VALUES ('20150715143929');
+
+INSERT INTO schema_migrations (version) VALUES ('20150715225937');
 

@@ -1,9 +1,33 @@
 <script>
   window.drink = <%= @drink.to_json.html_safe %>;
+  window.drink.photos = <%= @photos.to_json.html_safe %>;
 </script>
 <div id="drink-page" ng-controller="DrinkCtrl">
   <div class="grid row-one">
-    <div class="grid-cell left"><a href="#"></a></div>
+    <div class="grid-cell left">
+      <div></div>
+      <noscript>
+        <% @photos.each do |photo| %>
+          <%= image_tag photo.file.url, alt:"#{photo.alt}" %>
+        <% end -%>
+      </noscript>
+      <div ng-show="selectedPhoto" id="selected-photo">
+        <img ng-src="{{selectedPhoto.mediumUrl}}" class="photo container slider" ng-swipe-right="showPrevPhoto()" ng-swipe-left="showNextPhoto()">
+        <a class="arrow prev" ng-click="showPrevPhoto()"></a>
+        <a class="arrow next" ng-click="showNextPhoto()"></a>
+        <div id="selected-photo-ctrl">
+          <a><i class="fa fa-flag"></i></a>
+          <a><i class="fa fa-external-link"></i></a>
+          <a><i class="fa fa-share"></i></a>
+        </div>
+      </div>
+      <div ng-hide="selectedPhoto" class="photo">
+        No photos have been posted for this drink. <a ng-click="openPhotoUploadModal()">Add your own!</a>
+      </div>
+      <div id="gallery">
+        <img ng-repeat="photo in photos" ng-src="{{photo.thumbnail_url}}" alt="{{photo.alt}}" class="photo">
+      </div>
+    </div>
     <div class="grid-cell right">
       <div class="grid grid--center">
         <div class="grid-cell name">

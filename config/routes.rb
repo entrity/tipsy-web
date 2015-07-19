@@ -22,6 +22,8 @@ Rails.application.routes.draw do
       get :names
     end
   end
+
+  resources :photos, only: [:index, :create]
   
   resources :reviews do
     collection do
