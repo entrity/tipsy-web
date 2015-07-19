@@ -24,7 +24,7 @@
         <a href="/drinks">Browse</a>
       </div>
       <div ng-show="openReviewCt" class="grid-cell">
-        <a href="#review"><small>Review</small> <span class="badge">{{openReviewCt}}</span></a>
+        <a ng-click="openReviewModal()"><small>Review</small> <span class="badge">{{openReviewCt}}</span></a>
       </div>
       <div class="grid-cell user rep-cont dropdown">
         <div id="rep-alerts">

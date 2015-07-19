@@ -22,6 +22,10 @@ class Review < ActiveRecord::Base
     end
   end
 
+  def flags
+    reviewable.try(:flags)
+  end
+
   # Returns a Review if successful, else nil
   def self.next! user
     res = connection.raw_connection.exec_params(%Q(UPDATE #{table_name} topquery

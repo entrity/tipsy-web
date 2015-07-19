@@ -8,6 +8,9 @@ Object.defineProperties(window, {
 		writable: false,
 		configurable: false,
 	},
+	FAILURE: {
+		value: -1,
+	},
 	INGREDIENT: {
 		value: 1,
 		writable: false,
@@ -20,5 +23,8 @@ Object.defineProperties(window, {
 	POINTS_FOR_WINNING_VOTE: {
 		value: <%= PointDistribution::WINNING_VOTE.points %>,
 		configurable: false,
+	},
+	SUCCESS: {
+		value: 1.
 	},
 });

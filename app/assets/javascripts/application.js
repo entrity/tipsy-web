@@ -134,6 +134,17 @@ window.$ = angular.element;
 					});
 				}
 			},
+			openReviewModal: {
+				configurable: false,
+				value: function openReviewModal () {
+					$modal.open({
+						animation: true,
+						templateUrl: '/reviews/modal.html',
+						controller: 'ReviewCtrl',
+						size: 'max',
+					})
+				}
+			},
 			removeFromCabinet:{
 				configurable: false,
 				value: function (ingredient) {

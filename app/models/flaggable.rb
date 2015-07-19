@@ -45,6 +45,10 @@ module Flaggable
     return db_status >= DB_FLAG_INSERTED
   end
 
+  def publish!
+    update_attributes! status:APPROVED
+  end
+
   # Set status to NEEDS_REVIEW, which should create a review in a db callback
   def unpublish!
     update_attributes! status:NEEDS_REVIEW

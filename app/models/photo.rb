@@ -16,9 +16,19 @@ class Photo < ActiveRecord::Base
   def medium_url
     file.url(:medium)
   end
+  
+  # @override
+  def serializable_hash(options={})
+    options[:methods] ||= [:url]
+    super(options)
+  end
 
   def thumb
     file.url(:thumb)
+  end
+
+  def url
+    file.url
   end
 
 end

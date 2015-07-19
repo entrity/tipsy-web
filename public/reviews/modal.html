@@ -1,0 +1,3 @@
+<ng-include ng-show="!vote.status" src="'/reviews/show.html'"></ng-include>
+<ng-include ng-show="vote.status==getConstant('FAILURE')" src="'/reviews/empty.html'"></ng-include>
+<ng-include ng-show="vote.status==getConstant('SUCCESS')" src="'/reviews/thank-you.html'"></ng-include>
