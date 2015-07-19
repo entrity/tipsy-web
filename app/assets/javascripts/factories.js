@@ -44,5 +44,44 @@
 		});
 		return Differ;
 	}])
+	.factory('Flagger', ['$resource', function ($resource) {
+		var Flagger = function (scope) {
+			this.scope = scope;
+		};
+		Object.defineProperties(Flagger.prototype, {
+			submitFlag: {
+				configurable: false,
+				value: function (flaggable, type) {
+					if (!flaggable.$flagMotivation || !flaggable.$flagMotivation.trim().length) {
+						alert('Please supply text for your flag.');
+					}
+					else if (confirm("Are you sure you want to submit this flag?")) {
+						var thisFlagger = this;
+						$resource('/flags.json').save({
+							description: flaggable.$flagMotivation,
+							flaggable_id: flaggable.id,
+							flaggable_type: type,
+						},
+						function (data, headers) {
+							thisFlagger.scope.$close();
+						},
+						function (response) {
+							console.error(response);
+							var alertMsg = "Unspecified error. See javascript console for details.";
+							// alert on duplicate
+							if (response.data.errors && response.data.errors.user) {
+								response.data.errors.user.forEach(function (str) {
+									if (str == 'has already been taken') return alertMsg = "You have already flagged this input";
+								});
+							}
+							// alert on unspecified failure
+							alert(alertMsg);
+						});
+					}
+				}
+			}
+		});
+		return Flagger;
+	}])
 	;
 })();

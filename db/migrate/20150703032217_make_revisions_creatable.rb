@@ -1,6 +1,6 @@
 class MakeRevisionsCreatable < ActiveRecord::Migration
   def up
-    execute 'CREATE EXTENSION hstore'
+    execute 'CREATE EXTENSION IF NOT EXISTS hstore'
     change_table :revisions do |t|
       t.text    :name
       t.text    :description

@@ -6,7 +6,10 @@ class PhotosController < ApplicationController
   def create
     @photo = Photo.new photo_params
     @photo.user = current_user
-    @photo.save
+    @photo.status = Flaggable::NEEDS_REVIEW
+    if @photo.save
+      Review.create! reviewable:@photo, contributor:current_user
+    end
     respond_with @photo
   end
 

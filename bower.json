@@ -2,8 +2,9 @@
   "name": "tipsy-rails",
   "dependencies": {
     "angular": "~1.4.1",
+    "angular-animate": "~1.4.3",
     "angular-aria": "~1.4.1",
-    "angular-bootstrap": "~0.13.0",
+    "angular-bootstrap": "~0.13.1",
     "angular-diff-match-patch": "~0.1.0",
     "angular-resource": "~1.4.1",
     "angular-route": "~1.4.1",
@@ -13,6 +14,6 @@
     "pagedown": "~1.1.0"
   },
   "resolutions": {
-    "angular": "1.4.1"
+    "angular": "1.4.3"
   }
 }

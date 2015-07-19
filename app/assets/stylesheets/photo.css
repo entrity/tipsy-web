@@ -1,0 +1,132 @@
+/* DRINK PAGE PHOTO GALLERY */
+
+#gallery {
+  position: relative;
+  width: 224px;
+  min-height: 264px;
+}
+#gallery img.slide {
+  width: 224px;
+}
+#drink-page div#gallery a {
+  height: initial;
+  display: initial;
+  min-width: initial;
+  min-height: initial;
+  cursor: pointer;
+}
+#drink-page #gallery .arrow,
+#drink-page #gallery #gallery-ctrl {
+  position: absolute;
+  text-shadow: 0 0 3px black;
+  top: 130px;
+  z-index: 7;
+  display: none;
+}
+#gallery-ctrl {
+  width: 50%;
+  margin: 0 25%;
+  text-align: center;
+}
+#gallery .arrow.prev {
+  left: 16px;
+}
+#gallery .arrow.next {
+  right: 16px;
+}
+#drink-page #gallery:hover .arrow,
+#drink-page #gallery:hover #gallery-ctrl {
+  display: block;
+}
+#drink-page #gallery .arrow:hover,
+#drink-page #gallery #gallery-ctrl:hover {
+  opacity: 1;
+}
+#drink-page #gallery .nav {
+    bottom: -4px;
+    display: block;
+    height: 48px;
+    left: 0;
+    margin: 0 auto;
+    padding: 1em 0 0.8em;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    width: 100%;
+    z-index: 5;
+}
+#drink-page #gallery .nav li {
+    border: 5px solid #AAAAAA;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    height: 30px;
+    position: relative;
+    width: 50px;
+    overflow: hidden;
+}
+#drink-page #gallery .nav li.active {
+    border: 5px solid #ffd;
+}
+#drink-page #gallery .nav li img {
+    width: 100%;
+}
+#drink-page .slider {
+    margin-right: 20px;
+    position: relative;
+
+    -webkit-perspective: 1000px;
+    -moz-perspective: 1000px;
+    -ms-perspective: 1000px;
+    -o-perspective: 1000px;
+    perspective: 1000px;
+
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+#drink-page .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.slide.ng-hide-add {
+    opacity:1;
+
+    -webkit-transform: rotateX(0deg) rotateY(0deg);
+    -moz-transform: rotateX(0deg) rotateY(0deg);
+    -ms-transform: rotateX(0deg) rotateY(0deg);
+    -o-transform: rotateX(0deg) rotateY(0deg);
+    transform: rotateX(0deg) rotateY(0deg);
+
+    -webkit-transform-origin: right top 0;
+    -moz-transform-origin: right top 0;
+    -ms-transform-origin: right top 0;
+    -o-transform-origin: right top 0;
+    transform-origin: right top 0;
+
+    -webkit-transition:1s linear all;
+    -moz-transition:1s linear all;
+    -o-transition:1s linear all;
+    transition:1s linear all;
+}
+.slide.ng-hide-add-active {
+    opacity:0;
+    -webkit-transform: rotateX(50deg) rotateY(30deg);
+    -moz-transform: rotateX(50deg) rotateY(30deg);
+    -ms-transform: rotateX(50deg) rotateY(30deg);
+    -o-transform: rotateX(50deg) rotateY(30deg);
+    transform: rotateX(50deg) rotateY(30deg);
+}
+.slide.ng-hide-remove {
+    -webkit-transition:1s linear all;
+    -moz-transition:1s linear all;
+    -o-transition:1s linear all;
+    transition:1s linear all;
+    opacity:0;
+}
+.slide.ng-hide-remove-active {
+    opacity:1;
+}

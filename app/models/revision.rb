@@ -63,7 +63,8 @@ class Revision < ActiveRecord::Base
 
   # Set status and rollback revisable's revision
   def unpublish!
-    update_attributes! status:Flaggable::NEEDS_REVIEW
+    super
+    raise 'to do'
   end
 
   private
