@@ -11,6 +11,7 @@
   <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800'>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="/whhg-font/css/whhg.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
@@ -18,11 +19,11 @@
 
 <div class="wrapper">
   <ng-include src="'/toolbar.html'"></ng-include>
-  <div id="main-cont" class="grid">
+  <div id="main-cont" class="grid" ng-controller="User.EditCtrl">
     <div class="content grid-cell account-settings">
       <div class="grid grid--center profile">
         <div class="grid-cell avatar">
-          <img ng-src="{{getUser().avatar_url || '/images/anonymous-thumb.jpg'}}">
+          <img ng-src="{{user.thumbnail}}">
         </div>
         <div class="grid-cell">
           <h1><a href="#">Markham Anderson</a> / Profile</h1>
@@ -31,7 +32,7 @@
       </div>
       <div class="grid nav" ng-init="tab = 1">
         <div class="grid-cell active" ng-class="{active:tab===1}"><a href="" ng-click="tab = 1">Profile</a></div>
-        <div class="grid-cell" ng-class="{active:tab===2}"><a href="" ng-click="tab = 2">Password</a></div>
+        <div class="grid-cell" ng-class="{active:tab===2}"><a href="" ng-click="tab = 2">Email/Password</a></div>
         <div class="grid-cell" ng-class="{active:tab===3}"><a href="" ng-click="tab = 3">Notifications</a></div>
         <div class="grid-cell" ng-class="{active:tab===4}"><a href="" ng-click="tab = 4">Cancel Account</a></div>
       </div>
@@ -52,41 +53,36 @@
             <div class="grid grid--center field">
               <div class="grid-cell"><label>Profile Picture</label></div>
               <div class="grid-cell form-item avatar">
-                <img ng-src="{{getUser().avatar_url || '/images/anonymous-thumb.jpg'}}"><a class="action edit-avatar" href="#">Change Profile Picture</a>
+                <img ng-src="{{user.thumbnail}}"><a class="action edit-avatar" ng-click="openAvatarModal()">Change Profile Picture</a>
               </div>
             </div>
             <div class="grid grid--top field">
               <div class="grid-cell"><%= f.label :name %></div>
               <div class="grid-cell form-item">
                 <%= f.text_field :name %>
-                <small><small>We're big on real names around here, so people know who's who</small></small>
               </div>
             </div>
             <div class="grid grid--top field">
-              <div class="grid-cell"><label>Username</label></div>
+              <div class="grid-cell"><label>Nickname</label></div>
               <div class="grid-cell form-item">
-                <input type="text" name="user[name]" id="user_name">
-                <small><small>Your Tipsyology URL: http://tipsyology.com/<strong>quinesquines</strong></small></small>
+                <%= f.text_field :nickname %>
+                <small>Your Tipsyology URL: http://tipsyology.com/users/<strong>nickname</strong></small>
               </div>
             </div>
             <div class="grid grid--center field">
-              <div class="grid-cell"><%= f.label :email %></div>
-              <div class="grid-cell form-item"><%= f.email_field :email, autofocus: true %></div>
-            </div>
-            <div class="grid grid--center field">
               <div class="grid-cell"><label>Location</label></div>
-              <div class="grid-cell form-item"><input type="text" name="user[name]" id="user_name"></div>
+              <div class="grid-cell form-item"><%= f.text_field :location %></div>
             </div>
             <div class="grid grid--top field">
               <div class="grid-cell"><label>Twitter</label></div>
               <div class="grid-cell form-item">
-                <input type="text" name="user[name]" id="user_name">
-                <small><small>Enter your username so fans can find you on Twitter.</small></small>
+                <%= f.text_field :twitter %>
+                <small>Enter your username so fans can find you on Twitter.</small>
               </div>
             </div>
             <div class="grid grid--center field">
               <div class="grid-cell"><label>Bio</label></div>
-              <div class="grid-cell form-item"><input type="text" name="user[name]" id="user_name"></div>
+              <div class="grid-cell form-item"><%= f.text_area :bio %></div>
             </div>
 
             <div class="grid grid--center field">
@@ -109,40 +105,47 @@
             <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
               <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
             <% end %>
+          <% end %>
 
         </div>
       </div>
 
       <div class="grid" ng-show="tab === 2">
         <div class="grid-cell main gen">
+          <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
 
-          <div class="grid grid--top field">
-            <div class="grid-cell"><%= f.label :current_password %></div>
-            <div class="grid-cell form-item">
-              <%= f.password_field :current_password, autocomplete: "off" %>
-              <small><small>We need your current password to confirm your changes</small></small>
+            <div class="grid grid--center field">
+              <div class="grid-cell"><%= f.label :email %></div>
+              <div class="grid-cell form-item"><%= f.email_field :email, autofocus: true %></div>
             </div>
-          </div>
-          <div class="grid grid--top field">
-            <div class="grid-cell"><%= f.label :new_password %></div>
-            <div class="grid-cell form-item">
-              <%= f.password_field :password, autocomplete: "off" %>
-              <small><small>Leave blank if you don't want to change it</small></small>
+            <div class="grid grid--top field">
+              <div class="grid-cell"><%= f.label :current_password %></div>
+              <div class="grid-cell form-item">
+                <%= f.password_field :current_password, autocomplete: "off" %>
+                <small>We need your current password to confirm your changes</small>
+              </div>
             </div>
-          </div>
-
-          <div class="grid grid--center field">
-            <div class="grid-cell"><%= f.label :password_confirmation %></div>
-            <div class="grid-cell form-item"><%= f.password_field :password_confirmation, autocomplete: "off" %></div>
-          </div>
-
-          <div class="grid grid--center field">
-            <div class="grid-cell"></div>
-            <div class="grid-cell">
-              <div class="actions"><%= f.submit "Update" %></div>
+            <div class="grid grid--top field">
+              <div class="grid-cell"><%= f.label :new_password %></div>
+              <div class="grid-cell form-item">
+                <%= f.password_field :password, autocomplete: "off" %>
+                <small>Leave blank if you don't want to change it</small>
+              </div>
             </div>
-          </div>
 
+            <div class="grid grid--center field">
+              <div class="grid-cell"><%= f.label :password_confirmation %></div>
+              <div class="grid-cell form-item"><%= f.password_field :password_confirmation, autocomplete: "off" %></div>
+            </div>
+
+            <div class="grid grid--center field">
+              <div class="grid-cell"></div>
+              <div class="grid-cell">
+                <div class="actions"><%= f.submit "Update" %></div>
+              </div>
+            </div>
+
+          <% end -%>
         </div>
       </div>
 
@@ -163,7 +166,6 @@
         </div>
       </div>
 
-          <% end %>
     </div>
     <aside class="fancy-sidebar grid-cell">
       <div class="sidebar-controls"></div>

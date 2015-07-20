@@ -149,7 +149,7 @@
 		};
 		// flag active photo
 		$scope.flagPhoto = function flagPhoto () {
-			if ($scope.getActivePhoto()) {
+			if ($scope.requireLoggedIn() && $scope.getActivePhoto()) {
 				$modal.open({
 					animation: true,
 					templateUrl: '/photos/flag-modal.html',
@@ -166,6 +166,22 @@
 		$scope.photo = photo;
 		$scope.flagPhoto = function flagPhoto () {
 			new Flagger($scope).submitFlag(photo, 'Photo');
+		}
+	}])
+	.controller('User.AvatarModalCtrl', ['$scope', '$http', 'RailsSupport', 'user', function ($scope, $http, RailsSupport, user) {
+		$scope.saveImage = function saveImage (dataUrl, filename) {
+			if ($scope.requireLoggedIn()) {
+				$http.put('/users.json', {user:{photo_data:{data_url:dataUrl, filename:filename}}})
+				.success(function(data, status, headers, config){
+					$scope.getUser(true).$promise.then(function getUserSuccess (data) {
+						user.thumbnail = data.photo_url.replace(/original/, 'thumb');
+						$scope.$close();
+					});
+				})
+				.error(function(data, status, headers, config){
+					RailsSupport.errorAlert(data);
+				});
+			}
 		}
 	}])
 	;
