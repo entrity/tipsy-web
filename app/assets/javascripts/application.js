@@ -84,7 +84,9 @@
 				configurable: false,
 				value: function (forceReload) {
 					if (forceReload || !$rootScope.currentUser) {
-						$rootScope.currentUser = $resource('/users/0.json').get();
+						$rootScope.currentUser = $resource('/users/0.json').get(null, function (data) {
+							if (data.photo_url) data.tinyAvatar = data.photo_url.replace(/original/, 'tiny')
+						});
 						window.user = $rootScope.currentUser;
 					}
 					return $rootScope.currentUser;
