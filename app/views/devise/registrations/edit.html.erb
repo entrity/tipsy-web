@@ -11,6 +11,7 @@
   <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800'>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="/whhg-font/css/whhg.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
@@ -18,11 +19,11 @@
 
 <div class="wrapper">
   <ng-include src="'/toolbar.html'"></ng-include>
-  <div id="main-cont" class="grid">
+  <div id="main-cont" class="grid" ng-controller="User.EditCtrl">
     <div class="content grid-cell account-settings">
       <div class="grid grid--center profile">
         <div class="grid-cell avatar">
-          <img ng-src="{{getUser().avatar_url || '/images/anonymous-thumb.jpg'}}">
+          <img ng-src="{{user.thumbnail}}">
         </div>
         <div class="grid-cell">
           <h1><a href="#">Markham Anderson</a> / Profile</h1>
@@ -52,14 +53,13 @@
             <div class="grid grid--center field">
               <div class="grid-cell"><label>Profile Picture</label></div>
               <div class="grid-cell form-item avatar">
-                <img ng-src="{{getUser().avatar_url || '/images/anonymous-thumb.jpg'}}"><a class="action edit-avatar" href="#">Change Profile Picture</a>
+                <img ng-src="{{user.thumbnail}}"><a class="action edit-avatar" ng-click="openAvatarModal()">Change Profile Picture</a>
               </div>
             </div>
             <div class="grid grid--top field">
               <div class="grid-cell"><%= f.label :name %></div>
               <div class="grid-cell form-item">
                 <%= f.text_field :name %>
-                <small>We're big on real names around here, so people know who's who</small>
               </div>
             </div>
             <div class="grid grid--top field">

@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   has_many :review_votes, inverse_of: :user
   has_many :revisions, as: :user
 
-  has_attached_file :photo, :styles => { :thumb => "128x128>", :tiny => "32x32>" }
+  has_attached_file :photo, :styles => { :thumb => "128x128>", :tiny => "32x32>" }, :default_url => '/images/anonymous-:style.jpg'
 
   validates :nickname, uniqueness: true, allow_blank: true
   validates_with AttachmentContentTypeValidator, :attributes => :photo, :content_type => ["image/jpeg", "image/png"]
@@ -73,6 +73,25 @@ class User < ActiveRecord::Base
         user.email = data["email"] if user.email.blank?
       end
     end
+  end
+
+  # @param hash should contain :data_url & :filename
+  def photo_data= hash
+    raise "No data_url in photo_data" unless hash[:data_url].present?
+    raise "No filename in photo_data" unless hash[:filename].present?
+    image = Paperclip.io_adapters.for(hash[:data_url])
+    image.original_filename = hash[:filename]
+    self.photo = image
+  end
+
+  def photo_url
+    photo.url
+  end
+
+  # @override
+  def serializable_hash(options={})
+    options[:methods] ||= [:photo_url]
+    super(options)
   end
 
 end

@@ -6,22 +6,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
       edit_user_registration_path(resource)
     end
 
-    def update_resource(resource, params)
-      if [:password, :email].any?{|key| user_params.has_key?(key) }
-        resource.update_with_password(user_params)
+    def update_resource(resource, sanitized_params)
+      if [:password, :email].any?{|key| sanitized_params.has_key?(key) }
+        resource.update_with_password(sanitized_params)
       else
-        resource.update_without_password(user_params)
+        resource.update_without_password(sanitized_params)
       end
     end
 
-    def user_params
-      params.require(:user).permit(
-        :email, :password, :current_password, :password_confirmation,
-        :name, :nickname,
-        :bio, :location, :twitter,
-        :no_profanity,
-        :no_alcohol,
-      )
+    def account_update_params
+      super.merge(params.require(:user).permit(:photo_data => [:data_url, :filename]))
     end
 
 end
