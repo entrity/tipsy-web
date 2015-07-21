@@ -4,10 +4,6 @@
 		$rootScope.finder = {findables:[]};
 		$scope.finder.ingredients = [];
 		$scope.finder.options = new Object;
-		$scope.finder.options.noProfanity = !!parseInt(localStorage.getItem('noProfanity'));
-		$scope.$watch('finder.options.noProfanity', function (newVal, oldVal) {
-			localStorage.setItem('noProfanity', newVal ? 1 : 0);
-		});
 		$scope.finder.fetchFindables = function ($select) {
 			var searchTerm = $select.search;
 			if (searchTerm && searchTerm.length > 0) {
@@ -28,12 +24,13 @@
 		// callback when a selection is made
 		$scope.finder.selected = function ($item, $select) {
 			delete $select.selected;
-			delete this.findables;
+			this.findables = [];
 			if ($item) {
 				switch (parseInt($item.type)) {
 					case window.DRINK:
 						Turbolinks.visit('/drinks/'+$item.id); break;
 					case window.INGREDIENT:
+						delete $select.search;
 						if ($scope.onSplashScreen) Turbolinks.visit('/?ingredient_id='+$item.id);
 						else $scope.finder.addIngredient($item);
 						break;
