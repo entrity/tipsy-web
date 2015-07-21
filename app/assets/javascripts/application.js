@@ -43,7 +43,6 @@
 		'tipsy.misc',
 		'tipsy.rails',
 		'tipsy.review',
-		'tipsy.routes',
 		'tipsy.toolbar',
 		'ui.bootstrap',
 		'ui.select'

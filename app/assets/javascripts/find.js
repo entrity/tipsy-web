@@ -4,10 +4,6 @@
 		$rootScope.finder = {findables:[]};
 		$scope.finder.ingredients = [];
 		$scope.finder.options = new Object;
-		$scope.finder.options.noProfanity = !!parseInt(localStorage.getItem('noProfanity'));
-		$scope.$watch('finder.options.noProfanity', function (newVal, oldVal) {
-			localStorage.setItem('noProfanity', newVal ? 1 : 0);
-		});
 		$scope.finder.fetchFindables = function ($select) {
 			var searchTerm = $select.search;
 			if (searchTerm && searchTerm.length > 0) {
