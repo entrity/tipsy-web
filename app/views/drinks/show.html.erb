@@ -1,6 +1,7 @@
 <script>
   window.drink = <%= @drink.to_json.html_safe %>;
   window.drink.photos = <%= @photos.to_json(methods:[:thumb]).html_safe %>;
+  window.drink.comments = <%= @comments.to_json.html_safe %>;
 </script>
 <div id="drink-page" ng-controller="DrinkCtrl">
   <div class="grid row-one">
@@ -173,12 +174,29 @@
   </div>
   <!-- TIPS (COMMENTS) -->
   <div class="grid grid--center tips">
-    <div class="grid-cell">              
+    <div class="grid-cell">
       <h3><%= @drink.name %> tips? Comments? Join the discussion!</h3>
-      <textarea ng-model="comment.text"></textarea>
-      <a ng-click="createNote()">Save</a>
+      <textarea ng-model="newComment.text"></textarea>
+      <a ng-click="createComment(newComment)">Save</a>
     </div>
   </div>
+  <ng-include src="'/drinks/comments.html'"></ng-include>
+  <div id="static-comments" ng-show="!(comments && comments.length)">
+    <% @comments.each do |comment| %>
+      <div class="grid grid--center tips">
+        <div class="grid-cell">
+          <%= comment.score %>
+          <%= link_to user_path(id:comment.user_id), class:'avatar' do %>
+              <img ng-src="{{getUser().tinyAvatar}}">
+          <% end -%>
+          <%= comment.user_name %>
+          <%= comment.created_at.to_s(:long) %>
+          <div><%= comment.text %></div>
+        </div>
+      </div>
+    <% end -%>
+  </div>
+  <!-- SIMILAR DRINKS -->
   <div class="grid row-four similar-drinks">
     <div class="grid-cell">
       <h3>Drinks similar to a <%= @drink.name %></h3>

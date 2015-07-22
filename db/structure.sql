@@ -241,13 +241,19 @@ SET default_with_oids = false;
 CREATE TABLE comments (
     id integer NOT NULL,
     user_id integer,
-    commentable_id integer,
-    commentable_type character varying,
+    drink_id integer,
     text text,
     flag_pts smallint DEFAULT 0,
     status smallint DEFAULT 1,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    tip_pts integer DEFAULT 0,
+    score integer DEFAULT 0,
+    upvote_ct integer DEFAULT 0,
+    dnvote_ct integer DEFAULT 0,
+    parent_id integer,
+    user_name character varying,
+    user_avatar character varying
 );
 
 
@@ -870,10 +876,10 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: index_comments_on_commentable_id_and_commentable_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_comments_on_drink_id_and_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_comments_on_commentable_id_and_commentable_type ON comments USING btree (commentable_id, commentable_type);
+CREATE INDEX index_comments_on_drink_id_and_id ON comments USING btree (drink_id, id);
 
 
 --
@@ -1011,4 +1017,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150715225937');
 INSERT INTO schema_migrations (version) VALUES ('20150718171031');
 
 INSERT INTO schema_migrations (version) VALUES ('20150719231022');
+
+INSERT INTO schema_migrations (version) VALUES ('20150721025601');
 

@@ -4,6 +4,7 @@ class Drink < ActiveRecord::Base
   belongs_to :author, class_name:'User'
   belongs_to :revision
   
+  has_many :comments, inverse_of: :drink
   has_many :ingredients, class_name:'DrinkIngredient', dependent: :destroy, foreign_key: :drink_id, inverse_of: :drink
   has_many :photos, inverse_of: :drink
   has_many :revisions, inverse_of: :drink

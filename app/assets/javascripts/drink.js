@@ -34,9 +34,33 @@
 		});
 		return Revision;
 	}])
-	.controller('DrinkCtrl', ['$scope', '$modal', 'Drink', function ($scope, $modal, Drink) {
+	.controller('DrinkCtrl', ['$scope', '$modal', '$http', 'Drink', 'RailsSupport', function ($scope, $modal, $http, Drink, RailsSupport) {
 		$scope.drink = window.drink;
 		$scope.drinkCtrl = new Object;
+		$scope.comments = window.drink.comments;
+		$scope.tips = jQuery.grep($scope.drink.comments, function (comment) {
+			return comment.tip_pts;
+		}).sort(function (a, b) {
+			return a.tip_pts - b.tip_pts;
+		});
+		// Get votes for these comments for this user from backend, and set comment.userVote on each
+		(function(){
+			$scope.getUser().$promise.then(function (user) {
+				var commentIds = $scope.comments.reduce(function (prev, comment) {
+					return prev + '&comment_id[]=' + comment.id;
+				}, '');
+				$http.get('/comments/votes?user_id='+user.id+commentIds)
+				.success(function (data) {
+					var commentMap = {};
+					$scope.drink.comments.forEach(function (comment) {
+						commentMap[comment.id] = comment;
+					});
+					data.forEach(function (comment) {
+						if (commentMap[comment.id]) angular.extend(commentMap[comment.id], comment);
+					});
+				});
+			})
+		})();
 		$scope.flag = function () {
 			if ($scope.requireLoggedIn()) {
 				$modal.open({
@@ -62,6 +86,68 @@
 					resolve: {
 						drink: function () { return $scope.drink }
 					},
+				});
+			}
+		};
+		$scope.createComment = function (comment) {
+			if ($scope.requireLoggedIn()) {
+				$http.post('/comments.json',
+					angular.extend(comment, {drink_id: $scope.drink.id})
+				)
+				.success(function (data) {
+					delete $scope.newComment.text;
+					$scope.comments.push(data);
+				})
+				.error(function (data) {
+					RailsSupport.errorAlert(data);
+				})
+			}
+		};
+		$scope.upvoteComment = function (comment) {
+			if ($scope.requireLoggedIn()) {
+				$http.post('/comments/'+comment.id+'/upvote.json')
+				.success(function (data, status, headers, config) {
+					comment.userVote = status == 201 ? 1 : 0;
+				})
+				.error(function (data, status, headers, config) {
+					console.error(data, config);
+				});
+			}
+		};
+		$scope.dnvoteComment = function (comment) {
+			if ($scope.requireLoggedIn()) {
+				$http.post('/comments/'+comment.id+'/upvote.json')
+				.success(function (data, status, headers, config) {
+					comment.userVote = status == 201 ? -1 : 0;
+				})
+				.error(function (data, status, headers, config) {
+					console.error(data, config);
+				});
+			}
+		};
+		$scope.flagComment = function (comment) {
+			if ($scope.requireLoggedIn()) {
+				$http.post('/flags.json', {
+					flaggable_id: comment.id,
+					flaggable_type: 'Comment',
+					description: comment._flagDescription,
+				})
+				.success(function (data, status, headers, config) {
+
+				})
+				.error(function (data, status, headers, config) {
+
+				});
+			}
+		};
+		$scope.removeComment = function (comment) {
+			if ($scope.requireLoggedIn()) {
+				$http.delete('/comments/'+comment.id+'.json')
+				.success(function (data, status, headers, config) {
+
+				})
+				.error(function (data, status, headers, config) {
+
 				});
 			}
 		};
