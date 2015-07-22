@@ -148,18 +148,8 @@
 			$scope.photos.activeIndex = index;
 		};
 		// flag active photo
-		$scope.flagPhoto = function flagPhoto () {
-			if ($scope.requireLoggedIn() && $scope.getActivePhoto()) {
-				$modal.open({
-					animation: true,
-					templateUrl: '/photos/flag-modal.html',
-					size: 'med',
-					controller: 'Photo.FlagModalCtrl',
-					resolve: {
-						photo: function () { return $scope.getActivePhoto() }
-					}
-				});
-			}
+		$scope.flagPhoto = function () {
+			if ($scope.requireLoggedIn() && $scope.getActivePhoto()) new Flagger(this, $scope.getActivePhoto(), 'Photo');
 		}
 	}])
 	.controller('Photo.FlagModalCtrl', ['$scope', 'photo', 'Flagger', function ($scope, photo, Flagger) {

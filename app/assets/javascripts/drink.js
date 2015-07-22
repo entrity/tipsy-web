@@ -34,7 +34,7 @@
 		});
 		return Revision;
 	}])
-	.controller('DrinkCtrl', ['$scope', '$modal', '$http', 'Drink', 'RailsSupport', function ($scope, $modal, $http, Drink, RailsSupport) {
+	.controller('DrinkCtrl', ['$scope', '$modal', '$http', 'Drink', 'Flagger', 'RailsSupport', function ($scope, $modal, $http, Drink, Flagger, RailsSupport) {
 		$scope.drink = window.drink;
 		$scope.drinkCtrl = new Object;
 		$scope.comments = window.drink.comments;
@@ -126,20 +126,8 @@
 			}
 		};
 		$scope.flagComment = function (comment) {
-			if ($scope.requireLoggedIn()) {
-				$http.post('/flags.json', {
-					flaggable_id: comment.id,
-					flaggable_type: 'Comment',
-					description: comment._flagDescription,
-				})
-				.success(function (data, status, headers, config) {
-
-				})
-				.error(function (data, status, headers, config) {
-
-				});
-			}
-		};
+			if ($scope.requireLoggedIn()) new Flagger(this, comment, 'Comment');
+		}
 		$scope.removeComment = function (comment) {
 			if ($scope.requireLoggedIn()) {
 				$http.delete('/comments/'+comment.id+'.json')

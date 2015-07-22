@@ -44,26 +44,36 @@
 		});
 		return Differ;
 	}])
-	.factory('Flagger', ['$resource', function ($resource) {
-		var Flagger = function (scope) {
-			this.scope = scope;
+	.factory('Flagger', ['$resource', '$modal', function ($resource, $modal) {
+		var Flagger = function (parentScope, flaggable, flaggableType, modalOptions) {
+			this.flaggable = flaggable;
+			this.flaggableType = flaggableType;
+			modalOptions = angular.extend({
+				animation: true,
+				templateUrl: '/flag-modal.html',
+				size: 'med',
+				scope: angular.extend(parentScope.$new(), {
+					flagger: this,
+				}),
+			}, modalOptions || {});
+			this.flagModal = $modal.open(modalOptions);
 		};
 		Object.defineProperties(Flagger.prototype, {
-			submitFlag: {
+			createFlag: {
 				configurable: false,
-				value: function (flaggable, type) {
-					if (!flaggable.$flagMotivation || !flaggable.$flagMotivation.trim().length) {
+				value: function () {
+					if (!this.flagMotivation || !this.flagMotivation.trim().length) {
 						alert('Please supply text for your flag.');
 					}
 					else if (confirm("Are you sure you want to submit this flag?")) {
 						var thisFlagger = this;
 						$resource('/flags.json').save({
-							description: flaggable.$flagMotivation,
-							flaggable_id: flaggable.id,
-							flaggable_type: type,
+							description: this.flagMotivation,
+							flaggable_id: this.flaggable.id,
+							flaggable_type: this.flaggableType,
 						},
 						function (data, headers) {
-							thisFlagger.scope.$close();
+							thisFlagger.flagModal.close();
 						},
 						function (response) {
 							console.error(response);
