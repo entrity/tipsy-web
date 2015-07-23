@@ -22,7 +22,6 @@
   <ng-include src="'/toolbar.html'"></ng-include>
   <div id="main-cont" class="grid">
     <div class="content grid-cell">
-      <ng-view></ng-view>
       <ng-include src="'/find-results.html'" ng-if="finder.ingredients.length"></ng-include>
       <div ng-hide="hideRailsContent"><%= yield %></div>
     </div>
@@ -40,7 +39,7 @@
         <ul>
           <li class="sidebar-list-first">My Fridge <i class="icon-fridge"></i></li>
           <li ng-repeat="item in cabinet track by item.id" class="item">
-            {{item.name}} 
+            {{item.name}}
             <a ng-click="removeFromCabinet(item)"><i class="fa fa-times"></i></a>
           </li>
           <li ng-show="!cabinet || !cabinet.length" style="font-style:italic">(empty)</li>
@@ -61,7 +60,7 @@
     </div>
   </aside>
   <footer class="in-app">
-    <div class="grid">
+    <div class="grid grid--center center">
         <div class="grid-cell socials">
           <a href="" title="Tipsyology on Google+"><i class="fa fa-google-plus"></i></a>
           <a href="" title="Tipsyology on Facebook"><i class="fa fa-facebook"></i></a>

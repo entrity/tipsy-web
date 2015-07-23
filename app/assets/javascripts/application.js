@@ -29,8 +29,6 @@
 //= require ui-bootstrap
 //= require_tree .
 
-window.$ = angular.element;
-
 (function(){
 
 	angular.module('tipsy', [
@@ -42,10 +40,9 @@ window.$ = angular.element;
 		'tipsy.find',
 		'tipsy.image',
 		'tipsy.ingredient',
-		'tipsy.modals',
+		'tipsy.misc',
 		'tipsy.rails',
 		'tipsy.review',
-		'tipsy.routes',
 		'tipsy.toolbar',
 		'ui.bootstrap',
 		'ui.select'
@@ -85,9 +82,12 @@ window.$ = angular.element;
 			getUser: {
 				configurable: false,
 				value: function (forceReload) {
-					if (forceReload || !$rootScope.currentUser)
-						$rootScope.currentUser = $resource('/users/0.json').get();
-					window.user = $rootScope.currentUser;
+					if (forceReload || !$rootScope.currentUser) {
+						$rootScope.currentUser = $resource('/users/0.json').get(null, function (data) {
+							if (data.photo_url) data.tinyAvatar = data.photo_url.replace(/original/, 'tiny')
+						});
+						window.user = $rootScope.currentUser;
+					}
 					return $rootScope.currentUser;
 				}
 			},

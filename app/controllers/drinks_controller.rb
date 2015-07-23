@@ -26,6 +26,7 @@ class DrinksController < ApplicationController
           .includes(:ingredient)
           .limit(MAX_RESULTS)
         @photos = @drink.photos.where(status:Flaggable::APPROVED).order(:score)
+        @comments = @drink.comments.order(:score)
       }
       format.json {
         respond_with saved_drink

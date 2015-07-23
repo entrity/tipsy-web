@@ -1,8 +1,8 @@
 <script>
   window.drink = <%= @drink.to_json.html_safe %>;
   window.drink.photos = <%= @photos.to_json(methods:[:thumb]).html_safe %>;
+  window.drink.comments = <%= @comments.to_json.html_safe %>;
 </script>
-
 <div id="drink-page" ng-controller="DrinkCtrl">
   <div class="grid row photos">
     <div class="grid-cell" ng-controller="Drink.PhotoGalleryCtrl">
@@ -27,7 +27,7 @@
         <a class="arrow next" ng-click="showNextPhoto()"><i class="fa fa-arrow-right"></i></a>
         <ul class="nav">
           <li ng-repeat="photo in photos" ng-class="{'active':isActive($index)}">
-            <img src="{{photo.thumb}}" alt="{{photo.alt}}" title="{{photo.alt}}" ng-click="showPhoto($index);" />
+            <img ng-src="{{photo.thumb}}" alt="{{photo.alt}}" title="{{photo.alt}}" ng-click="showPhoto($index);" />
           </li>
         </ul>
       </div>
@@ -171,16 +171,36 @@
       </div>
     </div>
   </div>
-  
   <!-- TIPS (COMMENTS) -->
-  <div class="grid row center">
-    <div class="grid-cell">              
+  <div class="grid row tips center">
+    <div class="grid-cell">
       <h3><%= @drink.name %> tips? Comments? Join the discussion!</h3>
-      <textarea ng-model="comment.text"></textarea>
-      <a ng-click="createNote()">Save</a>
+      <textarea ng-model="newComment.text"></textarea>
+      <a ng-click="createComment(newComment)">Save</a>
     </div>
   </div>
-  <div class="grid row center similar-drinks">
+  <div class="grid row tips center">
+    <div class="grid-cell">
+      <ng-include src="'/drinks/comments.html'"></ng-include>
+      <div id="static-comments" ng-show="!(comments && comments.length)">
+        <% @comments.each do |comment| %>
+          <div class="grid grid--center tips">
+            <div class="grid-cell">
+              <%= comment.score %>
+              <%= link_to user_path(id:comment.user_id), class:'avatar' do %>
+                  <img ng-src="{{getUser().tinyAvatar}}">
+              <% end -%>
+              <%= comment.user_name %>
+              <%= comment.created_at.to_s(:long) %>
+              <div><%= comment.text %></div>
+            </div>
+          </div>
+        <% end -%>
+      </div>
+    </div>
+  </div>
+  <!-- SIMILAR DRINKS -->
+  <div class="grid row similar-drinks center">
     <div class="grid-cell">
       <h3>Drinks similar to a <%= @drink.name %></h3>
     </div>

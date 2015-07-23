@@ -1,0 +1,11 @@
+<form novalidate name="flagForm" ng-submit="createFlag(flagForm.$valid)">
+	<p>
+		Please indicate the motivation for your flag <em>(e.g. copyright infringement, spammy, indecent, harmful to a community spirit, I'm just vindictive)</em>.
+	</p>
+	<textarea name="motivation" class="form-control" ng-model="flagger.flagMotivation" required></textarea>
+	<p ng-show="flagForm.motivation.$invalid && !userForm.name.$pristine" class="red">Motivation for flag is required.</p>
+	<p>
+		<a class="btn btn-primary" ng-click="flagger.createFlag()">Submit Flag</a>
+		<a class="btn btn-danger" ng-click="$close()">Cancel</a>
+	</p>
+</form>
