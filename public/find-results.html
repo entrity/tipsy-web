@@ -16,21 +16,26 @@
 		</div>
 		<div class="grid-cell clear"><small><a ng-click="finder.removeIngredient($all)"><i class="fa fa-times-circle"></i> Clear all</a></small></div>
 	</div>
-	<div class="grid grid--center">What can I make?</div>
-	<ol>
-		<li ng-repeat="drink in finder.drinks">
-			{{drink.name}}
-			<a href="/drinks/{{drink.id}}"><i class="fa fa-link"></i></a>
-		</li>
-	</ol>
-	<div ng-show="!finder.drinks || !finder.drinks.length">
-		...Nothing yet. Try adding more ingredients.
-	</div>
-	<div>
-		<span ng-show="finder.drinks.left">{{drinks.left}} more search results</span>
-		<br>
-		<span ng-show="finder.drinks.pagesLeft">
-			<a ng-click="finder.loadNextPage()">Load Next Page: {{finder.drinks.page + 1}} of {{finder.drinks.pages}}</a>
-		</span>
+	<div class="grid results-list">
+		<div class="grid-cell">
+			<h4>What can I make?</h4>
+			<div class="grid grid--center item" ng-repeat="drink in finder.drinks">
+				<div class="grid-cell name"><a href="/drinks/{{drink.id}}">{{drink.name}}</a></div>
+				<div class="grid-cell"><i class="fa fa-clock-o"></i> <small>3 minutes</small></div>
+				<div class="grid-cell"><i class="fa fa-flask"></i> <small>3 ingredients</small></div>
+				<div class="grid-cell"><i class="fa fa-thumbs-up"></i> <small>300</small></div>
+				<div class="grid-cell"><i class="fa fa-heart"></i></div>
+			</div>
+			<div ng-show="!finder.drinks || !finder.drinks.length">
+				...Nothing yet. Try adding more ingredients.
+			</div>
+			<div ng-show="finder.drinks.left">
+				<span>{{drinks.left}} more search results</span>
+				<br>
+				<span ng-show="finder.drinks.pagesLeft">
+					<a ng-click="finder.loadNextPage()">Load Next Page: {{finder.drinks.page + 1}} of {{finder.drinks.pages}}</a>
+				</span>
+			</div>
+		</div>
 	</div>
 </div>

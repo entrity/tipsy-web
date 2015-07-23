@@ -561,3 +561,4 @@ $.Velocity
             [ { translateY: '-50%'}, 1]
         ]
     });
+

@@ -1,5 +1,7 @@
 <header>
-  <div class="wrapper grid grid--center" ng-controller="ToolbarCtrl">
+  <nav class="grid grid--center" ng-controller="ToolbarCtrl">
+
+    <!-- START UNIVERSAL USER NAV -->
     <div class="logo grid-cell">
       <a href="/"><img src="/images/tipsyology-logo.png" /></a>
     </div>
@@ -8,56 +10,68 @@
         <ng-include src="'/fuzzy-finder.html'"></ng-include>
       </div>
     </div>
-    <nav class="grid grid--center grid-cell" ng-cloak ng-hide="isLoggedIn()">
-      <div class="grid-cell">
-        <a ng-click="openSignInModal()"><small>Browse <i class="fa fa-caret-down"></i></small></a>
+    <!-- END UNIVERSAL USER NAV -->
+
+    <!-- START LOGGED OUT USER NAV -->
+    <div class="logged-out grid-cell" ng-cloak ng-hide="isLoggedIn()">
+      <div class="grid grid--center">
+        <div class="grid-cell">
+          <a ng-click="openSignInModal()"><small>Browse <i class="fa fa-caret-down"></i></small></a>
+        </div>
+        <div class="grid-cell user">
+          <a href="/users/sign_up/"><small>Sign up</small></a>
+        </div>
+        <div class="grid-cell user">
+          <a href="/users/sign_in/"><small>Sign in</small></a>
+        </div>
       </div>
-      <div class="grid-cell user">
-        <a href="/users/sign_up/"><small>Sign up</small></a>
-      </div>
-      <div class="grid-cell user">
-        <a href="/users/sign_in/"><small>Sign in</small></a>
-      </div>
-    </nav>
-    <nav class="grid grid--center" ng-cloak ng-show="isLoggedIn()">
-      <div class="grid-cell">
-        <a href="/drinks"><small>Browse <i class="fa fa-caret-down"></i></small></a>
-      </div>
-      <div ng-show="openReviewCt" class="grid-cell review">
-        <a ng-click="openReviewModal()"><small>Review</small> <span class="badge">{{openReviewCt}}</span></a>
-      </div>
-      <div class="grid-cell user rep-cont dropdown">
-        <div id="rep-alerts">
-          <a ng-click="openToolbarMenu($event, 'repChanges')">
-            <span class="reputation" title="{{getUser().points}} points of reputation ('tips')">{{getUser().points}}</span>
-            <span class="rep-change" ng-if="getUser().newPointChanges">{{getUser().newPointChanges < 0 ? '-' : '+'}}{{getUser().newPointChanges}}</span>
+    </div>
+    <!-- END LOGGED OUT USER NAV -->
+
+    <!-- START LOGGED IN USER NAV -->
+    <div class="logged-in grid-cell" ng-cloak ng-show="isLoggedIn()">
+      <div class="grid grid--center">
+        <div class="grid-cell">
+          <a href="/drinks"><small>Browse <i class="fa fa-caret-down"></i></small></a>
+        </div>
+        <div class="grid-cell review" ng-show="openReviewCt">
+          <a ng-click="openReviewModal()"><small>Review</small> <span class="badge">{{openReviewCt}}</span></a>
+        </div>
+        <div class="grid-cell user rep-cont dropdown">
+          <div id="rep-alerts">
+            <a ng-click="openToolbarMenu($event, 'repChanges')">
+              <span class="reputation" title="{{getUser().points}} points of reputation ('tips')">{{getUser().points}}</span>
+              <span class="rep-change" ng-if="getUser().newPointChanges">{{getUser().newPointChanges < 0 ? '-' : '+'}}{{getUser().newPointChanges}}</span>
+            </a>
+          </div>
+          <ul class="dropdown-menu dropdown-menu-right" ng-if="toolbar.repChanges">
+            <li ng-repeat="change in recentRepChanges">
+              <a href="#"><span class="rep-change">+1</span> User has liked your picture</a>
+            </li>
+          </ul>
+        </div>
+        <div class="grid-cell user trophie-cont">
+          <a href="#">
+            <i class="fa fa-trophy gold"></i> {{getUser().goldBadgeCt||0}}
+            <i class="fa fa-trophy silver"></i> {{getUser().silverBadgeCt||0}}
+            <i class="fa fa-trophy bronze"></i> {{getUser().bronzeBadgeCt||0}}
           </a>
         </div>
-        <ul class="dropdown-menu dropdown-menu-right" ng-if="toolbar.repChanges">
-          <li ng-repeat="change in recentRepChanges">
-            <a href="#"><span class="rep-change">+1</span> User has liked your picture</a>
-          </li>
-        </ul>
-      </div>
-      <div class="grid-cell user trophie-cont">
-        <a href="#">
-          <i class="fa fa-trophy gold"></i> {{getUser().goldBadgeCt||0}}
-          <i class="fa fa-trophy silver"></i> {{getUser().silverBadgeCt||0}}
-          <i class="fa fa-trophy bronze"></i> {{getUser().bronzeBadgeCt||0}}
-        </a>
-      </div>
-      <div class="grid-cell user avatar-cont dropdown">
-        <div class="grid" id="avatar-dropdown">
-          <a class="avatar" ng-click="openToolbarMenu($event, 'avatar')">
-            <img ng-src="{{getUser().avatar_url || '/images/anonymous-thumb.jpg'}}">
-          </a>
+        <div class="grid-cell user avatar-cont dropdown">
+          <div class="grid" id="avatar-dropdown">
+            <a class="avatar" ng-click="openToolbarMenu($event, 'avatar')">
+              <img ng-src="{{getUser().avatar_url || '/images/anonymous-thumb.jpg'}}">
+            </a>
+          </div>
+          <ul class="dropdown-menu dropdown-menu-right" ng-show="toolbar.avatar">
+            <li><a href="/users/edit"><i class="fa fa-user"></i> Markham Anderson</a></li>
+            <li><a href="/users/edit"><i class="fa fa-cog"></i> Account Settings</a></li>
+            <li><a href="/users/sign_out"><i class="fa fa-sign-out"></i> Log out</a></li>
+          </ul>
         </div>
-        <ul class="dropdown-menu dropdown-menu-right" ng-show="toolbar.avatar">
-          <li><a href="/users/edit"><i class="fa fa-user"></i> Markham Anderson</a></li>
-          <li><a href="/users/edit"><i class="fa fa-cog"></i> Account Settings</a></li>
-          <li><a href="/users/sign_out"><i class="fa fa-sign-out"></i> Log out</a></li>
-        </ul>
       </div>
-    </nav>
-  </div>
+    </div>
+    <!-- END LOGGED IN USER NAV -->
+
+  </nav>
 </header>
