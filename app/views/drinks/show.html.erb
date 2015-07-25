@@ -5,8 +5,8 @@
   window.drink.userFlags = <%= @user_flags.to_json.html_safe %>;
 </script>
 <div id="drink-page" ng-controller="DrinkCtrl">
-  <div class="grid row-one">
-    <div class="grid-cell left" ng-controller="Drink.PhotoGalleryCtrl">
+  <div class="grid row photos">
+    <div class="grid-cell" ng-controller="Drink.PhotoGalleryCtrl">
       <noscript>
         <% @photos.each do |photo| %>
           <%= image_tag photo.file.url, alt:"#{photo.alt}" %>
@@ -36,88 +36,85 @@
         No photos have been posted for this drink. <a ng-click="openPhotoUploadModal()">Add your own!</a>
       </div>
     </div>
-    <div class="grid-cell right">
-      <div class="grid grid--center">
-        <div class="grid-cell name">
-          <h1><%= @drink.name %></h1>
-          <div class="rating">
-            <a href="#">Comments (<%= @drink.comment_ct %>)</a>
-          </div>
-        </div>
-        <div class="grid-cell votes">
-          <div class="arrow up" role="button" aria-label="upvote" tabindex="0"><i class="fa fa-caret-up"></i></div>
-          <div class="score"><%= @drink.vote_sum %></div>
-          <div class="arrow down" role="button" aria-label="downvote" tabindex="0"><i class="fa fa-caret-down"></i></div>
-        </div>
+  </div>
+  <div class="grid grid--center row center">
+    <div class="grid-cell name">
+      <h1><%= @drink.name %></h1>
+      <div class="comments">
+        <a href="#">Comments (<%= @drink.comment_ct %>)</a>
       </div>
-      <div class="social-share-bar">Social share bar goes here</div>
-      <div class="grid description">
-        <div class="grid-cell prep-time">
-          <h3>
-            Description
-            <a ng-click="loadEditView()" class="fa fa-pencil"></a>
-            <a ng-click="flag()" class="fa fa-flag"></a>
-          </h3>
-          <div>
-            <% if @drink.description.present? %>
-              <noscript><%= @drink.description %></noscript>
-              <script>Tipsy.writeMarkdown(window.drink.description)</script>
-            <% else %>
-              <p>
-                <em>No description has been submitted for this drink yet.</em>
-                <br>
-                <a ng-click="loadEditView()">How would you describe this drink?</a>
-              </p>
-            <% end %>
-          </div>
-        </div>
-      </div>
-      <div class="grid drink-info">
-        <div class="grid-cell prep-time">
-          <p>
-            Prep time:
-            <a ng-click="loadEditView()" class="fa fa-pencil"></a>
-            <br>
-            <span>
-              <% if @drink.prep_time %>
-                <%= @drink.prep_time %>
-              <% else %>
-                <em>unknown</em>
-              <% end -%>
-            </span>
-          </p>
-        </div>
-        <div class="grid-cell calorie-count">
-          <p>
-            Calories:
-            <a ng-click="loadEditView()" class="fa fa-pencil"></a>
-            <br>
-            <span>
-              <% if @drink.calories %>
-                <%= @drink.calories %>
-              <% else %>
-                <em>unknown</em>
-              <% end -%>
-            </span>
-          </p>
-        </div>
-        <div class="grid-cell author">
-          <% if @drink.author %>
-            <p>
-              Author:
-              <br>
-              <a href="#">
-                <img>
-                <%= @drink.author.name %>
-                <span class="user-tips-count">(<%= @drink.author.points %> in tips)</span>
-              </a>
-            </p>
-          <% end -%>
-        </div>
+    </div>
+    <div class="grid-cell votes">
+      <div class="arrow up" role="button" aria-label="upvote" tabindex="0"><i class="fa fa-caret-up"></i></div>
+      <div class="score"><%= @drink.vote_sum %></div>
+      <div class="arrow down" role="button" aria-label="downvote" tabindex="0"><i class="fa fa-caret-down"></i></div>
+    </div>
+  </div>
+  <div class="grid row center">
+    <div class="grid-cell">
+      <div class="social-share-bar">
+        <a href="#" title="Print recipe"><i class="fa fa-print"></i></a>
+        <a href="#" title="Mail recipe"><i class="fa fa-envelope-o"></i></a>
+        <a href="#" title="Share recipe on facebook"><i class="fa fa-facebook"></i></a>
+        <a href="#" title="Share recipe on google+"><i class="fa fa-google-plus"></i></a>
+        <a href="#" title="Share recipe on twitter"><i class="fa fa-twitter"></i></a>
+        <a href="#" title="Share recipe on pinterest"><i class="fa fa-pinterest-p"></i></a>
+        <a href="#" title="Share recipe on tumblr"><i class="fa fa-tumblr"></i></a>
       </div>
     </div>
   </div>
-  <div class="grid row-two">
+  <div class="grid row center">
+    <div class="grid-cell prep-time">
+      <p>
+        Prep time:
+        <a ng-click="loadEditView()" class="fa fa-pencil"></a>
+        <br>
+        <span>
+          <% if @drink.prep_time %>
+            <%= @drink.prep_time %>
+          <% else %>
+            <em>unknown</em>
+          <% end -%>
+        </span>
+      </p>
+    </div>
+    <div class="grid-cell calorie-count">
+      <p>
+        Calories:
+        <a ng-click="loadEditView()" class="fa fa-pencil"></a>
+        <br>
+        <span>
+          <% if @drink.calories %>
+            <%= @drink.calories %>
+          <% else %>
+            <em>unknown</em>
+          <% end -%>
+        </span>
+      </p>
+    </div>
+  </div>
+  <div class="grid row center">
+    <div class="grid-cell">
+      <h3>
+        Description
+        <a ng-click="loadEditView()" class="fa fa-pencil"></a>
+        <a ng-click="flag()" class="fa fa-flag"></a>
+      </h3>
+      <div>
+        <% if @drink.description.present? %>
+          <noscript><%= @drink.description %></noscript>
+          <script>Tipsy.writeMarkdown(window.drink.description)</script>
+        <% else %>
+          <p>
+            <em>No description has been submitted for this drink yet.</em>
+            <br>
+            <a ng-click="loadEditView()">How would you describe this drink?</a>
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="grid row center">
     <div class="grid-cell ingredients">
       <div class="grid grid--center">
         <div class="grid-cell">
@@ -145,6 +142,8 @@
         </div>
       <% end %>
     </div>
+  </div>
+  <div class="grid row center">
     <div class="grid-cell directions">
       <div class="grid grid--center">
         <div class="grid-cell">
@@ -174,31 +173,35 @@
     </div>
   </div>
   <!-- TIPS (COMMENTS) -->
-  <div class="grid grid--center tips">
+  <div class="grid row tips center">
     <div class="grid-cell">
       <h3><%= @drink.name %> tips? Comments? Join the discussion!</h3>
       <textarea ng-model="newComment.text"></textarea>
       <a ng-click="createComment(newComment)">Save</a>
     </div>
   </div>
-  <ng-include src="'/drinks/comments.html'"></ng-include>
-  <div id="static-comments" ng-show="!(comments && comments.length)">
-    <% @comments.each do |comment| %>
-      <div class="grid grid--center tips">
-        <div class="grid-cell">
-          <%= comment.score %>
-          <%= link_to user_path(id:comment.user_id), class:'avatar' do %>
-              <img ng-src="{{getUser().tinyAvatar}}">
-          <% end -%>
-          <%= comment.user_name %>
-          <%= comment.created_at.to_s(:long) %>
-          <div><%= comment.text %></div>
-        </div>
+  <div class="grid row tips center">
+    <div class="grid-cell">
+      <ng-include src="'/drinks/comments.html'"></ng-include>
+      <div id="static-comments" ng-show="!(comments && comments.length)">
+        <% @comments.each do |comment| %>
+          <div class="grid grid--center tips">
+            <div class="grid-cell">
+              <%= comment.score %>
+              <%= link_to user_path(id:comment.user_id), class:'avatar' do %>
+                  <img ng-src="{{getUser().tinyAvatar}}">
+              <% end -%>
+              <%= comment.user_name %>
+              <%= comment.created_at.to_s(:long) %>
+              <div><%= comment.text %></div>
+            </div>
+          </div>
+        <% end -%>
       </div>
-    <% end -%>
+    </div>
   </div>
   <!-- SIMILAR DRINKS -->
-  <div class="grid row-four similar-drinks">
+  <div class="grid row similar-drinks center">
     <div class="grid-cell">
       <h3>Drinks similar to a <%= @drink.name %></h3>
     </div>

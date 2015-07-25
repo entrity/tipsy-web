@@ -1,4 +1,4 @@
-<div>
+<div class="uploader">
 	<div ng-if="uploader.errors && uploader.errors.length" class="red">
 		<p>Submission failed</p>
 		<ul>
@@ -19,7 +19,7 @@
 		</p>
 	</div>
 	<div ng-show="uploader.success" class="green">
-		<p>Thank you. Your submission shall be reviewed. It shall be published if approved.</p>
+		<p>Thank you. Your submission is pending approval and will be published if approved.</p>
 		<p><a class="btn btn-success" ng-click="$close()">Close</a></p>
 	</div>
 </div>
