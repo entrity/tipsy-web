@@ -27,6 +27,10 @@ class DrinksController < ApplicationController
           .limit(MAX_RESULTS)
         @photos = @drink.photos.where(status:Flaggable::APPROVED).order(:score)
         @comments = @drink.comments.order(:score)
+        if user_signed_in?
+          # Fetch flags created by this user for any photos or comments that pertain to `saved_drink`
+          @user_flags = Flag.for_user_photos_comments(current_user.id, @photos.map(&:id), @comments.map(&:id))
+        end
       }
       format.json {
         respond_with saved_drink

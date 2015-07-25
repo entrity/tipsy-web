@@ -911,6 +911,13 @@ CREATE INDEX index_drinks_on_name ON drinks USING btree (name);
 
 
 --
+-- Name: index_flags; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_flags ON flags USING btree (user_id, flaggable_id, flaggable_type);
+
+
+--
 -- Name: index_ingredients_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1019,4 +1026,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150718171031');
 INSERT INTO schema_migrations (version) VALUES ('20150719231022');
 
 INSERT INTO schema_migrations (version) VALUES ('20150721025601');
+
+INSERT INTO schema_migrations (version) VALUES ('20150722215532');
 

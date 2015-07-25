@@ -2,6 +2,7 @@
   window.drink = <%= @drink.to_json.html_safe %>;
   window.drink.photos = <%= @photos.to_json(methods:[:thumb]).html_safe %>;
   window.drink.comments = <%= @comments.to_json.html_safe %>;
+  window.drink.userFlags = <%= @user_flags.to_json.html_safe %>;
 </script>
 <div id="drink-page" ng-controller="DrinkCtrl">
   <div class="grid row-one">
@@ -17,7 +18,7 @@
           <a ng-click="upvotePhoto()"><i class="fa fa-thumbs-up"></i></a>
           <a ng-click="downvotePhoto()"><i class="fa fa-thumbs-down"></i></a>
           <br>
-          <a ng-click="flagPhoto()"><i class="fa fa-flag"></i></a>
+          <a ng-click="flagPhoto()"><i class="fa fa-flag" ng-class="isPhotoUserFlagged() && 'highlight'"></i></a>
           <a ng-href="{{photos[photos.activeIndex].originalUrl}}" target="_blank"><i class="fa fa-search-plus"></i></a>
           <a><i class="fa fa-share-alt"></i></a>
           <br>

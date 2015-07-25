@@ -6,6 +6,28 @@
 			update: {method:'PUT'},
 		});
 		Object.defineProperties(Drink.prototype, {
+			// turn this.userFlags into a map if present
+			buildUserFlagsMap: {
+				value: function buildUserFlagsMap () {
+					if (this.userFlags && !this.userFlagsMap) {
+						var drink = this;
+						this.userFlagsMap = new Object;
+						this.userFlags.forEach(function (flag) {
+							if (!drink.userFlagsMap[flag.flaggable_type]) drink.userFlagsMap[flag.flaggable_type] = new Object;
+							drink.userFlagsMap[flag.flaggable_type][flag.flaggable_id] = flag;
+						});
+					}
+					return this.userFlagsMap;
+				},
+				configurable: false,
+			},
+			setIsUserFlagged: {
+				value: function setIsUserFlagged (flaggable, flaggableType) {
+					if (!this.userFlagsMap && !this.buildUserFlagsMap()) return;
+					flaggable._isUserFlagged = this.userFlagsMap && this.userFlagsMap[flaggableType] && this.userFlagsMap[flaggableType][flaggable.id];
+				},
+				configurable: false,
+			},
 		});
 		return Drink;
 	}])
@@ -35,9 +57,15 @@
 		return Revision;
 	}])
 	.controller('DrinkCtrl', ['$scope', '$modal', '$http', 'Drink', 'Flagger', 'RailsSupport', function ($scope, $modal, $http, Drink, Flagger, RailsSupport) {
-		$scope.drink = window.drink;
+		$scope.drink = new Drink(window.drink);
 		$scope.drinkCtrl = new Object;
 		$scope.comments = window.drink.comments;
+		$scope.tips = new Array;
+		// Iterate comments:
+		$scope.comments.forEach(function (comment) {
+			if (comment.tip_pts) tips.push(comment);
+			$scope.drink.setIsUserFlagged(comment, 'Comment');
+		})
 		$scope.tips = jQuery.grep($scope.drink.comments, function (comment) {
 			return comment.tip_pts;
 		}).sort(function (a, b) {
@@ -178,8 +206,6 @@
 		$scope.submitFlag = function (revision) {
 			new Flagger($scope).submitFlag(revision, 'Revision');
 		}
-	}])
-	.controller('Drink.PhotoUploadCtrl', ['$scope', '$resource', function ($scope, $resource) {
 	}])
 	;
 

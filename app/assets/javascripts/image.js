@@ -123,6 +123,8 @@
 				$scope.photos.forEach(function (photo) {
 					photo.mediumUrl = photo.thumb.replace(/thumb/, 'medium');
 					photo.originalUrl = photo.thumb.replace(/thumb/, 'original');
+					// set _isUserFlagged
+					$scope.drink.setIsUserFlagged(photo, 'Photo');
 				});
 				// initilize activeIndex
 				$scope.photos.activeIndex = 0;
@@ -134,6 +136,9 @@
 		}
 		$scope.getActivePhoto = function getActivePhoto () {
 			return $scope.photos[$scope.photos.activeIndex];			
+		}
+		$scope.isPhotoUserFlagged = function () {
+			return $scope.getActivePhoto()._isUserFlagged;
 		}
 		// show prev image
 		$scope.showPrevPhoto = function () {

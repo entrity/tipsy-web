@@ -946,7 +946,11 @@ aside .btn-primary:hover,
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
 }
-#drink-page a.fa-flag:hover {
+#drink-page a .fa-flag.highlight {
+  color: goldenrod;
+  text-shadow: 1px 1px 1px red, -1px -1px 1px red, -1px 1px 1px red, 1px -1px 1px red
+}
+#drink-page a .fa-flag:hover {
   color: red;
   cursor: pointer;
 }
