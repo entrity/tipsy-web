@@ -54,180 +54,79 @@ COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs
 SET search_path = public, pg_catalog;
 
 --
--- Name: flag_comments(integer, integer, text, integer, integer, integer, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
+-- Name: flag_fn_return_type; Type: TYPE; Schema: public; Owner: -
 --
 
-CREATE FUNCTION flag_comments(i_user_id integer, i_flaggable_id integer, s_flaggable_type text, i_flag_limit integer, i_flag_bits integer, i_flag_pts integer, dt_timestamp timestamp without time zone) RETURNS integer
+CREATE TYPE flag_fn_return_type AS (
+	flag_created boolean,
+	review_created boolean,
+	flag_id integer
+);
+
+
+--
+-- Name: flag_record(text, integer, integer, text, integer, integer, integer, text, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION flag_record(s_table_name text, i_user_id integer, i_flaggable_id integer, s_flaggable_type text, i_flag_limit integer, i_flag_bits integer, i_flag_pts integer, s_description text, dt_timestamp timestamp without time zone) RETURNS TABLE(flag_created boolean, review_created boolean, flag_id integer)
     LANGUAGE plpgsql
     AS $$
-        DECLARE duplicate_flag_ct INT;
-        DECLARE open_review_ct INT;
-        DECLARE aggregate_flagger_ids INT[];
-        DECLARE return_value INT := 0;
-        BEGIN
-          -- check for existing flag with the same user and flaggable
-          LOCK ONLY flags IN SHARE MODE;
-          SELECT COUNT(*) FROM flags
-            WHERE user_id = i_user_id
-            AND flaggable_id = i_flaggable_id
-            AND flaggable_type = s_flaggable_type
-            LIMIT 1
-            INTO duplicate_flag_ct;
-          IF (SELECT duplicate_flag_ct) = 0 THEN
-            -- create flag
-            INSERT INTO flags (user_id, flaggable_id, flaggable_type, flag_bits, flag_pts, created_at) VALUES (i_user_id, i_flaggable_id, s_flaggable_type, i_flag_bits, i_flag_pts, dt_timestamp);
-            -- increment flaggable's flag_pts
-            UPDATE comments SET flag_pts = flag_pts + i_flag_pts WHERE id = i_flaggable_id;
-            -- set return value
-            return_value := 1;
-            -- check whether flaggable exceeds FLAG_POINTS_LIMIT
-            IF ((SELECT flag_pts FROM comments WHERE id = i_flaggable_id) >= i_flag_limit) THEN
-              -- check whether an open review exists for the flaggable
-              LOCK ONLY reviews IN SHARE MODE;
-              SELECT COUNT(*) FROM reviews
-                WHERE open = TRUE
-                AND reviewable_id = i_flaggable_id
-                AND reviewable_type = s_flaggable_type
-                LIMIT 1
-                INTO open_review_ct;
-              IF (SELECT open_review_ct) = 0 THEN
-                -- calc aggregate flagger_ids
-                SELECT ARRAY(SELECT user_id FROM flags WHERE flaggable_id = i_flaggable_id AND flaggable_type = s_flaggable_type) INTO aggregate_flagger_ids;
-                -- create review
-                INSERT INTO reviews (reviewable_id, reviewable_type, open, contributor_id, flagger_ids, created_at)
-                  VALUES (
-                      i_flaggable_id,
-                      s_flaggable_type,
-                      TRUE,
-                      (SELECT user_id FROM comments WHERE id = i_flaggable_id LIMIT 1),
-                      aggregate_flagger_ids,
-                      dt_timestamp
-                  );
-                return_value := 2;
-              END IF;
-            END IF;
-          END IF;
-          RETURN return_value;
-        END;
-      $$;
-
-
---
--- Name: flag_photos(integer, integer, text, integer, integer, integer, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION flag_photos(i_user_id integer, i_flaggable_id integer, s_flaggable_type text, i_flag_limit integer, i_flag_bits integer, i_flag_pts integer, dt_timestamp timestamp without time zone) RETURNS integer
-    LANGUAGE plpgsql
-    AS $$
-        DECLARE duplicate_flag_ct INT;
-        DECLARE open_review_ct INT;
-        DECLARE aggregate_flagger_ids INT[];
-        DECLARE return_value INT := 0;
-        BEGIN
-          -- check for existing flag with the same user and flaggable
-          LOCK ONLY flags IN SHARE MODE;
-          SELECT COUNT(*) FROM flags
-            WHERE user_id = i_user_id
-            AND flaggable_id = i_flaggable_id
-            AND flaggable_type = s_flaggable_type
-            LIMIT 1
-            INTO duplicate_flag_ct;
-          IF (SELECT duplicate_flag_ct) = 0 THEN
-            -- create flag
-            INSERT INTO flags (user_id, flaggable_id, flaggable_type, flag_bits, flag_pts, created_at) VALUES (i_user_id, i_flaggable_id, s_flaggable_type, i_flag_bits, i_flag_pts, dt_timestamp);
-            -- increment flaggable's flag_pts
-            UPDATE photos SET flag_pts = flag_pts + i_flag_pts WHERE id = i_flaggable_id;
-            -- set return value
-            return_value := 1;
-            -- check whether flaggable exceeds FLAG_POINTS_LIMIT
-            IF ((SELECT flag_pts FROM photos WHERE id = i_flaggable_id) >= i_flag_limit) THEN
-              -- check whether an open review exists for the flaggable
-              LOCK ONLY reviews IN SHARE MODE;
-              SELECT COUNT(*) FROM reviews
-                WHERE open = TRUE
-                AND reviewable_id = i_flaggable_id
-                AND reviewable_type = s_flaggable_type
-                LIMIT 1
-                INTO open_review_ct;
-              IF (SELECT open_review_ct) = 0 THEN
-                -- calc aggregate flagger_ids
-                SELECT ARRAY(SELECT user_id FROM flags WHERE flaggable_id = i_flaggable_id AND flaggable_type = s_flaggable_type) INTO aggregate_flagger_ids;
-                -- create review
-                INSERT INTO reviews (reviewable_id, reviewable_type, open, contributor_id, flagger_ids, created_at)
-                  VALUES (
-                      i_flaggable_id,
-                      s_flaggable_type,
-                      TRUE,
-                      (SELECT user_id FROM photos WHERE id = i_flaggable_id LIMIT 1),
-                      aggregate_flagger_ids,
-                      dt_timestamp
-                  );
-                return_value := 2;
-              END IF;
-            END IF;
-          END IF;
-          RETURN return_value;
-        END;
-      $$;
-
-
---
--- Name: flag_revisions(integer, integer, text, integer, integer, integer, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION flag_revisions(i_user_id integer, i_flaggable_id integer, s_flaggable_type text, i_flag_limit integer, i_flag_bits integer, i_flag_pts integer, dt_timestamp timestamp without time zone) RETURNS integer
-    LANGUAGE plpgsql
-    AS $$
-        DECLARE duplicate_flag_ct INT;
-        DECLARE open_review_ct INT;
-        DECLARE aggregate_flagger_ids INT[];
-        DECLARE return_value INT := 0;
-        BEGIN
-          -- check for existing flag with the same user and flaggable
-          LOCK ONLY flags IN SHARE MODE;
-          SELECT COUNT(*) FROM flags
-            WHERE user_id = i_user_id
-            AND flaggable_id = i_flaggable_id
-            AND flaggable_type = s_flaggable_type
-            LIMIT 1
-            INTO duplicate_flag_ct;
-          IF (SELECT duplicate_flag_ct) = 0 THEN
-            -- create flag
-            INSERT INTO flags (user_id, flaggable_id, flaggable_type, flag_bits, flag_pts, created_at) VALUES (i_user_id, i_flaggable_id, s_flaggable_type, i_flag_bits, i_flag_pts, dt_timestamp);
-            -- increment flaggable's flag_pts
-            UPDATE revisions SET flag_pts = flag_pts + i_flag_pts WHERE id = i_flaggable_id;
-            -- set return value
-            return_value := 1;
-            -- check whether flaggable exceeds FLAG_POINTS_LIMIT
-            IF ((SELECT flag_pts FROM revisions WHERE id = i_flaggable_id) >= i_flag_limit) THEN
-              -- check whether an open review exists for the flaggable
-              LOCK ONLY reviews IN SHARE MODE;
-              SELECT COUNT(*) FROM reviews
-                WHERE open = TRUE
-                AND reviewable_id = i_flaggable_id
-                AND reviewable_type = s_flaggable_type
-                LIMIT 1
-                INTO open_review_ct;
-              IF (SELECT open_review_ct) = 0 THEN
-                -- calc aggregate flagger_ids
-                SELECT ARRAY(SELECT user_id FROM flags WHERE flaggable_id = i_flaggable_id AND flaggable_type = s_flaggable_type) INTO aggregate_flagger_ids;
-                -- create review
-                INSERT INTO reviews (reviewable_id, reviewable_type, open, contributor_id, flagger_ids, created_at)
-                  VALUES (
-                      i_flaggable_id,
-                      s_flaggable_type,
-                      TRUE,
-                      (SELECT user_id FROM revisions WHERE id = i_flaggable_id LIMIT 1),
-                      aggregate_flagger_ids,
-                      dt_timestamp
-                  );
-                return_value := 2;
-              END IF;
-            END IF;
-          END IF;
-          RETURN return_value;
-        END;
-      $$;
+  DECLARE duplicate_flag_ct INT;
+  DECLARE open_review_ct INT;
+  DECLARE aggregate_flagger_ids INT[];
+  DECLARE contributor_id INT;
+  DECLARE flag_pts_after_update INT;
+  -- DECLARE return_value flag_fn_return_type;
+  BEGIN
+    -- check for existing flag with the same user and flaggable
+    LOCK ONLY flags IN SHARE MODE;
+    SELECT COUNT(*) FROM flags
+      WHERE user_id = i_user_id
+      AND flaggable_id = i_flaggable_id
+      AND flaggable_type = s_flaggable_type
+      LIMIT 1
+      INTO duplicate_flag_ct;
+    IF (SELECT duplicate_flag_ct) = 0 THEN
+      -- create flag
+      INSERT INTO flags (user_id, flaggable_id, flaggable_type, flag_bits, flag_pts, description, created_at) VALUES (i_user_id, i_flaggable_id, s_flaggable_type, i_flag_bits, i_flag_pts, s_description, dt_timestamp) RETURNING id INTO flag_id;
+      -- increment flaggable's flag_pts
+      EXECUTE FORMAT('UPDATE %s SET flag_pts = flag_pts + %s WHERE id = %s RETURNING flag_pts', s_table_name, i_flag_pts, i_flaggable_id) INTO flag_pts_after_update;
+      -- set return value
+      flag_created := TRUE;
+      -- check whether flaggable exceeds FLAG_POINTS_LIMIT
+      IF (flag_pts_after_update >= i_flag_limit) THEN
+        -- check whether an open review exists for the flaggable
+        LOCK ONLY reviews IN SHARE MODE;
+        SELECT COUNT(*) FROM reviews
+          WHERE open = TRUE
+          AND reviewable_id = i_flaggable_id
+          AND reviewable_type = s_flaggable_type
+          LIMIT 1
+          INTO open_review_ct;
+        IF (SELECT open_review_ct) = 0 THEN
+          -- calc aggregate flagger_ids
+          SELECT ARRAY(SELECT user_id FROM flags WHERE flaggable_id = i_flaggable_id AND flaggable_type = s_flaggable_type) INTO aggregate_flagger_ids;
+          -- get id of contributor whose contribution was flagged because this user is also not allowed to vote on the review to be created
+          EXECUTE FORMAT('SELECT user_id FROM %s WHERE id = %s LIMIT 1', s_table_name, i_flaggable_id) INTO contributor_id;
+          -- create review
+          INSERT INTO reviews (reviewable_id, reviewable_type, open, contributor_id, flagger_ids, created_at)
+            VALUES (
+                i_flaggable_id,
+                s_flaggable_type,
+                TRUE,
+                contributor_id,
+                aggregate_flagger_ids,
+                dt_timestamp
+            );
+          -- set return value
+          review_created := TRUE;
+        END IF;
+      END IF;
+    END IF;
+    -- return
+    RETURN NEXT;
+  END;
+$$;
 
 
 SET default_tablespace = '';
@@ -1028,4 +927,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150719231022');
 INSERT INTO schema_migrations (version) VALUES ('20150721025601');
 
 INSERT INTO schema_migrations (version) VALUES ('20150722215532');
+
+INSERT INTO schema_migrations (version) VALUES ('20150725005201');
 
