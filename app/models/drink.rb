@@ -29,8 +29,12 @@ class Drink < ActiveRecord::Base
     revision.try(:flag!)
   end
 
+  def url_path
+    "/drinks/#{id}-#{name.to_s.downcase.gsub(/\W+/, '-')}"
+  end
+  
   def vote_sum
     up_vote_ct - dn_vote_ct
   end
-  
+
 end

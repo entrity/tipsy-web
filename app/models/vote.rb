@@ -27,8 +27,12 @@ class Vote < ActiveRecord::Base
       # update score of votable
       if self.id
         raise TipsyException, "No 'prev_sign' in result from create_of_update_vote" unless results_hash.has_key?('prev_sign')
-        delta = sign - (results_hash['prev_sign'].to_i <=> 0) # should be in {-1,0,1}
-        votable.increment_score!(delta) if delta != 0
+        prev_sign = results_hash['prev_sign'].to_i <=> 0 # should be in {-1,0,1}
+        delta = sign - prev_sign
+        if delta != 0
+          votable.increment_score!(delta)
+          votable.distribute_vote_points(prev_sign, sign)
+        end
       end
       # return
       true
@@ -36,4 +40,5 @@ class Vote < ActiveRecord::Base
       false
     end
   end
+
 end

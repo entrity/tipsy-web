@@ -410,7 +410,10 @@ CREATE TABLE point_distributions (
     pointable_id integer,
     pointable_type character varying,
     created_at timestamp without time zone,
-    viewed boolean DEFAULT false
+    viewed boolean DEFAULT false,
+    title character varying,
+    description character varying,
+    url character varying
 );
 
 
@@ -1019,4 +1022,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150725005201');
 INSERT INTO schema_migrations (version) VALUES ('20150725173001');
 
 INSERT INTO schema_migrations (version) VALUES ('20150725174022');
+
+INSERT INTO schema_migrations (version) VALUES ('20150726180135');
 

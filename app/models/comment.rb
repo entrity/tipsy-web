@@ -8,6 +8,11 @@ class Comment < ActiveRecord::Base
   validates :user, presence: true
   validates :drink, presence: true
 
+  # @override Votable
+  def distribute_vote_points(prev_sign, sign)
+    # noop
+  end
+
   def set_user user
     self.user_id = user.id
     self.user_name = user.nickname
