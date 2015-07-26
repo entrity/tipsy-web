@@ -54,14 +54,30 @@ COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs
 SET search_path = public, pg_catalog;
 
 --
--- Name: flag_fn_return_type; Type: TYPE; Schema: public; Owner: -
+-- Name: create_or_update_vote(integer, integer, text, integer); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE TYPE flag_fn_return_type AS (
-	flag_created boolean,
-	review_created boolean,
-	flag_id integer
-);
+CREATE FUNCTION create_or_update_vote(i_user_id integer, i_votable_id integer, s_votable_type text, i_sign integer) RETURNS TABLE(vote_id integer, prev_sign integer)
+    LANGUAGE plpgsql
+    AS $$
+      BEGIN
+        LOCK ONLY votes IN SHARE MODE;
+        SELECT id, sign FROM votes
+          WHERE user_id = i_user_id AND votable_id = i_votable_id AND votable_type = s_votable_type
+          LIMIT 1
+          INTO vote_id, prev_sign;
+        IF (vote_id IS NOT NULL) THEN
+          UPDATE votes SET sign = i_sign, updated_at = current_timestamp
+            WHERE user_id = i_user_id AND votable_id = i_votable_id AND votable_type = s_votable_type;
+        ELSE
+          prev_sign := 0;
+          INSERT INTO votes (user_id, votable_id, votable_type, sign, created_at, updated_at)
+            VALUES (i_user_id, i_votable_id, s_votable_type, i_sign, current_timestamp, current_timestamp)
+            RETURNING id INTO vote_id;
+        END IF;
+        RETURN NEXT;
+      END;
+      $$;
 
 
 --
@@ -76,7 +92,6 @@ CREATE FUNCTION flag_record(s_table_name text, i_user_id integer, i_flaggable_id
   DECLARE aggregate_flagger_ids INT[];
   DECLARE contributor_id INT;
   DECLARE flag_pts_after_update INT;
-  -- DECLARE return_value flag_fn_return_type;
   BEGIN
     -- check for existing flag with the same user and flaggable
     LOCK ONLY flags IN SHARE MODE;
@@ -394,7 +409,8 @@ CREATE TABLE point_distributions (
     category_id integer,
     pointable_id integer,
     pointable_type character varying,
-    created_at timestamp without time zone
+    created_at timestamp without time zone,
+    viewed boolean DEFAULT false
 );
 
 
@@ -602,6 +618,40 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
+-- Name: votes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE votes (
+    id integer NOT NULL,
+    user_id integer,
+    votable_id integer,
+    votable_type character varying,
+    sign smallint DEFAULT 0,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: votes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE votes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: votes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE votes_id_seq OWNED BY votes.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -676,6 +726,13 @@ ALTER TABLE ONLY revisions ALTER COLUMN id SET DEFAULT nextval('revisions_id_seq
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY votes ALTER COLUMN id SET DEFAULT nextval('votes_id_seq'::regclass);
 
 
 --
@@ -775,6 +832,14 @@ ALTER TABLE ONLY users
 
 
 --
+-- Name: votes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY votes
+    ADD CONSTRAINT votes_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: index_comments_on_drink_id_and_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -831,6 +896,13 @@ CREATE INDEX index_photos_on_drink_id_and_status ON photos USING btree (drink_id
 
 
 --
+-- Name: index_point_distributions; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_point_distributions ON point_distributions USING btree (user_id, pointable_id, pointable_type);
+
+
+--
 -- Name: index_reviews_on_open_and_contributor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -863,6 +935,20 @@ CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 --
 
 CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
+
+
+--
+-- Name: index_viewed_point_distributions; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_viewed_point_distributions ON point_distributions USING btree (user_id, viewed, created_at);
+
+
+--
+-- Name: index_votes; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_votes ON votes USING btree (user_id, votable_id, votable_type);
 
 
 --
@@ -929,4 +1015,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150721025601');
 INSERT INTO schema_migrations (version) VALUES ('20150722215532');
 
 INSERT INTO schema_migrations (version) VALUES ('20150725005201');
+
+INSERT INTO schema_migrations (version) VALUES ('20150725173001');
+
+INSERT INTO schema_migrations (version) VALUES ('20150725174022');
 

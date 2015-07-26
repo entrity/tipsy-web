@@ -125,6 +125,7 @@
 					photo.originalUrl = photo.thumb.replace(/thumb/, 'original');
 					// set _isUserFlagged
 					$scope.drink.setIsUserFlagged(photo, 'Photo');
+					$scope.drink.setUserVoteSign(photo, 'Photo');
 				});
 				// initilize activeIndex
 				$scope.photos.activeIndex = 0;
@@ -155,6 +156,9 @@
 		// flag active photo
 		$scope.flagPhoto = function () {
 			if ($scope.requireLoggedIn() && $scope.getActivePhoto()) new Flagger(this, $scope.getActivePhoto(), 'Photo');
+		}
+		$scope.votePhoto = function (sign) {
+			$scope.vote($scope.getActivePhoto(), 'Photo', sign);
 		}
 	}])
 	.controller('Photo.FlagModalCtrl', ['$scope', 'photo', 'Flagger', function ($scope, photo, Flagger) {

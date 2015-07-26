@@ -47,6 +47,8 @@ Rails.application.routes.draw do
 
   resources :users, only: [:show]
 
+  resources :votes, only: [:create]
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

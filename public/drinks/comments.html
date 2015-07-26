@@ -2,8 +2,8 @@
 <div id="tips">
 	<div ng-repeat="comment in tips">
 		<div>
-			<a ng-click="upvoteComment(comment)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment.userVote == 1) && 'highlight'"></i></a>
-			<a ng-click="dnvoteComment(comment)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment.userVote == -1) && 'highlight'"></i></a>
+			<a ng-click="vote(comment, 'Comment', 1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment._userVoteSign > 0) && 'highlight'"></i></a>
+			<a ng-click="vote(comment, 'Comment', -1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment._userVoteSign < 0) && 'highlight'"></i></a>
 			{{comment.score}}
 			<img ng-src="{{comment.user_avatar}}">
 			{{comment.user_name}}
@@ -21,8 +21,8 @@
 <div id="comments">
 	<div ng-repeat="comment in comments">
 		<div>
-			<a ng-click="upvoteComment(comment)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment.userVote == 1) && 'highlight'"></i></a>
-			<a ng-click="dnvoteComment(comment)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment.userVote == -1) && 'highlight'"></i></a>
+			<a ng-click="vote(comment, 'Comment', 1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment._userVoteSign > 0) && 'highlight'"></i></a>
+			<a ng-click="vote(comment, 'Comment', -1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment._userVoteSign < 0) && 'highlight'"></i></a>
 			{{comment.score}}
 			<img ng-src="{{comment.user_avatar}}">
 			{{comment.user_name}}

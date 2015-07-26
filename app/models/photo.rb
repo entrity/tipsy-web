@@ -1,5 +1,6 @@
 class Photo < ActiveRecord::Base
   include Flaggable
+  include Votable
 
   belongs_to :drink, inverse_of: :photos
   belongs_to :user, inverse_of: :photos

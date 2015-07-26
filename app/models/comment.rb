@@ -1,5 +1,6 @@
 class Comment < ActiveRecord::Base
   include Flaggable
+  include Votable
 
   belongs_to :user
   belongs_to :drink
