@@ -6,7 +6,6 @@ RETURNS TABLE (flag_created BOOLEAN, review_created BOOLEAN, flag_id INT) AS $$
   DECLARE aggregate_flagger_ids INT[];
   DECLARE contributor_id INT;
   DECLARE flag_pts_after_update INT;
-  -- DECLARE return_value flag_fn_return_type;
   BEGIN
     -- check for existing flag with the same user and flaggable
     LOCK ONLY flags IN SHARE MODE;

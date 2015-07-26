@@ -5,29 +5,59 @@
 			ingredients: {method:'GET', isArray:true, url:'/drinks/:id/ingredients.json', cache:true},
 			update: {method:'PUT'},
 		});
+		var Map = function () {}; // For mapping Flags & Votes (as values) to the polymorphic records they target (as keys)
+		Object.defineProperties(Map.prototype, {
+			getValue: {
+				value: function (type, id, fieldName) {
+					var record = this[type] && this[type][id];
+					return fieldName ? (record && record[fieldName]) : record;
+				}
+			}
+		});
 		Object.defineProperties(Drink.prototype, {
 			// turn this.userFlags into a map if present
-			buildUserFlagsMap: {
-				value: function buildUserFlagsMap () {
-					if (this.userFlags && !this.userFlagsMap) {
+			getMap: {
+				value: function getMap (mapName, dataArray, typeFieldName, idFieldName) {
+					if (!this[mapName] && dataArray) {
 						var drink = this;
-						this.userFlagsMap = new Object;
-						this.userFlags.forEach(function (flag) {
-							if (!drink.userFlagsMap[flag.flaggable_type]) drink.userFlagsMap[flag.flaggable_type] = new Object;
-							drink.userFlagsMap[flag.flaggable_type][flag.flaggable_id] = flag;
+						this[mapName] = new Map;
+						dataArray.forEach(function (datum) {
+							if (!drink[mapName][datum[typeFieldName]]) drink[mapName][datum[typeFieldName]] = new Object;
+							drink[mapName][datum[typeFieldName]][datum[idFieldName]] = datum;
 						});
 					}
-					return this.userFlagsMap;
+					return this[mapName];
+				},
+				configurable: false,
+			},
+			getUserFlagsMap: {
+				value: function getUserFlagsMap () {
+					return this.getMap('userFlagsMap', this.userFlags, 'flaggable_type', 'flaggable_id');
+				},
+				configurable: false,
+			},
+			getUserVotesMap: {
+				value: function getUserVotesMap () {
+					return this.getMap('userVotesMap', this.userVotes, 'votable_type', 'votable_id');
 				},
 				configurable: false,
 			},
 			setIsUserFlagged: {
 				value: function setIsUserFlagged (flaggable, flaggableType) {
-					if (!this.userFlagsMap && !this.buildUserFlagsMap()) return;
-					flaggable._isUserFlagged = this.userFlagsMap && this.userFlagsMap[flaggableType] && this.userFlagsMap[flaggableType][flaggable.id];
+					var map;
+					if (map = this.getUserFlagsMap())
+						flaggable._isUserFlagged = !!map.getValue(flaggableType, flaggable.id);
 				},
 				configurable: false,
 			},
+			setUserVoteSign: {
+				value: function setUserVoteSign (votable, votableType) {
+					var map;
+					if (map = this.getUserVotesMap())
+						votable._userVoteSign = map.getValue(votableType, votable.id, 'sign');
+				},
+				configurable: false,
+			}
 		});
 		return Drink;
 	}])
@@ -58,37 +88,16 @@
 	}])
 	.controller('DrinkCtrl', ['$scope', '$modal', '$http', 'Drink', 'Flagger', 'RailsSupport', function ($scope, $modal, $http, Drink, Flagger, RailsSupport) {
 		$scope.drink = new Drink(window.drink);
+		$scope.drink.setUserVoteSign($scope.drink, 'Drink');
 		$scope.drinkCtrl = new Object;
 		$scope.comments = window.drink.comments;
 		$scope.tips = new Array;
 		// Iterate comments:
 		$scope.comments.forEach(function (comment) {
-			if (comment.tip_pts) tips.push(comment);
-			$scope.drink.setIsUserFlagged(comment, 'Comment');
-		})
-		$scope.tips = jQuery.grep($scope.drink.comments, function (comment) {
-			return comment.tip_pts;
-		}).sort(function (a, b) {
-			return a.tip_pts - b.tip_pts;
+			if (comment.tip_pts) tips.push(comment); // identify tips
+			$scope.drink.setIsUserFlagged(comment, 'Comment'); // identify flags by current user
+			$scope.drink.setUserVoteSign(comment, 'Comment'); // identify votes by current user
 		});
-		// Get votes for these comments for this user from backend, and set comment.userVote on each
-		(function(){
-			$scope.getUser().$promise.then(function (user) {
-				var commentIds = $scope.comments.reduce(function (prev, comment) {
-					return prev + '&comment_id[]=' + comment.id;
-				}, '');
-				$http.get('/comments/votes?user_id='+user.id+commentIds)
-				.success(function (data) {
-					var commentMap = {};
-					$scope.drink.comments.forEach(function (comment) {
-						commentMap[comment.id] = comment;
-					});
-					data.forEach(function (comment) {
-						if (commentMap[comment.id]) angular.extend(commentMap[comment.id], comment);
-					});
-				});
-			})
-		})();
 		$scope.flag = function () {
 			if ($scope.requireLoggedIn()) {
 				$modal.open({
@@ -131,25 +140,24 @@
 				})
 			}
 		};
-		$scope.upvoteComment = function (comment) {
+		$scope.vote = function (votable, votableType, sign) {
 			if ($scope.requireLoggedIn()) {
-				$http.post('/comments/'+comment.id+'/upvote.json')
+				if (sign) sign = sign > 0 ? 1 : -1; // ensure sign in {-1,0,1}
+				var prevSign = votable._userVoteSign || 0;
+				if (prevSign == sign) sign = 0; // undo existing vote if current vote has a sign
+				var delta = sign - prevSign;
+				$http.post('/votes.json', {
+					votable_type: votableType,
+					votable_id: votable.id,
+					sign: sign,
+				})
 				.success(function (data, status, headers, config) {
-					comment.userVote = status == 201 ? 1 : 0;
+					votable._userVoteSign = sign;
+					votable.score += delta;
 				})
 				.error(function (data, status, headers, config) {
-					console.error(data, config);
-				});
-			}
-		};
-		$scope.dnvoteComment = function (comment) {
-			if ($scope.requireLoggedIn()) {
-				$http.post('/comments/'+comment.id+'/upvote.json')
-				.success(function (data, status, headers, config) {
-					comment.userVote = status == 201 ? -1 : 0;
-				})
-				.error(function (data, status, headers, config) {
-					console.error(data, config);
+					console.error(data, status, headers, config);
+					RailsSupport.errorAlert(data);
 				});
 			}
 		};
@@ -160,10 +168,14 @@
 			if ($scope.requireLoggedIn()) {
 				$http.delete('/comments/'+comment.id+'.json')
 				.success(function (data, status, headers, config) {
-
+					var tipsIndex = $scope.tips.indexOf(comment);
+					if (tipsIndex) $scope.tips = $scope.tips.splice(tipsIndex, 1);
+					var commentsIndex = $scope.comments.indexOf(comment);
+					if (commentsIndex) $scope.comments = $scope.comments.splice(commentsIndex, 1);
 				})
 				.error(function (data, status, headers, config) {
-
+					console.error(data, status, headers, config);
+					alert('Failed to delete comment. See javascript console for details');
 				});
 			}
 		};

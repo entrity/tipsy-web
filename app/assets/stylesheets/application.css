@@ -62,6 +62,9 @@ a:focus {
   outline: none;
   text-decoration: none;
 }
+a.nolink {
+  color: black;
+}
 .flash-notice {
 	background: #cfc;
 }
@@ -387,6 +390,9 @@ nav .user .rep-change {
   border-radius: 3px;
   margin-left: 5px;
   font-weight: bold;
+}
+nav .user .rep-change.negative {
+  background: #f00;
 }
 nav .user li .rep-change {
   margin-left: 0;
@@ -916,6 +922,14 @@ aside .btn-primary:hover {
 }
 #fuzzy-finder .ui-select-match a .fa {
   font-size: 13px;
+}
+.fa-thumbs-o-up.highlight,
+.fa-thumbs-o-down.highlight,
+.fa-thumbs-up.highlight,
+.fa-thumbs-down.highlight,
+.fa-caret-up.highlight,
+.fa-caret-down.highlight {
+  color: orange;
 }
 
 /*** DRINK PAGE STYLES ***/

@@ -10,8 +10,8 @@ class Flag < ActiveRecord::Base
     stmt =
     if photo_ids.present? || comment_ids.present?
       conditions = []
-      conditions.push("flaggable_type = 'Photo' AND flaggable_id IN (#{photo_ids.join(',')})") if photo_ids.present?
-      conditions.push("flaggable_type = 'Comment' AND flaggable_id IN (#{comment_ids.join(',')})") if comment_ids.present?
+      conditions.push("(flaggable_type = 'Photo' AND flaggable_id IN (%s))" % photo_ids.join(',')) if photo_ids.present?
+      conditions.push("(flaggable_type = 'Comment' AND flaggable_id IN (%s))" % comment_ids.join(',')) if comment_ids.present?
       "user_id = %d AND (%s)" % [user_id, conditions.join(' OR ')]
     else
       'FALSE'
