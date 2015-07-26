@@ -391,6 +391,9 @@ nav .user .rep-change {
   margin-left: 5px;
   font-weight: bold;
 }
+nav .user .rep-change.negative {
+  background: #f00;
+}
 nav .user li .rep-change {
   margin-left: 0;
   margin-right: 5px;
