@@ -26,23 +26,15 @@ module Flaggable
   # - If overflagged? and no open Review for this flaggable exists:
   #   - create Review
   #   - unpublish
-  # @return boolean for whether Review was created
-  def flag! user, flag_bits
+  # @return Hash with keys 'flag_created', 'review_created', and 'flag_id'
+  def flag! user, flag_bits, description
     conn = self.class.connection.raw_connection
-    res = conn.exec_params("SELECT flag_#{self.class.table_name}($1, $2, $3, $4, $5, $6, $7)",
-      [user.id, id, self.class.name, FLAG_PTS_LIMIT, flag_bits, user.log_points, Time.now]
+    res = conn.exec_params("SELECT * FROM flag_record($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+      [self.class.table_name, user.id, id, self.class.name, FLAG_PTS_LIMIT, flag_bits, user.log_points, description, Time.now]
     )
-    db_status_string = res.getvalue(0,0) # Indicates whether a review was created
-    unless db_status_string =~ /\d+/
-      raise TipsyException.new db_flag_err_string(db_status_string)
-    end
-    db_status = db_status_string.to_i
-    if db_status < DB_INITIAL || db_status > DB_REVIEW_INSERTED
-      raise TipsyException.new db_flag_err_string(db_status_string)
-    end
-    unpublish! if db_status >= DB_REVIEW_INSERTED
-    # Indicates whether a Flag was created
-    return db_status >= DB_FLAG_INSERTED
+    results_hash = res.to_a.first
+    unpublish! if results_hash['review_created']
+    return results_hash
   end
 
   def publish!

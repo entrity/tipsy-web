@@ -123,6 +123,9 @@
 				$scope.photos.forEach(function (photo) {
 					photo.mediumUrl = photo.thumb.replace(/thumb/, 'medium');
 					photo.originalUrl = photo.thumb.replace(/thumb/, 'original');
+					// set _isUserFlagged
+					$scope.drink.setIsUserFlagged(photo, 'Photo');
+					$scope.drink.setUserVoteSign(photo, 'Photo');
 				});
 				// initilize activeIndex
 				$scope.photos.activeIndex = 0;
@@ -134,6 +137,9 @@
 		}
 		$scope.getActivePhoto = function getActivePhoto () {
 			return $scope.photos[$scope.photos.activeIndex];			
+		}
+		$scope.isPhotoUserFlagged = function () {
+			return $scope.getActivePhoto()._isUserFlagged;
 		}
 		// show prev image
 		$scope.showPrevPhoto = function () {
@@ -150,6 +156,9 @@
 		// flag active photo
 		$scope.flagPhoto = function () {
 			if ($scope.requireLoggedIn() && $scope.getActivePhoto()) new Flagger(this, $scope.getActivePhoto(), 'Photo');
+		}
+		$scope.votePhoto = function (sign) {
+			$scope.vote($scope.getActivePhoto(), 'Photo', sign);
 		}
 	}])
 	.controller('Photo.FlagModalCtrl', ['$scope', 'photo', 'Flagger', function ($scope, photo, Flagger) {

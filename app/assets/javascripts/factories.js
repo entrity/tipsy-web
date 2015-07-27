@@ -73,6 +73,7 @@
 							flaggable_type: this.flaggableType,
 						},
 						function (data, headers) {
+							thisFlagger.flaggable._isUserFlagged = true;
 							thisFlagger.flagModal.close();
 						},
 						function (response) {

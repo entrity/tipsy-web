@@ -54,180 +54,94 @@ COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs
 SET search_path = public, pg_catalog;
 
 --
--- Name: flag_comments(integer, integer, text, integer, integer, integer, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
+-- Name: create_or_update_vote(integer, integer, text, integer); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION flag_comments(i_user_id integer, i_flaggable_id integer, s_flaggable_type text, i_flag_limit integer, i_flag_bits integer, i_flag_pts integer, dt_timestamp timestamp without time zone) RETURNS integer
+CREATE FUNCTION create_or_update_vote(i_user_id integer, i_votable_id integer, s_votable_type text, i_sign integer) RETURNS TABLE(vote_id integer, prev_sign integer)
     LANGUAGE plpgsql
     AS $$
-        DECLARE duplicate_flag_ct INT;
-        DECLARE open_review_ct INT;
-        DECLARE aggregate_flagger_ids INT[];
-        DECLARE return_value INT := 0;
-        BEGIN
-          -- check for existing flag with the same user and flaggable
-          LOCK ONLY flags IN SHARE MODE;
-          SELECT COUNT(*) FROM flags
-            WHERE user_id = i_user_id
-            AND flaggable_id = i_flaggable_id
-            AND flaggable_type = s_flaggable_type
-            LIMIT 1
-            INTO duplicate_flag_ct;
-          IF (SELECT duplicate_flag_ct) = 0 THEN
-            -- create flag
-            INSERT INTO flags (user_id, flaggable_id, flaggable_type, flag_bits, flag_pts, created_at) VALUES (i_user_id, i_flaggable_id, s_flaggable_type, i_flag_bits, i_flag_pts, dt_timestamp);
-            -- increment flaggable's flag_pts
-            UPDATE comments SET flag_pts = flag_pts + i_flag_pts WHERE id = i_flaggable_id;
-            -- set return value
-            return_value := 1;
-            -- check whether flaggable exceeds FLAG_POINTS_LIMIT
-            IF ((SELECT flag_pts FROM comments WHERE id = i_flaggable_id) >= i_flag_limit) THEN
-              -- check whether an open review exists for the flaggable
-              LOCK ONLY reviews IN SHARE MODE;
-              SELECT COUNT(*) FROM reviews
-                WHERE open = TRUE
-                AND reviewable_id = i_flaggable_id
-                AND reviewable_type = s_flaggable_type
-                LIMIT 1
-                INTO open_review_ct;
-              IF (SELECT open_review_ct) = 0 THEN
-                -- calc aggregate flagger_ids
-                SELECT ARRAY(SELECT user_id FROM flags WHERE flaggable_id = i_flaggable_id AND flaggable_type = s_flaggable_type) INTO aggregate_flagger_ids;
-                -- create review
-                INSERT INTO reviews (reviewable_id, reviewable_type, open, contributor_id, flagger_ids, created_at)
-                  VALUES (
-                      i_flaggable_id,
-                      s_flaggable_type,
-                      TRUE,
-                      (SELECT user_id FROM comments WHERE id = i_flaggable_id LIMIT 1),
-                      aggregate_flagger_ids,
-                      dt_timestamp
-                  );
-                return_value := 2;
-              END IF;
-            END IF;
-          END IF;
-          RETURN return_value;
-        END;
+      BEGIN
+        LOCK ONLY votes IN SHARE MODE;
+        SELECT id, sign FROM votes
+          WHERE user_id = i_user_id AND votable_id = i_votable_id AND votable_type = s_votable_type
+          LIMIT 1
+          INTO vote_id, prev_sign;
+        IF (vote_id IS NOT NULL) THEN
+          UPDATE votes SET sign = i_sign, updated_at = current_timestamp
+            WHERE user_id = i_user_id AND votable_id = i_votable_id AND votable_type = s_votable_type;
+        ELSE
+          prev_sign := 0;
+          INSERT INTO votes (user_id, votable_id, votable_type, sign, created_at, updated_at)
+            VALUES (i_user_id, i_votable_id, s_votable_type, i_sign, current_timestamp, current_timestamp)
+            RETURNING id INTO vote_id;
+        END IF;
+        RETURN NEXT;
+      END;
       $$;
 
 
 --
--- Name: flag_photos(integer, integer, text, integer, integer, integer, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
+-- Name: flag_record(text, integer, integer, text, integer, integer, integer, text, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION flag_photos(i_user_id integer, i_flaggable_id integer, s_flaggable_type text, i_flag_limit integer, i_flag_bits integer, i_flag_pts integer, dt_timestamp timestamp without time zone) RETURNS integer
+CREATE FUNCTION flag_record(s_table_name text, i_user_id integer, i_flaggable_id integer, s_flaggable_type text, i_flag_limit integer, i_flag_bits integer, i_flag_pts integer, s_description text, dt_timestamp timestamp without time zone) RETURNS TABLE(flag_created boolean, review_created boolean, flag_id integer)
     LANGUAGE plpgsql
     AS $$
-        DECLARE duplicate_flag_ct INT;
-        DECLARE open_review_ct INT;
-        DECLARE aggregate_flagger_ids INT[];
-        DECLARE return_value INT := 0;
-        BEGIN
-          -- check for existing flag with the same user and flaggable
-          LOCK ONLY flags IN SHARE MODE;
-          SELECT COUNT(*) FROM flags
-            WHERE user_id = i_user_id
-            AND flaggable_id = i_flaggable_id
-            AND flaggable_type = s_flaggable_type
-            LIMIT 1
-            INTO duplicate_flag_ct;
-          IF (SELECT duplicate_flag_ct) = 0 THEN
-            -- create flag
-            INSERT INTO flags (user_id, flaggable_id, flaggable_type, flag_bits, flag_pts, created_at) VALUES (i_user_id, i_flaggable_id, s_flaggable_type, i_flag_bits, i_flag_pts, dt_timestamp);
-            -- increment flaggable's flag_pts
-            UPDATE photos SET flag_pts = flag_pts + i_flag_pts WHERE id = i_flaggable_id;
-            -- set return value
-            return_value := 1;
-            -- check whether flaggable exceeds FLAG_POINTS_LIMIT
-            IF ((SELECT flag_pts FROM photos WHERE id = i_flaggable_id) >= i_flag_limit) THEN
-              -- check whether an open review exists for the flaggable
-              LOCK ONLY reviews IN SHARE MODE;
-              SELECT COUNT(*) FROM reviews
-                WHERE open = TRUE
-                AND reviewable_id = i_flaggable_id
-                AND reviewable_type = s_flaggable_type
-                LIMIT 1
-                INTO open_review_ct;
-              IF (SELECT open_review_ct) = 0 THEN
-                -- calc aggregate flagger_ids
-                SELECT ARRAY(SELECT user_id FROM flags WHERE flaggable_id = i_flaggable_id AND flaggable_type = s_flaggable_type) INTO aggregate_flagger_ids;
-                -- create review
-                INSERT INTO reviews (reviewable_id, reviewable_type, open, contributor_id, flagger_ids, created_at)
-                  VALUES (
-                      i_flaggable_id,
-                      s_flaggable_type,
-                      TRUE,
-                      (SELECT user_id FROM photos WHERE id = i_flaggable_id LIMIT 1),
-                      aggregate_flagger_ids,
-                      dt_timestamp
-                  );
-                return_value := 2;
-              END IF;
-            END IF;
-          END IF;
-          RETURN return_value;
-        END;
-      $$;
-
-
---
--- Name: flag_revisions(integer, integer, text, integer, integer, integer, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION flag_revisions(i_user_id integer, i_flaggable_id integer, s_flaggable_type text, i_flag_limit integer, i_flag_bits integer, i_flag_pts integer, dt_timestamp timestamp without time zone) RETURNS integer
-    LANGUAGE plpgsql
-    AS $$
-        DECLARE duplicate_flag_ct INT;
-        DECLARE open_review_ct INT;
-        DECLARE aggregate_flagger_ids INT[];
-        DECLARE return_value INT := 0;
-        BEGIN
-          -- check for existing flag with the same user and flaggable
-          LOCK ONLY flags IN SHARE MODE;
-          SELECT COUNT(*) FROM flags
-            WHERE user_id = i_user_id
-            AND flaggable_id = i_flaggable_id
-            AND flaggable_type = s_flaggable_type
-            LIMIT 1
-            INTO duplicate_flag_ct;
-          IF (SELECT duplicate_flag_ct) = 0 THEN
-            -- create flag
-            INSERT INTO flags (user_id, flaggable_id, flaggable_type, flag_bits, flag_pts, created_at) VALUES (i_user_id, i_flaggable_id, s_flaggable_type, i_flag_bits, i_flag_pts, dt_timestamp);
-            -- increment flaggable's flag_pts
-            UPDATE revisions SET flag_pts = flag_pts + i_flag_pts WHERE id = i_flaggable_id;
-            -- set return value
-            return_value := 1;
-            -- check whether flaggable exceeds FLAG_POINTS_LIMIT
-            IF ((SELECT flag_pts FROM revisions WHERE id = i_flaggable_id) >= i_flag_limit) THEN
-              -- check whether an open review exists for the flaggable
-              LOCK ONLY reviews IN SHARE MODE;
-              SELECT COUNT(*) FROM reviews
-                WHERE open = TRUE
-                AND reviewable_id = i_flaggable_id
-                AND reviewable_type = s_flaggable_type
-                LIMIT 1
-                INTO open_review_ct;
-              IF (SELECT open_review_ct) = 0 THEN
-                -- calc aggregate flagger_ids
-                SELECT ARRAY(SELECT user_id FROM flags WHERE flaggable_id = i_flaggable_id AND flaggable_type = s_flaggable_type) INTO aggregate_flagger_ids;
-                -- create review
-                INSERT INTO reviews (reviewable_id, reviewable_type, open, contributor_id, flagger_ids, created_at)
-                  VALUES (
-                      i_flaggable_id,
-                      s_flaggable_type,
-                      TRUE,
-                      (SELECT user_id FROM revisions WHERE id = i_flaggable_id LIMIT 1),
-                      aggregate_flagger_ids,
-                      dt_timestamp
-                  );
-                return_value := 2;
-              END IF;
-            END IF;
-          END IF;
-          RETURN return_value;
-        END;
-      $$;
+  DECLARE duplicate_flag_ct INT;
+  DECLARE open_review_ct INT;
+  DECLARE aggregate_flagger_ids INT[];
+  DECLARE contributor_id INT;
+  DECLARE flag_pts_after_update INT;
+  BEGIN
+    -- check for existing flag with the same user and flaggable
+    LOCK ONLY flags IN SHARE MODE;
+    SELECT COUNT(*) FROM flags
+      WHERE user_id = i_user_id
+      AND flaggable_id = i_flaggable_id
+      AND flaggable_type = s_flaggable_type
+      LIMIT 1
+      INTO duplicate_flag_ct;
+    IF (SELECT duplicate_flag_ct) = 0 THEN
+      -- create flag
+      INSERT INTO flags (user_id, flaggable_id, flaggable_type, flag_bits, flag_pts, description, created_at) VALUES (i_user_id, i_flaggable_id, s_flaggable_type, i_flag_bits, i_flag_pts, s_description, dt_timestamp) RETURNING id INTO flag_id;
+      -- increment flaggable's flag_pts
+      EXECUTE FORMAT('UPDATE %s SET flag_pts = flag_pts + %s WHERE id = %s RETURNING flag_pts', s_table_name, i_flag_pts, i_flaggable_id) INTO flag_pts_after_update;
+      -- set return value
+      flag_created := TRUE;
+      -- check whether flaggable exceeds FLAG_POINTS_LIMIT
+      IF (flag_pts_after_update >= i_flag_limit) THEN
+        -- check whether an open review exists for the flaggable
+        LOCK ONLY reviews IN SHARE MODE;
+        SELECT COUNT(*) FROM reviews
+          WHERE open = TRUE
+          AND reviewable_id = i_flaggable_id
+          AND reviewable_type = s_flaggable_type
+          LIMIT 1
+          INTO open_review_ct;
+        IF (SELECT open_review_ct) = 0 THEN
+          -- calc aggregate flagger_ids
+          SELECT ARRAY(SELECT user_id FROM flags WHERE flaggable_id = i_flaggable_id AND flaggable_type = s_flaggable_type) INTO aggregate_flagger_ids;
+          -- get id of contributor whose contribution was flagged because this user is also not allowed to vote on the review to be created
+          EXECUTE FORMAT('SELECT user_id FROM %s WHERE id = %s LIMIT 1', s_table_name, i_flaggable_id) INTO contributor_id;
+          -- create review
+          INSERT INTO reviews (reviewable_id, reviewable_type, open, contributor_id, flagger_ids, created_at)
+            VALUES (
+                i_flaggable_id,
+                s_flaggable_type,
+                TRUE,
+                contributor_id,
+                aggregate_flagger_ids,
+                dt_timestamp
+            );
+          -- set return value
+          review_created := TRUE;
+        END IF;
+      END IF;
+    END IF;
+    -- return
+    RETURN NEXT;
+  END;
+$$;
 
 
 SET default_tablespace = '';
@@ -495,7 +409,11 @@ CREATE TABLE point_distributions (
     category_id integer,
     pointable_id integer,
     pointable_type character varying,
-    created_at timestamp without time zone
+    created_at timestamp without time zone,
+    viewed boolean DEFAULT false,
+    title character varying,
+    description character varying,
+    url character varying
 );
 
 
@@ -703,6 +621,40 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
+-- Name: votes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE votes (
+    id integer NOT NULL,
+    user_id integer,
+    votable_id integer,
+    votable_type character varying,
+    sign smallint DEFAULT 0,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: votes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE votes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: votes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE votes_id_seq OWNED BY votes.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -777,6 +729,13 @@ ALTER TABLE ONLY revisions ALTER COLUMN id SET DEFAULT nextval('revisions_id_seq
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY votes ALTER COLUMN id SET DEFAULT nextval('votes_id_seq'::regclass);
 
 
 --
@@ -876,6 +835,14 @@ ALTER TABLE ONLY users
 
 
 --
+-- Name: votes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY votes
+    ADD CONSTRAINT votes_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: index_comments_on_drink_id_and_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -911,6 +878,13 @@ CREATE INDEX index_drinks_on_name ON drinks USING btree (name);
 
 
 --
+-- Name: index_flags; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_flags ON flags USING btree (user_id, flaggable_id, flaggable_type);
+
+
+--
 -- Name: index_ingredients_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -922,6 +896,13 @@ CREATE INDEX index_ingredients_on_name ON ingredients USING btree (name);
 --
 
 CREATE INDEX index_photos_on_drink_id_and_status ON photos USING btree (drink_id, status);
+
+
+--
+-- Name: index_point_distributions; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_point_distributions ON point_distributions USING btree (user_id, pointable_id, pointable_type);
 
 
 --
@@ -957,6 +938,20 @@ CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 --
 
 CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
+
+
+--
+-- Name: index_viewed_point_distributions; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_viewed_point_distributions ON point_distributions USING btree (user_id, viewed, created_at);
+
+
+--
+-- Name: index_votes; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_votes ON votes USING btree (user_id, votable_id, votable_type);
 
 
 --
@@ -1019,4 +1014,14 @@ INSERT INTO schema_migrations (version) VALUES ('20150718171031');
 INSERT INTO schema_migrations (version) VALUES ('20150719231022');
 
 INSERT INTO schema_migrations (version) VALUES ('20150721025601');
+
+INSERT INTO schema_migrations (version) VALUES ('20150722215532');
+
+INSERT INTO schema_migrations (version) VALUES ('20150725005201');
+
+INSERT INTO schema_migrations (version) VALUES ('20150725173001');
+
+INSERT INTO schema_migrations (version) VALUES ('20150725174022');
+
+INSERT INTO schema_migrations (version) VALUES ('20150726180135');
 

@@ -22,11 +22,17 @@ class DrinksController < ApplicationController
   def show
     respond_to do |format|
       format.html {
+        @canonical_url = request.protocol + request.raw_host_with_port + saved_drink.url_path
         @ingredients = saved_drink.ingredients
           .includes(:ingredient)
           .limit(MAX_RESULTS)
-        @photos = @drink.photos.where(status:Flaggable::APPROVED).order(:score)
-        @comments = @drink.comments.order(:score)
+        @photos = saved_drink.photos.where(status:Flaggable::APPROVED).order(:score)
+        @comments = saved_drink.comments.order(:score)
+        if user_signed_in?
+          # Fetch flags created by this user for any photos or comments that pertain to `saved_drink`
+          @user_flags = Flag.for_user_photos_comments(current_user.id, @photos.map(&:id), @comments.map(&:id))
+          @user_votes = Vote.for_user_photos_comments_drink(current_user.id, @photos.map(&:id), @comments.map(&:id), saved_drink.id)
+        end
       }
       format.json {
         respond_with saved_drink

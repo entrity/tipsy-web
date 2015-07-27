@@ -3,7 +3,8 @@ class FlagsController < ApplicationController
 
   def create
     @flag = Flag.new flag_params.merge(user:current_user)
-    if @flag.flaggable && @flag.flaggable.flag!(current_user, 0)
+    results_hash = @flag.flaggable && @flag.flaggable.flag!(current_user, 0, @flag.description)
+    if results_hash && results_hash['flag_created']
       render nothing:true, status:201
     elsif @flag.valid?
       raise "Flag appears to be valid but did not save in flags#create: #{@flag.inspect}"

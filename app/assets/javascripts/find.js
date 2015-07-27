@@ -23,14 +23,14 @@
 		}
 		// callback when a selection is made
 		$scope.finder.selected = function ($item, $select) {
-			delete $select.selected;
-			this.findables = [];
 			if ($item) {
 				switch (parseInt($item.type)) {
 					case window.DRINK:
 						Turbolinks.visit('/drinks/'+$item.id); break;
 					case window.INGREDIENT:
+						this.findables = [];
 						delete $select.search;
+						delete $select.selected;
 						if ($scope.onSplashScreen) Turbolinks.visit('/?ingredient_id='+$item.id);
 						else $scope.finder.addIngredient($item);
 						break;
