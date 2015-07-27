@@ -20,7 +20,7 @@
 <div class="wrapper">
   <ng-include src="'/toolbar.html'"></ng-include>
   <div id="main-cont" class="grid" ng-controller="User.EditCtrl">
-    <div class="content grid-cell account-settings">
+    <div class="content grid-cell account-settings center">
       <div class="grid grid--center profile">
         <div class="grid-cell avatar">
           <img ng-src="{{user.thumbnail}}">
@@ -34,7 +34,7 @@
         <div class="grid-cell active" ng-class="{active:tab===1}"><a href="" ng-click="tab = 1">Profile</a></div>
         <div class="grid-cell" ng-class="{active:tab===2}"><a href="" ng-click="tab = 2">Email/Password</a></div>
         <div class="grid-cell" ng-class="{active:tab===3}"><a href="" ng-click="tab = 3">Notifications</a></div>
-        <div class="grid-cell" ng-class="{active:tab===4}"><a href="" ng-click="tab = 4">Cancel Account</a></div>
+        <div class="grid-cell" ng-class="{active:tab===4}"><a href="" ng-click="tab = 4">Deactivate Account</a></div>
       </div>
       <div class="grid" ng-show="tab === 1">
         <div class="grid-cell main gen">
@@ -160,7 +160,7 @@
           <div class="grid grid--center field">
             <div class="grid-cell"><label>Unhappy?</label></div>
             <div class="grid-cell">
-              <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %>
+              <%= button_to "Deactivate my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %>
             </div>
           </div>
         </div>
