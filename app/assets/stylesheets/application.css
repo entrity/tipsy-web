@@ -26,10 +26,10 @@ body {
 }
 
 #fuzzy-finder .ui-select-match::before {
-	font-family: 'FontAwesome';
-	content: '\f002';
+  font-family: 'FontAwesome';
+  content: '\f002';
   left: 8px;
-	margin-right: 0.5em;
+  margin-right: 0.5em;
   position: absolute;
   top: 8px;
   z-index: 3000;
@@ -39,18 +39,18 @@ body {
   padding-left: 16px;
 }
 #fuzzy-finder ul.ui-select-choices {
-	padding-left: 0;
+  padding-left: 0;
   top: 34px;
 }
 #fuzzy-finder .ui-select-choices-row .ingredient::before {
-	font-family: 'FontAwesome';
-	content: '\f1b1';
-	margin-right: 0.5em;
+  font-family: 'FontAwesome';
+  content: '\f1b1';
+  margin-right: 0.5em;
 }
 #fuzzy-finder .ui-select-choices-row .drink::before {
-	font-family: 'FontAwesome';
-	content: '\f000';
-	margin-right: 0.5em;
+  font-family: 'FontAwesome';
+  content: '\f000';
+  margin-right: 0.5em;
 }
 /* Override Bootstrap to facilitate AngularJS */
 body .dropdown-menu {
@@ -63,13 +63,13 @@ a:focus {
   text-decoration: none;
 }
 .flash-notice {
-	background: #cfc;
+  background: #cfc;
 }
 .flash-alert {
-	background: #eec;
+  background: #eec;
 }
 .flash-error {
-	background: #fcc;
+  background: #fcc;
 }
 label {
   margin-bottom: 0;
@@ -206,7 +206,7 @@ a:hover {
   border: none;
   box-shadow: none;
   font-size: 12px;
-  
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
 }
 #find-results .dropdown-menu:after {
   right: 14px;
@@ -354,7 +354,7 @@ nav .open .rep-cont #rep-alerts:hover {
 }
 nav .rep-cont a:hover,
 nav .trophie-cont a:hover {
-  background-color: #0A6B94;
+  background-color: #267fdd;
   color: #fff;
 }
 nav .trophie-cont a i {
@@ -627,6 +627,7 @@ nav .user li .rep-change {
   background-color: #267fdd;
 }
 .fancy-sidebar.open .sidebar-btn .fa {
+  color: #fff;
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -o-transform: rotate(180deg);
@@ -691,6 +692,9 @@ nav .user li .rep-change {
 aside a {
   color: #fff;
   font-weight: bold;
+}
+aside a:hover {
+  color: #ddd;
 }
 aside li.item .fa {
   color: #000;
