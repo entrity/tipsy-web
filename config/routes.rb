@@ -22,6 +22,8 @@ Rails.application.routes.draw do
       get :revisions
     end
   end
+
+  resources :drinks, path: 'recipe', only: [:show]
   
   resources :flags, only: :create
 

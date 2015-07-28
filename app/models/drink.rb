@@ -30,7 +30,7 @@ class Drink < ActiveRecord::Base
   end
 
   def url_path
-    "/drinks/#{id}-#{name.to_s.downcase.gsub(/\W+/, '-')}"
+    "/recipe/#{id}-#{name.to_s.downcase.gsub(/[\W]+/, '-')}"
   end
   
   def vote_sum
