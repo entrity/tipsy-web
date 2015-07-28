@@ -144,6 +144,27 @@ CREATE FUNCTION flag_record(s_table_name text, i_user_id integer, i_flaggable_id
 $$;
 
 
+--
+-- Name: insert_unique_trophy(integer, integer); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION insert_unique_trophy(i_user_id integer, i_category_id integer) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+      DECLARE i_duplicate_ct INT;
+      BEGIN
+        LOCK ONLY trophies IN SHARE MODE;
+        SELECT COUNT(*) FROM trophies WHERE user_id = i_user_id AND category_id = i_category_id LIMIT 1 INTO i_duplicate_ct;
+        IF (i_duplicate_ct = 0) THEN
+          INSERT INTO trophies (user_id, category_id, created_at) VALUES (i_user_id, i_category_id, current_timestamp);
+          RETURN TRUE;
+        ELSE
+          RETURN FALSE;
+        END IF;
+      END;
+      $$;
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -213,7 +234,8 @@ CREATE TABLE drinks (
     author_id integer,
     calories smallint,
     prep_time text,
-    required_ingredient_ids integer[]
+    required_ingredient_ids integer[],
+    user_id integer
 );
 
 
@@ -260,7 +282,8 @@ CREATE TABLE flags (
     flag_bits smallint DEFAULT 0,
     flag_pts smallint NOT NULL,
     created_at timestamp without time zone,
-    description text
+    description text,
+    tallied integer
 );
 
 
@@ -561,6 +584,37 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: trophies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE trophies (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    category_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: trophies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE trophies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: trophies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE trophies_id_seq OWNED BY trophies.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -597,7 +651,13 @@ CREATE TABLE users (
     nickname character varying,
     bio text,
     twitter character varying,
-    location character varying
+    location character varying,
+    gold_trophy_ct integer DEFAULT 0,
+    silver_trophy_ct integer DEFAULT 0,
+    bronze_trophy_ct integer DEFAULT 0,
+    comment_ct integer DEFAULT 0,
+    revision_ct integer DEFAULT 0,
+    photo_ct integer DEFAULT 0
 );
 
 
@@ -728,6 +788,13 @@ ALTER TABLE ONLY revisions ALTER COLUMN id SET DEFAULT nextval('revisions_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY trophies ALTER COLUMN id SET DEFAULT nextval('trophies_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
@@ -824,6 +891,14 @@ ALTER TABLE ONLY reviews
 
 ALTER TABLE ONLY revisions
     ADD CONSTRAINT revisions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: trophies_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY trophies
+    ADD CONSTRAINT trophies_pkey PRIMARY KEY (id);
 
 
 --
@@ -1024,4 +1099,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150725173001');
 INSERT INTO schema_migrations (version) VALUES ('20150725174022');
 
 INSERT INTO schema_migrations (version) VALUES ('20150726180135');
+
+INSERT INTO schema_migrations (version) VALUES ('20150728010414');
+
+INSERT INTO schema_migrations (version) VALUES ('20150729003919');
 

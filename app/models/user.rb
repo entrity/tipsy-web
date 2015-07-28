@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   has_many :photos, inverse_of: :user # contributions. photos of drinks
   has_many :review_votes, inverse_of: :user
   has_many :revisions, as: :user
+  has_many :trophies, inverse_of: :user
 
   has_attached_file :photo, :styles => { :thumb => "128x128>", :tiny => "32x32>" }, :default_url => '/images/anonymous-:style.jpg'
 
@@ -17,6 +18,8 @@ class User < ActiveRecord::Base
   validates_with AttachmentContentTypeValidator, :attributes => :photo, :content_type => ["image/jpeg", "image/png"]
   validates_with AttachmentSizeValidator, :attributes => :photo, :less_than => 5.megabytes
   validates_attachment_file_name :photo, :matches => [/png\Z/, /jpe?g\Z/]
+
+  after_update :award_trophies_on_update
 
   # @return order of magnitude of `self.points`
   def log_points
@@ -67,6 +70,74 @@ class User < ActiveRecord::Base
     user
   end
 
+  def increment_comment_ct!
+    award_trophy case pg_increment!(:comment_ct)
+    when 1;   TrophyCategory::COMMENTS_1
+    when 20;  TrophyCategory::COMMENTS_20
+    when 75;  TrophyCategory::COMMENTS_75
+    when 200; TrophyCategory::COMMENTS_200
+    end
+  end
+
+  def increment_helpful_flag_ct!
+    award_trophy case flag.user.pg_increment!(:helpful_flags)
+    when 5;  TrophyCategory::HELPFUL_FLAGS_5
+    when 15; TrophyCategory::HELPFUL_FLAGS_15
+    when 50; TrophyCategory::HELPFUL_FLAGS_50
+    end
+  end
+
+  # Increment count, award trophy
+  def increment_majority_votes!
+    award_trophy case pg_increment!(:majority_review_votes)
+    when 1;   TrophyCategory::WINNING_VOTES_1
+    when 10;  TrophyCategory::WINNING_VOTES_10
+    when 50;  TrophyCategory::WINNING_VOTES_50
+    when 250; TrophyCategory::WINNING_VOTES_250
+    end
+  end
+
+  # Increment count
+  def increment_minority_votes!
+    pg_increment!(:minority_review_votes)
+  end
+  
+  def increment_photo_ct!
+    award_trophy case pg_increment!(:photo_ct)
+    when 1;   TrophyCategory::PHOTOS_1
+    when 20;  TrophyCategory::PHOTOS_20
+    when 75;  TrophyCategory::PHOTOS_75
+    when 200; TrophyCategory::PHOTOS_200
+    end
+  end
+  
+  def increment_revision_ct!
+    award_trophy case pg_increment!(:revision_ct)
+      when 1;  TrophyCategory::REVISIONS_1
+      when 10; TrophyCategory::REVISIONS_10
+      when 25; TrophyCategory::REVISIONS_25
+      when 75; TrophyCategory::REVISIONS_75
+    end
+  end
+
+  # @param colour - integer
+  def increment_trophy_ct! colour
+    pg_increment! case colour
+    when TrophyCategory::GOLD
+      :gold_trophy_ct
+    when TrophyCategory::SILVER
+      :silver_trophy_ct
+    when TrophyCategory::BRONZE
+      :bronze_trophy_ct
+    end
+  end
+
+  def increment_unhelpful_flag_ct!
+    award_trophy case pg_increment!(:unhelpful_flags)
+    when 5; TrophyCategory::BAD_FLAGS_5
+    end
+  end
+
   def self.new_with_session(params, session)
     super.tap do |user|
       if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"]
@@ -93,5 +164,20 @@ class User < ActiveRecord::Base
     options[:methods] ||= [:photo_url]
     super(options)
   end
+
+  private
+
+    def award_trophy trophy_category
+      Trophy.create(user:self, category_id:trophy_category.id) if trophy_category
+    end
+
+    def award_trophies_on_update
+      if changes['no_profanity'] && changes['no_profanity'][1] && 
+        Trophy.create_unique(self, TrophyCategory::NO_PROFANITY)
+      end
+      if changes['no_alcohol'] && changes['no_alcohol'][1]
+        Trophy.create_unique(self, TrophyCategory::NO_ALCOHOL)
+      end
+    end
 
 end

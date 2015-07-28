@@ -1,0 +1,10 @@
+<% @trophies.each do |trophy| %>
+	<% if trophy.category %>
+		<div>
+			<%= trophy_icon(trophy) %>
+			<%= content_tag :span, trophy.category.name %>
+			<%= content_tag :span, trophy.created_at.to_s(:tipsy_date) %>
+			<%= content_tag :span, trophy.category.description %>
+		</div>
+	<% end -%>
+<% end -%>

@@ -1,0 +1,156 @@
+# COMMENTS
+-
+  const: COMMENTS_1
+  colour: BRONZE
+  name: Toe in the water
+  description: Posted your first comment
+-
+  const: COMMENTS_20
+  colour: BRONZE
+  name: Speaking out
+  description: Posted 20 comments
+-
+  const: COMMENTS_75
+  colour: SILVER
+  name: Commentator
+  description: Posted 75 comments
+-
+  const: COMMENTS_200
+  colour: GOLD
+  name: Community builder
+  description: Posted 200 comments
+-
+  const: COMMENT_NEGATIVE_4_POINTS
+  colour: BRONZE
+  name: Unpopular
+  description: Posted a comment that won -4 points
+-
+  const: COMMENT_3_POINTS
+  colour: BRONZE
+  name: Fair comment
+  description: Posted a comment that won 3 points
+-
+  const: COMMENT_8_POINTS
+  colour: SILVER
+  name: Popular comment
+  description: Posted a comment that won 8 points
+-
+  const: COMMENT_20_POINTS
+  colour: GOLD
+  name: Super comment
+  description: Posted a comment that won 20 points
+# FLAG
+-
+  const: BAD_FLAGS_5
+  colour: BRONZE
+  name: Checkered flag
+  description: Raised 5 unhelpful flags
+-
+  const: HELPFUL_FLAGS_5
+  colour: BRONZE
+  name: Semaphore
+  description: Raised 5 helpful flags
+-
+  const: HELPFUL_FLAGS_15
+  colour: SILVER
+  name: Flag grenade
+  description: Raised 15 helpful flags
+-
+  const: HELPFUL_FLAGS_50
+  colour: GOLD
+  name: Pole dancer
+  description: Raised 50 helpful flags
+# PHOTOS
+-
+  const: PHOTOS_1
+  colour: BRONZE
+  name: Photo
+  description: Posted your first comment
+-
+  const: PHOTOS_20
+  colour: BRONZE
+  name: Dark room
+  description: Posted 20 comments
+-
+  const: PHOTOS_75
+  colour: SILVER
+  name: Photo album
+  description: Posted 75 comments
+-
+  const: PHOTOS_200
+  colour: GOLD
+  name: Snapshot
+  description: Posted 200 comments
+-
+  const: PHOTO_NEGATIVE_2_POINTS
+  colour: BRONZE
+  name: Bokeh
+  description: Posted a photo that won -2 points
+-
+  const: PHOTO_5_POINTS
+  colour: BRONZE
+  name: Decent exposure
+  description: Posted a photo that won 5 points
+-
+  const: PHOTO_13_POINTS
+  colour: SILVER
+  name: Shutterbug
+  description: Posted a photo that won 13 points
+-
+  const: PHOTO_30_POINTS
+  colour: GOLD
+  name: Peter Parker
+  description: Posted a photo that won 30 points
+# REVISIONS
+-
+  const: REVISIONS_1
+  colour: BRONZE
+  name: Pencil pusher
+  description: Your first revision approved
+-
+  const: REVISIONS_10
+  colour: BRONZE
+  name: Editor
+  description: Published 10 revisions
+-
+  const: REVISIONS_25
+  colour: SILVER
+  name: Content creator
+  description: Published 25 revisions
+-
+  const: REVISIONS_75
+  colour: GOLD
+  name: True contributor
+  description: Published 75 revisions
+# ONE-OFFS (MISC)
+-
+  const: NO_ALCOHOL
+  colour: BRONZE
+  name: Tee-totaller
+  description: Set your 'no alcohol' option
+-
+  const: NO_PROFANITY
+  colour: SILVER
+  name: Silver tongue
+  description: Set your 'no profanity' option
+# WINNING VOTES
+-
+  const: WINNING_VOTES_1
+  colour: BRONZE
+  name: Cast your ballot
+  description: Cast your first vote in an editorial review
+-
+  const: WINNING_VOTES_10
+  colour: BRONZE
+  name: Civic duty
+  description: Cast 10 responsible (winning) votes
+-
+  const: WINNING_VOTES_50
+  colour: SILVER
+  name: (Ballot) Boxing Champ
+  description: Cast 50 responsible (winning) votes
+-
+  const: WINNING_VOTES_250
+  colour: GOLD
+  name: Citizenship
+  description: Cast 250 responsible (winning) votes

@@ -17,6 +17,11 @@ class Photo < ActiveRecord::Base
   def medium_url
     file.url(:medium)
   end
+
+  def publish!
+    super
+    user.increment_photo_ct!
+  end
   
   # @override
   def serializable_hash(options={})

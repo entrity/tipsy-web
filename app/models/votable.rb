@@ -4,7 +4,37 @@ module Votable
     unless base.attribute_method?(:score)
       raise "No score column on Votable class #{base.name}"
     end
+    unless base.attribute_method?(:user_id)
+      raise "No user_id column on Votable class #{base.name}"
+    end
     base.has_many :votes, as: :votable, dependent: :destroy, inverse_of: :votable
+  end
+
+  def create_trophy_if_warranted
+    case self
+    when Comment
+      case score
+      when -4
+        Trophy.create(user:user, category_id:TropyCategory::COMMENT_NEGATIVE_4_POINTS.id)
+      when 3
+        Trophy.create(user:user, category_id:TropyCategory::COMMENT_3_POINTS.id)
+      when 8
+        Trophy.create(user:user, category_id:TropyCategory::COMMENT_8_POINTS.id)
+      when 20
+        Trophy.create(user:user, category_id:TropyCategory::COMMENT_20_POINTS.id)
+      end
+    when Photo
+      case score
+      when -2
+        Trophy.create(user:user, category_id:TropyCategory::COMMENT_NEGATIVE_2_POINTS.id)
+      when 5
+        Trophy.create(user:user, category_id:TropyCategory::COMMENT_5_POINTS.id)
+      when 13
+        Trophy.create(user:user, category_id:TropyCategory::COMMENT_13_POINTS.id)
+      when 30
+        Trophy.create(user:user, category_id:TropyCategory::COMMENT_30_POINTS.id)
+      end
+    end
   end
 
   def increment_score!(delta)
