@@ -29,6 +29,10 @@ class Drink < ActiveRecord::Base
     revision.try(:flag!)
   end
 
+  def top_photo
+    @top_photo ||= photos.order(:score).last
+  end
+
   def url_path
     "/recipe/#{id}-#{name.to_s.downcase.gsub(/[\W]+/, '-')}"
   end

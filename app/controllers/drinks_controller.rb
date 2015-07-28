@@ -22,8 +22,9 @@ class DrinksController < ApplicationController
   def show
     respond_to do |format|
       format.html {
-        @canonical_url = request.protocol + request.raw_host_with_port + saved_drink.url_path
-        @ingredients = saved_drink.ingredients
+        @canonical_url = 'http://tipsyology.com' + saved_drink.url_path
+        @meta_photo    = saved_drink.top_photo.try(:url)
+        @ingredients   = saved_drink.ingredients
           .includes(:ingredient)
           .limit(MAX_RESULTS)
         @photos = saved_drink.photos.where(status:Flaggable::APPROVED).order(:score)
