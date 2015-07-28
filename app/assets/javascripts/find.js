@@ -1,6 +1,6 @@
 (function () {
 	angular.module('tipsy.find', [])
-	.controller('FindCtrl', ['$rootScope', '$scope', '$resource', '$location', function ($rootScope, $scope, $resource, $location) {
+	.controller('FindCtrl', ['$rootScope', '$scope', '$resource', '$location', 'Drink', function ($rootScope, $scope, $resource, $location, Drink) {
 		$rootScope.finder = {findables:[]};
 		$scope.finder.ingredients = [];
 		$scope.finder.options = new Object;
@@ -26,7 +26,8 @@
 			if ($item) {
 				switch (parseInt($item.type)) {
 					case window.DRINK:
-						Turbolinks.visit('/drinks/'+$item.id); break;
+						var url = new Drink($item).getUrl();
+						Turbolinks.visit(url); break;
 					case window.INGREDIENT:
 						this.findables = [];
 						delete $select.search;
@@ -51,9 +52,6 @@
 		$scope.finder.loadNextPage = function () {
 			var pageNumber = (this.drinks.page || 0) + 1;
 			this.fetchDrinksForIngredients(pageNumber, true);
-		}
-		$scope.finder.navigateToDrink = function (drink) {
-			window.location.href = '/drinks/'+drink.id;
 		}
 		// Define array or (append if array already exists) $scope.finder.drinks
 		$scope.finder.fetchDrinksForIngredients = function (pageNumber, append) {

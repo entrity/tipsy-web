@@ -30,6 +30,13 @@
 				},
 				configurable: false,
 			},
+			getUrl: {
+				value: function () {
+					var nameSlug = this.name ? '-' + this.name.toLowerCase().replace(/[^\w]+/g, '-') : '';
+					return '/recipe/'+this.id+nameSlug;
+				},
+				configurable: false,
+			},
 			getUserFlagsMap: {
 				value: function getUserFlagsMap () {
 					return this.getMap('userFlagsMap', this.userFlags, 'flaggable_type', 'flaggable_id');
@@ -201,7 +208,7 @@
 			});
 		}
 		$scope.visitDrink = function () {
-			Turbolinks.visit('/drinks/'+id+'.html');
+			Turbolinks.visit($scope.drink.getUrl());
 		}
 		// Start description text editor
 		new Markdown.Editor(Markdown.getSanitizingConverter()).run();
