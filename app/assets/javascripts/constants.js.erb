@@ -1,0 +1,30 @@
+Object.defineProperties(window, {
+	Tipsy: {
+		value: new Object,
+		configurable: false,
+	},
+	DRINK: {
+		value: 0,
+		writable: false,
+		configurable: false,
+	},
+	FAILURE: {
+		value: -1,
+	},
+	INGREDIENT: {
+		value: 1,
+		writable: false,
+		configurable: false,
+	},
+	POINTS_FOR_REVISION: {
+		value: <%= PointDistributionCategory::REVISION_APPROVED_50.points %>,
+		configurable: false,
+	},
+	POINTS_FOR_WINNING_VOTE: {
+		value: <%= PointDistributionCategory::WINNING_VOTE.points %>,
+		configurable: false,
+	},
+	SUCCESS: {
+		value: 1.
+	},
+});

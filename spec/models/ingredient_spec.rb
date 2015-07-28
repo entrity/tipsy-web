@@ -1,4 +1,5 @@
-require 'shared_examples/fuzzy_findable.rb'
+require 'rails_helper.rb'
+require 'shared_examples/fuzzy_findable_examples.rb'
 
 describe Ingredient do
 

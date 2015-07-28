@@ -1,7 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'devise'
+gem 'devise', '~> 3.5.1'
+gem 'diff_match_patch_native', '~> 1.0.2'
 gem 'omniauth-facebook'
+gem 'paperclip', '~> 4.3'
 gem 'responders', '~> 2.0'
 gem 'will_paginate', '~> 3.0.6'
 
@@ -43,6 +45,8 @@ group :development, :test do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'factory_girl_rails'
+  gem 'pry'
+  gem 'pry-doc'
 end
 
 group :development do

@@ -1,22 +1,60 @@
 Rails.application.routes.draw do
 
-  devise_for :users, sign_out_via: [:get, :post, :delete], controllers: { :omniauth_callbacks => "users/omniauth_callbacks" }
-  
+  devise_for :users, sign_out_via: [:get, :post, :delete], controllers: {
+    :registrations => "users/registrations",
+    :omniauth_callbacks => "users/omniauth_callbacks"
+  }
+  as :user do
+    get 'users', :to => 'users/registrations#edit', :as => :user_root # Rails 3
+  end
+
   root 'home#home'
 
   get 'sitemap.xml' => 'home#sitemap', defaults:{format: :xml}
 
   get 'fuzzy_find.json' => 'home#fuzzy_find', defaults:{format: :json}
 
+  resources :comments, only: [:create, :update]
+
   resources :drinks do
-    collection do
+    member do
       get :ingredients
+      get :revisions
     end
   end
-  
-  resources :ingredients
 
-  resources :users, only: [:show]
+  resources :drinks, path: 'recipe', only: [:show]
+  
+  resources :flags, only: :create
+
+  resources :ingredients do
+    collection do
+      get :names
+    end
+  end
+
+  resources :photos, only: [:index, :create]
+  
+  resources :reviews do
+    collection do
+      get :count
+      get :next
+    end
+    member do
+      post :vote
+    end
+  end
+
+  resources :revisions, only: [:create, :show]
+
+  resources :users, only: [:show] do
+    collection do
+      get :unviewed_point_distributions
+      put :viewed_point_distributions
+    end
+  end
+
+  resources :votes, only: [:create]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

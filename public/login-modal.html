@@ -1,0 +1,36 @@
+<div class="grid grid--center signin modal-content">
+  <div class="grid-cell">
+    <div>{{message}}</div>
+
+    <a class="btn facebook" href="/users/auth/facebook">Sign in with Facebook</a>
+
+    <img class="hr" src="/images/hr-or.png">
+
+    <form class="new_user ng-pristine ng-valid" id="new_user" action="/users/sign_in" accept-charset="UTF-8" method="post">
+      <div class="field input-group">
+        <div class="input-group-addon"><i class="fa fa-user"></i></div>
+        <input autofocus="autofocus" class="form-control" placeholder="Email" type="email" value="" name="user[email]" id="user_email" style="background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=);" autocomplete="off">
+      </div>
+
+      <div class="field input-group">
+        <div class="input-group-addon"><i class="fa fa-lock"></i></div>
+        <input autocomplete="off" class="form-control" placeholder="Password" type="password" name="user[password]" id="user_password" style="background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=);">
+      </div>
+
+      <div class="field input-group">
+        <input name="user[remember_me]" type="hidden" value="0"><input type="checkbox" value="1" name="user[remember_me]" id="user_remember_me">
+        <label for="user_remember_me">Remember me</label>
+      </div>
+
+      <div class="actions">
+        <input type="submit" name="commit" value="Log in" class="btn btn-primary">
+      </div>
+    </form>
+    <div class="links">
+      <a href="/users/sign_up">No account? Sign up</a><br>
+      <a href="/users/password/new">Forgot your password?</a><br>
+      <a href="/users/confirmation/new">Didn't receive confirmation email?</a><br>
+    </div>
+
+  </div>
+</div>

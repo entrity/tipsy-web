@@ -1,0 +1,35 @@
+<div ng-controller="Drink.EditCtrl">
+	<div ng-hide="revision.id">
+		<p><a class="btn btn-primary" ng-click="visitDrink()">Back to {{drink.name}}</a></p>
+		<h3>Name</h3>
+		<input type=text ng-model="revision.name">
+		<h3>Description</h3>
+		<div id="wmd-button-bar"></div>
+		<textarea id="wmd-input" ng-model="revision.description"></textarea>
+		<div id="wmd-preview"></div>
+		<h3>Prep Time</h3>
+		<input type=text ng-model="revision.prep_time">
+		<h3>Calories</h3>
+		<input type=number ng-model="revision.calories">
+		<h3>Recipe Directions</h3>
+		<div id="wmd-button-bar-instructions"></div>
+		<textarea id="wmd-input-instructions" ng-model="revision.instructions"></textarea>
+		<div id="wmd-preview-instructions"></div>
+		<h3>Ingredients</h3>
+		<div ng-repeat="ingredient in revision.ingredients">
+			<ingredient-finder data-ingredient="ingredient"></ingredient-finder>
+			<input type=text ng-model="ingredient.qty">
+			<label><input type=checkbox ng-model="ingredient.optional"> optional</label>
+			<a class="btn btn-warning" ng-click="removeIngredient($index)"><i class="fa fa-times"></i></a>
+		</div>
+		<a class="btn btn-info" ng-click="addIngredient()">Add Ingredient</a>
+		<label><input type=checkbox ng-model="revision.non_alcoholic">Non-alcoholic</label>
+		<label><input type=checkbox ng-model="revision.profane">Name contains religious reference, profanity, or crude language</label>
+		<br>
+		<a class="btn btn-primary" ng-click="save()">Save Revision</a>
+	</div>
+	<div ng-cloak ng-show="revision.id">
+		<p>Thank you. Your changes will be reviewed. If approved, they shall be published, and you shall be awarded {{getConstant('POINTS_FOR_REVISION')}} points in tips.</p>
+		<p><a class="btn btn-primary" ng-click="visitDrink()">Back to {{drink.name}}</a></p>
+	</div>
+</div>

@@ -1,0 +1,8 @@
+<div id="fuzzy-finder" ng-controller="FindCtrl">
+	<ui-select theme="bootstrap" ng-model="finder.records" on-select="finder.selected($item, $select)" reset-search-input="false" search-enabled="true" close-on-select="false" autofocus="true">
+		<ui-select-match data-placeholder="Search drinks and ingredients" allow-clear="true"></ui-select-match>
+		<ui-select-choices repeat="item in finder.findables" refresh-delay="100" refresh="finder.fetchFindables($select)">
+			<div class="{{item | tipsyFindableClass}}" ng-bind-html="item.name | highlight: $select.search"></div>
+		</ui-select-choices>
+	</ui-select>
+</div>

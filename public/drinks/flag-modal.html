@@ -1,0 +1,33 @@
+<div ng-controller="Drink.FlagModalCtrl" id="drink-flag-modal">
+	<div ng-if="revisions.length">
+		<p>
+			<span class="label label-info">Step One</span>
+			<span>Please indicate which revision introduced the problematic content (highlighted in green).</span>
+		</p>
+		<div ng-hide="revisions.selected &amp;&amp; revisions.selected!=revision" ng-repeat="revision in revisions | orderBy : id : true" title="Revision {{revision.id}}">
+			<hr>
+			<p>Revision: {{revision.created_at | date}}</p>
+			<p>Description</p>
+			<div class="diff" ng-bind-html="revision.$descriptionDiff"></div>
+			<br>
+			<p>Instructions</p>
+			<div class="diff" ng-bind-html="revision.$instructionDiff"></div>
+			<br>
+			<p></p>
+			<a class="btn btn-primary" ng-click="revisions.selected=revision">This revision needs a flag</a>
+		</div>
+		<div ng-if="revisions.selected">
+			<p>
+				<span class="label label-info">Step Two</span>
+				<span>Please indicate the motivation for your flag <em>(e.g. copyright infringement, spammy, indecent, harmful to a community spirit, I'm just vindictive)</em>.</span>
+			</p>
+			<textarea ng-model="revisions.selected.$flagMotivation"></textarea>
+			<a class="btn btn-primary" ng-click="submitFlag(revisions.selected)">Submit Flag</a>
+			<a class="btn btn-danger" ng-click="revisions.selected=null">Oops. Not this revision</a>
+		</div>
+	</div>
+	<div ng-if="!revisions.length &amp;&amp; revisions.$resolved">
+		<p>We cannot find any saved revisions for this page, so it looks like there's nothing to flag.</p>
+		<p>If you believe you have reached this message in error. Please hang up and dial your operator. Or submit a bug report. BUT FIRST DO A SEARCH TO SEE IF ANY BUG REPORT ALREADY EXISTS FOR YOUR ERROR! <a href="https://bitbucket.org/entrity/tipsy-web/issues?status=new&status=open">Tipsy Bug Tracker</a></p>
+	</div>
+</div>

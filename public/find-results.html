@@ -1,0 +1,41 @@
+<div id="find-results">
+	<div class="grid grid--center filters" ng-mouseleave="finder.hideIngredientCtls()">
+		<div class="grid-cell">Ingredients:</div>
+		<div class="btn-group" ng-repeat="ingredient in finder.ingredients" dropdown>
+			<button type="button" ng-click="ingredient._ctlToggled=!ingredient._ctlToggled" class="btn btn-primary btn-xs">{{ingredient.name}}</button>
+			<button type="button" ng-click="ingredient._ctlToggled=!ingredient._ctlToggled" class="btn btn-primary btn-xs dropdown-toggle" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
+				<span class="caret"></span>
+				<span class="sr-only">Split button!</span>
+			</button>
+			<ul ng-show="ingredient._ctlToggled" class="dropdown-menu dropdown-menu-right" role="menu">
+				<li><a ng-click="finder.removeIngredient($index)"><i class="fa fa-remove"></i></a></li>
+				<li><a ng-click="addToCabinet(ingredient)"><i class="icon-fridge"></i></a></li>
+				<li><a ng-click="addToShoppingList(ingredient)"><i class="fa fa-shopping-cart"></i></a></li>
+				<li><a href="/ingredients/{{ingredient.id}}"><i class="fa fa-link"></i></a></li>
+			</ul>
+		</div>
+		<div class="grid-cell clear"><small><a ng-click="finder.removeIngredient($all)"><i class="fa fa-times-circle"></i> Clear all</a></small></div>
+	</div>
+	<div class="grid results-list">
+		<div class="grid-cell">
+			<h4>What can I make?</h4>
+			<div class="grid grid--center item" ng-repeat="drink in finder.drinks">
+				<div class="grid-cell name"><a href="{{drink.getUrl()}}">{{drink.name}}</a></div>
+				<div class="grid-cell"><i class="fa fa-clock-o"></i> <small>3 minutes</small></div>
+				<div class="grid-cell"><i class="fa fa-flask"></i> <small>3 ingredients</small></div>
+				<div class="grid-cell"><i class="fa fa-thumbs-up"></i> <small>300</small></div>
+				<div class="grid-cell"><i class="fa fa-heart"></i></div>
+			</div>
+			<div ng-show="!finder.drinks || !finder.drinks.length">
+				...Nothing yet. Try adding more ingredients.
+			</div>
+			<div ng-show="finder.drinks.left">
+				<span>{{drinks.left}} more search results</span>
+				<br>
+				<span ng-show="finder.drinks.pagesLeft">
+					<a ng-click="finder.loadNextPage()">Load Next Page: {{finder.drinks.page + 1}} of {{finder.drinks.pages}}</a>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>

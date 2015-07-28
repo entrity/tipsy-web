@@ -1,6 +1,14 @@
 class Drink < ActiveRecord::Base
   include FuzzyFindable
-  has_many :ingredients, class_name:'DrinkIngredient', dependent: :destroy
+  include Votable
+
+  belongs_to :author, class_name:'User'
+  belongs_to :revision
+  
+  has_many :comments, inverse_of: :drink
+  has_many :ingredients, class_name:'DrinkIngredient', dependent: :destroy, foreign_key: :drink_id, inverse_of: :drink
+  has_many :photos, inverse_of: :drink
+  has_many :revisions, inverse_of: :drink
 
   # Scope results to Drinks which include all of the indicated ingredients
   scope :for_ingredients, -> ingredient_ids {
@@ -11,4 +19,26 @@ class Drink < ActiveRecord::Base
       .distinct
       .order('ingredient_ct')
   }
+
+  scope :for_exclusive_ingredients, -> ingredient_ids {
+    first_pass_drink_ids = DrinkIngredient.where(ingredient_id:ingredient_ids).where('optional IS NOT TRUE').distinct.pluck(:drink_id)
+    where(id:first_pass_drink_ids).where('required_ingredient_ids <@ \'{?}\'', Array.wrap(ingredient_ids).map(&:to_i))
+  }
+
+  def flag!
+    revision.try(:flag!)
+  end
+
+  def top_photo
+    @top_photo ||= photos.order(:score).last
+  end
+
+  def url_path
+    "/recipe/#{id}-#{name.to_s.downcase.gsub(/[\W]+/, '-')}"
+  end
+  
+  def vote_sum
+    up_vote_ct - dn_vote_ct
+  end
+
 end

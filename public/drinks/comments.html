@@ -1,0 +1,38 @@
+<h3>Tips</h3>
+<div id="tips">
+	<div ng-repeat="comment in tips">
+		<div>
+			<a ng-click="vote(comment, 'Comment', 1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment._userVoteSign > 0) && 'highlight'"></i></a>
+			<a ng-click="vote(comment, 'Comment', -1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment._userVoteSign < 0) && 'highlight'"></i></a>
+			{{comment.score}}
+			<img ng-src="{{comment.user_avatar}}">
+			{{comment.user_name}}
+			{{comment.created_at | date}}
+		</div>
+		<div>
+			<a ng-click="flagComment(comment)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-flag" ng-class="comment._isUserFlagged && 'highlight'"></i></a>
+			<a ng-click="removeComment(comment)" ng-if="comment.user_id == getUser().id"><i class="fa fa-times-circle"></i></a>
+			<span ng-bind="comment.text"></span>
+		</div>
+	</div>
+	<p ng-show="!tips.length"><em>No tips have been created for this page. Submit a comment of your own and have it earmarked as a tip by community members!</em></p>
+</div>
+<h3>Comments</h3>
+<div id="comments">
+	<div ng-repeat="comment in comments">
+		<div>
+			<a ng-click="vote(comment, 'Comment', 1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment._userVoteSign > 0) && 'highlight'"></i></a>
+			<a ng-click="vote(comment, 'Comment', -1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment._userVoteSign < 0) && 'highlight'"></i></a>
+			{{comment.score}}
+			<img ng-src="{{comment.user_avatar}}">
+			{{comment.user_name}}
+			{{comment.created_at | date}}
+		</div>
+		<div>
+			<a ng-click="flagComment(comment)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-flag" ng-class="comment._isUserFlagged && 'highlight'"></i></a>
+			<a ng-click="removeComment(comment)" ng-if="comment.user_id == getUser().id"><i class="fa fa-times-circle"></i></a>
+			<span ng-bind="comment.text"></span>
+		</div>
+	</div>
+</div>
+

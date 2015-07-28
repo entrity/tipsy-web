@@ -6,9 +6,22 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauth_providers => [:facebook]
 
-  validates :name, uniqueness: true
-
   has_many :identities, inverse_of: :user
+  has_many :photos, inverse_of: :user # contributions. photos of drinks
+  has_many :review_votes, inverse_of: :user
+  has_many :revisions, as: :user
+
+  has_attached_file :photo, :styles => { :thumb => "128x128>", :tiny => "32x32>" }, :default_url => '/images/anonymous-:style.jpg'
+
+  validates :nickname, uniqueness: true, allow_blank: true
+  validates_with AttachmentContentTypeValidator, :attributes => :photo, :content_type => ["image/jpeg", "image/png"]
+  validates_with AttachmentSizeValidator, :attributes => :photo, :less_than => 5.megabytes
+  validates_attachment_file_name :photo, :matches => [/png\Z/, /jpe?g\Z/]
+
+  # @return order of magnitude of `self.points`
+  def log_points
+    Math.log([1 + points, 2].max, 10).ceil
+  end
 
   def self.from_omniauth(auth, signed_in_resource=nil)
     # Get the identity and user if they exist
@@ -31,9 +44,13 @@ class User < ActiveRecord::Base
 
       # Create the user if it's a new registration
       if user.nil?
+        name = nil
+        begin
+          auth.info.nickname || auth.extra.raw_info.name || auth.uid
+        rescue => ex
+        end
         user = User.new(
-          name: auth.extra.raw_info.name,
-          name: auth.info.nickname || auth.uid,
+          name: name,
           email: email,
           password: Devise.friendly_token[0,20]
         )
@@ -56,6 +73,25 @@ class User < ActiveRecord::Base
         user.email = data["email"] if user.email.blank?
       end
     end
+  end
+
+  # @param hash should contain :data_url & :filename
+  def photo_data= hash
+    raise "No data_url in photo_data" unless hash[:data_url].present?
+    raise "No filename in photo_data" unless hash[:filename].present?
+    image = Paperclip.io_adapters.for(hash[:data_url])
+    image.original_filename = hash[:filename]
+    self.photo = image
+  end
+
+  def photo_url
+    photo.url
+  end
+
+  # @override
+  def serializable_hash(options={})
+    options[:methods] ||= [:photo_url]
+    super(options)
   end
 
 end

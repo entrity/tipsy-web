@@ -14,9 +14,23 @@ class IngredientsController < ApplicationController
 
   def show
     @ingredient = Ingredient.find params[:id]
-    @drinks = @ingredient.drinks
-      .order('random()')
-      .limit(MAX_RESULTS)
+    if request.format.json?
+      respond_with @ingredient
+    else
+      @drinks = @ingredient.drinks
+        .order('random()')
+        .limit(MAX_RESULTS)
+    end
   end
 
+  def names
+    if params[:id].blank?
+      respond_with Hash.new
+    else
+      sql = Ingredient.where(id:params[:id]).select([:id,:name]).to_sql
+      res = Ingredient.connection.execute(sql)
+      map = Hash[res.map{|x| [x['id'], x['name']] }]
+      respond_with map
+    end
+  end
 end
