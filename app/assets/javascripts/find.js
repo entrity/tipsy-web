@@ -55,7 +55,7 @@
 		}
 		// Define array or (append if array already exists) $scope.finder.drinks
 		$scope.finder.fetchDrinksForIngredients = function (pageNumber, append) {
-			if (!($scope.finder.ingredients && $scope.finder.ingredients.length && $scope.finder.ingredients.length > 1)) return;
+			if (!($scope.finder.ingredients && $scope.finder.ingredients.length)) return;
 			var ingredientIds = $scope.finder.ingredients.map(function (ingredient) {
 				return ingredient.id;
 			});
