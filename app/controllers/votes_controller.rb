@@ -7,7 +7,9 @@ class VotesController < ApplicationController
   def create
     @vote = Vote.new vote_params
     @vote.user = current_user
-    @vote.save
+    if @vote.save
+      @vote.votable.create_trophy_if_warranted
+    end
     respond_with @vote
   end
 

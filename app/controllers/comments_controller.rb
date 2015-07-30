@@ -7,7 +7,9 @@ class CommentsController < ApplicationController
     @comment = Comment.new comment_params
     @comment.set_user(current_user)
     @comment.status = Flaggable::APPROVED
-    @comment.save
+    if @comment.save
+      current_user.increment_comment_ct!
+    end
     respond_with @comment
   end
 

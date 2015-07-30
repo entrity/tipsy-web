@@ -18,7 +18,8 @@ class Revision < ActiveRecord::Base
   before_save -> { self.prev_ingredients = prev_ingredients.map(&:as_json) }, if: :prev_ingredients
 
   def publish!
-    update_attributes! status:Flaggable::APPROVED
+    super
+    user.increment_revision_ct!
     required_ingredient_ids = ingredients.select{|ing| !ing['optional'] }.map{|ing| ing['id'] }
     if drink.revision.nil?
       drink.update_attributes!(

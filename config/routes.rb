@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   }
   as :user do
     get 'users', :to => 'users/registrations#edit', :as => :user_root # Rails 3
+    get '/user/edit(.format)', to: 'users/registrations#edit', defaults: {id: 0}
   end
 
   root 'home#home'
@@ -52,7 +53,13 @@ Rails.application.routes.draw do
       get :unviewed_point_distributions
       put :viewed_point_distributions
     end
+    member do
+      get :trophies
+    end
   end
+
+  get '/user(.format)', to: 'users#show', defaults: {id: 0}
+  get '/user/trophies(.format)', to: 'users#trophies', defaults: {id: 0}
 
   resources :votes, only: [:create]
 

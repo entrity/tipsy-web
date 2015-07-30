@@ -1,4 +1,4 @@
-class TipsyException::DatabaseException < TipsyException::Exception
+class TipsyException::DatabaseException < TipsyException
 
   # @param result - a PG::Result (return value from PG::Connection.execute)
   # @param expected - number of rows expected to be updated/selected/inserted in UPDATE/SELECT/INSERT command
