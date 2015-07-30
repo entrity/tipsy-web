@@ -47,12 +47,6 @@
 		'ui.bootstrap',
 		'ui.select'
 	])
-	.config(['$locationProvider', function ($locationProvider) {
-		$locationProvider.html5Mode({
-			enabled: true,
-			requireBase: false
-		});
-	}])
 	.run(['$rootScope', '$resource', '$modal', '$http', '$templateCache', '$q', function ($rootScope, $resource, $modal, $http, $templateCache, $q) {
 		Object.defineProperties($rootScope, {
 			addToCabinet: {
