@@ -1,6 +1,6 @@
 (function () {
 	angular.module('tipsy.find', [])
-	.controller('FindCtrl', ['$rootScope', '$scope', '$resource', '$location', 'Drink', function ($rootScope, $scope, $resource, $location, Drink) {
+	.controller('FindCtrl', ['$rootScope', '$scope', '$resource', '$location', 'Drink', 'Ingredient', function ($rootScope, $scope, $resource, $location, Drink, Ingredient) {
 		$rootScope.finder = {findables:[]};
 		$scope.finder.ingredients = [];
 		$scope.finder.options = new Object;
@@ -42,7 +42,7 @@
 		}
 		// Add ingredient to $scope.finder.ingredients and fetch drink results
 		$scope.finder.addIngredient = function (ingredient) {
-			this.ingredients.push(ingredient);
+			this.ingredients.push(new Ingredient(ingredient));
 			this.fetchDrinksForIngredients();
 		}
 		$scope.finder.removeIngredient = function (index) {

@@ -10,4 +10,8 @@ class Ingredient < ActiveRecord::Base
 
   before_update -> { self.canonical_id = nil if canonical_id == id }
 
+  def url_path
+    "/ingredient/#{id}-#{name.to_s.downcase.gsub(/[\W]+/, '-')}.html"
+  end
+
 end

@@ -16,7 +16,7 @@
 				configurable: false,
 				value: function getUrl (ingredient) {
 					var nameSlug = ingredient.name ? '-' + ingredient.name.toLowerCase().replace(/[^\w]+/g, '-') : '';
-					return '/ingredients/'+ingredient.id+nameSlug;
+					return '/ingredient/'+ingredient.id+nameSlug+'.html';
 				}
 			},
 		});

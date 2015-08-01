@@ -18,6 +18,7 @@ class IngredientsController < ApplicationController
     if request.format.json?
       respond_with @ingredient
     else
+      @canonical_url = 'http://tipsyology.com' + get_ingredient.url_path
       @drinks = @ingredient.drinks
         .order('random()')
         .limit(MAX_RESULTS)
