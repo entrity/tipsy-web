@@ -1,0 +1,23 @@
+<div ng-controller="Ingredient.EditCtrl">
+	<div ng-hide="revision.id">
+		<p><a class="btn btn-primary" href="{{ingredient.getUrl()}}">Back to {{ingredient.name}}</a></p>
+		<h3>Name</h3>
+		<input type=text ng-model="revision.name">
+		<br>
+		<label><input type=checkbox ng-change="aliasCheckboxToggled()" ng-model="editPage.aliasNeeded"> &nbsp;This ingredient is an alias for a more generic ingredient</label>
+		<br>
+		<em>(e.g. <strong>bitter</strong> is an alias for <strong>bitters</strong> and <strong>Absolut vodka</strong> is an alias for <strong>vodka</strong>)</em>
+		<div ng-show="editPage.aliasNeeded">
+			<ingredient-finder data-ingredient="editPage.canonical" data-exclude-ids="editPage.idsToExcludeFromSearch"></ingredient-finder>
+		</div>
+		<h3>Description</h3>
+		<div id="wmd-button-bar"></div>
+		<textarea id="wmd-input" ng-model="revision.description"></textarea>
+		<div id="wmd-preview"></div>
+		<a class="btn btn-primary" ng-click="save()">Save Revision</a>
+	</div>
+	<div ng-cloak ng-show="revision.id">
+		<p>Thank you. Your changes will be reviewed. If approved, they shall be published, and you shall be awarded {{getConstant('POINTS_FOR_REVISION')}} points in tips.</p>
+		<p><a class="btn btn-primary" href="{{ingredient.getUrl()}}">Back to {{ingredient.name}}</a></p>
+	</div>
+</div>

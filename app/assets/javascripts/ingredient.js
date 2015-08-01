@@ -3,23 +3,62 @@
 	.factory('Ingredient', ['$resource', function ($resource) {
 		var Ingredient = $resource('/ingredients/:id.json', {id:'@id'}, {
 		});
+		Object.defineProperties(Ingredient.prototype, {
+			getUrl: {
+				configurable: false,
+				value: function getUrl () {
+					return Ingredient.getUrl(this);
+				}
+			},
+		});
+		Object.defineProperties(Ingredient, {
+			getUrl: {
+				configurable: false,
+				value: function getUrl (ingredient) {
+					var nameSlug = ingredient.name ? '-' + ingredient.name.toLowerCase().replace(/[^\w]+/g, '-') : '';
+					return '/ingredients/'+ingredient.id+nameSlug;
+				}
+			},
+		});
 		return Ingredient;
 	}])
+	.factory('IngredientRevision', ['$resource', function ($resource) {
+		var Revision = $resource('/ingredient_revisions/:id.json', {id:'@id'});
+		Object.defineProperties(Revision.prototype, {
+			// Copy select attributes from drink
+			loadIngredient: {
+				configurable: false,
+				value: function (ingredient) {
+					var sharedAttrs = ['name', 'description', 'canonical_id'];
+					for (var i = 0; i < sharedAttrs.length; i++) {
+						var key = sharedAttrs[i];
+						this[key] = ingredient[key];
+					}
+					this.ingredient_id     = ingredient.id;
+					this.parent_id         = ingredient.revision_id;
+					this.prev_description  = ingredient.description;
+					this.prev_canonical_id = ingredient.canonical_id;
+				},
+			}
+		});
+		return Revision;
+	}])
 	.factory('IngredientSearch', ['Ingredient', function (Ingredient) {
-		var IngredientSearch = function (ingredient) {
+		var IngredientSearch = function (ingredient, idsToExclude) {
 			this.choice = ingredient;
+			this.idsToExclude = idsToExclude;
 		};
 		Object.defineProperties(IngredientSearch.prototype, {
 			choices: {
 				get: function () {
-					return IngredientSearch.choices;
+					return IngredientSearch.choices; // defined in this.searchIngredients
 				}
 			},
 			searchIngredients: {
 				value: function (term) {
 					if (term && term.length && term != IngredientSearch.term) {
 						IngredientSearch.term = term;
-						IngredientSearch.choices = Ingredient.query({fuzzy:term});
+						IngredientSearch.choices = Ingredient.query({fuzzy:term, 'exclude_ids[]':this.idsToExclude});
 					}
 				}
 			},
@@ -41,10 +80,59 @@
 				</ui-select>',
 			link: function (scope, elem, attrs) {
 				var ingredient;
+				var idsToExclude;
 				if (attrs.ingredient) ingredient = scope.$eval(attrs.ingredient);
-				scope.ingredientSearch = new IngredientSearch(ingredient);
+				if (attrs.excludeIds) idsToExclude = scope.$eval(attrs.excludeIds);
+				scope.ingredientSearch = new IngredientSearch(ingredient, idsToExclude);
+			},
+		}
+	}])
+	.controller('IngredientCtrl', ['$scope', '$modal', 'Ingredient', function ($scope, $modal, Ingredient) {
+		$scope.ingredient = new Ingredient(window.ingredient);
+		$scope.loadEditView = function () {
+			if ($scope.requireLoggedIn()) {
+				Turbolinks.visit('/ingredients/'+$scope.ingredient.id+'/edit.html');
 			}
+		}; // loadEditView
+		$scope.flag = function () {
+			if ($scope.requireLoggedIn()) {
+				$modal.open({
+					animation: true,
+					templateUrl: '/ingredients/flag-modal.html',
+					size: 'lg',
+				});
+			}
+		}; // flag
+	}])
+	.controller('Ingredient.EditCtrl', ['$scope', 'Ingredient', 'IngredientRevision', 'RailsSupport', function ($scope, Ingredient, IngredientRevision, RailsSupport) {
+		var id = getUrlId();
+		$scope.ingredient = Ingredient.get({id:id});
+		$scope.revision = new IngredientRevision();
+		$scope.editPage = {idsToExcludeFromSearch:[id]};
+		// Build description text editor
+		var editor = new Markdown.Editor(Markdown.getSanitizingConverter());
+		// Callback on ingredient loaded
+		$scope.ingredient.$promise.then(function (data) {
+			if (data.canonical_id && data.canonical_id != data.id)
+				$scope.editPage.aliasNeeded = true;
+			$scope.revision.loadIngredient(data);
+			editor.run();
+		});
+		$scope.aliasCheckboxToggled = function () {
+			if (!$scope.aliasNeeded) $scope.ingredient.canonical_id = null;
+		}
+		$scope.save = function () {
+			$scope.revision.$save(null, function (data) {
+				// success
+			}, function (httpResponse) {
+				RailsSupport.errorAlert(httpResponse);
+			});
 		}
 	}])
 	;
+
+	function getUrlId () {
+		var match = /\/ingredients\/(\d+)/.exec(window.location.pathname);
+		if (match) return match[1];
+	}
 })();

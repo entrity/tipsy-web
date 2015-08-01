@@ -34,6 +34,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :ingredient_revisions, only: [:create, :show]
+
   resources :photos, only: [:index, :create]
   
   resources :reviews do

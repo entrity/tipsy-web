@@ -13,8 +13,7 @@
 			<p>Instructions</p>
 			<div class="diff" ng-bind-html="revision.$instructionDiff"></div>
 			<br>
-			<p></p>
-			<a class="btn btn-primary" ng-click="revisions.selected=revision">This revision needs a flag</a>
+			<p><a class="btn btn-primary" ng-click="revisions.selected=revision">This revision needs a flag</a></p>
 		</div>
 		<div ng-if="revisions.selected">
 			<p>

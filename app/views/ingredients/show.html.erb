@@ -1,14 +1,53 @@
-<h1><%= @ingredient.name %></h1>
-<div><%= @ingredient.description %></div>
-<p>
-  50 or fewer randomly selected drinks made with this ingredient:
-  <br>
-  <small>Refresh to see a different list.</small>
-</p>
-<ul>
-  <% @drinks.each do |drink| %>
-    <li>
-      <%= link_to drink.name, url_for(drink) %>
-    </li>
+<script type="text/javascript">
+  window.ingredient = <%= @ingredient.to_json.html_safe %>;
+</script>
+<div ng-controller="IngredientCtrl">
+	<div class="grid row center">
+    <div class="grid-cell"><h1><%= @ingredient.name %></h1></div>
+  </div>
+	<% if @ingredient.canonical %>
+    <div class="grid row center">
+      <div class="grid-cell">
+        <em>Canonical form</em> &nbsp;
+        <%= link_to @ingredient.canonical.name, @ingredient.canonical %>
+      </div>
+    </div>
   <% end %>
-</ul>
+  <div class="grid row center">
+    <div class="grid-cell">
+      <h3>
+        Description
+        <a ng-click="loadEditView()" class="fa fa-pencil"></a>
+        <a ng-click="flag()" class="fa fa-flag"></a>
+      </h3>
+      <div>
+        <% if @ingredient.description.present? %>
+          <noscript><%= @ingredient.description %></noscript>
+          <script>Tipsy.writeMarkdown(window.ingredient.description)</script>
+        <% else %>
+          <p>
+            <em>No description has been submitted for this ingredient yet.</em>
+            <br>
+            <a ng-click="loadEditView()">How would you describe this ingredient?</a>
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="grid row center">
+    <div class="grid-cell">
+      <p>
+        Here are a few drinks made with this ingredient:
+        <br>
+        <small>Refresh to see a different list.</small>
+      </p>
+      <ul>
+        <% @drinks.each do |drink| %>
+          <li>
+            <%= link_to drink.name, url_for(drink) %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,6 @@
 class Revision < ActiveRecord::Base
   include Flaggable
+  include Patchable
 
   belongs_to :user
   belongs_to :drink
@@ -67,14 +68,5 @@ class Revision < ActiveRecord::Base
     super
     raise 'to do'
   end
-
-  private
-
-    def patch prev, post, target
-      patcher = DiffMatchPatch.new
-      patches = patcher.patch_make(prev, post)
-      text, results = patcher.patch_apply(patches, target)
-      return text
-    end
 
 end

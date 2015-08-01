@@ -81,7 +81,7 @@
 						this[key] = drink[key];
 					}
 					this.drink_id = drink.id;
-					this.revision_id = drink.revision_id;
+					this.parent_id = drink.revision_id;
 					this.prev_description = drink.description;
 					this.prev_instruction = drink.instructions;
 					// Fetch ingredients from server
@@ -187,12 +187,19 @@
 			}
 		};
 	}])
-	.controller('Drink.EditCtrl', ['$scope', 'Drink', 'Revision', function ($scope, Drink, Revision) {
+	.controller('Drink.EditCtrl', ['$scope', 'Drink', 'Revision', 'RailsSupport', function ($scope, Drink, Revision, RailsSupport) {
 		var id = getDrinkId($scope);
 		$scope.drink = Drink.get({id:id});
 		$scope.revision = new Revision();
+		// Build description text editor
+		var descriptionEditor = new Markdown.Editor(Markdown.getSanitizingConverter());
+		// Build instructions text editor
+		var instructionEditor = new Markdown.Editor(Markdown.getSanitizingConverter(), '-instructions');
+		// Drink loaded callback
 		$scope.drink.$promise.then(function () {
 			$scope.revision.loadDrink($scope.drink);
+			descriptionEditor.run();
+			instructionEditor.run();
 		});
 		$scope.addIngredient = function () {
 			$scope.revision.ingredients.push(new Object);
@@ -204,16 +211,12 @@
 			$scope.revision.$save(null, function (data) {
 				// success
 			}, function () {
-				// failure
+				RailsSupport.errorAlert(data);
 			});
 		}
 		$scope.visitDrink = function () {
 			Turbolinks.visit($scope.drink.getUrl());
 		}
-		// Start description text editor
-		new Markdown.Editor(Markdown.getSanitizingConverter()).run();
-		// Start instructions text editor
-		new Markdown.Editor(Markdown.getSanitizingConverter(), '-instructions').run();
 	}])
 	.controller('Drink.FlagModalCtrl', ['$scope', '$resource', 'Differ', 'Flagger', function ($scope, $resource, Differ, Flagger) {
 		$scope.revisions = $resource('/drinks/'+getDrinkId($scope)+'/revisions.json').query(null, function (data) {
