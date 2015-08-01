@@ -129,6 +129,20 @@
 			});
 		}
 	}])
+	.controller('Ingredient.FlagModalCtrl', ['$scope', '$resource', 'Differ', 'Flagger', function ($scope, $resource, Differ, Flagger) {
+		$scope.revisions = $resource('/ingredients/'+getUrlId()+'/revisions.json').query(null, function (data) {
+			data.forEach(function(revision){
+				revision.$descriptionDiff = new Differ(revision.prev_description, revision.description).prettyHtml();
+			});
+		});
+		$scope.flagger = new Flagger($scope, null, 'IngredientRevision', false);
+		$scope.submitFlag = function (revision) {
+			$scope.flagger.createFlag(revision, revision._flagMotivation)
+			.$promise.then(function () {
+				$scope.$close();
+			});
+		}
+	}])
 	;
 
 	function getUrlId () {

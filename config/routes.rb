@@ -32,6 +32,9 @@ Rails.application.routes.draw do
     collection do
       get :names
     end
+    member do
+      get :revisions
+    end
   end
 
   resources :ingredient_revisions, only: [:create, :show]

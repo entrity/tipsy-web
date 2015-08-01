@@ -225,8 +225,12 @@
 				revision.$instructionDiff = new Differ(revision.prev_instruction, revision.instructions).prettyHtml();
 			});
 		});
+		$scope.flagger = new Flagger($scope, null, 'Revision', false);
 		$scope.submitFlag = function (revision) {
-			new Flagger($scope).submitFlag(revision, 'Revision');
+			$scope.flagger.createFlag(revision, 'Revision')
+			.$promise.then(function () {
+				$scope.$close();
+			});
 		}
 	}])
 	;

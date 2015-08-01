@@ -14,7 +14,7 @@ class IngredientsController < ApplicationController
   end
 
   def show
-    @ingredient = Ingredient.find params[:id]
+    get_ingredient
     if request.format.json?
       respond_with @ingredient
     else
@@ -38,4 +38,17 @@ class IngredientsController < ApplicationController
       respond_with map
     end
   end
+
+  # Get published revisions
+  def revisions
+    @revisions = get_ingredient.revisions.where(status:Flaggable::APPROVED)
+    respond_with @revisions
+  end
+
+  private
+
+    def get_ingredient
+      @ingredient ||= Ingredient.find params[:id]
+    end
+
 end

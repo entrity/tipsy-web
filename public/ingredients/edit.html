@@ -17,7 +17,7 @@
 		<a class="btn btn-primary" ng-click="save()">Save Revision</a>
 	</div>
 	<div ng-cloak ng-show="revision.id">
-		<p>Thank you. Your changes will be reviewed. If approved, they shall be published, and you shall be awarded {{getConstant('POINTS_FOR_REVISION')}} points in tips.</p>
-		<p><a class="btn btn-primary" href="{{ingredient.getUrl()}}">Back to {{ingredient.name}}</a></p>
+		<p>Thank you. Your changes will be reviewed. If approved, they shall be published, and you shall be awarded points in tips.</p>
+		<p><a class="btn btn-primary" ng-href="{{ingredient.getUrl()}}">Back to {{ingredient.name}}</a></p>
 	</div>
 </div>

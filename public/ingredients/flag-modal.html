@@ -1,4 +1,4 @@
-<div ng-controller="Drink.FlagModalCtrl" id="drink-flag-modal">
+<div ng-controller="Ingredient.FlagModalCtrl" id="ingredient-flag-modal">
 	<div ng-if="revisions.length">
 		<p>
 			<span class="label label-info">Step One</span>
@@ -9,9 +9,6 @@
 			<p>Revision: {{revision.created_at | date}}</p>
 			<p>Description</p>
 			<div class="diff" ng-bind-html="revision.$descriptionDiff"></div>
-			<br>
-			<p>Instructions</p>
-			<div class="diff" ng-bind-html="revision.$instructionDiff"></div>
 			<br>
 			<p><a class="btn btn-primary" ng-click="revisions.selected=revision">This revision needs a flag</a></p>
 		</div>
