@@ -24,6 +24,6 @@
 	</div>
 	<div ng-if="!revisions.length &amp;&amp; revisions.$resolved">
 		<p>We cannot find any saved revisions for this page, so it looks like there's nothing to flag.</p>
-		<p>If you believe you have reached this message in error. Please hang up and dial your operator. Or submit a bug report. BUT FIRST DO A SEARCH TO SEE IF ANY BUG REPORT ALREADY EXISTS FOR YOUR ERROR! <a href="https://bitbucket.org/entrity/tipsy-web/issues?status=new&status=open">Tipsy Bug Tracker</a></p>
+		<p>If you believe you have reached this message in error. Please hang up and dial your operator. Or submit a bug report. BUT FIRST DO A SEARCH TO SEE IF ANY BUG REPORT ALREADY EXISTS FOR YOUR ERROR! <a ng-href="{{getWindowVal('BUG_TRACKER')}}">Tipsy Bug Tracker</a></p>
 	</div>
 </div>

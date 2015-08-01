@@ -91,6 +91,12 @@
 					return $rootScope.currentUser;
 				}
 			},
+			getWindowVal: {
+				configurable: false,
+				value: function (key) {
+					return window[key];
+				},
+			},
 			fetchOpenReviewCt: {
 				configurable: false,
 				value: function () {
