@@ -7,8 +7,10 @@
 		$scope.finder.fetchFindables = function ($select) {
 			var searchTerm = $select.search;
 			if (searchTerm && searchTerm.length > 0) {
+				var ingredientIds = this.ingredients.map(function (item) { return item.id });
 				var params = {
 					fuzzy: searchTerm,
+					'exclude_ingredient_ids[]': ingredientIds,
 					profane: !$scope.finder.options.noProfanity,
 					drinks: !(this.ingredients && this.ingredients.length)
 				}
@@ -109,8 +111,10 @@
 		}
 	}])
 	;
-	
+
 	function compareFuzzyFindResults (a, b, searchTerm) {
+		var levenshteinDifference = a.distance - b.distance;
+		if (levenshteinDifference != 0) return levenshteinDifference;
 		var searchTermIndex = 0;
 		var length = Math.min(a.length, b.length);
 		for (var i = 0; i < length; i++) {
