@@ -63,10 +63,12 @@
 			});
 			var drinks = $resource('/drinks/:id.json').query({
 				'ingredient_id[]':ingredientIds,
-				'select[]':['id', 'name', 'comment_ct', 'score'],
+				'select[]':['id', 'name', 'comment_ct', 'up_vote_ct', 'ingredient_ct'],
 				page: (pageNumber || 1),
 				profane: ($scope.finder.options.noProfanity ? false : null),
 			}, function (data, responseHeaders) {
+				// make Drinks from data
+				drinks = drinks.map(function (datum) { return new Drink(datum) });
 				if (append && $scope.finder.drinks)
 					$scope.finder.drinks = $scope.finder.drinks.concat(drinks);
 				else

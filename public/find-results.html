@@ -20,10 +20,10 @@
 		<div class="grid-cell">
 			<h4>What can I make?</h4>
 			<div class="grid grid--center item" ng-repeat="drink in finder.drinks">
-				<div class="grid-cell name"><a href="{{drink.getUrl()}}">{{drink.name}}</a></div>
-				<div class="grid-cell"><i class="fa fa-clock-o"></i> <small>3 minutes</small></div>
-				<div class="grid-cell"><i class="fa fa-flask"></i> <small>3 ingredients</small></div>
-				<div class="grid-cell"><i class="fa fa-thumbs-up"></i> <small>300</small></div>
+				<div class="grid-cell name"><a ng-href="{{drink.getUrl()}}">{{drink.name}}</a></div>
+				<div class="grid-cell"><i class="fa fa-clock-o"></i> <small>{{dirnk.prep_time || '?'}}</small></div>
+				<div class="grid-cell"><i class="fa fa-flask"></i> <small>{{drink.ingredient_ct || 0}}</small></div>
+				<div class="grid-cell"><i class="fa fa-thumbs-up"></i> <small>{{drink.up_vote_ct || 0}}</small></div>
 				<div class="grid-cell"><i class="fa fa-heart"></i></div>
 			</div>
 			<div ng-show="!finder.drinks || !finder.drinks.length">
