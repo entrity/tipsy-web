@@ -5,12 +5,12 @@
   window.drink.userFlags = <%= @user_flags.to_json.html_safe %>;
   window.drink.userVotes = <%= @user_votes.to_json.html_safe %>;
 </script>
-<div id="drink-page" ng-controller="DrinkCtrl">
+<div id="drink-page" ng-controller="DrinkCtrl" itemscope itemtype="http://schema.org/Recipe">
   <div class="grid row photos">
     <div class="grid-cell" ng-controller="Drink.PhotoGalleryCtrl">
       <noscript>
         <% @photos.each do |photo| %>
-          <%= image_tag photo.file.url, alt:"#{photo.alt}" %>
+          <%= image_tag photo.file.url, alt:"#{photo.alt}", itemprop:"image" %>
         <% end -%>
       </noscript>
       <div id="gallery" class="slider" ng-if="photos.length">
@@ -41,7 +41,8 @@
   </div>
   <div class="grid grid--center row center">
     <div class="grid-cell name">
-      <h1><%= @drink.name %></h1>
+      <h1 itemprop="name"><%= @drink.name %></h1>
+      <%= content_tag :meta, @drink.comment_ct, itemprop:"commentCount" %>
       <div class="comments">
         <a href="#">Comments (<%= @drink.comment_ct %>)</a>
       </div>
@@ -71,7 +72,7 @@
         Prep time:
         <a ng-click="loadEditView()" class="fa fa-pencil"></a>
         <br>
-        <span>
+        <span itemprop="prepTime">
           <% if @drink.prep_time %>
             <%= @drink.prep_time %>
           <% else %>
@@ -104,7 +105,7 @@
       </h3>
       <div>
         <% if @drink.description.present? %>
-          <noscript><%= @drink.description %></noscript>
+          <noscript itemprop="description"><%= @drink.description %></noscript>
           <script>Tipsy.writeMarkdown(window.drink.description)</script>
         <% else %>
           <p>
@@ -127,7 +128,7 @@
         </div>
       </div>
       <% @ingredients.each do |ingredient| %>
-        <div class="grid grid--center ingredient">
+        <div class="grid grid--center ingredient" itemprop="recipeIngredient">
           <div class="grid-cell actions">
             <a ng-click="addToCabinet(<%= drink_ingredient_json ingredient %>)" title="Add to My Fridge">
               <i class="sprite sprite-fridge"></i>
@@ -156,7 +157,7 @@
           </h3>
           <% if @drink.instructions.present? %>
             <div>
-              <noscript><%= @drink.instructions %></noscript>
+              <noscript itemprop="recipeInstructions"><%= @drink.instructions %></noscript>
               <script type="text/javascript">Tipsy.writeMarkdown(window.drink.instructions);</script>
             </div>
             <p>
@@ -187,15 +188,18 @@
       <ng-include src="'/drinks/comments.html'"></ng-include>
       <div id="static-comments" ng-show="!(comments && comments.length)">
         <% @comments.each do |comment| %>
-          <div class="grid grid--center tips">
+          <div class="grid grid--center tips" itemscope itemtype="https://schema.org/Comment">
             <div class="grid-cell">
               <%= comment.score %>
+              <%= tag :meta, content:comment.dnvote_ct,             itemprop:"downvoteCount" %>
+              <%= tag :meta, content:comment.upvote_ct,             itemprop:"upvoteCount" %>
+              <%= tag :meta, content:comment.created_at.to_s(:iso), itemprop:"dateCreated" %>
               <%= link_to user_path(id:comment.user_id), class:'avatar' do %>
                   <img ng-src="{{getUser().tinyAvatar}}">
               <% end -%>
               <%= comment.user_name %>
               <%= comment.created_at.to_s(:long) %>
-              <div><%= comment.text %></div>
+              <div itemprop="text"><%= comment.text %></div>
             </div>
           </div>
         <% end -%>
