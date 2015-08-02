@@ -68,7 +68,7 @@
 		});
 		return Drink;
 	}])
-	.factory('Revision', ['$resource', function ($resource) {
+	.factory('Revision', ['$resource', 'Drink', function ($resource, Drink) {
 		var Revision = $resource('/revisions/:id.json', {id:'@id'});
 		Object.defineProperties(Revision.prototype, {
 			// Copy select attributes from drink
@@ -85,7 +85,7 @@
 					this.prev_description = drink.description;
 					this.prev_instruction = drink.instructions;
 					// Fetch ingredients from server
-					this.prev_ingredients = Drink.ingredients({id:id}, function () {
+					this.prev_ingredients = Drink.ingredients({id:drink.id}, function () {
 						this.ingredients = angular.copy(this.prev_ingredients);
 					});
 				},
@@ -202,6 +202,7 @@
 			instructionEditor.run();
 		});
 		$scope.addIngredient = function () {
+			if (!$scope.revision.ingredients) $scope.revision.ingredients = [];
 			$scope.revision.ingredients.push(new Object);
 		}
 		$scope.removeIngredient = function (index) {
