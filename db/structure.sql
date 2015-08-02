@@ -350,6 +350,45 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 
 --
+-- Name: ingredient_revisions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE ingredient_revisions (
+    id integer NOT NULL,
+    user_id integer,
+    ingredient_id integer,
+    parent_id integer,
+    name character varying,
+    description text,
+    prev_description text,
+    canonical_id integer,
+    prev_canonical_id integer,
+    flag_pts smallint DEFAULT 0,
+    status smallint DEFAULT 0,
+    created_at timestamp without time zone
+);
+
+
+--
+-- Name: ingredient_revisions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE ingredient_revisions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ingredient_revisions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE ingredient_revisions_id_seq OWNED BY ingredient_revisions.id;
+
+
+--
 -- Name: ingredients; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -357,7 +396,8 @@ CREATE TABLE ingredients (
     id integer NOT NULL,
     name text NOT NULL,
     description text,
-    revision_id integer
+    revision_id integer,
+    canonical_id integer
 );
 
 
@@ -746,6 +786,13 @@ ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY ingredient_revisions ALTER COLUMN id SET DEFAULT nextval('ingredient_revisions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY ingredients ALTER COLUMN id SET DEFAULT nextval('ingredients_id_seq'::regclass);
 
 
@@ -843,6 +890,14 @@ ALTER TABLE ONLY glasses
 
 ALTER TABLE ONLY identities
     ADD CONSTRAINT identities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ingredient_revisions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY ingredient_revisions
+    ADD CONSTRAINT ingredient_revisions_pkey PRIMARY KEY (id);
 
 
 --
@@ -957,6 +1012,20 @@ CREATE INDEX index_drinks_on_name ON drinks USING btree (name);
 --
 
 CREATE INDEX index_flags ON flags USING btree (user_id, flaggable_id, flaggable_type);
+
+
+--
+-- Name: index_ingredient_revisions_on_ingredient_id_and_user_id_and_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_ingredient_revisions_on_ingredient_id_and_user_id_and_id ON ingredient_revisions USING btree (ingredient_id, user_id, id);
+
+
+--
+-- Name: index_ingredients_on_canonical_id_and_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_ingredients_on_canonical_id_and_id ON ingredients USING btree (canonical_id, id);
 
 
 --
@@ -1103,4 +1172,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150726180135');
 INSERT INTO schema_migrations (version) VALUES ('20150728010414');
 
 INSERT INTO schema_migrations (version) VALUES ('20150729003919');
+
+INSERT INTO schema_migrations (version) VALUES ('20150730032132');
 

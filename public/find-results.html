@@ -11,7 +11,7 @@
 				<li><a ng-click="finder.removeIngredient($index)"><i class="fa fa-remove"></i></a></li>
 				<li><a ng-click="addToCabinet(ingredient)"><i class="icon-fridge"></i></a></li>
 				<li><a ng-click="addToShoppingList(ingredient)"><i class="fa fa-shopping-cart"></i></a></li>
-				<li><a href="/ingredients/{{ingredient.id}}"><i class="fa fa-link"></i></a></li>
+				<li><a ng-href="{{ingredient.getUrl()}}" ng-click="visit(ingredient.getUrl(), $event)"><i class="fa fa-link"></i></a></li>
 			</ul>
 		</div>
 		<div class="grid-cell clear"><small><a ng-click="finder.removeIngredient($all)"><i class="fa fa-times-circle"></i> Clear all</a></small></div>
@@ -20,10 +20,10 @@
 		<div class="grid-cell">
 			<h4>What can I make?</h4>
 			<div class="grid grid--center item" ng-repeat="drink in finder.drinks">
-				<div class="grid-cell name"><a href="{{drink.getUrl()}}">{{drink.name}}</a></div>
-				<div class="grid-cell"><i class="fa fa-clock-o"></i> <small>3 minutes</small></div>
-				<div class="grid-cell"><i class="fa fa-flask"></i> <small>3 ingredients</small></div>
-				<div class="grid-cell"><i class="fa fa-thumbs-up"></i> <small>300</small></div>
+				<div class="grid-cell name"><a ng-href="{{drink.getUrl()}}">{{drink.name}}</a></div>
+				<div class="grid-cell"><i class="fa fa-clock-o"></i> <small>{{dirnk.prep_time || '?'}}</small></div>
+				<div class="grid-cell"><i class="fa fa-flask"></i> <small>{{drink.ingredient_ct || 0}}</small></div>
+				<div class="grid-cell"><i class="fa fa-thumbs-up"></i> <small>{{drink.up_vote_ct || 0}}</small></div>
 				<div class="grid-cell"><i class="fa fa-heart"></i></div>
 			</div>
 			<div ng-show="!finder.drinks || !finder.drinks.length">

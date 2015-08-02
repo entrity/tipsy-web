@@ -10,6 +10,8 @@ class Drink < ActiveRecord::Base
   has_many :photos, inverse_of: :drink
   has_many :revisions, inverse_of: :drink
 
+  validates :name, presence: true
+
   # Scope results to Drinks which include all of the indicated ingredients
   scope :for_ingredients, -> ingredient_ids {
     ids = Array.wrap(ingredient_ids).compact

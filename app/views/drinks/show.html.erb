@@ -138,7 +138,7 @@
               <i class="sprite sprite-shopping-cart"></i>
             </a>
           </div>
-          <div class="grid-cell name" itemprop="recipeIngredient"><%= ingredient.name %></div>
+          <div class="grid-cell name" itemprop="recipeIngredient"><%= link_to ingredient.name, ingredient.url_path %></div>
           <div class="grid-cell amount">
             <% if ingredient.optional %><em>(optional)</em><% end -%>
             <%= ingredient.qty %>

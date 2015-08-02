@@ -91,6 +91,12 @@
 					return $rootScope.currentUser;
 				}
 			},
+			getWindowVal: {
+				configurable: false,
+				value: function (key) {
+					return window[key];
+				},
+			},
 			fetchOpenReviewCt: {
 				configurable: false,
 				value: function () {
@@ -170,6 +176,14 @@
 				configurable: false,
 				value: JSON.parse(localStorage.getItem('shoppingList')) || []
 			},
+			visit: {
+				configurable: false,
+				value: function visit (url, event) {
+					event.stopPropagation();
+					event.preventDefault();
+					Turbolinks.visit(url);
+				}
+			}
 		});
 		/* Support fns */
 		function addIngredientToAside (ingredient, arrayName) {

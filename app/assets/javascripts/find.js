@@ -1,14 +1,16 @@
 (function () {
 	angular.module('tipsy.find', [])
-	.controller('FindCtrl', ['$rootScope', '$scope', '$resource', '$location', 'Drink', function ($rootScope, $scope, $resource, $location, Drink) {
+	.controller('FindCtrl', ['$rootScope', '$scope', '$resource', '$location', 'Drink', 'Ingredient', function ($rootScope, $scope, $resource, $location, Drink, Ingredient) {
 		$rootScope.finder = {findables:[]};
 		$scope.finder.ingredients = [];
 		$scope.finder.options = new Object;
 		$scope.finder.fetchFindables = function ($select) {
 			var searchTerm = $select.search;
 			if (searchTerm && searchTerm.length > 0) {
+				var ingredientIds = this.ingredients.map(function (item) { return item.id });
 				var params = {
 					fuzzy: searchTerm,
+					'exclude_ingredient_ids[]': ingredientIds,
 					profane: !$scope.finder.options.noProfanity,
 					drinks: !(this.ingredients && this.ingredients.length)
 				}
@@ -42,7 +44,7 @@
 		}
 		// Add ingredient to $scope.finder.ingredients and fetch drink results
 		$scope.finder.addIngredient = function (ingredient) {
-			this.ingredients.push(ingredient);
+			this.ingredients.push(new Ingredient(ingredient));
 			this.fetchDrinksForIngredients();
 		}
 		$scope.finder.removeIngredient = function (index) {
@@ -61,10 +63,12 @@
 			});
 			var drinks = $resource('/drinks/:id.json').query({
 				'ingredient_id[]':ingredientIds,
-				'select[]':['id', 'name', 'comment_ct', 'score'],
+				'select[]':['id', 'name', 'comment_ct', 'up_vote_ct', 'ingredient_ct'],
 				page: (pageNumber || 1),
 				profane: ($scope.finder.options.noProfanity ? false : null),
 			}, function (data, responseHeaders) {
+				// make Drinks from data
+				drinks = drinks.map(function (datum) { return new Drink(datum) });
 				if (append && $scope.finder.drinks)
 					$scope.finder.drinks = $scope.finder.drinks.concat(drinks);
 				else
@@ -109,8 +113,10 @@
 		}
 	}])
 	;
-	
+
 	function compareFuzzyFindResults (a, b, searchTerm) {
+		var levenshteinDifference = a.distance - b.distance;
+		if (levenshteinDifference != 0) return levenshteinDifference;
 		var searchTermIndex = 0;
 		var length = Math.min(a.length, b.length);
 		for (var i = 0; i < length; i++) {

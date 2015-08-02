@@ -48,7 +48,7 @@
 		var Flagger = function (parentScope, flaggable, flaggableType, modalOptions) {
 			this.flaggable = flaggable;
 			this.flaggableType = flaggableType;
-			modalOptions = angular.extend({
+			this.modalOptions = angular.extend({
 				animation: true,
 				templateUrl: '/flag-modal.html',
 				size: 'med',
@@ -56,25 +56,28 @@
 					flagger: this,
 				}),
 			}, modalOptions || {});
-			this.flagModal = $modal.open(modalOptions);
+			if (modalOptions != false) this.openModal();
 		};
 		Object.defineProperties(Flagger.prototype, {
 			createFlag: {
 				configurable: false,
-				value: function () {
-					if (!this.flagMotivation || !this.flagMotivation.trim().length) {
+				// Parameters here are optional. They default to the values set on the Flagger instance itself (whether via the constructor function or by other means).
+				value: function createFlag (flaggable, flagMotivation) {
+					if (!flagMotivation) flagMotivation = this.flagMotivation;
+					if (!flagMotivation || !flagMotivation.trim().length) {
 						alert('Please supply text for your flag.');
 					}
 					else if (confirm("Are you sure you want to submit this flag?")) {
+						if (!flaggable) flaggable = this.flaggable;
 						var thisFlagger = this;
-						$resource('/flags.json').save({
-							description: this.flagMotivation,
-							flaggable_id: this.flaggable.id,
+						return $resource('/flags.json').save({
+							description: flagMotivation,
+							flaggable_id: flaggable.id,
 							flaggable_type: this.flaggableType,
 						},
 						function (data, headers) {
-							thisFlagger.flaggable._isUserFlagged = true;
-							thisFlagger.flagModal.close();
+							flaggable._isUserFlagged = true;
+							if (thisFlagger.flagModal) thisFlagger.flagModal.close();
 						},
 						function (response) {
 							console.error(response);
@@ -90,7 +93,14 @@
 						});
 					}
 				}
-			}
+			},
+			openModal: {
+				configurable: false,
+				value: function openModal (modalOptions) {
+					modalOptions = angular.extend({}, this.modalOptions, modalOptions||{});
+					this.flagModal = $modal.open(modalOptions);
+				}
+			},
 		});
 		return Flagger;
 	}])

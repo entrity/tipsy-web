@@ -13,6 +13,7 @@ class Vote < ActiveRecord::Base
   validates :user, presence: true
   validates :votable, presence: true
   validates :sign, presence: true
+  validate  :voter_cannot_be_contributor
 
   def save
     if valid?
@@ -40,5 +41,17 @@ class Vote < ActiveRecord::Base
       false
     end
   end
+
+  private
+
+    def voter_cannot_be_contributor
+      contributor_id = nil
+      [:contributor_id, :user_id].each do |key|
+        if votable.respond_to?(key)
+          break contributor_id = votable.send(key)
+        end
+      end
+      errors.add(:user, "cannot be the same as the votable contributor") if contributor_id == self.user_id
+    end
 
 end

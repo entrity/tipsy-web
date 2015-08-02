@@ -4,7 +4,8 @@ class RevisionsController < ApplicationController
   respond_to :json
 
   def create
-    @revision = Revision.new revision_params
+    @model = controller_path.classify.constantize
+    @revision = @model.new revision_params
     @revision.user = current_user
     @revision.status = Flaggable::NEEDS_REVIEW
     if @revision.save

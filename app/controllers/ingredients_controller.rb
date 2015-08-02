@@ -1,10 +1,11 @@
 class IngredientsController < ApplicationController
   respond_to :json, :html
-  MAX_RESULTS = 50
+  MAX_RESULTS = 15
 
   def index
     @ingredients = Ingredient.default_scoped
     @ingredients = @ingredients.fuzzy_find(params[:fuzzy]) if params[:fuzzy].present?
+    @ingredients = @ingredients.where('id NOT IN (?)', params[:exclude_ids]) if params[:exclude_ids].present?
     @ingredients = @ingredients.for_drink(params[:drink_id]) if params[:drink_id].present?
     @ingredients = @ingredients.select(params[:select]) if params[:select].present?
     @ingredients = @ingredients.paginate page:params[:page], per_page:MAX_RESULTS
@@ -13,14 +14,19 @@ class IngredientsController < ApplicationController
   end
 
   def show
-    @ingredient = Ingredient.find params[:id]
+    get_ingredient
     if request.format.json?
       respond_with @ingredient
     else
+      @canonical_url = 'http://tipsyology.com' + get_ingredient.url_path
       @drinks = @ingredient.drinks
         .order('random()')
         .limit(MAX_RESULTS)
     end
+  end
+
+  def edit
+    render layout:'application', text:%q(<ng-include src="'/ingredients/edit.html'"></ng-include>)
   end
 
   def names
@@ -33,4 +39,17 @@ class IngredientsController < ApplicationController
       respond_with map
     end
   end
+
+  # Get published revisions
+  def revisions
+    @revisions = get_ingredient.revisions.where(status:Flaggable::APPROVED)
+    respond_with @revisions
+  end
+
+  private
+
+    def get_ingredient
+      @ingredient ||= Ingredient.find params[:id]
+    end
+
 end
