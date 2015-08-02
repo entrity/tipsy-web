@@ -53,7 +53,7 @@ class DrinksController < ApplicationController
   # Get published revisions
   def revisions
     @revisions = saved_drink.revisions.where(status:Flaggable::APPROVED)
-    respond_with @revisions.as_json(methods:[:diff])
+    respond_with @revisions
   end
 
 private

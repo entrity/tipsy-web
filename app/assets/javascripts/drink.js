@@ -68,7 +68,7 @@
 		});
 		return Drink;
 	}])
-	.factory('Revision', ['$resource', function ($resource) {
+	.factory('Revision', ['$resource', 'Drink', function ($resource, Drink) {
 		var Revision = $resource('/revisions/:id.json', {id:'@id'});
 		Object.defineProperties(Revision.prototype, {
 			// Copy select attributes from drink
@@ -81,11 +81,11 @@
 						this[key] = drink[key];
 					}
 					this.drink_id = drink.id;
-					this.revision_id = drink.revision_id;
+					this.parent_id = drink.revision_id;
 					this.prev_description = drink.description;
 					this.prev_instruction = drink.instructions;
 					// Fetch ingredients from server
-					this.prev_ingredients = Drink.ingredients({id:id}, function () {
+					this.prev_ingredients = Drink.ingredients({id:drink.id}, function () {
 						this.ingredients = angular.copy(this.prev_ingredients);
 					});
 				},
@@ -187,14 +187,22 @@
 			}
 		};
 	}])
-	.controller('Drink.EditCtrl', ['$scope', 'Drink', 'Revision', function ($scope, Drink, Revision) {
+	.controller('Drink.EditCtrl', ['$scope', 'Drink', 'Revision', 'RailsSupport', function ($scope, Drink, Revision, RailsSupport) {
 		var id = getDrinkId($scope);
 		$scope.drink = Drink.get({id:id});
 		$scope.revision = new Revision();
+		// Build description text editor
+		var descriptionEditor = new Markdown.Editor(Markdown.getSanitizingConverter());
+		// Build instructions text editor
+		var instructionEditor = new Markdown.Editor(Markdown.getSanitizingConverter(), '-instructions');
+		// Drink loaded callback
 		$scope.drink.$promise.then(function () {
 			$scope.revision.loadDrink($scope.drink);
+			descriptionEditor.run();
+			instructionEditor.run();
 		});
 		$scope.addIngredient = function () {
+			if (!$scope.revision.ingredients) $scope.revision.ingredients = [];
 			$scope.revision.ingredients.push(new Object);
 		}
 		$scope.removeIngredient = function (index) {
@@ -204,16 +212,12 @@
 			$scope.revision.$save(null, function (data) {
 				// success
 			}, function () {
-				// failure
+				RailsSupport.errorAlert(data);
 			});
 		}
 		$scope.visitDrink = function () {
 			Turbolinks.visit($scope.drink.getUrl());
 		}
-		// Start description text editor
-		new Markdown.Editor(Markdown.getSanitizingConverter()).run();
-		// Start instructions text editor
-		new Markdown.Editor(Markdown.getSanitizingConverter(), '-instructions').run();
 	}])
 	.controller('Drink.FlagModalCtrl', ['$scope', '$resource', 'Differ', 'Flagger', function ($scope, $resource, Differ, Flagger) {
 		$scope.revisions = $resource('/drinks/'+getDrinkId($scope)+'/revisions.json').query(null, function (data) {
@@ -222,8 +226,12 @@
 				revision.$instructionDiff = new Differ(revision.prev_instruction, revision.instructions).prettyHtml();
 			});
 		});
+		$scope.flagger = new Flagger($scope, null, 'Revision', false);
 		$scope.submitFlag = function (revision) {
-			new Flagger($scope).submitFlag(revision, 'Revision');
+			$scope.flagger.createFlag(revision, 'Revision')
+			.$promise.then(function () {
+				$scope.$close();
+			});
 		}
 	}])
 	;

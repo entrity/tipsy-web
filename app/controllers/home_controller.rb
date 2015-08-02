@@ -15,7 +15,11 @@ layout nil
     if params[:fuzzy].blank?
       render json:{errors:['Missing search parameter']}, status:406
     else
-      opts = {profane:parse_bool(:profane), drinks:parse_bool(:drinks)}
+      opts = {
+        profane:                parse_bool(:profane),
+        drinks:                 parse_bool(:drinks),
+        exclude_ingredient_ids: params[:exclude_ingredient_ids],
+      }
       hashes = FuzzyFindable.autocomplete(params[:fuzzy], opts)
       render json:hashes
     end

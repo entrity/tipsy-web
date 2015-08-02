@@ -32,7 +32,14 @@ Rails.application.routes.draw do
     collection do
       get :names
     end
+    member do
+      get :revisions
+    end
   end
+
+  resources :ingredients, path: 'ingredient', only: [:show]
+
+  resources :ingredient_revisions, only: [:create, :show]
 
   resources :photos, only: [:index, :create]
   
