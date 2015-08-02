@@ -335,14 +335,10 @@ nav .logged-out .grid-cell:last-child,
 nav .logged-in .grid-cell:last-child {
   margin-right: 0;
 }
-nav .logged-out {
-
-}
-nav .logged-in {
-
-}
 nav .rep-cont .dropdown-menu {
-  right: -7px;
+  right: -50%;
+  margin-right: -8px;
+  padding: 5px;
 }
 nav .rep-cont a,
 nav .trophie-cont a {
@@ -939,20 +935,21 @@ aside .btn-primary:hover {
 
 /*** DRINK PAGE STYLES ***/
 
-#drink-page h1 {
+#drink-page h1,
+#ingredient-page h1 {
   font-weight: 600;
   margin: 0;
   padding: 0 0 6px 0;
 }
-#drink-page h3 {
+#drink-page h3,
+#recipe-editor h3 {
   font-size: 14px;
   font-weight: 600;
-  margin: 0;
+  margin: 0 0 8px 0;
 }
-#drink-page h3 {
-  margin-bottom: 8px;
-}
-#drink-page .center {
+#drink-page .center,
+#recipe-editor .center,
+#ingredient-page .center {
   max-width: 600px;
 }
 #drink-page .photos {
@@ -961,8 +958,14 @@ aside .btn-primary:hover {
   background: url(/images/img-upload.png) no-repeat center #f4f4f4;
   margin-bottom: 30px;
 }
-#drink-page .row {
+#drink-page .row,
+#recipe-editor .row,
+#ingredient-page .row {
   padding: 0 0 40px 0;
+}
+#recipe-editor .row:first-child,
+#ingredient-page .row:first-child {
+  padding: 40px 0;
 }
 #drink-page .votes {
   max-width: 34px;
@@ -1005,7 +1008,7 @@ aside .btn-primary:hover {
   color: #FF7300;
 }
 #drink-page .ingredients {
-  max-width: 50%;
+  max-width: 70%;
   margin-right: 60px;
 }
 #drink-page .ingredients .ingredient {
@@ -1020,7 +1023,7 @@ aside .btn-primary:hover {
   text-align: right;
 }
 #drink-page .ingredients .ingredient .actions {
-  max-width: 60px;
+  max-width: 80px;
 }
 #drink-page .grid-cell.actions a {
   text-decoration: none;
@@ -1080,6 +1083,13 @@ tipsy-image-editor a.btn:hover {
 }
 .uploader {
   padding: 10px 10px 0 10px;
+}
+
+/*** DRINK PAGE STYLES:Comments ***/
+
+#comments .comment-id {
+  flex: 0 1 auto;
+  margin-right: 14px;
 }
 
 /*** ACCOUNT SETTINGS ***/
