@@ -111,6 +111,19 @@
 					});
 				}
 			},
+			isInCabinetOrShoppingList: {
+				configurable: false,
+				value: function isInCabinetOrShoppingList (id) {
+					var i;
+					for (i = 0; i < this.cabinet.length; i++) {
+						if (this.cabinet[i].id == id) return true;
+					}
+					for (i = 0; i < this.shoppingList.length; i++) {
+						if (this.shoppingList[i].id == id) return true;
+					}
+					return false;
+				}
+			},
 			isLoggedIn: {
 				configurable: false,
 				value: function (forceReload) {

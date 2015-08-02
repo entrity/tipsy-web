@@ -3,7 +3,7 @@
 </script>
 <div ng-controller="IngredientCtrl">
 	<div class="grid row center">
-    <div class="grid-cell"><h1><%= @ingredient.name %></h1></div>
+    <div class="grid-cell" ng-class="isInCabinetOrShoppingList(<%= ingredient.ingredient_id %>) &amp;&amp; 'in-sidebar'"><h1><%= @ingredient.name %></h1></div>
   </div>
 	<% if @ingredient.canonical %>
     <div class="grid row center">

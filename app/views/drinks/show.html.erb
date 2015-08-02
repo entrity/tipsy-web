@@ -16,11 +16,11 @@
       <div id="gallery" class="slider" ng-if="photos.length">
         <img ng-repeat="photo in photos" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{photo.mediumUrl}}" />
         <div id="gallery-ctrl">
-          <a ng-click="votePhoto(1)"><i class="fa fa-thumbs-up" ng-class="getActivePhoto()._userVoteSign > 0 && 'highlight'"></i></a>
+          <a ng-click="votePhoto(1)"><i class="fa fa-thumbs-up" ng-class="getActivePhoto()._userVoteSign > 0 &amp;&amp; 'highlight'"></i></a>
           <span ng-bind="getActivePhoto().score"></span>
-          <a ng-click="votePhoto(-1)"><i class="fa fa-thumbs-down" ng-class="getActivePhoto()._userVoteSign < 0 && 'highlight'"></i></a>
+          <a ng-click="votePhoto(-1)"><i class="fa fa-thumbs-down" ng-class="getActivePhoto()._userVoteSign < 0 &amp;&amp; 'highlight'"></i></a>
           <br>
-          <a ng-click="flagPhoto()"><i class="fa fa-flag" ng-class="isPhotoUserFlagged() && 'highlight'"></i></a>
+          <a ng-click="flagPhoto()"><i class="fa fa-flag" ng-class="isPhotoUserFlagged() &amp;&amp; 'highlight'"></i></a>
           <a ng-href="{{photos[photos.activeIndex].originalUrl}}" target="_blank"><i class="fa fa-search-plus"></i></a>
           <a><i class="fa fa-share-alt"></i></a>
           <br>
@@ -48,9 +48,9 @@
       </div>
     </div>
     <div class="grid-cell votes">
-      <div class="arrow up" role="button" aria-label="upvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', 1)"><i class="fa fa-caret-up" ng-class="drink._userVoteSign > 0 && 'highlight'" ></i></a></div>
+      <div class="arrow up" role="button" aria-label="upvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', 1)"><i class="fa fa-caret-up" ng-class="drink._userVoteSign > 0 &amp;&amp; 'highlight'" ></i></a></div>
       <div class="score"><noscript><%= @drink.score %></noscript>{{drink.score}}</div>
-      <div class="arrow down" role="button" aria-label="downvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', -1)"><i class="fa fa-caret-down" ng-class="drink._userVoteSign < 0 && 'highlight'" ></i></a></div>
+      <div class="arrow down" role="button" aria-label="downvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', -1)"><i class="fa fa-caret-down" ng-class="drink._userVoteSign < 0 &amp;&amp; 'highlight'" ></i></a></div>
     </div>
   </div>
   <div class="grid row center">
@@ -137,7 +137,7 @@
               <i class="sprite sprite-shopping-cart"></i>
             </a>
           </div>
-          <div class="grid-cell name"><%= link_to ingredient.name, ingredient.url_path %></div>
+          <div class="grid-cell name" ng-class="isInCabinetOrShoppingList(<%= ingredient.ingredient_id %>) &amp;&amp; 'in-sidebar'"><%= link_to ingredient.name, ingredient.url_path %></div>
           <div class="grid-cell amount">
             <% if ingredient.optional %><em>(optional)</em><% end -%>
             <%= ingredient.qty %>
