@@ -46,7 +46,7 @@
       <div ng-hide="hideRailsContent"><%= yield %></div>
     </div>
   </div>
-  <aside class="fancy-sidebar grid-cell nano">
+  <aside class="fancy-sidebar grid-cell nano" ng-class="sidebar.open && 'open'">
     <div class="sidebar-btn">
       <i class="fa fa-bars"></i>
     </div>
@@ -100,12 +100,6 @@
 </div>
 <script type="text/javascript">
   $(".nano").nanoScroller();
-
-  $(document).ready(function(){
-    $(".sidebar-btn").click(function(){
-      $(".fancy-sidebar").toggleClass( "open" );
-    })
-  })
 </script>
 </body>
 </html>

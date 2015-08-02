@@ -176,6 +176,10 @@
 				configurable: false,
 				value: JSON.parse(localStorage.getItem('shoppingList')) || []
 			},
+			sidebar: {
+				configurable: false,
+				value: {} // just for holding config options
+			},
 			visit: {
 				configurable: false,
 				value: function visit (url, event) {
@@ -208,6 +212,12 @@
 		/* Initialization calls */
 		while (removeDuplicatesFromAside($rootScope.cabinet)) {}
 		while (removeDuplicatesFromAside($rootScope.shoppingList)) {}
+		$rootScope.sidebar.open = JSON.parse(localStorage.getItem('sidebar.open')||false);
+		/* Attach non-angular callbacks */
+		$(".sidebar-btn").click(function () {
+			$rootScope.sidebar.open = !$rootScope.sidebar.open;
+			localStorage.setItem('sidebar.open', $rootScope.sidebar.open);
+		});
 	}])
 	.filter('tipsyFindableClass', function () {
 		return function (item) {
