@@ -45,7 +45,6 @@ describe RevisionsController, type: :controller do
       "format" => "json",
     }}
     it 'sets prev_ingredients' do
-      expect_any_instance_of(Revision).to receive(:drink).at_least(:once).and_return(build_stubbed :drink)
       post :create, params
       r = Revision.last
       expect(response.status).to eq 201
