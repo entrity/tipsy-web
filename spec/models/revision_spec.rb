@@ -17,9 +17,8 @@ describe Revision do
 
   describe 'ingredients=' do
     it 'sets persistable ingredients array' do
-      expect(revision).to receive(:user).at_least(:once).and_return(user)
-      expect(revision).to receive(:drink).at_least(:once).and_return(drink)
       revision.ingredients = ingredients
+      expect(revision).to receive(:user).at_least(:once).and_return(user)
       revision.save
       revision.reload
       expect(revision.ingredients.length).to eq 2
