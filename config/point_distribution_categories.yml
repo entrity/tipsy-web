@@ -46,3 +46,11 @@
   name: 'REVISION_REJECTED'
   points: -2
   message: Drink edit voted out in a review
+-
+  name: 'DRINK_UPVOTE'
+  points: 10
+  message: Receive upvote on drink
+-
+  name: 'DRINK_DOWNVOTE'
+  points: 2
+  message: Receive downvote on drink

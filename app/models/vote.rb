@@ -31,8 +31,8 @@ class Vote < ActiveRecord::Base
         prev_sign = results_hash['prev_sign'].to_i <=> 0 # should be in {-1,0,1}
         delta = sign - prev_sign
         if delta != 0
-          votable.increment_score!(delta)
-          votable.distribute_vote_points(prev_sign, sign)
+          votable.increment_score!(delta) # change points on votable itself
+          votable.distribute_vote_points(prev_sign, sign) # change points on user (contributor)
         end
       end
       # return
