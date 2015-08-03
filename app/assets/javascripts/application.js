@@ -47,7 +47,7 @@
 		'ui.bootstrap',
 		'ui.select'
 	])
-	.run(['$rootScope', '$resource', '$modal', '$http', '$templateCache', '$q', function ($rootScope, $resource, $modal, $http, $templateCache, $q) {
+	.run(['$rootScope', '$resource', '$modal', '$http', '$q', '$window', function ($rootScope, $resource, $modal, $http, $q, $window) {
 		Object.defineProperties($rootScope, {
 			addToCabinet: {
 				configurable: false,
@@ -196,11 +196,23 @@
 			visit: {
 				configurable: false,
 				value: function visit (url, event) {
-					event.stopPropagation();
-					event.preventDefault();
+					if (event) {
+						event.stopPropagation();
+						event.preventDefault();
+					}
 					Turbolinks.visit(url);
 				}
-			}
+			},
+			visitNoTurbo: {
+				configurable: false,
+				value: function visit (url, event) {
+					if (event) {
+						event.stopPropagation();
+						event.preventDefault();
+					}
+					$window.location.href = url;
+				}
+			},
 		});
 		/* Support fns */
 		function addIngredientToAside (ingredient, arrayName) {
