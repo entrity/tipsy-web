@@ -34,6 +34,15 @@ module Votable
       when 30
         Trophy.create(user:user, category_id:TropyCategory::COMMENT_30_POINTS.id)
       end
+    when Drink
+      case score
+      when 5
+        Trophy.create(user:user, category_id:TropyCategory::DRINK_5_POINTS.id)
+      when 15
+        Trophy.create(user:user, category_id:TropyCategory::DRINK_15_POINTS.id)
+      when 50
+        Trophy.create(user:user, category_id:TropyCategory::DRINK_50_POINTS.id)
+      end
     end
   end
 
@@ -49,6 +58,8 @@ module Votable
       [PointDistributionCategory::COMMENT_UPVOTE, PointDistributionCategory::COMMENT_DOWNVOTE]
     when Photo
       [PointDistributionCategory::PHOTO_UPVOTE, PointDistributionCategory::PHOTO_DOWNVOTE]
+    when Drink
+      [PointDistributionCategory::DRINK_UPVOTE, PointDistributionCategory::DRINK_DOWNVOTE]
     end
     if prev_sign < 0 # need to undistribute points from previous upvote
       award_single_point_distribution(up_cat, true)

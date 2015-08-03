@@ -2,7 +2,7 @@ class Drink < ActiveRecord::Base
   include FuzzyFindable
   include Votable
 
-  belongs_to :author, class_name:'User'
+  belongs_to :user, class_name:'User' # author
   belongs_to :revision
   
   has_many :comments, inverse_of: :drink

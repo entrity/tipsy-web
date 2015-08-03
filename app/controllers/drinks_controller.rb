@@ -44,6 +44,7 @@ class DrinksController < ApplicationController
   def edit
     render layout:'application', text:%q(<ng-include src="'/drinks/edit.html'"></ng-include>)
   end
+  alias_method :new, :edit
 
   def ingredients
     @ingredients = saved_drink.ingredients

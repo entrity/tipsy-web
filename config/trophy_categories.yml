@@ -39,6 +39,22 @@
   colour: GOLD
   name: Super comment
   description: Posted a comment that won 20 points
+# DRINK
+-
+  const: DRINK_5_POINTS
+  colour: BRONZE
+  name: Bartenderfoot
+  description: Created a drink that won 5 points
+-
+  const: DRINK_15_POINTS
+  colour: SILVER
+  name: Mixologist
+  description: Created a drink that won 15 points
+-
+  const: DRINK_50_POINTS
+  colour: GOLD
+  name: Tipsologist
+  description: Created a drink that won 50 points
 # FLAG
 -
   const: BAD_FLAGS_5

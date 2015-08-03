@@ -1,7 +1,10 @@
 <div id="recipe-editor" ng-controller="Drink.EditCtrl">
 	<div class="grid grid--center row center">
 		<div class="grid-cell" ng-hide="revision.id">
-			<p><a class="btn btn-primary" ng-click="visitDrink()">Back to {{drink.name}}</a></p>
+			<p>
+				<a ng-show="drink &amp;&amp; drink.id" class="btn btn-primary" ng-click="visitDrink()">Back to {{drink.name}}</a>
+				<a ng-hide="drink &amp;&amp; drink.id" class="btn btn-primary" ng-click="visitNoTurbo('/')">Back to Home</a>
+			</p>
 		</div>
 	</div>
   <div class="grid row center">
@@ -59,8 +62,11 @@
 			<a class="btn btn-primary" ng-click="save()">Save Revision</a>
 		</div>
 		<div ng-cloak ng-show="revision.id">
-			<p>Thank you. Your changes will be reviewed. If approved, they shall be published, and you shall be awarded {{getConstant('POINTS_FOR_REVISION')}} points in tips.</p>
-			<p><a class="btn btn-primary" ng-click="visitDrink()">Back to {{drink.name}}</a></p>
+			<p>Thank you. Your changes will be reviewed. If approved, they shall be published, and you shall be awarded points in tips.</p>
+			<p>
+				<a ng-show="drink &amp;&amp; drink.id" class="btn btn-primary" ng-click="visitDrink()">Back to {{drink.name}}</a>
+				<a ng-hide="drink &amp;&amp; drink.id" class="btn btn-primary" ng-click="visitNoTurbo('/')">Back to Home</a>
+			</p>
 		</div>
 	</div>
 </div>

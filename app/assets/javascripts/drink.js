@@ -188,19 +188,25 @@
 		};
 	}])
 	.controller('Drink.EditCtrl', ['$scope', 'Drink', 'Revision', 'RailsSupport', function ($scope, Drink, Revision, RailsSupport) {
-		var id = getDrinkId($scope);
-		$scope.drink = Drink.get({id:id});
 		$scope.revision = new Revision();
 		// Build description text editor
 		var descriptionEditor = new Markdown.Editor(Markdown.getSanitizingConverter());
 		// Build instructions text editor
 		var instructionEditor = new Markdown.Editor(Markdown.getSanitizingConverter(), '-instructions');
-		// Drink loaded callback
-		$scope.drink.$promise.then(function () {
-			$scope.revision.loadDrink($scope.drink);
+		// Get drink id and act on it (but it won't be present if this is creating a revision for a new -- nonexistent -- drink)
+		var id = getDrinkId($scope);
+		if (id != null) { // could be 0, which is falsey
+			$scope.drink = Drink.get({id:id});
+			// Drink loaded callback
+			$scope.drink.$promise.then(function () {
+				$scope.revision.loadDrink($scope.drink);
+				descriptionEditor.run();
+				instructionEditor.run();
+			});
+		} else { // action for new, but not edit
 			descriptionEditor.run();
 			instructionEditor.run();
-		});
+		}
 		$scope.addIngredient = function () {
 			if (!$scope.revision.ingredients) $scope.revision.ingredients = [];
 			$scope.revision.ingredients.push(new Object);
