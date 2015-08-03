@@ -5,22 +5,22 @@
   window.drink.userFlags = <%= @user_flags.to_json.html_safe %>;
   window.drink.userVotes = <%= @user_votes.to_json.html_safe %>;
 </script>
-<div id="drink-page" ng-controller="DrinkCtrl" itemscope itemtype="https://schema.org/Recipe">
+<div id="drink-page" ng-controller="DrinkCtrl" itemscope itemtype="http://schema.org/Recipe">
   <div class="grid row photos">
     <div class="grid-cell" ng-controller="Drink.PhotoGalleryCtrl">
       <noscript>
         <% @photos.each do |photo| %>
-          <%= image_tag photo.file.url, alt:"#{photo.alt}" %>
+          <%= image_tag photo.file.url, alt:"#{photo.alt}", itemprop:"image" %>
         <% end -%>
       </noscript>
       <div id="gallery" class="slider" ng-if="photos.length">
         <img ng-repeat="photo in photos" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{photo.mediumUrl}}" />
         <div id="gallery-ctrl">
-          <a ng-click="votePhoto(1)"><i class="fa fa-thumbs-up" ng-class="getActivePhoto()._userVoteSign > 0 && 'highlight'"></i></a>
+          <a ng-click="votePhoto(1)"><i class="fa fa-thumbs-up" ng-class="getActivePhoto()._userVoteSign > 0 &amp;&amp; 'highlight'"></i></a>
           <span ng-bind="getActivePhoto().score"></span>
-          <a ng-click="votePhoto(-1)"><i class="fa fa-thumbs-down" ng-class="getActivePhoto()._userVoteSign < 0 && 'highlight'"></i></a>
+          <a ng-click="votePhoto(-1)"><i class="fa fa-thumbs-down" ng-class="getActivePhoto()._userVoteSign < 0 &amp;&amp; 'highlight'"></i></a>
           <br>
-          <a ng-click="flagPhoto()"><i class="fa fa-flag" ng-class="isPhotoUserFlagged() && 'highlight'"></i></a>
+          <a ng-click="flagPhoto()"><i class="fa fa-flag" ng-class="isPhotoUserFlagged() &amp;&amp; 'highlight'"></i></a>
           <a ng-href="{{photos[photos.activeIndex].originalUrl}}" target="_blank"><i class="fa fa-search-plus"></i></a>
           <a><i class="fa fa-share-alt"></i></a>
           <br>
@@ -42,14 +42,15 @@
   <div class="grid grid--center row center">
     <div class="grid-cell name">
       <h1 itemprop="name"><%= @drink.name %></h1>
+      <%= content_tag :meta, @drink.comment_ct, itemprop:"commentCount" %>
       <div class="comments">
         <a href="#">Comments (<%= @drink.comment_ct %>)</a>
       </div>
     </div>
     <div class="grid-cell votes" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-      <div class="arrow up" role="button" aria-label="upvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', 1)"><i class="fa fa-caret-up" ng-class="drink._userVoteSign > 0 && 'highlight'" ></i></a></div>
+      <div class="arrow up" role="button" aria-label="upvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', 1)"><i class="fa fa-caret-up" ng-class="drink._userVoteSign > 0 &amp;&amp; 'highlight'" ></i></a></div>
       <div class="score" itemprop="ratingValue"><noscript><%= @drink.score %></noscript>{{drink.score}}</div>
-      <div class="arrow down" role="button" aria-label="downvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', -1)"><i class="fa fa-caret-down" ng-class="drink._userVoteSign < 0 && 'highlight'" ></i></a></div>
+      <div class="arrow down" role="button" aria-label="downvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', -1)"><i class="fa fa-caret-down" ng-class="drink._userVoteSign < 0 &amp;&amp; 'highlight'" ></i></a></div>
     </div>
   </div>
   <div class="grid row center">
@@ -71,7 +72,7 @@
         Prep time:
         <a ng-click="loadEditView()" class="fa fa-pencil"></a>
         <br>
-        <span itemprop="cookTime">
+        <span itemprop="prepTime">
           <% if @drink.prep_time %>
             <%= @drink.prep_time %>
           <% else %>
@@ -129,7 +130,7 @@
         </div>
       </div>
       <% @ingredients.each do |ingredient| %>
-        <div class="grid grid--center ingredient">
+        <div class="grid grid--center ingredient" itemprop="recipeIngredient">
           <div class="grid-cell actions">
             <a ng-click="addToCabinet(<%= drink_ingredient_json ingredient %>)" title="Add to My Fridge">
               <i class="sprite sprite-fridge"></i>
@@ -138,7 +139,7 @@
               <i class="sprite sprite-shopping-cart"></i>
             </a>
           </div>
-          <div class="grid-cell name" itemprop="recipeIngredient"><%= link_to ingredient.name, ingredient.url_path %></div>
+          <div class="grid-cell name" ng-class="isInCabinetOrShoppingList(<%= ingredient.ingredient_id %>) &amp;&amp; 'in-sidebar'"><%= link_to ingredient.name, ingredient.url_path %></div>
           <div class="grid-cell amount">
             <% if ingredient.optional %><em>(optional)</em><% end -%>
             <%= ingredient.qty %>
@@ -185,15 +186,18 @@
     <div class="grid-cell">
       <div id="static-comments" ng-show="!(comments && comments.length)">
         <% @comments.each do |comment| %>
-          <div class="grid grid--center tips">
+          <div class="grid grid--center tips" itemscope itemtype="https://schema.org/Comment">
             <div class="grid-cell">
               <%= comment.score %>
+              <%= tag :meta, content:comment.dnvote_ct,             itemprop:"downvoteCount" %>
+              <%= tag :meta, content:comment.upvote_ct,             itemprop:"upvoteCount" %>
+              <%= tag :meta, content:comment.created_at.to_s(:iso), itemprop:"dateCreated" %>
               <%= link_to user_path(id:comment.user_id), class:'avatar' do %>
                   <img ng-src="{{getUser().tinyAvatar}}">
               <% end -%>
               <%= comment.user_name %>
               <%= comment.created_at.to_s(:long) %>
-              <div><%= comment.text %></div>
+              <div itemprop="text"><%= comment.text %></div>
             </div>
           </div>
         <% end -%>

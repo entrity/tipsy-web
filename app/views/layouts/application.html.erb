@@ -7,17 +7,22 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tipsyology</title>
   <meta property="og:site_name" content="Tipsyology - Discover, create and share all things tipsy!">
+  <meta name="twitter:site"     content="tipsyology" />
   <meta property="fb:app_id"    content="1586283884980033" />
   <% if @canonical_url.present? %>
-    <%= tag :link, rel: 'canonical', href: @canonical_url %>
-    <%= tag :meta,   property: 'og:url',         content: @canonical_url %>
+    <%= tag :link,   rel:      'canonical',           href: @canonical_url %>
+    <%= tag :meta,   property: 'og:url',              content: @canonical_url %>
   <% end %>
   <% if @drink %>
     <meta property="og:type" content="recipe" />
-    <%= tag :meta,   property: 'og:title',       content: "#{@drink.name} cocktail" %>
-    <%= tag :meta,   property: 'og:description', content: (@drink.description || "How to make a #{@drink.name}")[0...300] %>
+    <%= tag :meta,   property: 'og:title',            content: "#{@drink.name} cocktail" %>
+    <%= tag :meta,   property: 'twitter:title',       content: "#{@drink.name} cocktail"[0...70] %>
+    <%= tag :meta,   property: 'og:description',      content: (@drink.description || "How to make a #{@drink.name}")[0...300] %>
+    <%= tag :meta,   property: 'twitter:description', content: (@drink.description || "How to make a #{@drink.name}")[0...300] %>
   <% end -%>
-  <%= tag :meta,     property: 'og:image',       content: (@meta_photo || '/images/labcoat.png') %>
+  <%= tag :meta,     property: 'og:image',            content: (@meta_photo || '/images/labcoat.png') %>
+  <%= tag :meta,     property: 'twitter:image',       content: (@meta_photo || '/images/labcoat.png') %>
+  <meta name="twitter:card" content="summary" />
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800'>
@@ -28,7 +33,10 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body ng-app='tipsy'>
+<body ng-app='tipsy' itemscope itemtype="http://schema.org/WebPage">
+  <% if @canonical_url.present? %>
+    <%= tag :meta, itemprop: 'url', content: @canonical_url %>
+  <% end %>
 
 <div class="wrapper">
   <ng-include src="'/toolbar.html'"></ng-include>
@@ -38,7 +46,7 @@
       <div ng-hide="hideRailsContent"><%= yield %></div>
     </div>
   </div>
-  <aside class="fancy-sidebar grid-cell nano">
+  <aside class="fancy-sidebar grid-cell nano" ng-class="sidebar.open && 'open'">
     <div class="sidebar-btn">
       <i class="fa fa-bars"></i>
     </div>
@@ -92,12 +100,6 @@
 </div>
 <script type="text/javascript">
   $(".nano").nanoScroller();
-
-  $(document).ready(function(){
-    $(".sidebar-btn").click(function(){
-      $(".fancy-sidebar").toggleClass( "open" );
-    })
-  })
 </script>
 </body>
 </html>

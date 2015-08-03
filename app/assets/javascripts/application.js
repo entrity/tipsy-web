@@ -47,7 +47,7 @@
 		'ui.bootstrap',
 		'ui.select'
 	])
-	.run(['$rootScope', '$resource', '$modal', '$http', '$templateCache', '$q', function ($rootScope, $resource, $modal, $http, $templateCache, $q) {
+	.run(['$rootScope', '$resource', '$modal', '$http', '$q', '$window', function ($rootScope, $resource, $modal, $http, $q, $window) {
 		Object.defineProperties($rootScope, {
 			addToCabinet: {
 				configurable: false,
@@ -109,6 +109,19 @@
 						console.error('Failed to fetch open review count');
 						console.error(data, status, headers, config);
 					});
+				}
+			},
+			isInCabinetOrShoppingList: {
+				configurable: false,
+				value: function isInCabinetOrShoppingList (id) {
+					var i;
+					for (i = 0; i < this.cabinet.length; i++) {
+						if (this.cabinet[i].id == id) return true;
+					}
+					for (i = 0; i < this.shoppingList.length; i++) {
+						if (this.shoppingList[i].id == id) return true;
+					}
+					return false;
 				}
 			},
 			isLoggedIn: {
@@ -176,14 +189,30 @@
 				configurable: false,
 				value: JSON.parse(localStorage.getItem('shoppingList')) || []
 			},
+			sidebar: {
+				configurable: false,
+				value: {} // just for holding config options
+			},
 			visit: {
 				configurable: false,
 				value: function visit (url, event) {
-					event.stopPropagation();
-					event.preventDefault();
+					if (event) {
+						event.stopPropagation();
+						event.preventDefault();
+					}
 					Turbolinks.visit(url);
 				}
-			}
+			},
+			visitNoTurbo: {
+				configurable: false,
+				value: function visit (url, event) {
+					if (event) {
+						event.stopPropagation();
+						event.preventDefault();
+					}
+					$window.location.href = url;
+				}
+			},
 		});
 		/* Support fns */
 		function addIngredientToAside (ingredient, arrayName) {
@@ -208,6 +237,12 @@
 		/* Initialization calls */
 		while (removeDuplicatesFromAside($rootScope.cabinet)) {}
 		while (removeDuplicatesFromAside($rootScope.shoppingList)) {}
+		$rootScope.sidebar.open = JSON.parse(localStorage.getItem('sidebar.open')||false);
+		/* Attach non-angular callbacks */
+		$(".sidebar-btn").click(function () {
+			$rootScope.sidebar.open = !$rootScope.sidebar.open;
+			localStorage.setItem('sidebar.open', $rootScope.sidebar.open);
+		});
 	}])
 	.filter('tipsyFindableClass', function () {
 		return function (item) {
