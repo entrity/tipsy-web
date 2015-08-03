@@ -47,9 +47,9 @@
         <a href="#">Comments (<%= @drink.comment_ct %>)</a>
       </div>
     </div>
-    <div class="grid-cell votes">
+    <div class="grid-cell votes" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
       <div class="arrow up" role="button" aria-label="upvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', 1)"><i class="fa fa-caret-up" ng-class="drink._userVoteSign > 0 &amp;&amp; 'highlight'" ></i></a></div>
-      <div class="score"><noscript><%= @drink.score %></noscript>{{drink.score}}</div>
+      <div class="score" itemprop="ratingValue"><noscript><%= @drink.score %></noscript>{{drink.score}}</div>
       <div class="arrow down" role="button" aria-label="downvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', -1)"><i class="fa fa-caret-down" ng-class="drink._userVoteSign < 0 &amp;&amp; 'highlight'" ></i></a></div>
     </div>
   </div>
@@ -81,12 +81,12 @@
         </span>
       </p>
     </div>
-    <div class="grid-cell calorie-count">
+    <div class="grid-cell calorie-count" itemprop="nutrition" itemscope itemtype="http://schema.org/NutritionInformation">
       <p>
         Calories:
         <a ng-click="loadEditView()" class="fa fa-pencil"></a>
         <br>
-        <span>
+        <span itemprop="calories">
           <% if @drink.calories %>
             <%= @drink.calories %>
           <% else %>
@@ -105,10 +105,12 @@
       </h3>
       <div>
         <% if @drink.description.present? %>
-          <noscript itemprop="description"><%= @drink.description %></noscript>
-          <script>Tipsy.writeMarkdown(window.drink.description)</script>
+          <p itemprop="description">
+            <noscript><%= @drink.description %></noscript>
+            <script>Tipsy.writeMarkdown(window.drink.description)</script>
+          </p>
         <% else %>
-          <p>
+          <p itemprop="description">
             <em>No description has been submitted for this drink yet.</em>
             <br>
             <a ng-click="loadEditView()">How would you describe this drink?</a>
@@ -155,22 +157,18 @@
             <a ng-click="loadEditView()" class="fa fa-pencil"></a>
             <a ng-click="flag()" class="fa fa-flag"></a>
           </h3>
-          <% if @drink.instructions.present? %>
-            <div>
-              <noscript itemprop="recipeInstructions"><%= @drink.instructions %></noscript>
+          <p itemprop="recipeInstructions">
+            <% if @drink.instructions.present? %>
+              <noscript><%= @drink.instructions %></noscript>
               <script type="text/javascript">Tipsy.writeMarkdown(window.drink.instructions);</script>
-            </div>
-            <p>
               <em>Were these directions helpful?</em><br>
               <a ng-click="loadEditView()">Improve them!</a>
-            </p>
-          <% else %>
-            <p>
+            <% else %>
               <em>No instructions have been written yet.</em>
               <br>
               <a ng-click="loadEditView()">How would you prepare this drink?</a>
-            </p>
-          <% end %>
+            <% end %>
+          </p>
         </div>
       </div>
     </div>
@@ -183,9 +181,9 @@
       <a ng-click="createComment(newComment)">Save</a>
     </div>
   </div>
+  <ng-include src="'/drinks/comments.html'"></ng-include>
   <div class="grid row tips center">
     <div class="grid-cell">
-      <ng-include src="'/drinks/comments.html'"></ng-include>
       <div id="static-comments" ng-show="!(comments && comments.length)">
         <% @comments.each do |comment| %>
           <div class="grid grid--center tips" itemscope itemtype="https://schema.org/Comment">
