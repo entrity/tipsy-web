@@ -2,10 +2,10 @@
   window.ingredient = <%= @ingredient.to_json.html_safe %>;
 </script>
 <div ng-controller="IngredientCtrl">
-	<div class="grid row center">
-    <div class="grid-cell" ng-class="isInCabinetOrShoppingList(<%= ingredient.ingredient_id %>) &amp;&amp; 'in-sidebar'"><h1><%= @ingredient.name %></h1></div>
+  <div class="grid row center">
+    <div class="grid-cell" ng-class="isInCabinetOrShoppingList(<%= @ingredient.id %>) &amp;&amp; 'in-sidebar'"><h1><%= @ingredient.name %></h1></div>
   </div>
-	<% if @ingredient.canonical %>
+  <% if @ingredient.canonical %>
     <div class="grid row center">
       <div class="grid-cell">
         <em>Canonical form</em> &nbsp;
