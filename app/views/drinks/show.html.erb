@@ -42,7 +42,7 @@
   <div class="grid grid--center row center">
     <div class="grid-cell name">
       <h1 itemprop="name"><%= @drink.name %></h1>
-      <%= content_tag :meta, @drink.comment_ct, itemprop:"commentCount" %>
+      <%= tag :meta, content:@drink.comment_ct, itemprop:"commentCount" %>
       <div class="comments">
         <a href="#">Comments (<%= @drink.comment_ct %>)</a>
       </div>
