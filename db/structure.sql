@@ -234,7 +234,7 @@ CREATE TABLE drinks (
     author_id integer,
     calories smallint,
     prep_time text,
-    required_ingredient_ids integer[],
+    required_canonical_ingredient_ids integer[],
     user_id integer
 );
 
@@ -266,7 +266,8 @@ CREATE TABLE drinks_ingredients (
     drink_id integer,
     ingredient_id integer,
     qty character varying,
-    optional boolean DEFAULT false
+    optional boolean DEFAULT false,
+    canonical_id integer
 );
 
 
@@ -1174,4 +1175,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150728010414');
 INSERT INTO schema_migrations (version) VALUES ('20150729003919');
 
 INSERT INTO schema_migrations (version) VALUES ('20150730032132');
+
+INSERT INTO schema_migrations (version) VALUES ('20150803235732');
+
+INSERT INTO schema_migrations (version) VALUES ('20150803235836');
 

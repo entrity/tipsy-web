@@ -30,7 +30,7 @@ class Revision < ActiveRecord::Base
     if drink_id.nil? # if there is no drink_id, this revision represents a user-created drink that doesn't exist yet
       self.drink = Drink.create(user_id:user_id, name:name)
     end
-    drink.required_ingredient_ids = ingredients.select{|ing| !ing['optional'] }.map{|ing| ing['id'] }
+    drink.required_canonical_ingredient_ids = ingredients.select{|ing| !ing['optional'] }.map{|ing| ing['canonical_id'] }
     user.increment_revision_ct! unless flags.limit(1).count > 0 # If any flags are present, then this has already been published once and doesn't merit distribution of counts/points
     # Create/destroy added/removed ingredients
     if drink.revision.nil?

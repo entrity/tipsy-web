@@ -22,9 +22,9 @@ class Drink < ActiveRecord::Base
       .order('ingredient_ct')
   }
 
-  scope :for_exclusive_ingredients, -> ingredient_ids {
-    first_pass_drink_ids = DrinkIngredient.where(ingredient_id:ingredient_ids).where('optional IS NOT TRUE').distinct.pluck(:drink_id)
-    where(id:first_pass_drink_ids).where('required_ingredient_ids <@ \'{?}\'', Array.wrap(ingredient_ids).map(&:to_i))
+  scope :for_exclusive_ingredients, -> canonical_ingredient_ids {
+    first_pass_drink_ids = DrinkIngredient.where(canonical_id:canonical_ingredient_ids).where('optional IS NOT TRUE').distinct.pluck(:drink_id)
+    where(id:first_pass_drink_ids).where('required_canonical_ingredient_ids <@ \'{?}\'', Array.wrap(canonical_ingredient_ids).map(&:to_i))
   }
 
   def flag!
