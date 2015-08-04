@@ -167,30 +167,6 @@
       </div>
 
     </div>
-    <aside class="fancy-sidebar grid-cell">
-      <div class="sidebar-controls"></div>
-      <div class="ingredients-list">
-        <ul>
-          <li class="sidebar-list-first">My Cabinet <i class="icon-fridge"></i></li>
-          <li ng-repeat="item in cabinet track by item.id" class="item">
-            {{item.name}} 
-            <a ng-click="removeFromCabinet(item)"><i class="fa fa-times"></i></a>
-          </li>
-          <li ng-show="!cabinet || !cabinet.length" style="font-style:italic">(empty)</li>
-          <li><a><i class="icon-circlefork"></i> What can I make?</a></li>
-        </ul>
-      </div>
-      <div class="shopping-list">
-        <ul>
-          <li class="sidebar-list-first">Shopping List <i class="fa fa-shopping-cart"></i></li>
-          <li ng-repeat="item in shoppingList track by item.id" class="item">
-            {{item.name}}
-            <a ng-click="removeFromShoppingList(item)"><i class="fa fa-times"></i></a>
-          </li>
-          <li ng-show="!shoppingList || !shoppingList.length" style="font-style:italic">(empty)</li>
-        </ul>
-      </div>
-    </aside>
   </div>
   <footer>Copyright stuff</footer>
 </div>

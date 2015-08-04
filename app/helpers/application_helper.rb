@@ -5,7 +5,7 @@ module ApplicationHelper
   end
 
   def drink_ingredient_json drink_ingredient
-    drink_ingredient.ingredient.as_json(only:[:name, :id]).to_json
+    drink_ingredient.ingredient.as_json(only:[:name, :id, :canonical_id]).to_json
   end
 
   def trophy_icon trophy

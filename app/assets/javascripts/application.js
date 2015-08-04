@@ -132,7 +132,7 @@
 			},
 			loadCabinetToFuzzyFindResults: {
 				configurable: false,
-				value: function () {
+				value: function loadCabinetToFuzzyFindResults () {
 					this.finder.ingredients = angular.copy(this.cabinet);
 					this.finder.fetchDrinksForIngredients();
 				}

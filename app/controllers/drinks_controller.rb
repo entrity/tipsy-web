@@ -8,7 +8,11 @@ class DrinksController < ApplicationController
     @drinks = @drinks.select(params[:select]) if params[:select].present?
     @drinks = @drinks.where(profane:params[:profane]) if params[:profane].present?
     if params[:ingredient_id].present?
-      @drinks = @drinks.for_exclusive_ingredients(params[:ingredient_id])
+      params[:canonical_ingredient_id] ||= []
+      params[:canonical_ingredient_id] += Ingredient.where(id:params[:ingredient_id]).pluck(:canonical_id)
+    end
+    if params[:canonical_ingredient_id].present?
+      @drinks = @drinks.for_exclusive_ingredients(params[:canonical_ingredient_id])
     end
     if params[:no_paginate]
       @drinks = @drinks.limit(MAX_RESULTS)

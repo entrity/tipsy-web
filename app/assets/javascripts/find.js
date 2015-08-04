@@ -45,6 +45,7 @@
 		// Add ingredient to $scope.finder.ingredients and fetch drink results
 		$scope.finder.addIngredient = function (ingredient) {
 			this.ingredients.push(new Ingredient(ingredient));
+			angular.element('body').animate({scrollTop:0}, 200);
 			this.fetchDrinksForIngredients();
 		}
 		$scope.finder.removeIngredient = function (index) {
@@ -58,11 +59,16 @@
 		// Define array or (append if array already exists) $scope.finder.drinks
 		$scope.finder.fetchDrinksForIngredients = function (pageNumber, append) {
 			if (!($scope.finder.ingredients && $scope.finder.ingredients.length)) return;
-			var ingredientIds = $scope.finder.ingredients.map(function (ingredient) {
-				return ingredient.id;
+			var ingredientIds = [], canonicalIngredientIds = [];
+			$scope.finder.ingredients.forEach(function (ingredient) {
+				if (isNaN(ingredient.canonical_id))
+					ingredientIds.push(ingredient.id);
+				else
+					canonicalIngredientIds.push(ingredient.canonical_id);
 			});
 			var drinks = $resource('/drinks/:id.json').query({
 				'ingredient_id[]':ingredientIds,
+				'canonical_ingredient_id[]':canonicalIngredientIds,
 				'select[]':['id', 'name', 'comment_ct', 'up_vote_ct', 'ingredient_ct'],
 				page: (pageNumber || 1),
 				profane: ($scope.finder.options.noProfanity ? false : null),
