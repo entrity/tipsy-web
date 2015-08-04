@@ -595,18 +595,16 @@ nav .user li .rep-change {
 }
 .fancy-sidebar .sidebar-btn {
   display: block;
-  height: 36px;
-  width: 40px;
+  height: 134px;
+  width: 35px;
+  background: url(/images/btn-sidebar.png) no-repeat;
   position: absolute;
-  top: 0;
-  left: -40px;
-  border-radius: 4px 0 0 4px;
-  background-color: #fff;
+  top: 6px;
+  left: -35px;
   transition: all .4s ease;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
-.fancy-sidebar .sidebar-btn:after {
+/*.fancy-sidebar .sidebar-btn:after {
   content:'';
   position: absolute;
   width: 5px;
@@ -617,17 +615,18 @@ nav .user li .rep-change {
 }
 .fancy-sidebar .sidebar-btn:hover {
   background-color: #267fdd;
-}
+} */
 .fancy-sidebar .sidebar-btn .fa {
   color: #000;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  margin-top: -20px;
   line-height: 36px;
   width: 40px;
   font-size: 14px;
   text-align: center;
   transition: all .4s ease;
-}
-.fancy-sidebar.open .sidebar-btn {
-  background-color: #267fdd;
 }
 .fancy-sidebar.open .sidebar-btn .fa {
   color: #fff;
@@ -640,12 +639,11 @@ nav .user li .rep-change {
 .fancy-sidebar {
   width:200px;
   position: fixed;
-  top: 90px;
-  bottom: 36px;
+  top: 57px;
+  bottom: 0;
   right: -203px;
-  padding:10px;
-  background-color: #267fdd;
-  border-radius: 0 0 0 4px;
+  padding: 16px 10px;
+  background-color: #1dbb73;
   transition: all .4s ease;
   box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
@@ -953,10 +951,12 @@ aside .btn-primary:hover {
   max-width: 600px;
 }
 #drink-page .photos {
-  min-height: 300px;
+  min-height: 330px;
   border-bottom: 1px solid #ededed;
   background: url(/images/img-upload.png) no-repeat center #f4f4f4;
   margin-bottom: 30px;
+  overflow: hidden;
+  position: relative;
 }
 #drink-page .row,
 #recipe-editor .row,
