@@ -4,7 +4,11 @@ class UsersController < ApplicationController
   before_action :require_signed_in, only: :unviewed_point_distributions
 
   def show
-    respond_with get_user
+    get_user
+    if request.format.html?
+      @canonical_url = 'http://tipsyology.com' + @user.url_path
+    end
+    respond_with @user
   end
 
   def trophies

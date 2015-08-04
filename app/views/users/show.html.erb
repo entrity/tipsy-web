@@ -1,0 +1,53 @@
+<div class="wrapper">
+  <ng-include src="'/toolbar.html'"></ng-include>
+  <div id="main-cont" class="grid" ng-controller="User.EditCtrl">
+    <div class="content grid-cell account-settings center">
+      <div class="grid grid--center profile">
+        <div class="grid-cell avatar">
+          <%= image_tag @user.photo.url(:thumb) %>
+        </div>
+        <div class="grid-cell">
+          <h1><%= @user.name %></h1>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="grid-cell main gen">
+          <div class="grid grid--center field">
+            <div class="grid-cell"><label>Profile Picture</label></div>
+            <div class="grid-cell form-item avatar">
+              <%= image_tag @user.photo.url %>
+            </div>
+          </div>
+          <div class="grid grid--top field">
+            <div class="grid-cell"><%= label_tag :name %></div>
+            <div class="grid-cell form-item">
+              <%= @user.name %>
+            </div>
+          </div>
+          <div class="grid grid--top field">
+            <div class="grid-cell"><label>Nickname</label></div>
+            <div class="grid-cell form-item">
+              <%= @user.nickname %>
+            </div>
+          </div>
+          <div class="grid grid--center field">
+            <div class="grid-cell"><label>Location</label></div>
+            <div class="grid-cell form-item"><%= @user.location %></div>
+          </div>
+          <div class="grid grid--top field">
+            <div class="grid-cell"><label>Twitter</label></div>
+            <div class="grid-cell form-item">
+              <%= @user.twitter %>
+            </div>
+          </div>
+          <div class="grid grid--center field">
+            <div class="grid-cell"><label>Bio</label></div>
+            <div class="grid-cell form-item"><%= @user.bio %></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

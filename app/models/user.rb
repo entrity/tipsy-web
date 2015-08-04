@@ -165,6 +165,10 @@ class User < ActiveRecord::Base
     super(options)
   end
 
+  def url_path
+    "/users/#{nickname.to_s.downcase.gsub(/[\W]+/, '-')}"
+  end
+
   private
 
     def award_trophy trophy_category
