@@ -14,7 +14,8 @@ class User < ActiveRecord::Base
 
   has_attached_file :photo, :styles => { :thumb => "128x128>", :tiny => "32x32>" }, :default_url => '/images/anonymous-:style.jpg'
 
-  validates :nickname, uniqueness: true, allow_blank: true
+  validates :nickname, uniqueness: true, allow_blank: true, format: { with: /[a-zA-Z]/,
+    message: "requries at least one alphabetic character" }
   validates_with AttachmentContentTypeValidator, :attributes => :photo, :content_type => ["image/jpeg", "image/png"]
   validates_with AttachmentSizeValidator, :attributes => :photo, :less_than => 5.megabytes
   validates_attachment_file_name :photo, :matches => [/png\Z/, /jpe?g\Z/]
@@ -166,7 +167,11 @@ class User < ActiveRecord::Base
   end
 
   def url_path
-    "/users/#{nickname.to_s.downcase.gsub(/[\W]+/, '-')}"
+    if nickname.present?
+      "/users/#{nickname.to_s.downcase.gsub(/[\W]+/, '-')}"
+    else
+      "/users/#{id}"
+    end
   end
 
   private
