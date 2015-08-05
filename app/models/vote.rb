@@ -51,7 +51,7 @@ class Vote < ActiveRecord::Base
           break contributor_id = votable.send(key)
         end
       end
-      errors.add(:user, "cannot be the same as the votable contributor") if contributor_id == self.user_id
+      errors.add(:base, "You cannot vote on your own contribution!") if contributor_id == self.user_id
     end
 
 end

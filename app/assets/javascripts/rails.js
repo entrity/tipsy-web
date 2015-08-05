@@ -11,11 +11,12 @@
 					if (!status) {
 						status     = data.status;
 						statusText = data.statusText;
-						data       = data.data;
 					}
+					if (data && data.data) data = data.data;
 					if (statusText) errStrings.push(status.toString()+' '+statusText);
 					for (key in data.errors) {
 						var array = data.errors[key];
+						if (key === 'base') key = '';
 						array.forEach(function (value, index) {
 							errStrings.push(key + ' ' + value);
 						});
