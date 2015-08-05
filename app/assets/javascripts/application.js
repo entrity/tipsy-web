@@ -111,14 +111,23 @@
 					});
 				}
 			},
-			isInCabinetOrShoppingList: {
+			isInCabinet: {
 				configurable: false,
-				value: function isInCabinetOrShoppingList (id) {
-					var i;
-					for (i = 0; i < this.cabinet.length; i++) {
+				value: function isInCabinet (id) {
+					if (typeof(id) === "object") id = id.id;
+					if (typeof(id) === "string") id = parseInt(id);
+					for (var i = 0; i < this.cabinet.length; i++) {
 						if (this.cabinet[i].id == id) return true;
 					}
-					for (i = 0; i < this.shoppingList.length; i++) {
+					return false;
+				}
+			},
+			isInShoppingList: {
+				configurable: false,
+				value: function isInShoppingList (id) {
+					if (typeof(id) === "object") id = id.id;
+					if (typeof(id) === "string") id = parseInt(id);
+					for (var i = 0; i < this.shoppingList.length; i++) {
 						if (this.shoppingList[i].id == id) return true;
 					}
 					return false;
