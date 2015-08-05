@@ -14,7 +14,7 @@
         <% end -%>
       </noscript>
       <div id="gallery" class="slider" ng-if="photos.length">
-        <img ng-repeat="photo in photos" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{photo.mediumUrl}}" />
+        <img ng-repeat="photo in photos" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{photo.activeUrl}}" />
         <div id="gallery-ctrl">
           <a ng-click="votePhoto(1)"><i class="fa fa-thumbs-up" ng-class="getActivePhoto()._userVoteSign > 0 &amp;&amp; 'highlight'"></i></a>
           <span ng-bind="getActivePhoto().score"></span>
