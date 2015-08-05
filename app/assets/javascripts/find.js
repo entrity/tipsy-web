@@ -49,8 +49,13 @@
 			this.fetchDrinksForIngredients();
 		}
 		$scope.finder.removeIngredient = function (index) {
-			this.ingredients.splice(index, 1);
-			this.fetchDrinksForIngredients();
+			if (index == null) {
+				this.ingredients = [];
+				this.drinks = [];
+			} else {
+				this.ingredients.splice(index, 1);
+				this.fetchDrinksForIngredients();
+			}
 		}
 		$scope.finder.loadNextPage = function () {
 			var pageNumber = (this.drinks.page || 0) + 1;
