@@ -142,8 +142,8 @@
 					delete $scope.newComment.text;
 					$scope.comments.push(data);
 				})
-				.error(function (data) {
-					RailsSupport.errorAlert(data);
+				.error(function (data, status) {
+					RailsSupport.errorAlert(data, status);
 				})
 			}
 		};
@@ -164,7 +164,7 @@
 				})
 				.error(function (data, status, headers, config) {
 					console.error(data, status, headers, config);
-					RailsSupport.errorAlert(data);
+					RailsSupport.errorAlert(data, status);
 				});
 			}
 		};
