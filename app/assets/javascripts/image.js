@@ -119,9 +119,9 @@
 			if ($scope.drink.photos && $scope.drink.photos.length) {
 				// set $scope.photos
 				$scope.photos = $scope.drink.photos;
-				// set mediumUrl for each photo
+				// set activeUrl for each photo
 				$scope.photos.forEach(function (photo) {
-					photo.mediumUrl = photo.thumb.replace(/thumb/, 'medium');
+					photo.activeUrl = photo.thumb.replace(/thumb/, 'large');
 					photo.originalUrl = photo.thumb.replace(/thumb/, 'original');
 					// set _isUserFlagged
 					$scope.drink.setIsUserFlagged(photo, 'Photo');
