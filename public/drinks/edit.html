@@ -1,72 +1,151 @@
 <div id="recipe-editor" ng-controller="Drink.EditCtrl">
-	<div class="grid grid--center row center">
-		<div class="grid-cell" ng-hide="revision.id">
-			<p>
-				<a ng-show="drink &amp;&amp; drink.id" class="btn btn-primary" ng-click="visitDrink()">Back to {{drink.name}}</a>
-				<a ng-hide="drink &amp;&amp; drink.id" class="btn btn-primary" ng-click="visitNoTurbo('/')">Back to Home</a>
-			</p>
+  <div class="grid row center">
+    <div class="grid-cell form-group form-group-lg">
+			<h3 for="drinkName">Name</h3>
+			<input class="form-control" id="drinkName" placeholder="What is this delicious cocktail called?" type="text" ng-model="revision.name">
+		</div>
+	</div>
+	<div class="grid row center">
+    <div class="grid-cell form-group form-group-lg">
+		  <div class="grid grid--gutters">
+		    <div class="grid-cell form-group form-group-lg">
+					<h3 for="prepTime">Prep Time</h3>
+					<div class="input-group">
+						<input class="form-control" id="prepTime" placeholder="" type="number" min="1" max="9999" ng-model="revision.prep_time">
+      			<div class="input-group-addon">minutes</div>
+      		</div>
+				</div>
+		    <div class="grid-cell form-group form-group-lg">
+					<h3 for="calCount">Calories Per Serving</h3>
+					<div class="input-group">
+						<input class="form-control" id="calCount" placeholder="" type="number" min="1" max="9999" ng-model="revision.calories">
+      			<div class="input-group-addon">calories</div>
+      		</div>
+				</div>
+			</div>
 		</div>
 	</div>
   <div class="grid row center">
-    <div class="grid-cell">
-			<h3>Name</h3>
-			<input type=text ng-model="revision.name">
+    <div class="grid-cell form-group">
+  		<div class="grid grid--gutters">
+    		<div class="grid-cell">
+					<h3 for="wmd-input">Description</h3>
+					<textarea id="wmd-input" class="form-control" placeholder="Tell us about this cocktail, history, why you like it, how it tastes, etc." ng-model="revision.description" rows="3"></textarea>
+				</div>
+			</div>
+  		<div class="grid grid--gutters">
+    		<div class="grid-cell">
+					<div id="wmd-preview"></div>
+				</div>
+			</div>
 		</div>
 	</div>
   <div class="grid row center">
-    <div class="grid-cell">
-			<h3>Prep Time</h3>
-			<input type=text ng-model="revision.prep_time">
-		</div>
-    <div class="grid-cell">
-			<h3>Calories</h3>
-			<input type=number ng-model="revision.calories">
-		</div>
-	</div>
-  <div class="grid row center">
-    <div class="grid-cell">
-			<h3>Description</h3>
-			<div id="wmd-button-bar"></div>
-			<textarea id="wmd-input" ng-model="revision.description"></textarea>
-			<div id="wmd-preview"></div>
+    <div class="grid-cell form-group form-group-lg">
+  		<div class="grid grid--gutters">
+    		<div class="grid-cell">
+					<h3 for="wmd-input-instructions">Recipe Directions</h3>
+					<textarea id="wmd-input-instructions" class="form-control" placeholder="What is the first step?" ng-model="revision.instructions" rows="1"></textarea>
+				</div>
+			</div>
 		</div>
 	</div>
-  <div class="grid row center">
-    <div class="grid-cell">
-			<h3>Recipe Directions</h3>
-			<div id="wmd-button-bar-instructions"></div>
-			<textarea id="wmd-input-instructions" ng-model="revision.instructions"></textarea>
-			<div id="wmd-preview-instructions"></div>
-		</div>
-	</div>
-  <div class="grid row center">
-    <div class="grid-cell">
+  <div class="grid row center ingredients">
+    <div class="grid-cell form-group form-group-lg">
 			<h3>Ingredients</h3>
 			<div ng-repeat="ingredient in revision.ingredients">
-				<ingredient-finder data-ingredient="ingredient"></ingredient-finder>
-				<input type=text ng-model="ingredient.qty">
-				<label><input type=checkbox ng-model="ingredient.optional"> optional</label>
-				<a class="btn btn-warning" ng-click="removeIngredient($index)"><i class="fa fa-times"></i></a>
+				<div class="grid grid--center grid--gutters">
+	    		<div class="grid-cell">
+						<ingredient-finder data-ingredient="ingredient"></ingredient-finder>
+					</div>
+	    		<div class="grid-cell qty">
+						<input class="form-control" placeholder="Quantity" type="text" ng-model="ingredient.qty">
+					</div>
+	    		<div class="grid-cell">
+						<label><input type="checkbox" ng-model="ingredient.optional"> optional</label>
+					</div>
+	    		<div class="grid-cell">
+						<a ng-click="removeIngredient($index)"><i class="fa fa-times-circle"></i></a>
+					</div>
+				</div>
 			</div>
-			<a class="btn btn-info" ng-click="addIngredient()">Add Ingredient</a>
+			<div class="grid grid--center grid--gutters">
+    		<div class="grid-cell">
+					<a class="btn btn-info form-control" ng-click="addIngredient()">Add Ingredient</a>
+				</div>
+			</div>
+		</div>
+	</div>
+  <div class="grid row center form-group form-group-lg">
+    <div class="grid-cell slider">
+			<h3>Tastes</h3>
+    	<div>
+				<label>Alcohol:</label>
+				<input class="slider" data-slider-max="50" data-slider-min="0" data-slider-value="25" type="text">
+			</div>
+    	<div>
+				<label>Fruitiness:</label>
+				<input class="slider" data-slider-max="50" data-slider-min="0" data-slider-value="25" type="text">
+			</div>
+    	<div>
+				<label>Sweetness:</label>
+				<input class="slider" data-slider-max="50" data-slider-min="0" data-slider-value="25" type="text">
+			</div>
+    	<div>
+				<label>Spiciness:</label>
+				<input class="slider" data-slider-max="50" data-slider-min="0" data-slider-value="25" type="text">
+			</div>
+    	<div>
+				<label>Bitterness:</label>
+				<input class="slider" data-slider-max="50" data-slider-min="0" data-slider-value="25" type="text">
+			</div>
+    	<div>
+				<label>Sourness:</label>
+				<input class="slider" data-slider-max="50" data-slider-min="0" data-slider-value="25" type="text">
+			</div>
+    	<div>
+				<label>Saltiness / Savoriness:</label>
+				<input class="slider" data-slider-max="50" data-slider-min="0" data-slider-value="25" type="text">
+			</div>
+    	<div>
+				<label>Creaminess:</label>
+				<input class="slider" data-slider-max="50" data-slider-min="0" data-slider-value="25" type="text">
+			</div>
+    	<div>
+				<label>Bubbliness:</label>
+				<input class="slider" data-slider-max="50" data-slider-min="0" data-slider-value="25" type="text">
+			</div>
+    	<div>
+				<label>Dryness:</label>
+				<input class="slider" data-slider-max="50" data-slider-min="0" data-slider-value="25" type="text">
+			</div>
+		</div>
+	</div>
+  <div class="grid row center form-group form-group-lg">
+    <div class="grid-cell checkbox">
+			<label><input type="checkbox" ng-model="revision.non_alcoholic"> Non-alcoholic</label><br>
+			<label><input type="checkbox" ng-model="revision.profane"> Name contains religious reference, profanity, or crude language</label>
 		</div>
 	</div>
   <div class="grid row center">
-    <div class="grid-cell">
-			<label><input type=checkbox ng-model="revision.non_alcoholic">Non-alcoholic</label><br>
-			<label><input type=checkbox ng-model="revision.profane">Name contains religious reference, profanity, or crude language</label>
+    <div class="grid-cell form-group">
+			<div class="grid grid--center grid--gutters aligner">
+		    <div class="grid-cell grid--shrink">
+					<a class="btn btn-primary" ng-click="save()">Publish</a>
+				</div>
+		    <div class="grid-cell grid--shrink">
+					<a ng-show="drink &amp;&amp; drink.id" ng-click="visitDrink()">Cancel</a>
+				</div>
+			</div>
 		</div>
 	</div>
   <div class="grid row center">
-    <div class="grid-cell">
-			<a class="btn btn-primary" ng-click="save()">Save Revision</a>
-		</div>
-		<div ng-cloak ng-show="revision.id">
-			<p>Thank you. Your changes will be reviewed. If approved, they shall be published, and you shall be awarded points in tips.</p>
-			<p>
-				<a ng-show="drink &amp;&amp; drink.id" class="btn btn-primary" ng-click="visitDrink()">Back to {{drink.name}}</a>
-				<a ng-hide="drink &amp;&amp; drink.id" class="btn btn-primary" ng-click="visitNoTurbo('/')">Back to Home</a>
-			</p>
+    <div class="grid-cell form-group" ng-cloak ng-show="revision.id">
+			<div class="grid grid--center grid--gutters aligner">
+		    <div class="grid-cell grid--shrink">
+					<p>Thank you. Your changes will be reviewed. If approved, they shall be published, and you shall be awarded points in tips.</p>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

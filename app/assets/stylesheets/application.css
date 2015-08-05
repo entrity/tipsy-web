@@ -23,6 +23,7 @@ body {
   font-size: 13px;
   margin: 0;
   overflow-x: hidden;
+  color: #212121;
 }
 
 #fuzzy-finder .ui-select-match::before {
@@ -873,10 +874,13 @@ aside .btn-primary:hover {
 }
 /* With gutters */
 .grid--gutters {
-  margin: -1em 0 0 -1em;
+  margin: -1em -1em -1em -1em;
 }
 .grid--gutters > .grid-cell {
-  padding: 1em 0 0 1em;
+  padding: 1em 1em 1em 1em;
+}
+.grid--shrink {
+  flex: 0 1 auto;
 }
 /* Alignment per row */
 .grid--top {
@@ -939,8 +943,7 @@ aside .btn-primary:hover {
   margin: 0;
   padding: 0 0 6px 0;
 }
-#drink-page h3,
-#recipe-editor h3 {
+#drink-page h3 {
   font-size: 14px;
   font-weight: 600;
   margin: 0 0 8px 0;
@@ -1061,6 +1064,132 @@ aside .btn-primary:hover {
   background: #ddd;
   color: #888;
 }
+
+/*** RECIPE EDITOR ***/
+
+
+#recipe-editor h3 {
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 0;
+}
+#recipe-editor .form-group {
+  margin-bottom: 0;
+}
+#recipe-editor .ingredients .form-group .grid .grid-cell:nth-of-type(3),
+#recipe-editor .ingredients .form-group .grid .grid-cell:nth-of-type(4) {
+  flex: 0 1 auto;
+}
+#recipe-editor .form-group textarea {
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
+  border-radius: 6px;
+}
+#recipe-editor .form-group .qty {
+  width: 160px;
+  flex: 0 1 auto;
+}
+
+.slider {
+  margin-bottom: 40px;
+}
+.slider-vertical {
+  margin: 10px;
+}
+.slider {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  width: 100%;
+}
+.slider.slider-horizontal {
+  height: 30px; 
+}
+.slider.slider-horizontal .slider-track {
+  height: 6px;
+  width: 100%;
+  margin-top: -3px;
+  top: 50%;
+  left: 0; 
+}
+.slider.slider-horizontal .slider-selection {
+  height: 100%;
+  top: 0;
+  bottom: 0; 
+}
+.slider.slider-horizontal .slider-handle {
+  margin-left: -12px;
+  margin-top: -9px; 
+}
+.slider.slider-horizontal .slider-handle.triangle {
+  border-width: 0 10px 10px 10px;
+  width: 0;
+  height: 0;
+  border-bottom-color: #0480be;
+  margin-top: 0; 
+}
+.slider.slider-vertical {
+  height: 220px;
+  width: 30px; 
+}
+.slider.slider-vertical .slider-track {
+  width: 6px;
+  height: 100%;
+  margin-left: -3px;
+  left: 50%;
+  top: 0; 
+}
+.slider.slider-vertical .slider-selection {
+  width: 100%;
+  left: 0;
+  top: 0;
+  bottom: 0; 
+}
+.slider.slider-vertical .slider-handle {
+  margin-left: -9px;
+  margin-top: -12px; 
+}
+.slider.slider-vertical .slider-handle.triangle {
+  border-width: 10px 0 10px 10px;
+  width: 1px;
+  height: 1px;
+  border-left-color: #0480be;
+  margin-left: 0; 
+}
+.slider input {
+  display: none; 
+}
+.slider .tooltip-inner {
+  white-space: nowrap; 
+}
+.slider-track {
+  position: absolute;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 4px; 
+}
+.slider-selection {
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+  border-radius: 4px; 
+}
+.slider-handle {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+  border: 0px solid transparent; 
+}
+.slider-handle.round {
+  border-radius: 24px; 
+}
+.slider-handle.triangle {
+  background: transparent none; 
+}
+
 
 /*** IMAGE EDITOR / UPLOADER ***/
 
@@ -1271,6 +1400,7 @@ footer.fixed {
 footer.in-app {
   background: #263444;
   min-height: 120px;
+  padding: 40px 0;
 }
 footer.fixed .grid .grid-cell.socials,
 footer.in-app .grid .grid-cell.socials {
@@ -1280,17 +1410,23 @@ footer.in-app .grid .grid-cell.socials {
 footer.fixed .grid .grid-cell.socials .fa,
 footer.in-app .grid .grid-cell.socials .fa {
   margin-right: 6px;
-  opacity: 0.5;
+  font-size: 18px;
   color: #aaa;
 }
 footer.fixed .grid .grid-cell.copyright,
 footer.in-app .grid .grid-cell.copyright {
-  opacity: 0.5;
   color: #aaa;
+  font-size: 11px;
+}
+footer a:hover {
+  color: #00B3FF;
+}
+footer .fa:hover {
+  color: #00B3FF;
 }
 footer.fixed .grid .grid-cell.copyright {
   padding-right: 102px;
 }
-footer.in-app .grid .grid-cell.copyright {
-  padding-right: 317px;
+footer.in-app .row {
+  margin-bottom: 20px;
 }
