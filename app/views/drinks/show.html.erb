@@ -132,14 +132,14 @@
       <% @ingredients.each do |ingredient| %>
         <div class="grid grid--center ingredient" itemprop="recipeIngredient">
           <div class="grid-cell actions">
-            <a ng-click="addToCabinet(<%= drink_ingredient_json ingredient %>)" title="Add to My Fridge">
+            <a ng-click="addToCabinet(<%= drink_ingredient_json ingredient %>)" title="Add to My Fridge" ng-class="isInCabinet(<%= ingredient.ingredient_id %>) &amp;&amp; 'active'">
               <i class="sprite sprite-fridge"></i>
             </a>
-            <a ng-click="addToShoppingList(<%= drink_ingredient_json ingredient %>)" title="Add to Shopping List">
+            <a ng-click="addToShoppingList(<%= drink_ingredient_json ingredient %>)" title="Add to Shopping List" ng-class="isInShoppingList(<%= ingredient.ingredient_id %>) &amp;&amp; 'active'">
               <i class="sprite sprite-shopping-cart"></i>
             </a>
           </div>
-          <div class="grid-cell name" ng-class="isInCabinetOrShoppingList(<%= ingredient.ingredient_id %>) &amp;&amp; 'in-sidebar'"><%= link_to ingredient.name, ingredient.url_path %></div>
+          <div class="grid-cell name"><%= link_to ingredient.name, ingredient.url_path %></div>
           <div class="grid-cell amount">
             <% if ingredient.optional %><em>(optional)</em><% end -%>
             <%= ingredient.qty %>

@@ -9,8 +9,8 @@
 			</button>
 			<ul ng-show="ingredient._ctlToggled" class="dropdown-menu dropdown-menu-right" role="menu">
 				<li><a ng-click="finder.removeIngredient($index)"><i class="fa fa-remove"></i></a></li>
-				<li><a ng-click="addToCabinet(ingredient)"><i class="icon-fridge"></i></a></li>
-				<li><a ng-click="addToShoppingList(ingredient)"><i class="fa fa-shopping-cart"></i></a></li>
+				<li><a ng-click="addToCabinet(ingredient)" ng-class="isInCabinet(ingredient) &amp;&amp; 'active'"><i class="icon-fridge"></i></a></li>
+				<li><a ng-click="addToShoppingList(ingredient)" ng-class="isInShoppingList(ingredient) &amp;&amp; 'active'"><i class="fa fa-shopping-cart"></i></a></li>
 				<li><a ng-href="{{ingredient.getUrl()}}" ng-click="visitNoTurbo(ingredient.getUrl(), $event)"><i class="fa fa-link"></i></a></li>
 			</ul>
 		</div>
