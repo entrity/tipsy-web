@@ -30,6 +30,7 @@ class DrinksController < ApplicationController
         @meta_photo    = saved_drink.top_photo.try(:url)
         @ingredients   = saved_drink.ingredients
           .includes(:ingredient)
+          .order('sort DESC')
           .limit(MAX_RESULTS)
         @photos = saved_drink.photos.where(status:Flaggable::APPROVED).order(:score)
         @comments = saved_drink.comments.order(:score)
@@ -51,7 +52,7 @@ class DrinksController < ApplicationController
   alias_method :new, :edit
 
   def ingredients
-    @ingredients = saved_drink.ingredients
+    @ingredients = saved_drink.ingredients.order('sort DESC')
     respond_with @ingredients.as_json(methods:[:name])
   end
 

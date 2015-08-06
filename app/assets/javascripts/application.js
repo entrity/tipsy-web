@@ -14,6 +14,7 @@
 //= require 'angular-animate/angular-animate'
 //= require 'angular-aria/angular-aria.min'
 //= require 'angular-bootstrap/ui-bootstrap-tpls.min'
+//= require 'angular-drag-and-drop-lists/angular-drag-and-drop-lists.min'
 //= require 'angular-resource/angular-resource.min'
 //= require 'angular-route/angular-route.min'
 //= require 'angular-sanitize/angular-sanitize.min'
@@ -33,6 +34,7 @@
 (function(){
 
 	angular.module('tipsy', [
+		'dndLists',
 		'ngAria',
 		'ngResource',
 		'ngSanitize',

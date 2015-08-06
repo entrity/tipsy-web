@@ -268,7 +268,8 @@ CREATE TABLE drinks_ingredients (
     ingredient_id integer,
     qty character varying,
     optional boolean DEFAULT false,
-    canonical_id integer
+    canonical_id integer,
+    sort integer DEFAULT 0
 );
 
 
@@ -989,10 +990,10 @@ CREATE INDEX index_comments_on_user_id ON comments USING btree (user_id);
 
 
 --
--- Name: index_drinks_ingredients_on_drink_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_drinks_ingredients_on_drink_id_and_sort; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_drinks_ingredients_on_drink_id ON drinks_ingredients USING btree (drink_id);
+CREATE INDEX index_drinks_ingredients_on_drink_id_and_sort ON drinks_ingredients USING btree (drink_id, sort);
 
 
 --
@@ -1182,4 +1183,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150803235732');
 INSERT INTO schema_migrations (version) VALUES ('20150803235836');
 
 INSERT INTO schema_migrations (version) VALUES ('20150806001328');
+
+INSERT INTO schema_migrations (version) VALUES ('20150806004006');
 

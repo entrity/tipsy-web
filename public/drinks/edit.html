@@ -89,6 +89,24 @@
 					</div>
 				</div>
 			</div>
+			<div>
+				<ul dnd-list="revision.ingredients">
+					<li ng-repeat="ingredient in revision.ingredients" dnd-draggable="ingredient" dnd-moved="revision.ingredients.splice($index, 1)" dnd-effect-allowed="move" dnd-selected="revision.ingredients.selected = item" ng-class="{'selected': revision.ingredients.selected === item}">
+						<div class="grid-cell">
+							<ingredient-finder data-ingredient="ingredient"></ingredient-finder>
+						</div>
+						<div class="grid-cell qty">
+							<input class="form-control" placeholder="Quantity" type="text" ng-model="ingredient.qty">
+						</div>
+						<div class="grid-cell">
+							<label><input type="checkbox" ng-model="ingredient.optional"> optional</label>
+						</div>
+						<div class="grid-cell">
+							<a ng-click="removeIngredient($index)"><i class="fa fa-times-circle"></i></a>
+						</div>
+					</li>
+				</ul>
+			<div>
 			<div class="grid grid--center grid--gutters">
 				<div class="grid-cell">
 					<a class="btn btn-info form-control" ng-click="addIngredient()">Add Ingredient</a>
