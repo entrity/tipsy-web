@@ -10,7 +10,7 @@ namespace :db do
       if id
         canonical_id = h[CANONICAL_HEADER].present? ? h[CANONICAL_HEADER].to_i : id
         name         = h[NAME_HEADER]
-        byebug if name.blank?
+        raise "No name!: #{row.inspect}" if name.blank?
         res = db.exec_params "UPDATE ingredients SET name = $1, canonical_id = $2 WHERE id = $3", [name, canonical_id, id]
         if res.cmd_tuples == 0
           db.exec_params "INSERT INTO ingredients (id, name, canonical_id) VALUES ($1, $2, $3)", [id, name, canonical_id]

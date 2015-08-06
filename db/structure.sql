@@ -235,7 +235,8 @@ CREATE TABLE drinks (
     calories smallint,
     prep_time text,
     required_canonical_ingredient_ids integer[],
-    user_id integer
+    user_id integer,
+    related_drink_ids integer[] DEFAULT '{}'::integer[]
 );
 
 
@@ -1179,4 +1180,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150730032132');
 INSERT INTO schema_migrations (version) VALUES ('20150803235732');
 
 INSERT INTO schema_migrations (version) VALUES ('20150803235836');
+
+INSERT INTO schema_migrations (version) VALUES ('20150806001328');
 
