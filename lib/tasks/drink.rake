@@ -1,6 +1,7 @@
 namespace :drink do
   task :set_related => :environment do
-    Drink.all.each do |drink|
+    start_time = Time.now
+    Drink.find_each do |drink|
       ingredient_ids = drink.ingredients.pluck(:ingredient_id)
       candidates = Drink
         .joins(:ingredients)
@@ -18,6 +19,10 @@ namespace :drink do
       end
       related_drinks = candidates[0...5]
       drink.update_attributes! related_drink_ids:related_drinks.map(&:id)
+      puts drink.id
+      if drink.id % 20 == 0
+        puts "%05d seconds elapsed" % (Time.now - start_time)
+      end
     end
   end
 
