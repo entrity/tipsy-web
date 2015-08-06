@@ -85,8 +85,9 @@
 					this.prev_description = drink.description;
 					this.prev_instruction = drink.instructions;
 					// Fetch ingredients from server
+					var thisRevision = this;
 					this.prev_ingredients = Drink.ingredients({id:drink.id}, function () {
-						this.ingredients = angular.copy(this.prev_ingredients);
+						thisRevision.ingredients = angular.copy(thisRevision.prev_ingredients);
 					});
 				},
 			}
