@@ -49,7 +49,7 @@
   opacity: 1;
 }
 #drink-page #gallery .nav {
-    bottom: 30px;
+    bottom: 0;
     display: block;
     left: 0;
     margin: 0 auto;

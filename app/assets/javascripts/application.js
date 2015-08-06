@@ -27,6 +27,7 @@
 //= require image-resize-crop-canvas/component
 //= require turbolinks
 //= require ui-bootstrap
+//= require jquery.toolbar.min
 //= require_tree .
 
 (function(){
