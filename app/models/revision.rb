@@ -39,12 +39,17 @@ class Revision < ActiveRecord::Base
       prev_ingredients ||= drink.ingredients || parent.try(:ingredients)
       deled_ingredients = Array.wrap(prev_ingredients) - Array.wrap(ingredients)
       added_ingredients = Array.wrap(ingredients) - Array.wrap(prev_ingredients)
+      intsc_ingredients = Array.wrap(ingredients) & Array.wrap(prev_ingredients) # ingredients which have not changed
+      ingredients.each_with_index{|ing, idx| ing['sort'] = idx}
       if deled_ingredients.present?
         del_ingredient_ids = deled_ingredients.map{|ing| ing['ingredient_id'] }
         DrinkIngredient.where(drink_id:drink_id, ingredient_id:del_ingredient_ids).delete_all
       end
       if added_ingredients.present?
         added_ingredients.each{|ing| DrinkIngredient.create!(ing.merge(drink_id:drink_id)) }
+      end
+      if intsc_ingredients.present?
+        intsc_ingredients.each{|ing| DrinkIngredient.where(drink_id:drink_id, ingredient_id:ing['ingredient_id']).update_all(sort:ing['sort']) }
       end
     end
     super
