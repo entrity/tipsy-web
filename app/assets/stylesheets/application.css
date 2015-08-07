@@ -1135,7 +1135,7 @@ aside .btn-primary:hover {
   counter-reset: step;
 }
 #recipe-editor .sliders {
-  flex: 0 0 50%;
+  flex: 0 0 70%;
 }
 .sliders .alcohol .slider-selection {
   background-color: #7FC7AF;
