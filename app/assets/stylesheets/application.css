@@ -12,6 +12,7 @@
  *
  *= require 'angular-ui-select/dist/select.min'
  *= require image-resize-crop-canvas/component
+ *= require bootstrap-slider
  *= require_tree .
  *= require_self
  */
@@ -1079,19 +1080,9 @@ aside .btn-primary:hover {
 #recipe-editor .form-group {
   margin-bottom: 0;
 }
-#recipe-editor .ingredients .form-group .grid .grid-cell:nth-of-type(3),
-#recipe-editor .ingredients .form-group .grid .grid-cell:nth-of-type(4) {
-  flex: 0 1 auto;
-}
-#recipe-editor .form-group textarea {
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.3333333;
-  border-radius: 6px;
-}
-#recipe-editor .form-group .qty {
-  width: 160px;
-  flex: 0 1 auto;
+#recipe-editor .directions .grid .btn,
+#recipe-editor .ingredients .grid .btn {
+  margin-top: 10px;
 }
 #recipe-editor .directions .step {
   position: relative;
@@ -1116,8 +1107,68 @@ aside .btn-primary:hover {
   counter-increment: step;
   content: counter(step);
 }
+#recipe-editor .form-group textarea {
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
+  border-radius: 6px;
+}
+#recipe-editor .form-group .qty {
+  width: 160px;
+  flex: 0 1 auto;
+}
+#recipe-editor .ingredients .form-group .grid .grid-cell:nth-of-type(3),
+#recipe-editor .ingredients .form-group .grid .grid-cell:nth-of-type(4) {
+  flex: 0 1 auto;
+}
+#recipe-editor .ingredients li.grid .grid-cell:first-child {
+  cursor: move;
+  padding-left: 0;
+}
+#recipe-editor .ingredients li.grid .grid-cell:last-child {
+  padding-right: 0;
+}
+#recipe-editor .ingredients li.grid .grid-cell .fa {
+  opacity: 0.7;
+}
+#recipe-editor .ingredients li.grid .grid-cell:first-child:hover .fa {
+  opacity: 1;
+}
 #recipe-editor .directions .form-group {
   counter-reset: step;
+}
+#recipe-editor .sliders {
+  flex: 0 0 50%;
+}
+.sliders .alcohol .slider-selection {
+  background-color: #7FC7AF;
+}
+.sliders .fruitiness .slider-selection {
+  background-color: #A5CD52;
+}
+.sliders .sweetness .slider-selection {
+  background-color: #FF4E50;
+}
+.sliders .spiciness .slider-selection {
+  background-color: #C4975C;
+}
+.sliders .bitterness .slider-selection {
+  background-color: #CDB7B5;
+}
+.sliders .sourness .slider-selection {
+  background-color: #B5C53D;
+}
+.sliders .saltiness .slider-selection {
+  background-color: #D8D8C0;
+}
+.sliders .creaminess .slider-selection {
+  background-color: #FFF8DB;
+}
+.sliders .bubbliness .slider-selection {
+  background-color: #F59982;
+}
+.sliders .dryness .slider-selection {
+  background-color: #BBEED9;
 }
 
 /*** DRAG-AND-DROP LISTS ***/
@@ -1126,20 +1177,21 @@ aside .btn-primary:hover {
  * For the correct positioning of the placeholder element, the dnd-list and
  * it's children must have position: relative
  */
+ul[dnd-list] {
+  margin: 0;
+}
 ul[dnd-list],
 ul[dnd-list] > li {
   position: relative;
 }
-
 /**
  * The dnd-list should always have a min-height,
  * otherwise you can't drop to it once it's empty
  */
 ul[dnd-list] {
-    min-height: 42px;
-    padding-left: 0px;
+  min-height: 42px;
+  padding-left: 0px;
 }
-
 /**
  * The dndDraggingSource class will be applied to
  * the source element of a drag operation. It makes
@@ -1147,20 +1199,27 @@ ul[dnd-list] {
  * that he's actually moving it.
  */
 ul[dnd-list] .dndDraggingSource {
-    display: none;
+  display: none;
 }
-
 /**
  * An element with .dndPlaceholder class will be
  * added to the dnd-list while the user is dragging
  * over it.
  */
 ul[dnd-list] .dndPlaceholder {
-    display: block;
-    background-color: #ddd;
-    min-height: 42px;
+  display: block;
+  background-color: #efefef;
+  min-height: 72px;
+  border-radius: 6px;
+  border: dashed 1px #bbb;
+  margin-left: -10px;
+  margin-right: -10px;
 }
-
+ul[dnd-list] .dndDragging {
+  background-color: #efefef !important;
+  border-radius: 6px !important;
+  border: dashed 1px #bbb !important;
+}
 /**
  * The dnd-lists's child elements currently MUST have
  * position: relative. Otherwise we can not determine
@@ -1169,23 +1228,25 @@ ul[dnd-list] .dndPlaceholder {
  * browsers we can use event.offsetY for this.
  */
 ul[dnd-list] li {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
-    display: block;
-    padding: 10px 15px;
-    margin-bottom: -1px;
+  background-color: #fff;
+  border-radius: 6px;
+  transition: all 1s;
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0 15px;
+  border: dashed 1px transparent;
 }
-
+ul[dnd-list] li.hover {
+  background-color: #fefefe;
+  border: dashed 1px #efefef;
+}
 /**
  * Show selected elements in green
  */
 ul[dnd-list] li.selected {
-    background-color: #dff0d8;
-    color: #3c763d;
 }
-
 
 /*** IMAGE EDITOR / UPLOADER ***/
 

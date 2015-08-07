@@ -29,6 +29,7 @@
 //= require turbolinks
 //= require ui-bootstrap
 //= require jquery.toolbar.min
+//= require bootstrap-slider
 //= require_tree .
 
 (function(){
