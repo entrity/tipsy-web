@@ -18,6 +18,9 @@ Rails.application.routes.draw do
   resources :comments, only: [:create, :update]
 
   resources :drinks do
+    collection do
+      get :suggestions
+    end
     member do
       get :ingredients
       get :revisions

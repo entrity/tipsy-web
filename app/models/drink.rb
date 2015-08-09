@@ -23,12 +23,26 @@ class Drink < ActiveRecord::Base
   }
 
   scope :for_exclusive_ingredients, -> canonical_ingredient_ids {
-    first_pass_drink_ids = DrinkIngredient.where(canonical_id:canonical_ingredient_ids).where('optional IS NOT TRUE').distinct.pluck(:drink_id)
-    where(id:first_pass_drink_ids).where('required_canonical_ingredient_ids <@ \'{?}\'', Array.wrap(canonical_ingredient_ids).map(&:to_i))
+    where("id in #{Drink.ids_for_ingredients_sql(canonical_ingredient_ids)}")
+    .where('required_canonical_ingredient_ids <@ \'{?}\'', Array.wrap(canonical_ingredient_ids).map(&:to_i))
   }
 
   def flag!
     revision.try(:flag!)
+  end
+
+  # Find imperfect Drink matches for list of ingredients
+  def self.suggestions canonical_ingredient_ids
+    canonical_ids_txt = canonical_ingredient_ids.join(',')
+    res = connection.execute %Q(SELECT id, name, required_canonical_ingredient_ids, 
+      ARRAY_LENGTH(required_canonical_ingredient_ids - ARRAY[#{canonical_ids_txt}], 1) AS distance
+      FROM drinks
+        WHERE id IN (#{ids_for_ingredients_sql(canonical_ingredient_ids)})
+        AND ARRAY_LENGTH(required_canonical_ingredient_ids - ARRAY[#{canonical_ids_txt}], 1) > 0
+      ORDER BY distance
+      LIMIT 100
+    )
+    res.to_a
   end
 
   def top_photo
@@ -42,5 +56,11 @@ class Drink < ActiveRecord::Base
   def vote_sum
     up_vote_ct - dn_vote_ct
   end
+
+  private
+
+    def self.ids_for_ingredients_sql canonical_ingredient_ids
+      '(' + DrinkIngredient.where(canonical_id:canonical_ingredient_ids).where('optional IS NOT TRUE').distinct.select(:drink_id).to_sql + ')'
+    end
 
 end
