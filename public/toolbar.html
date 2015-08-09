@@ -10,7 +10,16 @@
         <ng-include src="'/fuzzy-finder.html'"></ng-include>
       </div>
     </div>
+    <div class="grid-cell">
+      <a href="/drinks"><small>Browse <i class="fa fa-caret-down"></i></small></a>
+    </div>
     <!-- END UNIVERSAL USER NAV -->
+
+    <!-- MOBILE BURGER -->
+    <div class="mobile-hamburger grid-cell grid--shrink">
+      <i class="fa fa-bars"></i>
+    </div>
+    <!-- MOBILE BURGER -->
 
     <!-- START LOGGED OUT USER NAV -->
     <div class="logged-out grid-cell" ng-cloak ng-hide="isLoggedIn()">
@@ -31,9 +40,6 @@
     <!-- START LOGGED IN USER NAV -->
     <div class="logged-in grid-cell" ng-cloak ng-show="isLoggedIn()">
       <div class="grid grid--center">
-        <div class="grid-cell">
-          <a href="/drinks"><small>Browse <i class="fa fa-caret-down"></i></small></a>
-        </div>
         <div class="grid-cell review" ng-show="openReviewCt">
           <a ng-click="openReviewModal()"><small>Review</small> <span class="badge">{{openReviewCt}}</span></a>
         </div>

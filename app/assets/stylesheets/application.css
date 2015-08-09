@@ -26,7 +26,18 @@ body {
   overflow-x: hidden;
   color: #212121;
 }
-
+.disable-hover {
+  pointer-events: none;
+}
+.fa,
+.sprite,
+.actions {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 #fuzzy-finder .ui-select-match::before {
   font-family: 'FontAwesome';
   content: '\f002';
@@ -149,6 +160,11 @@ a:hover {
 }
 .wrapper {
   margin: 0 auto;
+}
+.mobile-hamburger {
+  display: none;
+  color: #000;
+  cursor: pointer;
 }
 .logged-out-nav {
   position: fixed;
@@ -370,6 +386,10 @@ nav .search .input-group .form-control {
   border-radius: 4px !important;
   border: 1px solid lightgray;
 }
+nav .logged-out,
+nav .logged-in {
+  flex: 0 1 auto;
+}
 nav .logged-out .grid-cell:first-child,
 nav .logged-in .grid-cell:first-child {
   flex: 0 1 auto;
@@ -418,17 +438,17 @@ nav .user {
   flex: 0 1 auto;
 }
 nav .user .avatar {
-  height: 28px;
-  width: 28px;
+  height: 32px;
+  width: 32px;
   overflow: hidden;
 }
 nav .user .avatar img {
-  height: 28px;
-  width: 28px;
+  height: 32px;
+  width: 32px;
   position: relative;
   display: block;
-  border-radius: 50%;
-  border: 2px solid lightgray;
+  border-radius: 4px;
+  border: 1px solid lightgray;
 }
 nav .user .rep-change {
   background: #8fc77e;
@@ -645,12 +665,12 @@ nav .user li .rep-change {
 }
 .fancy-sidebar .sidebar-btn {
   display: block;
-  height: 134px;
-  width: 35px;
+  height: 130px;
+  width: 28px;
   background: url(/images/btn-sidebar.png) no-repeat;
   position: absolute;
   top: 6px;
-  left: -35px;
+  left: -28px;
   transition: all .4s ease;
   cursor: pointer;
 }
@@ -670,7 +690,7 @@ nav .user li .rep-change {
   color: #000;
   position: absolute;
   top: 50%;
-  left: 0;
+  left: -6px;
   margin-top: -20px;
   line-height: 36px;
   width: 40px;
@@ -695,7 +715,6 @@ nav .user li .rep-change {
   padding: 16px 10px;
   background-color: #1dbb73;
   transition: all .4s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 .fancy-sidebar.open {
   right: 0;
@@ -866,8 +885,20 @@ aside .btn-primary:hover {
 .signin.grid .grid-cell .btn.facebook {
   display: block;
   background: #4E69A2;
-  color: #fff;
+  color: #ddd;
   border: 1px solid #3B5998;
+}
+.form-control {
+  border-color: #eee;
+  box-shadow: none;
+}
+.input-group-addon:last-child {
+  border-left: 1px solid #ccc;
+}
+.form-group-lg .form-control,
+.form-group textarea {
+  font-size: 17px;
+  line-height: 22px;
 }
 
 .grid {
@@ -961,9 +992,15 @@ aside .btn-primary:hover {
   min-height: 330px;
   border-bottom: 1px solid #ededed;
   background: url(/images/img-upload.png) no-repeat center #f4f4f4;
+  background-position: calc(50% + 8px) calc(50% - 30px);
   margin-bottom: 30px;
   overflow: hidden;
   position: relative;
+}
+#drink-page .add-photo {
+  position: absolute;
+  bottom: 16%;
+  width: 100%;
 }
 #drink-page .row,
 #recipe-editor .row,
@@ -975,14 +1012,41 @@ aside .btn-primary:hover {
   padding: 40px 0;
 }
 #drink-page .votes {
-  max-width: 34px;
   text-align: center;
+}
+#drink-page .votes > div {
+  display: inline-block;
+  padding: .5em;
+  background: whitesmoke;
+  border-radius: 4px;
+}
+#drink-page .votes > div:nth-of-type(1) {
+  padding-left: .7em;
+  border-radius: 4px 0 0 4px;
+}
+#drink-page .votes > div:nth-of-type(1):hover {
+  background: darkgray;
+}
+#drink-page .votes > div:nth-of-type(2) {
+  padding-right: 1.2em;
+  padding-left: 1.2em;
+  border-radius: 0;
+  position: relative;
+  margin-right: -1px;
+  margin-left: -1px;
+}
+#drink-page .votes > div:nth-of-type(3) {
+  padding-right: .7em;
+  border-radius: 0 4px 4px 0;
+}
+#drink-page .votes > div:nth-of-type(3):hover {
+  background: darkgray;
 }
 #drink-page .votes .fa {
   font-size: 16px;
 }
 #drink-page .votes .arrow:hover .fa {
-  color: orange;
+  color: #fff;
 }
 #drink-page .rating {
   display: inline-block;
@@ -1016,7 +1080,6 @@ aside .btn-primary:hover {
 }
 #drink-page .ingredients {
   max-width: 70%;
-  margin-right: 60px;
 }
 #drink-page .ingredients .ingredient {
   padding: 6px 0;
@@ -1039,13 +1102,6 @@ aside .btn-primary:hover {
 }
 #drink-page .grid-cell.actions a i {
   margin-bottom: -5px;
-}
-#drink-page .similar-drinks {
-  background-color: #f4f4f4;
-  margin: 0 auto 40px auto;
-  padding: 20px;
-  border-top: 1px solid lightgray;
-  border-bottom: 1px solid lightgray;
 }
 #drink-page a .fa-flag.highlight {
   color: goldenrod;
@@ -1103,12 +1159,6 @@ aside .btn-primary:hover {
   counter-increment: step;
   content: counter(step);
 }
-#recipe-editor .form-group textarea {
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.3333333;
-  border-radius: 6px;
-}
 #recipe-editor .form-group .qty {
   width: 160px;
   flex: 0 1 auto;
@@ -1134,8 +1184,21 @@ aside .btn-primary:hover {
 #recipe-editor .directions .form-group {
   counter-reset: step;
 }
-#recipe-editor .sliders {
-  flex: 0 0 70%;
+.slider .slider-handle:before {
+  content: '';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  z-index: 1;
+  box-shadow: 0 0 3px 2px rgb(171, 173, 172);
+  border-radius: 50%;
+  transition: all .4s;
+}
+.slider:hover .slider-handle:before {
+  opacity: 1;
 }
 .sliders .alcohol .slider-selection {
   background-color: #7FC7AF;
@@ -1270,9 +1333,101 @@ tipsy-image-editor a.btn:hover {
 
 /*** DRINK PAGE STYLES:Comments ***/
 
+#comments:last-child {
+  margin-bottom: 0;
+}
 #comments .comment-id {
   flex: 0 1 auto;
   margin-right: 14px;
+}
+.comments-cont {
+  margin-right: -1em;
+  margin-left: -1em;
+}
+.comments-cont section {
+  padding: 0 !important;
+}
+.comments-cont section h3,
+.comments-cont #comments {
+  padding: 1em;
+  margin-bottom: 0 !important;
+  border-bottom: 1px solid lightgray;
+}
+.comments-cont #comments:last-child {
+  border-bottom: none;
+}
+.comments-cont #comments > .grid .grid-cell:first-child {
+  padding-right: 1em;
+}
+.comments-cont #comments .name {
+  font-weight: bold;
+}
+.comments-cont #comments .date {
+    opacity: .6;
+}
+.comments-cont #comments .date:before {
+    content: "\00b7";
+}
+.comments-cont .grid:first-child h3 {
+  margin-bottom: 0 !important;
+}
+.comments-cont .comment-box {
+  padding: 1em !important;
+}
+.comments-cont > .grid {
+  padding: 1em;
+  border: 1px solid lightgray;
+}
+.comments-cont > .grid {
+  border-radius: 4px 4px 0 0;
+  border-color: #BFE0EC;
+  background-color: #E5F2F7;
+}
+.comments-cont > .grid:nth-of-type(2) {
+  border-radius: 0;
+  border-top: none;
+}
+.comments-cont > .grid:last-child {
+  border-radius: 0 0 4px 4px;
+  border-top: none;
+  background-color: transparent;
+  border-color: lightgray;
+}
+.comments-cont .avatar {
+  height: 32px;
+  width: 32px;
+  position: relative;
+  display: block;
+  border-radius: 3px;
+  border: 1px solid #BFE0EC;
+}
+.comment-box .grid-cell .grid .grid-cell:first-child {
+  padding-right: 0;
+}
+.no-comments {
+  display:block;
+  padding: 2em 1em;
+  font-style: italic;
+  opacity: .8;
+  text-align: center;
+}
+.no-comments .fa {
+  font-size: 30px;
+  display: block;
+  margin-bottom: 10px;
+  opacity: .8;
+}
+.comment-box textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  border: 1px solid #BFE0EC;
+  height: 60px;
+  transition: height .3s ease-out;
+}
+.comment-box textarea:focus {
+  height: 120px;
 }
 
 /*** ACCOUNT SETTINGS ***/
@@ -1338,7 +1493,7 @@ tipsy-image-editor a.btn:hover {
   height: 68px;
   display: block;
   margin: 0 auto;
-  border-radius: 50%;
+  border-radius: 4px;
   border: 1px solid #fff;
 }
 .account-settings .avatar img {
@@ -1346,7 +1501,7 @@ tipsy-image-editor a.btn:hover {
   height: 48px;
   position: relative;
   display: block;
-  border-radius: 50%;
+  border-radius: 4px;
   border: 1px solid #fff;
 }
 .account-settings h1 {
@@ -1483,4 +1638,39 @@ footer.fixed .grid .grid-cell.copyright {
 }
 footer.in-app .row {
   margin-bottom: 20px;
+}
+
+
+@media screen and (max-width: 785px) {
+  nav {
+    min-width: 100% !important;
+    min-height: 56px;
+    height: auto;
+    padding: 0 10px;
+    flex-wrap: wrap;
+  }
+  nav .search {
+    display: none;
+  }
+  nav .mobile-hamburger {
+    display: block;
+    flex: 0 1 auto;
+    margin-left: 20px;
+    margin-right: 10px;
+  }
+  nav .logged-in,
+  nav .logged-out {
+    display: none;
+    flex: 100%;
+  }
+  #main-cont {
+    padding: 57px 10px 0 10px;
+  }
+  #drink-page .ingredients {
+    max-width: 100%;
+  }
+  .comments-cont {
+    margin-right: 0;
+    margin-left: 0;
+  }
 }
