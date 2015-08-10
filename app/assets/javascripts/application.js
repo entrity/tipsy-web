@@ -49,7 +49,7 @@
 		'ui.bootstrap',
 		'ui.select'
 	])
-	.run(['$rootScope', '$resource', '$modal', '$http', '$q', '$window', function ($rootScope, $resource, $modal, $http, $q, $window) {
+	.run(['$rootScope', '$resource', '$modal', '$http', '$q', '$window', 'User', function ($rootScope, $resource, $modal, $http, $q, $window, User) {
 		Object.defineProperties($rootScope, {
 			addToCabinet: {
 				configurable: false,
@@ -83,12 +83,12 @@
 			},
 			getUser: {
 				configurable: false,
-				value: function (forceReload) {
+				value: function getUser (forceReload) {
 					if (forceReload || !$rootScope.currentUser) {
-						$rootScope.currentUser = $resource('/users/0.json').get(null, function (data) {
-							if (data.photo_url) data.tinyAvatar = data.photo_url.replace(/original/, 'tiny')
+						window.user = $rootScope.currentUser = $resource('/users/0.json').get(null, function (data) {
+							if (data.photo_url) data.tinyAvatar = data.photo_url.replace(/original/, 'tiny');
+							window.user = $rootScope.currentUser = new User(data);
 						});
-						window.user = $rootScope.currentUser;
 					}
 					return $rootScope.currentUser;
 				}
