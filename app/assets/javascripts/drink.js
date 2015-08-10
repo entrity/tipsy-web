@@ -106,6 +106,10 @@
 			$scope.drink.setIsUserFlagged(comment, 'Comment'); // identify flags by current user
 			$scope.drink.setUserVoteSign(comment, 'Comment'); // identify votes by current user
 		});
+		// Fetch related drinks
+		Drink.query({'id[]':$scope.drink.related_drink_ids}, function (data) {
+			$scope.relatedDrinks = data.map(function (obj) { return new Drink(obj) });
+		});
 		$scope.flag = function () {
 			if ($scope.requireLoggedIn()) {
 				$modal.open({

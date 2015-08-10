@@ -5,6 +5,7 @@ class DrinksController < ApplicationController
   def index
     move_ingredient_id_params_to_canonical_ids
     @drinks = Drink.default_scoped
+    @drinks = @drinks.where(id:params[:id]) if params[:id].present?
     @drinks = @drinks.fuzzy_find(params[:fuzzy]) if params[:fuzzy].present?
     @drinks = @drinks.select(params[:select]) if params[:select].present?
     @drinks = @drinks.where(profane:params[:profane]) if params[:profane].present?

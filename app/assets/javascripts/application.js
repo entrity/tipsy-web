@@ -177,6 +177,12 @@
 					})
 				}
 			},
+			parsePsqlIntarray: {
+				configurable: false,
+				value: function parsePsqlIntarray (text) {
+					text.substr(1, text.length-2).split(',').map(function (num) { return parseInt(num) });
+				}
+			},
 			removeFromCabinet:{
 				configurable: false,
 				value: function (ingredient) {
