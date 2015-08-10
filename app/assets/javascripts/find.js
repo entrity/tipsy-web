@@ -109,7 +109,10 @@
 			// Fetch suggestions if due
 			if ($scope.finder.ingredients.length >= 3) {
 				$scope.finder.suggestions = $resource('/drinks/suggestions.json').get(
-					{'ingredient_id[]':ingredientIds,'canonical_ingredient_id[]':canonicalIngredientIds}
+					{'ingredient_id[]':ingredientIds,'canonical_ingredient_id[]':canonicalIngredientIds},
+					function (data) {
+						$scope.finder.suggestions.drinks = $scope.finder.suggestions.drinks.map(function (obj) { return new Drink(obj) })
+					}
 				);
 			} else {
 				$scope.finder.suggestions = [];
