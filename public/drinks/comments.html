@@ -1,6 +1,6 @@
-  <div class="grid row tips center">
-    <div class="grid-cell">
-    	<h3><%= @drink.name %> tips</h3>
+<div class="grid row tips center">
+	<div class="grid-cell">
+		<h3>{{drink.name}} tips</h3>
 			<div id="tips">
 				<div ng-repeat="comment in tips">
 					<div>
@@ -19,66 +19,66 @@
 				</div>
 				<p ng-show="!tips.length"><em>No tips have been created for this page. Submit a comment of your own and have it earmarked as a tip by community members!</em></p>
 			</div>
-    </div>
-  </div>  
-  <!-- COMMENTS TEXTAREA -->
-	<div class="center">
-	  <div class="comments-cont">
-  		<div class="grid">
-		    <div class="grid-cell">
-		      <h3>Tips? Comments? Join the discussion!</h3>
-		    </div>
-		  </div>
-		  <div class="comment-box grid row">
-		  	<div class="grid-cell">
-		  		<div class="grid grid--gutters">
-		  			<div class="grid-cell grid--shrink">
-		  				<img class="avatar" ng-src="{{getUser().tinyAvatar}}">
-		  			</div>
-				    <div class="grid-cell">
-				      <textarea ng-model="newComment.text" placeholder="Leave a comment"></textarea>
-				      <a class="btn btn-primary pull-right" ng-click="createComment(newComment)">Comment</a>
-				    </div>
-				  </div>
-		    </div>
-		  </div>
-		  <section class="grid row" itemscope itemtype="https://schema.org/UserComments">
-		    <div class="grid-cell">
-					<h3>Comments</h3>
-					<span class="no-comments"><i class="fa fa-commenting-o"></i> This drink currently has no comments. Be the first to share your thoughts!</span>
-					<div id="comments" ng-repeat="comment in comments">
-						<div class="grid">
-							<div class="grid-cell grid--shrink">
-								<img class="avatar" ng-src="{{comment.user_avatar}}">
-								<span class="comment-vote">
-									<a ng-click="vote(comment, 'Comment', 1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment._userVoteSign > 0) && 'highlight'"></i></a>
-									{{comment.score}}
-									<a ng-click="vote(comment, 'Comment', -1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment._userVoteSign < 0) && 'highlight'"></i></a>
-								</span>
+	</div>
+</div>
+<!-- COMMENTS TEXTAREA -->
+<div class="center">
+	<div class="comments-cont">
+		<div class="grid">
+			<div class="grid-cell">
+				<h3>Tips? Comments? Join the discussion!</h3>
+			</div>
+		</div>
+		<div class="comment-box grid row">
+			<div class="grid-cell">
+				<div class="grid grid--gutters">
+					<div class="grid-cell grid--shrink">
+						<img class="avatar" ng-src="{{getUser().tinyAvatar}}">
+					</div>
+					<div class="grid-cell">
+						<textarea ng-model="newComment.text" placeholder="Leave a comment"></textarea>
+						<a class="btn btn-primary pull-right" ng-click="createComment(newComment)">Comment</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<section class="grid row" itemscope itemtype="https://schema.org/UserComments">
+			<div class="grid-cell">
+				<h3>Comments</h3>
+				<span class="no-comments" ng-hide="comments.length"><i class="fa fa-commenting-o"></i> This drink currently has no comments. Be the first to share your thoughts!</span>
+				<div id="comments" ng-repeat="comment in comments">
+					<div class="grid">
+						<div class="grid-cell grid--shrink">
+							<img class="avatar" ng-src="{{comment.user_avatar}}">
+							<span class="comment-vote">
+								<a ng-click="vote(comment, 'Comment', 1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment._userVoteSign > 0) && 'highlight'"></i></a>
+								{{comment.score}}
+								<a ng-click="vote(comment, 'Comment', -1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment._userVoteSign < 0) && 'highlight'"></i></a>
+							</span>
+						</div>
+						<div class="grid-cell comment-id">
+							<div class="grid">
+								<div class="grid-cell">
+									<span class="name" itemprop="creator">{{comment.user_name}}</span>
+									<span class="date" itemprop="commentTime"> {{comment.created_at | date}}</span>
+								</div>
 							</div>
-							<div class="grid-cell comment-id">
-								<div class="grid">
-									<div class="grid-cell">
-										<span class="name" itemprop="creator">{{comment.user_name}}</span>
-										<span class="date" itemprop="commentTime"> {{comment.created_at | date}}</span>
-									</div>
+							<div class="grid">
+								<div class="grid-cell comment-text">
+									<span itemprop="commentText" ng-bind="comment.text"></span>
 								</div>
-								<div class="grid">
-									<div class="grid-cell comment-text">
-										<span itemprop="commentText" ng-bind="comment.text"></span>
-									</div>
-								</div>
-								<div class="grid">
-									<div class="grid-cell">
-										<a ng-click="flagComment(comment)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-flag" ng-class="comment._isUserFlagged && 'highlight'"></i></a>
-										<a ng-click="removeComment(comment)" ng-if="comment.user_id == getUser().id"><i class="fa fa-times-circle"></i></a>
-									</div>
+							</div>
+							<div class="grid">
+								<div class="grid-cell">
+									<a ng-click="flagComment(comment)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-flag" ng-class="comment._isUserFlagged && 'highlight'"></i></a>
+									<a ng-click="removeComment(comment)" ng-if="comment.user_id == getUser().id"><i class="fa fa-times-circle"></i></a>
 								</div>
 							</div>
 						</div>
 					</div>
-		    </div>
-		  </section> 
-		</div>
+				</div>
+			</div>
+		</section> 
 	</div>
+</div>
 
