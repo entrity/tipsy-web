@@ -104,5 +104,17 @@
 		});
 		return Flagger;
 	}])
+	.factory('User', ['$resource', function ($resource) {
+		var User = $resource('/users/:id.json');
+		Object.defineProperties(User.prototype, {
+			getNickname: {
+				configurable: false,
+				value: function getNickname () {
+					return this.nickname || this.name || 'User '+this.id;
+				},
+			},
+		});
+		return User;
+	}])
 	;
 })();

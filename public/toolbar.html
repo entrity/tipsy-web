@@ -81,7 +81,7 @@
           </div>
           <!-- USER DROPDOWN -->
           <ul class="dropdown-menu dropdown-menu-right" ng-show="toolbar.avatar">
-            <li><a href="/users/edit"><i class="fa fa-user"></i> {{getUser().nickname}}</a></li>
+            <li><a href="/users/edit"><i class="fa fa-user"></i> {{getUser().getNickname()}}</a></li>
             <li><a href="/users/edit"><i class="fa fa-cog"></i> Account Settings</a></li>
             <li><a href="/users/sign_out" ng-click="visitNoTurbo('/users/sign_out', $event)"><i class="fa fa-sign-out"></i> Log out</a></li>
           </ul>
