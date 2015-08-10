@@ -208,6 +208,11 @@
   <div class="grid row similar-drinks center">
     <div class="grid-cell">
       <h3>Drinks similar to a <%= @drink.name %></h3>
+      <ul>
+        <li ng-repeat="drink in relatedDrinks">
+          <a ng-href="{{drink.getUrl()}}" ng-bind="drink.name"></a>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
