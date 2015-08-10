@@ -20,9 +20,10 @@ namespace :db do
   end
 
   task :set_required_ingredients => :environment do
-    db.exec "UPDATE drinks SET required_canonical_ingredient_ids = (SELECT ARRAY_AGG(ingredients.canonical_id) FROM ingredients INNER JOIN drinks_ingredients ON ingredient_id = ingredients.id WHERE drink_id = drinks.id)"
+    db.exec "UPDATE drinks SET required_canonical_ingredient_ids = (SELECT ARRAY_AGG(COALESCE(ingredients.canonical_id, ingredients.id)) FROM ingredients INNER JOIN drinks_ingredients ON ingredient_id = ingredients.id WHERE drink_id = drinks.id AND optional IS NOT TRUE)"
   end
 
+  desc "Finds ingredients whose canonical_id does not refer to an extant ingredient"
   task :find_bad_canonical_ids => :environment do
     res = db.exec "SELECT i.id, i.name, i.canonical_id from ingredients as i left outer join ingredients as ii on i.canonical_id = ii.id where ii.id is null or ii.id != ii.canonical_id;"
     if res.count == 0

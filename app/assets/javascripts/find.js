@@ -106,6 +106,17 @@
 					}
 				}
 			});
+			// Fetch suggestions if due
+			if ($scope.finder.ingredients.length >= 3) {
+				$scope.finder.suggestions = $resource('/drinks/suggestions.json').get(
+					{'ingredient_id[]':ingredientIds,'canonical_ingredient_id[]':canonicalIngredientIds},
+					function (data) {
+						$scope.finder.suggestions.drinks = $scope.finder.suggestions.drinks.map(function (obj) { return new Drink(obj) })
+					}
+				);
+			} else {
+				$scope.finder.suggestions = [];
+			}
 		}
 		$scope.finder.hideIngredientCtls = function hideIngredientCtls () {
 			this.ingredients.forEach(function (ingredient) {
@@ -121,6 +132,21 @@
 					function (data) { $scope.finder.addIngredient(data) }
 				);
 			}
+		}
+		// Subtract array b from a (a - b)
+		function arrayDifference (a, b) {
+			var difference = [];
+			var mapB = {};
+			for (var i in b) mapB[b[i]] = true;
+			for (var i in a) if (!mapB[a[i]]) difference.push(a[i]);
+			return difference;
+		}
+		// Return an int array parsed from Posgres array
+		function toIntArray (str) {
+			if (str && str.length)
+				return JSON.parse(str.substr(1, str.length-2));
+			else
+				return [];
 		}
 	}])
 	;
