@@ -85,13 +85,25 @@
 			},
 			getUser: {
 				configurable: false,
-				value: function getUser (forceReload) {
+				value: function getUser (successCallback, failureCallback, forceReload) {
+					// Fetch user from API
 					if (forceReload || !$rootScope.currentUser) {
 						window.user = $rootScope.currentUser = $resource('/users/0.json').get(null, function (data) {
 							if (data.photo_url) data.tinyAvatar = data.photo_url.replace(/original/, 'tiny');
 							window.user = $rootScope.currentUser = new User(data);
 						});
 					}
+					// Schedule callbacks
+					if (successCallback) $rootScope.currentUser.$promise.then(function () {
+						if ($rootScope.currentUser.id)
+							successCallback($rootScope.currentUser);
+						else
+							failureCallback($rootScope.currentUser);
+					});
+					if (failureCallback) $rootScope.currentUser.$promise.then(null, function () {
+						failureCallback($rootScope.currentUser);
+					});
+					// Return
 					return $rootScope.currentUser;
 				}
 			},
@@ -140,7 +152,7 @@
 			isLoggedIn: {
 				configurable: false,
 				value: function (forceReload) {
-					return $rootScope.getUser(forceReload).id;
+					return this.getUser(null, null, forceReload).id;
 				}
 			},
 			loadCabinetToFuzzyFindResults: {
@@ -197,8 +209,14 @@
 			},
 			requireLoggedIn: {
 				configurable: false,
-				value: function () {
-					if (this.isLoggedIn())
+				value: function requireLoggedIn (successCallback, failureCallback) {
+					if (successCallback || failureCallback) {
+						this.getUser(successCallback, failureCallback);
+						this.getUser(null, function () {
+							$rootScope.openLoginModal('This action requires you to log in.');
+						});
+					}
+					else if (this.isLoggedIn())
 						return true;
 					else
 						this.openLoginModal('This action requires you to log in.');

@@ -50,6 +50,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'better_errors'
   gem 'capistrano-bower'
   gem 'capistrano-rails'
   gem 'capistrano-rvm'

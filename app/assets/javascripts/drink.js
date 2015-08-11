@@ -43,6 +43,20 @@
 				},
 				configurable: false,
 			},
+			getUserTipVotesMap: {
+				// @return map of comment_id to CommentTipVote
+				value: function getUserTipVotesMap () {
+					if (!this.userTipVotesMap && this.userTipVotes) {
+						var drink = this;
+						this.userTipVotesMap = {};
+						this.userTipVotes.forEach(function (tipVote) {
+							drink.userTipVotesMap[tipVote.comment_id] = tipVote;
+						});
+					}
+					return this.userTipVotesMap;
+				},
+				configurable: false,
+			},
 			getUserVotesMap: {
 				value: function getUserVotesMap () {
 					return this.getMap('userVotesMap', this.userVotes, 'votable_type', 'votable_id');
@@ -54,6 +68,14 @@
 					var map;
 					if (map = this.getUserFlagsMap())
 						flaggable._isUserFlagged = !!map.getValue(flaggableType, flaggable.id);
+				},
+				configurable: false,
+			},
+			setUserTipVote: {
+				value: function setUserTipVote (comment) {
+					var map;
+					if (map = this.getUserTipVotesMap())
+						comment._isUserTipVoted = map[comment.id];
 				},
 				configurable: false,
 			},
@@ -102,9 +124,10 @@
 		$scope.tips = new Array;
 		// Iterate comments:
 		$scope.comments.forEach(function (comment) {
-			if (comment.tip_pts) tips.push(comment); // identify tips
+			if (comment.tip_pts) $scope.tips.push(comment);    // identify tips
+			$scope.drink.setUserTipVote(comment);              // identify tip votes by current user
 			$scope.drink.setIsUserFlagged(comment, 'Comment'); // identify flags by current user
-			$scope.drink.setUserVoteSign(comment, 'Comment'); // identify votes by current user
+			$scope.drink.setUserVoteSign(comment, 'Comment');  // identify votes by current user
 		});
 		// Fetch related drinks
 		Drink.query({'id[]':$scope.drink.related_drink_ids}, function (data) {
@@ -190,6 +213,32 @@
 					alert('Failed to delete comment. See javascript console for details');
 				});
 			}
+		};
+		$scope.tipComment = function (comment) {
+			$scope.requireLoggedIn(function (user) {
+				if (user.id === comment.user_id) {
+					alert('You cannot vote on your own comment');
+					return;
+				}
+				var urlSuffix, successValue, alertAction;
+				if (comment._isUserTipVoted) {
+					urlSuffix    = 'unvote';
+					successValue = false;
+					alertAction  = 'untip';
+				} else {
+					urlSuffix    = 'vote';
+					successValue = true;
+					alertAction  = 'tip';
+				}
+				$http.post('/comments/'+comment.id+'/'+urlSuffix+'_tip.json')
+				.success(function (data, status, headers, config) {
+					comment._isUserTipVoted = successValue;
+				})
+				.error(function (data, status, headers, config) {
+					console.error(data, status, headers, config);
+					alert('Failed to '+alertAction+' comment. See javascript console for details');
+				});
+			});
 		};
 	}])
 	.controller('Drink.EditCtrl', ['$scope', 'Drink', 'Revision', 'RailsSupport', function ($scope, Drink, Revision, RailsSupport) {

@@ -23,6 +23,16 @@ class CommentsController < ApplicationController
     end
   end
 
+  def unvote_tip
+    respond_with CommentTipVote.where(user_id:current_user.id, comment_id:params[:id]).first.destroy
+  end
+
+  def vote_tip
+    attrs = {user_id:current_user.id, comment_id:params[:id]}
+    @vote = CommentTipVote.new(attrs)
+    respond_with @vote.save ? @vote : (CommentTipVote.where(attrs).first || @vote)
+  end
+
   private
 
     def comment_params
@@ -31,6 +41,14 @@ class CommentsController < ApplicationController
         :text,
         :parent_id,
       ])
+    end
+
+    def comment_tip_vote_url comment_vote_tip
+      ''
+    end
+
+    def comment_tip_votes_url
+      ''
     end
 
 end

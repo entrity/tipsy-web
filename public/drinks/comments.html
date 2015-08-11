@@ -12,7 +12,10 @@
 						{{comment.created_at | date}}
 					</div>
 					<div>
-						<a ng-click="flagComment(comment)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-flag" ng-class="comment._isUserFlagged && 'highlight'"></i></a>
+						<span ng-hide="comment.user_id == getUser().id">
+							<a ng-click="flagComment(comment)" title="Flag comment as inappropriate"><i class="fa fa-flag" ng-class="comment._isUserFlagged &amp;&amp; 'highlight'"></i></a>
+							<a ng-click="tipComment(comment)" title="Mark as a useful tip (only actual tips should be voted)"><i class="fa fa-flag" ng-class="comment._isUserTipVoted &amp;&amp; 'highlight'"></i></a>
+						</span>
 						<a ng-click="removeComment(comment)" ng-if="comment.user_id == getUser().id"><i class="fa fa-times-circle"></i></a>
 						<span ng-bind="comment.text"></span>
 					</div>
@@ -65,13 +68,12 @@
 							</div>
 							<div class="grid">
 								<div class="grid-cell comment-text">
-									<span itemprop="commentText" ng-bind="comment.text"></span>
-								</div>
-							</div>
-							<div class="grid">
-								<div class="grid-cell">
-									<a ng-click="flagComment(comment)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-flag" ng-class="comment._isUserFlagged && 'highlight'"></i></a>
+									<span ng-hide="comment.user_id == getUser().id">
+										<a ng-click="flagComment(comment)" title="Flag comment as inappropriate"><i class="fa fa-flag" ng-class="comment._isUserFlagged &amp;&amp; 'highlight'"></i></a>
+										<a ng-click="tipComment(comment)" title="Mark as a useful tip (only actual tips should be voted)"><i class="fa fa-flag" ng-class="comment._isUserTipVoted &amp;&amp; 'highlight'"></i></a>
+									</span>
 									<a ng-click="removeComment(comment)" ng-if="comment.user_id == getUser().id"><i class="fa fa-times-circle"></i></a>
+									<span itemprop="commentText" ng-bind="comment.text"></span>
 								</div>
 							</div>
 						</div>

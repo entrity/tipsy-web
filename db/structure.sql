@@ -184,6 +184,37 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: comment_tip_votes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE comment_tip_votes (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    comment_id integer NOT NULL,
+    created_at timestamp without time zone
+);
+
+
+--
+-- Name: comment_tip_votes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE comment_tip_votes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: comment_tip_votes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE comment_tip_votes_id_seq OWNED BY comment_tip_votes.id;
+
+
+--
 -- Name: comments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -775,6 +806,13 @@ ALTER SEQUENCE votes_id_seq OWNED BY votes.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY comment_tip_votes ALTER COLUMN id SET DEFAULT nextval('comment_tip_votes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY comments ALTER COLUMN id SET DEFAULT nextval('comments_id_seq'::regclass);
 
 
@@ -867,6 +905,14 @@ ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regcl
 --
 
 ALTER TABLE ONLY votes ALTER COLUMN id SET DEFAULT nextval('votes_id_seq'::regclass);
+
+
+--
+-- Name: comment_tip_votes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY comment_tip_votes
+    ADD CONSTRAINT comment_tip_votes_pkey PRIMARY KEY (id);
 
 
 --
@@ -987,6 +1033,13 @@ ALTER TABLE ONLY users
 
 ALTER TABLE ONLY votes
     ADD CONSTRAINT votes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_comment_tip_votes_on_user_id_and_comment_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_comment_tip_votes_on_user_id_and_comment_id ON comment_tip_votes USING btree (user_id, comment_id);
 
 
 --
@@ -1201,4 +1254,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150806001328');
 INSERT INTO schema_migrations (version) VALUES ('20150806004006');
 
 INSERT INTO schema_migrations (version) VALUES ('20150806235034');
+
+INSERT INTO schema_migrations (version) VALUES ('20150810235704');
 
