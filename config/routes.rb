@@ -15,7 +15,12 @@ Rails.application.routes.draw do
 
   get 'fuzzy_find.json' => 'home#fuzzy_find', defaults:{format: :json}
 
-  resources :comments, only: [:create, :update]
+  resources :comments, only: [:create, :destroy] do
+    member do
+      post :unvote_tip
+      post :vote_tip
+    end
+  end
 
   resources :drinks do
     collection do

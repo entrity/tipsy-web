@@ -1,9 +1,10 @@
 <script>
   window.drink = <%= @drink.to_json.html_safe %>;
-  window.drink.photos = <%= @photos.to_json(methods:[:thumb]).html_safe %>;
-  window.drink.comments = <%= @comments.to_json.html_safe %>;
-  window.drink.userFlags = <%= @user_flags.to_json.html_safe %>;
-  window.drink.userVotes = <%= @user_votes.to_json.html_safe %>;
+  window.drink.photos       = <%= @photos.to_json(methods:[:thumb]).html_safe %>;
+  window.drink.comments     = <%= @comments.to_json.html_safe %>;
+  window.drink.userFlags    = <%= @user_flags.to_json.html_safe %>;
+  window.drink.userTipVotes = <%= @user_tips.to_json.html_safe %>;
+  window.drink.userVotes    = <%= @user_votes.to_json.html_safe %>;
 </script>
 <div id="drink-page" ng-controller="DrinkCtrl" itemscope itemtype="http://schema.org/Recipe">
   <div class="grid photos">

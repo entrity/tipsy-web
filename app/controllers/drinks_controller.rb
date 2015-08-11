@@ -33,9 +33,12 @@ class DrinksController < ApplicationController
         @photos = saved_drink.photos.where(status:Flaggable::APPROVED).order(:score)
         @comments = saved_drink.comments.order(:score)
         if user_signed_in?
+          comment_ids = @comments.map(&:id)
+          photo_ids   = @photos.map(&:id)
           # Fetch flags created by this user for any photos or comments that pertain to `saved_drink`
-          @user_flags = Flag.for_user_photos_comments(current_user.id, @photos.map(&:id), @comments.map(&:id))
-          @user_votes = Vote.for_user_photos_comments_drink(current_user.id, @photos.map(&:id), @comments.map(&:id), saved_drink.id)
+          @user_flags = Flag.for_user_photos_comments(current_user.id, photo_ids, comment_ids)
+          @user_votes = Vote.for_user_photos_comments_drink(current_user.id, photo_ids, comment_ids, saved_drink.id)
+          @user_tips  = CommentTipVote.where(user_id:current_user.id, comment_id:comment_ids)
         end
       }
       format.json {
