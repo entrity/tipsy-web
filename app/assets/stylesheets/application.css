@@ -190,7 +190,8 @@ a:hover {
   margin: 0;
   padding: 0 0 20px 0;
 }
-#find-results .results-list {
+#find-results .results-list,
+#find-results .suggestions-list {
   max-width: 600px;
   margin: 0 auto;
   padding: 40px 0 0 0;
@@ -605,7 +606,8 @@ nav .user li .rep-change {
   text-align: center;
   max-width: 30%;
 }
-.results-list .item {
+.results-list .item,
+.suggestions-list .item {
   height:40px;
   padding: 3px 20px;
   margin:5px 0;
@@ -614,50 +616,62 @@ nav .user li .rep-change {
   border:dashed 1px #fff;
   transition:border 100ms ease-in-out;
 }
-.results-list .item .fa {
+.results-list .item .fa,
+.suggestions-list .item .fa {
   margin-right: 3px;
 }
-.results-list .item .grid-cell {
+.results-list .item .grid-cell,
+.suggestions-list .item .grid-cell {
   padding: 0 12px;
 }
-.results-list .item .grid-cell {
+.results-list .item .grid-cell,
+.suggestions-list .item .grid-cell {
   flex: 0 1 auto;
 }
-.results-list .item .grid-cell:first-child {
+.results-list .item .grid-cell:first-child,
+.suggestions-list .item .grid-cell:first-child {
   flex: 1;
   padding: 0 12px 0 0;
 }
-.results-list .item .grid-cell:last-child {
+.results-list .item .grid-cell:last-child,
+.suggestions-list .item .grid-cell:last-child {
   padding: 0 0 0 12px;
 }
-.results-list .item:hover {
+.results-list .item:hover,
+.suggestions-list .item:hover {
   border:dashed 1px gray;
   cursor:pointer;
 }
-.results-list .item .checkmark {
+.results-list .item .checkmark,
+.suggestions-list .item .checkmark {
   max-width:40px;
   text-align: center;
 }
-.results-list .item .checkmark .fa-check-square {
+.results-list .item .checkmark .fa-check-square,
+.suggestions-list .item .checkmark .fa-check-square {
   color: #5cb85c;
 }
-.results-list .item .name {
+.results-list .item .name,,
+.suggestions-list .item .name {
   max-width:490px;
   font-size:14px;
 }
-.results-list .item .comments {
+.results-list .item .comments,
+.suggestions-list .item .comments {
   max-width:74px;
   font-size:13px;
   color:#939393;
   text-align: center;
 }
-.results-list .item .rating {
+.results-list .item .rating,
+.suggestions-list .item .rating {
   max-width:120px;
   font-size:13px;
   color:#939393;
   text-align: center;
 }
-.results-list .item .favorite {
+.results-list .item .favorite,
+.suggestions-list .item .favorite {
   max-width:17px;
   margin:0 0 0 8px;
   color:#939393;

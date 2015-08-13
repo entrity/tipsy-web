@@ -16,7 +16,7 @@
 		</div>
 		<div class="grid-cell clear"><small><a ng-click="finder.removeIngredient()"><i class="fa fa-times-circle"></i> Clear all</a></small></div>
 	</div>
-	<div class="grid results-list">
+	<div class="grid row results-list">
 		<div class="grid-cell">
 			<h4>What can I make?</h4>
 			<div class="grid grid--center item" ng-repeat="drink in finder.drinks">
@@ -36,6 +36,10 @@
 					<a ng-click="finder.loadNextPage()">Load Next Page: {{finder.drinks.page + 1}} of {{finder.drinks.pages}}</a>
 				</span>
 			</div>
+		</div>
+	</div>
+	<div class="grid row suggestions-list">
+		<div class="grid-cell">
 			<div ng-if="finder.suggestions.drinks.length">
 				<h4>Suggestions</h4>
 				<p>
