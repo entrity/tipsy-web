@@ -192,7 +192,7 @@ a:hover {
 }
 #find-results .filters {
   padding: 10px 20px;
-  background-color: #f4f4f4;
+  background-color: #FBFBFB;
   border-bottom: 1px solid #ededed;
   flex-wrap: wrap;
 }
@@ -991,7 +991,7 @@ aside .btn-primary:hover {
 #drink-page .photos {
   min-height: 330px;
   border-bottom: 1px solid #ededed;
-  background: url(/images/img-upload.png) no-repeat center #f4f4f4;
+  background: url(/images/img-upload.png) no-repeat center #FBFBFB;
   background-position: calc(50% + 8px) calc(50% - 30px);
   margin-bottom: 30px;
   overflow: hidden;
@@ -1124,6 +1124,76 @@ aside .btn-primary:hover {
   background: #ddd;
   color: #888;
 }
+#drink-page .similar-drinks h3 {
+  margin-bottom: 20px;
+}
+#drink-page .similar-drinks > .grid-cell > .grid {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell {
+  min-width: 50%;
+  max-width: 50%;
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid,
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid > .grid-cell {
+  width: 100%;
+  background-color: #E5F2F7
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child {
+  flex-direction: column;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #BFE0EC;
+  box-shadow: 0 0 0 4px rgba(191,224,236,0.0);
+  transition: all .3s;
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child:hover {
+  box-shadow: 0 0 0 4px rgba(191,224,236,0.8);
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child > .grid-cell:nth-of-type(2) {
+  background: #fff;
+  border-top: 1px solid #BFE0EC;
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child > .grid-cell:last-child {
+  background: #fff;
+  border-top: 1px solid #BFE0EC;
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child > .grid-cell:last-child .grid-cell {
+  text-align: center;
+  padding: 6px 12px;
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child > .grid-cell:last-child .grid-cell:first-child {
+  border-right: 1px solid #BFE0EC;;
+}
+#drink-page .similar-drinks .grid .grid-cell .image {
+  min-width: 100%;
+}
+#drink-page .similar-drinks .grid .grid-cell .image .fa {
+  font-size: 46px;
+  display: block;
+  padding: 50px 0;
+  text-align: center;
+  color: #BFE0EC;
+}
+#drink-page .similar-drinks .grid .grid-cell .name {
+  display: block;
+  min-width: 100%;
+  text-align: center;
+  padding: 6px 12px;
+  font-size: 16px;
+  flex: 1 0 auto;    
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #292f33;
+}
+.full-bleed {
+  border-top: 1px solid #e1e8ed;
+  background: #FBFBFB;
+  padding: 40px 0;
+}
+
 
 /*** RECIPE EDITOR ***/
 
@@ -1672,5 +1742,14 @@ footer.in-app .row {
   .comments-cont {
     margin-right: 0;
     margin-left: 0;
+  }
+  .full-bleed {
+    margin-right: -10px;
+    margin-left: -10px;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .full-bleed .cards {
+    min-width: 100% !important;
   }
 }

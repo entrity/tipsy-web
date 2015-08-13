@@ -37,7 +37,7 @@ class Drink < ActiveRecord::Base
     res = connection.execute %Q(SELECT id, name, required_canonical_ingredient_ids, ingredient_ct, prep_time, up_vote_ct
       FROM drinks
         WHERE id IN (#{ids_for_ingredients_sql(canonical_ingredient_ids)})
-        AND ARRAY_LENGTH(required_canonical_ingredient_ids - ARRAY[#{canonical_ids_txt}], 1) = 1
+        AND ARRAY_LENGTH(required_canonical_ingredient_ids - #{canonical_ids_txt}::int[], 1) = 1
       ORDER BY ingredient_ct DESC
       LIMIT 100
     )
