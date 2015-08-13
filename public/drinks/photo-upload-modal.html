@@ -7,6 +7,7 @@
 	</div>
 	<progressbar class="progress-striped active" type="{{uploader.progress == 100 ? (uploader.errors ? 'danger' : 'success') : null}}" value="uploader.progress"></progressbar>
 	<div ng-hide="uploader.success">
+		<form action="/file-upload" class="dropzone" id="my-awesome-dropzone"></form>
 		<p>
 			<input type="file" ngf-select ng-model="imgFiles" ng-model-rejected="rejFiles" ngf-capture="'camera'" accept="image/*" ngf-accept="'image/*'">
 		</p>

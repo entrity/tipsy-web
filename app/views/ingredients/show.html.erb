@@ -1,7 +1,7 @@
 <script type="text/javascript">
   window.ingredient = <%= @ingredient.to_json.html_safe %>;
 </script>
-<div ng-controller="IngredientCtrl">
+<div id="ingredient-page" ng-controller="IngredientCtrl">
   <div class="grid row center">
     <div class="grid-cell"><h1><%= @ingredient.name %></h1></div>
   	</div>
@@ -34,20 +34,18 @@
       </div>
     </div>
   </div>
-  <div class="grid row center">
+  <div class="grid results-list row center">
     <div class="grid-cell">
-      <p>
-        Here are a few drinks made with this ingredient:
-        <br>
-        <small>Refresh to see a different list.</small>
-      </p>
-      <ul>
-        <% @drinks.each do |drink| %>
-          <li>
-            <%= link_to drink.name, url_for(drink) %>
-          </li>
-        <% end %>
-      </ul>
+      <h3>Here are a few drinks made with this ingredient:<br><small>Refresh to see a different list.</small></h3>
+      <% @drinks.each do |drink| %>
+      <div class="grid grid--center item">
+        <div class="grid-cell name"><a ng-href="{{drink.getUrl()}}"><%= link_to drink.name, url_for(drink) %></a></div>
+        <div class="grid-cell"><i class="fa fa-clock-o"></i> <small>...</small></div>
+        <div class="grid-cell"><i class="fa fa-flask"></i> <small>...</small></div>
+        <div class="grid-cell"><i class="fa fa-thumbs-up"></i> <small>...</small></div>
+        <div class="grid-cell"><i class="fa fa-heart"></i></div>
+      </div>
+      <% end %>
     </div>
   </div>
 </div>

@@ -190,16 +190,16 @@ a:hover {
   margin: 0;
   padding: 0 0 20px 0;
 }
+#find-results .results-list {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 0 0 0;
+}
 #find-results .filters {
   padding: 10px 20px;
   background-color: #f4f4f4;
   border-bottom: 1px solid #ededed;
   flex-wrap: wrap;
-}
-#find-results .results-list {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 40px 0 0 0;
 }
 #find-results .filters .grid-cell {
   flex: 0 1 auto;
@@ -970,7 +970,7 @@ aside .btn-primary:hover {
   color: orange;
 }
 
-/*** DRINK PAGE STYLES ***/
+/*** DRINK/INGREDIENT/RECIPE-EDITOR STYLES ***/
 
 #drink-page h1,
 #ingredient-page h1 {
@@ -978,13 +978,16 @@ aside .btn-primary:hover {
   margin: 0;
   padding: 0 0 6px 0;
 }
-#drink-page h3 {
-  font-size: 14px;
+#drink-page h3,
+#ingredient-page h3 {
+  font-size: 15px;
   font-weight: 600;
   margin: 0 0 8px 0;
 }
 #drink-page .center,
 #recipe-editor .center,
+#ingredient-page .center,
+#profile-page .center,
 #ingredient-page .center {
   max-width: 600px;
 }
