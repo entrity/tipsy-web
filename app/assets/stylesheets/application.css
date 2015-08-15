@@ -17,7 +17,9 @@
  *= require_self
  */
 
-
+html {
+  overflow-x: hidden;
+}
 body {
   background-color: #fff;
   font-family: 'Open Sans', sans-serif;
@@ -379,6 +381,12 @@ nav .logo {
 nav .search {
   max-width: 300px;
   margin-right: 16px;
+}
+nav > .grid-cell:first-child {
+  padding-right: 16px;
+}
+nav .fa-bars {
+  font-size: 14px;
 }
 nav .search .input-group {
   width: 100%;
@@ -1692,6 +1700,12 @@ tipsy-image-editor a.btn:hover {
 .content a.fa-flag:hover {
   opacity: 1;
 }
+/*** NG-PAGESLIDE ***/
+.ng-pageslide {
+  background: #eee;
+}
+
+
 
 /*** NANO SCROLL STYLES ***/
 

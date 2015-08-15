@@ -2,6 +2,9 @@
   <nav class="grid grid--center" ng-controller="ToolbarCtrl">
 
     <!-- START UNIVERSAL USER NAV -->
+    <div class="grid-cell grid--shrink">
+      <a ng-click="toggle('leftbarOpen')"><i class="fa fa-bars"></i></a>
+    </div>
     <div class="logo grid-cell">
       <a href="/" ng-click="visit('/')"><img src="/images/tipsyology-logo.png" /></a>
     </div>
@@ -85,6 +88,9 @@
             <li><a href="/users/edit"><i class="fa fa-cog"></i> Account Settings</a></li>
             <li><a href="/users/sign_out" ng-click="visit('/users/sign_out', $event)"><i class="fa fa-sign-out"></i> Log out</a></li>
           </ul>
+        </div>
+        <div class="grid-cell grid--shrink">
+          <a ng-click="toggle('rightbarOpen')"><i class="fa fa-bars"></i></a>
         </div>
       </div>
     </div>
