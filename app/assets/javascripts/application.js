@@ -21,11 +21,13 @@
 //= require 'angular-touch/angular-touch.min'
 //= require 'angular-ui-select/dist/select.min'
 //= require google-diff-match-patch/diff_match_patch
+//= require hammerjs/hammer.min.js
 //= require ng-file-upload/ng-file-upload.min
 //= require ng-pageslide/dist/angular-pageslide-directive.min
 //= require pagedown/Markdown.Converter
 //= require pagedown/Markdown.Sanitizer
 //= require pagedown/Markdown.Editor
+//= require ryanmullins-angular-hammer/angular.hammer.min
 //= require image-resize-crop-canvas/component
 //= require ui-bootstrap
 //= require jquery.toolbar.min
@@ -36,6 +38,7 @@
 
 	angular.module('tipsy', [
 		'dndLists',
+		'hmTouchEvents',
 		'ngAria',
 		'ngResource',
 		'ngSanitize',
