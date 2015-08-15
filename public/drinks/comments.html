@@ -1,27 +1,35 @@
-<div class="grid row tips center">
-	<div class="grid-cell">
-		<h3>{{drink.name}} tips</h3>
-			<div id="tips">
-				<div ng-repeat="comment in tips">
-					<div>
-						<a ng-click="vote(comment, 'Comment', 1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment._userVoteSign > 0) && 'highlight'"></i></a>
-						<a ng-click="vote(comment, 'Comment', -1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment._userVoteSign < 0) && 'highlight'"></i></a>
-						{{comment.score}}
-						<img ng-src="{{comment.user_avatar}}">
-						{{comment.user_name}}
-						{{comment.created_at | date}}
+<div class="center row">
+	<div class="tips-cont">
+		<div class="grid tips">
+			<div class="grid-cell">
+				<h3>{{drink.name}} user tips</h3>
+			</div>
+		</div>
+		<div id="tips" ng-repeat="comment in tips">
+			<div class="grid">
+				<div class="grid-cell grid--shrink">
+					<img class="avatar" ng-src="{{comment.user_avatar}}">
+				</div>
+				<div class="grid-cell">
+					<div class="grid">
+						<div class="grid-cell">
+							<span class="name" itemprop="creator">{{comment.user_name}}</span>
+						</div>
 					</div>
-					<div>
-						<span ng-hide="comment.user_id == getUser().id">
-							<a ng-click="flagComment(comment)" title="Flag comment as inappropriate"><i class="fa fa-flag" ng-class="comment._isUserFlagged &amp;&amp; 'highlight'"></i></a>
-							<a ng-click="tipComment(comment)" title="Mark as a useful tip (only actual tips should be voted)"><i class="fa fa-flag" ng-class="comment._isUserTipVoted &amp;&amp; 'highlight'"></i></a>
-						</span>
-						<a ng-click="removeComment(comment)" ng-if="comment.user_id == getUser().id"><i class="fa fa-times-circle"></i></a>
-						<span ng-bind="comment.text"></span>
+					<div class="grid">
+						<div class="grid-cell">
+							<span itemprop="commentText" ng-bind="comment.text"></span>
+							<div class="comment-actions">
+								<span class="comment-flag tip">
+									6 users flagged this as a tip
+								</span>
+							</div>
+						</div>
 					</div>
 				</div>
-				<p ng-show="!tips.length"><em>No tips have been created for this page. Submit a comment of your own and have it earmarked as a tip by community members!</em></p>
 			</div>
+		</div>
+		<p ng-show="!tips.length"><em>No tips have been created for this page. Submit a comment of your own and have it earmarked as a tip by community members!</em></p>
 	</div>
 </div>
 <!-- COMMENTS TEXTAREA -->
@@ -40,7 +48,7 @@
 					</div>
 					<div class="grid-cell">
 						<textarea ng-model="newComment.text" placeholder="Leave a comment"></textarea>
-						<a class="btn btn-primary pull-right" ng-click="createComment(newComment)">Comment</a>
+						<a class="btn btn-primary btn-sm pull-right" ng-click="createComment(newComment)">Post</a>
 					</div>
 				</div>
 			</div>
@@ -53,11 +61,6 @@
 					<div class="grid">
 						<div class="grid-cell grid--shrink">
 							<img class="avatar" ng-src="{{comment.user_avatar}}">
-							<span class="comment-vote">
-								<a ng-click="vote(comment, 'Comment', 1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment._userVoteSign > 0) && 'highlight'"></i></a>
-								{{comment.score}}
-								<a ng-click="vote(comment, 'Comment', -1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment._userVoteSign < 0) && 'highlight'"></i></a>
-							</span>
 						</div>
 						<div class="grid-cell comment-id">
 							<div class="grid">
@@ -68,12 +71,24 @@
 							</div>
 							<div class="grid">
 								<div class="grid-cell comment-text">
-									<span ng-hide="comment.user_id == getUser().id">
-										<a ng-click="flagComment(comment)" title="Flag comment as inappropriate"><i class="fa fa-flag" ng-class="comment._isUserFlagged &amp;&amp; 'highlight'"></i></a>
-										<a ng-click="tipComment(comment)" title="Mark as a useful tip (only actual tips should be voted)"><i class="fa fa-flag" ng-class="comment._isUserTipVoted &amp;&amp; 'highlight'"></i></a>
-									</span>
-									<a ng-click="removeComment(comment)" ng-if="comment.user_id == getUser().id"><i class="fa fa-times-circle"></i></a>
 									<span itemprop="commentText" ng-bind="comment.text"></span>
+									<div class="comment-actions">
+										<span class="comment-reply">
+											<a href=""> Reply</a>
+										</span>
+										<span class="comment-vote">
+											{{comment.score}}
+											<a ng-click="vote(comment, 'Comment', 1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment._userVoteSign > 0) && 'highlight'"></i></a>
+											<a ng-click="vote(comment, 'Comment', -1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment._userVoteSign < 0) && 'highlight'"></i></a>
+										</span>
+										<span ng-if="comment.user_id == getUser().id"><a ng-click="removeComment(comment)"> Delete</a></span>
+										<span class="comment-flag tip" ng-hide="comment.user_id == getUser().id">
+											Was this comment helpful? Flag it as a tip <a class="btn btn-default btn-xs" ng-click="tipComment(comment)" title="Mark as a useful tip (only actual tips should be voted)"><i class="fa fa-flag"></i> Tip</a>
+										</span>
+										<span class="comment-flag inappropriate pull-right" ng-hide="comment.user_id == getUser().id">
+											<a ng-click="flagComment(comment)" title="Flag comment as inappropriate"><i class="fa fa-flag" ng-class="comment._isUserFlagged &amp;&amp; 'highlight'"></i></a>
+										</span>
+									</div>
 								</div>
 							</div>
 						</div>

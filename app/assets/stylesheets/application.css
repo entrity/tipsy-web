@@ -449,7 +449,7 @@ nav .user .avatar img {
   position: relative;
   display: block;
   border-radius: 4px;
-  border: 1px solid lightgray;
+  background: #BFE0EC;
 }
 nav .user .rep-change {
   background: #8fc77e;
@@ -984,7 +984,7 @@ aside .btn-primary:hover {
   color: orange;
 }
 
-/*** DRINK/INGREDIENT/RECIPE-EDITOR STYLES ***/
+/*** DRINK/INGREDIENT/RECIPE-EDITOR/TIPS STYLES ***/
 
 #drink-page h1,
 #ingredient-page h1 {
@@ -1176,9 +1176,12 @@ aside .btn-primary:hover {
   background: #fff;
   border-top: 1px solid #BFE0EC;
 }
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child > .grid-cell:last-child .grid {
+  padding: 12px 0;
+}
 #drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child > .grid-cell:last-child .grid-cell {
   text-align: center;
-  padding: 6px 12px;
+  padding: 0 12px;
 }
 #drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child > .grid-cell:last-child .grid-cell:first-child {
   border-right: 1px solid #BFE0EC;;
@@ -1197,7 +1200,7 @@ aside .btn-primary:hover {
   display: block;
   min-width: 100%;
   text-align: center;
-  padding: 6px 12px;
+  padding: 12px 12px;
   font-size: 16px;
   flex: 1 0 auto;    
   text-overflow: ellipsis;
@@ -1209,6 +1212,15 @@ aside .btn-primary:hover {
   border-top: 1px solid #e1e8ed;
   background: #FBFBFB;
   padding: 40px 0;
+}
+#tips {
+  padding: 1em 0;
+}
+#tips .grid > .grid-cell:first-child {
+  margin-right: 1em;
+}
+#tips .grid > .grid-cell:last-child > .grid {
+  padding-bottom: 5px;
 }
 
 
@@ -1425,7 +1437,7 @@ tipsy-image-editor a.btn:hover {
 }
 #comments .comment-id {
   flex: 0 1 auto;
-  margin-right: 14px;
+  width: 100%;
 }
 .comments-cont {
   margin-right: -1em;
@@ -1446,7 +1458,8 @@ tipsy-image-editor a.btn:hover {
 .comments-cont #comments > .grid .grid-cell:first-child {
   padding-right: 1em;
 }
-.comments-cont #comments .name {
+.comments-cont #comments .name,
+#tips .name {
   font-weight: bold;
 }
 .comments-cont #comments .date {
@@ -1480,13 +1493,14 @@ tipsy-image-editor a.btn:hover {
   background-color: transparent;
   border-color: lightgray;
 }
-.comments-cont .avatar {
+.comments-cont .avatar,
+#tips .avatar {
   height: 32px;
   width: 32px;
   position: relative;
   display: block;
   border-radius: 3px;
-  border: 1px solid #BFE0EC;
+  background: #BFE0EC;
 }
 .comment-box .grid-cell .grid .grid-cell:first-child {
   padding-right: 0;
@@ -1515,6 +1529,68 @@ tipsy-image-editor a.btn:hover {
 }
 .comment-box textarea:focus {
   height: 120px;
+}
+.comment-box .grid-cell .grid .grid-cell:last-child {
+  position: relative;
+}
+.comment-box .grid-cell .grid .grid-cell:last-child:before {
+  background-color: #fff;
+  box-shadow: -1px 1px 1px 0 #BFE0EC;
+  content: "\00a0";
+  display: block;
+  height: 10px;
+  left: 9px;
+  position: absolute;
+  top: 25px;
+  transform:             rotate( 45deg );
+      -moz-transform:    rotate( 45deg );
+      -ms-transform:     rotate( 45deg );
+      -o-transform:      rotate( 45deg );
+      -webkit-transform: rotate( 45deg );
+  width:  10px;
+}
+.comment-actions {
+  display: block;
+  padding-top: 7px;
+}
+.comment-actions span {
+  position: relative;
+  opacity: .8;
+  padding-left: 9px;
+  margin-left: 9px;
+  font-size: 88%;
+}
+.comment-actions span .fa {
+  font-size: 14px;
+}
+.comment-actions span:first-child {
+  padding-left: 0;
+  margin-left: 0;
+}
+.comment-actions span:before {
+  content: "\00b7";
+  position: absolute;
+  left: -3px;
+}
+.comment-actions span:first-child:before,
+.comment-actions span:last-child:before {
+  display: none;
+}
+#comments .comment-actions span:last-child {
+  opacity: 0;
+  transition: all .4s;
+}
+#comments:hover .comment-actions span:last-child {
+  opacity: 1;
+}
+#comments .comment-id .grid:first-child {
+  padding-bottom: 5px;
+}
+#comments .comment-vote .fa-thumbs-o-up {
+  padding-left: 5px;
+}
+#comments .comment-vote .fa-thumbs-o-down {
+  padding-left: 5px;
 }
 
 /*** ACCOUNT SETTINGS ***/
