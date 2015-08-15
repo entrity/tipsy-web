@@ -26,7 +26,6 @@
 //= require pagedown/Markdown.Sanitizer
 //= require pagedown/Markdown.Editor
 //= require image-resize-crop-canvas/component
-//= require turbolinks
 //= require ui-bootstrap
 //= require jquery.toolbar.min
 //= require bootstrap-slider
@@ -238,16 +237,6 @@
 				}
 			},
 			visit: {
-				configurable: false,
-				value: function visit (url, event) {
-					if (event) {
-						event.stopPropagation();
-						event.preventDefault();
-					}
-					Turbolinks.visit(url);
-				}
-			},
-			visitNoTurbo: {
 				configurable: false,
 				value: function visit (url, event) {
 					if (event) {

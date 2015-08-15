@@ -91,7 +91,7 @@
 		$scope.ingredient = new Ingredient(window.ingredient);
 		$scope.loadEditView = function () {
 			if ($scope.requireLoggedIn()) {
-				Turbolinks.visit('/ingredients/'+$scope.ingredient.id+'/edit.html');
+				$scope.visit('/ingredients/'+$scope.ingredient.id+'/edit.html');
 			}
 		}; // loadEditView
 		$scope.flag = function () {

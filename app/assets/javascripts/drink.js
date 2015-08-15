@@ -145,7 +145,7 @@
 		$scope.loadEditView = function () {
 			if ($scope.requireLoggedIn()) {
 				var id = getDrinkId($scope);
-				Turbolinks.visit('/drinks/'+id+'/edit.html');
+				$scope.visit('/drinks/'+id+'/edit.html');
 			}
 		};
 		$scope.openPhotoUploadModal = function () {
@@ -276,7 +276,7 @@
 			});
 		}
 		$scope.visitDrink = function () {
-			Turbolinks.visit($scope.drink.getUrl());
+			$scope.visit($scope.drink.getUrl());
 		}
 	}])
 	.controller('Drink.FlagModalCtrl', ['$scope', '$resource', 'Differ', 'Flagger', function ($scope, $resource, Differ, Flagger) {

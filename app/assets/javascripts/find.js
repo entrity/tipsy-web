@@ -29,12 +29,12 @@
 				switch (parseInt($item.type)) {
 					case window.DRINK:
 						var url = new Drink($item).getUrl();
-						$scope.visitNoTurbo(url); break;
+						$scope.visit(url); break;
 					case window.INGREDIENT:
 						this.findables = [];
 						delete $select.search;
 						delete $select.selected;
-						if ($scope.onSplashScreen) $scope.visitNoTurbo('/?ingredient_id='+$item.id);
+						if ($scope.onSplashScreen) $scope.visit('/?ingredient_id='+$item.id);
 						else $scope.finder.addIngredient($item);
 						break;
 					default:

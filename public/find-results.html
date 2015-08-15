@@ -11,7 +11,7 @@
 				<li><a ng-click="finder.removeIngredient($index)"><i class="fa fa-remove"></i></a></li>
 				<li><a ng-click="addToCabinet(ingredient)" ng-class="isInCabinet(ingredient) &amp;&amp; 'active'"><i class="icon-fridge"></i></a></li>
 				<li><a ng-click="addToShoppingList(ingredient)" ng-class="isInShoppingList(ingredient) &amp;&amp; 'active'"><i class="fa fa-shopping-cart"></i></a></li>
-				<li><a ng-href="{{ingredient.getUrl()}}" ng-click="visitNoTurbo(ingredient.getUrl(), $event)"><i class="fa fa-link"></i></a></li>
+				<li><a ng-href="{{ingredient.getUrl()}}" ng-click="visit(ingredient.getUrl(), $event)"><i class="fa fa-link"></i></a></li>
 			</ul>
 		</div>
 		<div class="grid-cell clear"><small><a ng-click="finder.removeIngredient()"><i class="fa fa-times-circle"></i> Clear all</a></small></div>
@@ -50,7 +50,7 @@
 							<li><a ng-click="finder.removeIngredient($index)"><i class="fa fa-remove"></i></a></li>
 							<li><a ng-click="addToCabinet(ingredient)" ng-class="isInCabinet(ingredient) &amp;&amp; 'active'"><i class="icon-fridge"></i></a></li>
 							<li><a ng-click="addToShoppingList(ingredient)" ng-class="isInShoppingList(ingredient) &amp;&amp; 'active'"><i class="fa fa-shopping-cart"></i></a></li>
-							<li><a ng-href="{{ingredient.getUrl()}}" ng-click="visitNoTurbo(ingredient.getUrl(), $event)"><i class="fa fa-link"></i></a></li>
+							<li><a ng-href="{{ingredient.getUrl()}}" ng-click="visit(ingredient.getUrl(), $event)"><i class="fa fa-link"></i></a></li>
 						</ul>
 					</div>
 				</p>
