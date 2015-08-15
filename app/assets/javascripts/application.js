@@ -21,10 +21,13 @@
 //= require 'angular-touch/angular-touch.min'
 //= require 'angular-ui-select/dist/select.min'
 //= require google-diff-match-patch/diff_match_patch
+//= require hammerjs/hammer.min.js
 //= require ng-file-upload/ng-file-upload.min
+//= require ng-pageslide/dist/angular-pageslide-directive.min
 //= require pagedown/Markdown.Converter
 //= require pagedown/Markdown.Sanitizer
 //= require pagedown/Markdown.Editor
+//= require ryanmullins-angular-hammer/angular.hammer.min
 //= require image-resize-crop-canvas/component
 //= require ui-bootstrap
 //= require jquery.toolbar.min
@@ -35,9 +38,11 @@
 
 	angular.module('tipsy', [
 		'dndLists',
+		'hmTouchEvents',
 		'ngAria',
 		'ngResource',
 		'ngSanitize',
+		'pageslide-directive',
 		'tipsy.drink',
 		'tipsy.factories',
 		'tipsy.find',
@@ -154,6 +159,13 @@
 					return this.getUser(null, null, forceReload).id;
 				}
 			},
+			isToggled: {
+				configurable: false,
+				value: function isToggled (key) {
+					if (!(key in this.tipsyconfig)) this.tipsyconfig[key] = JSON.parse(localStorage.getItem(key));
+					return this.tipsyconfig[key];
+				}
+			},
 			loadCabinetToFuzzyFindResults: {
 				configurable: false,
 				value: function loadCabinetToFuzzyFindResults () {
@@ -229,7 +241,18 @@
 				configurable: false,
 				value: {} // just for holding config options
 			},
-			toggleSidebar: {
+			tipsyconfig: {
+				configurable: false,
+				value: {} // just for holding config options
+			},
+			toggle: {
+				configurable: false,
+				value: function toggle (key) {
+					this.tipsyconfig[key] = !this.tipsyconfig[key];
+					localStorage.setItem(key, this.tipsyconfig[key]);
+				}
+			},
+			toggleSidebar: { // deprecated
 				configurable: false,
 				value: function toggleSidebar () {
 					this.sidebar.open = !this.sidebar.open;
@@ -271,6 +294,8 @@
 		while (removeDuplicatesFromAside($rootScope.cabinet)) {}
 		while (removeDuplicatesFromAside($rootScope.shoppingList)) {}
 		$rootScope.sidebar.open = JSON.parse(localStorage.getItem('sidebar.open')||false);
+		$rootScope.isToggled('leftbarOpen');
+		$rootScope.isToggled('rightbarOpen');
 	}])
 	.filter('tipsyFindableClass', function () {
 		return function (item) {

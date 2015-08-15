@@ -37,6 +37,9 @@
 
 <div class="wrapper">
   <ng-include src="'/toolbar.html'"></ng-include>
+  <% unless @no_leftbar %>
+    <pageslide id="sidebar-l" ps-open="leftbarOpen" ps-side="left" ng-include='"/application/leftbar.html"'></pageslide>
+  <% end %>
   <div id="main-cont" class="grid">
     <div class="content grid-cell">
       <ng-include src="'/find-results.html'" ng-if="finder.ingredients.length"></ng-include>
@@ -76,6 +79,9 @@
       </div>
     </div>
   </aside>
+  <% unless @no_rightbar %>
+    <pageslide id="sidebar-r" ps-open="rightbarOpen" ps-side="right" ng-include='"/application/rightbar.html"'></pageslide>
+  <% end %>
   <footer class="in-app">
     <div class="grid grid--center row center aligner">
       <div class="grid-cell copyright grid--shrink">
