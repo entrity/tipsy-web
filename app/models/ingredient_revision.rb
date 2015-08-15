@@ -23,6 +23,18 @@ class IngredientRevision < ActiveRecord::Base
   def publish!
     user.increment_revision_ct! unless flags.limit(1).count > 0 # If any flags are present, then this has already been published once and doesn't merit distribution of counts/points
     super
+    if canonical_id != prev_canonical_id
+      prev_val = prev_canonical_id || ingredient_id
+      curr_val = canonical_id || ingredient_id
+      # Update denormalized canonical ingredient ids on drinks
+      self.class.connection.execute("UPDATE drinks
+        SET required_canonical_ingredient_ids = ARRAY_REPLACE(required_canonical_ingredient_ids, #{prev_val}, #{curr_val})
+        WHERE #{prev_val} = ANY(required_canonical_ingredient_ids)")
+      # Update canonical ingredient ids on drinks_ingredients
+      self.class.connection.execute("UPDATE drinks_ingredients
+        SET canonical_id = #{curr_val}
+        WHERE ingredient_id = #{ingredient_id}")
+    end
   end
 
 end
