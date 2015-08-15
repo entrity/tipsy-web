@@ -31,7 +31,6 @@ describe DrinksController, :type => :controller do
       let(:params){{format: :json}}
       context 'with ingredient_id[] param' do
         it 'should return 200' do
-          expect(Drink).to receive(:for_exclusive_ingredients).and_call_original
           params[:ingredient_id] = 1
           subject
           assert_response 200
@@ -41,7 +40,7 @@ describe DrinksController, :type => :controller do
         context 'of multiple values' do
           it 'should return 200' do
             expect(Drink).to receive(:for_exclusive_ingredients).and_call_original
-            params[:ingredient_id] = [1,2,3]
+            params[:canonical_ingredient_id] = [1,2,3]
             subject
             assert_response 200
           end
@@ -49,7 +48,7 @@ describe DrinksController, :type => :controller do
         context 'of one value' do
           it 'should return 200' do
             expect(Drink).to receive(:for_exclusive_ingredients).and_call_original
-            params[:ingredient_id] = [1]
+            params[:canonical_ingredient_id] = [1]
             subject
             assert_response 200
           end
