@@ -40,6 +40,7 @@
 		'ngSanitize',
 		'tipsy.drink',
 		'tipsy.factories',
+		'tipsy.favourites',
 		'tipsy.find',
 		'tipsy.image',
 		'tipsy.ingredient',

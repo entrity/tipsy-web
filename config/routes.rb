@@ -33,6 +33,10 @@ Rails.application.routes.draw do
   end
 
   resources :drinks, path: 'recipe', only: [:show]
+
+  resources :favourites, only: [:index, :create, :update, :destroy]
+
+  resources :favourites_collections, only: [:index, :create, :update, :destroy]
   
   resources :flags, only: :create
 

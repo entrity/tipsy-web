@@ -133,23 +133,33 @@
 		Drink.query({'id[]':$scope.drink.related_drink_ids}, function (data) {
 			$scope.relatedDrinks = data.map(function (obj) { return new Drink(obj) });
 		});
+		$scope.favourite = function () {
+			$scope.requireLoggedIn(function () {
+				if ($scope.drink._userFavId == null)
+					$scope.openFavourites($scope.drink); // defined in favourites.js
+				else
+					$http.delete('/favourites/'+$scope.drink._userFavId+'.json')
+					.success(function () { $scope.drink._userFavId = null })
+					.error(RailsSupport.errorAlert);
+			});
+		};
 		$scope.flag = function () {
-			if ($scope.requireLoggedIn()) {
+			$scope.requireLoggedIn(function () {
 				$modal.open({
 					animation: true,
 					templateUrl: '/drinks/flag-modal.html',
 					size: 'lg',
 				});
-			}
+			});
 		};
 		$scope.loadEditView = function () {
-			if ($scope.requireLoggedIn()) {
+			$scope.requireLoggedIn(function () {
 				var id = getDrinkId($scope);
 				$scope.visit('/drinks/'+id+'/edit.html');
-			}
+			});
 		};
 		$scope.openPhotoUploadModal = function () {
-			if ($scope.requireLoggedIn()) {
+			$scope.requireLoggedIn(function () {
 				var modalInstance = $modal.open({
 					animation: true,
 					controller: 'Drink.PhotoUploadCtrl',
@@ -159,10 +169,10 @@
 						drink: function () { return $scope.drink }
 					},
 				});
-			}
+			});
 		};
 		$scope.createComment = function (comment) {
-			if ($scope.requireLoggedIn()) {
+			$scope.requireLoggedIn(function () {
 				$http.post('/comments.json',
 					angular.extend(comment, {drink_id: $scope.drink.id})
 				)
@@ -173,10 +183,10 @@
 				.error(function (data, status) {
 					RailsSupport.errorAlert(data, status);
 				})
-			}
+			});
 		};
 		$scope.vote = function (votable, votableType, sign) {
-			if ($scope.requireLoggedIn()) {
+			$scope.requireLoggedIn(function () {
 				if (sign) sign = sign > 0 ? 1 : -1; // ensure sign in {-1,0,1}
 				var prevSign = votable._userVoteSign || 0;
 				if (prevSign == sign) sign = 0; // undo existing vote if current vote has a sign
@@ -194,13 +204,15 @@
 					console.error(data, status, headers, config);
 					RailsSupport.errorAlert(data, status);
 				});
-			}
+			});
 		};
 		$scope.flagComment = function (comment) {
-			if ($scope.requireLoggedIn()) new Flagger(this, comment, 'Comment');
+			$scope.requireLoggedIn(function () {
+				new Flagger(this, comment, 'Comment');
+			});
 		}
 		$scope.removeComment = function (comment) {
-			if ($scope.requireLoggedIn()) {
+			$scope.requireLoggedIn(function () {
 				$http.delete('/comments/'+comment.id+'.json')
 				.success(function (data, status, headers, config) {
 					var tipsIndex = $scope.tips.indexOf(comment);
@@ -212,7 +224,7 @@
 					console.error(data, status, headers, config);
 					alert('Failed to delete comment. See javascript console for details');
 				});
-			}
+			});
 		};
 		$scope.tipComment = function (comment) {
 			$scope.requireLoggedIn(function (user) {
