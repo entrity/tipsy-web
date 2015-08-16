@@ -338,7 +338,8 @@ CREATE TABLE favourites_collections (
     id integer NOT NULL,
     user_id integer,
     name character varying,
-    preview_url character varying
+    preview_urls character varying[],
+    favourite_ct integer DEFAULT 0
 );
 
 

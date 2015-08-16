@@ -10,7 +10,8 @@ class CreateFavouritesAndFavouritesCollections < ActiveRecord::Migration
     create_table :favourites_collections do |t|
       t.integer :user_id
       t.string  :name
-      t.string  :preview_url
+      t.string  :preview_urls, array: true
+      t.integer :favourite_ct, default: 0
     end
     add_index :favourites_collections, [:user_id, :name]
   end
