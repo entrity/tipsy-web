@@ -38,7 +38,7 @@
 <div class="wrapper">
   <ng-include src="'/toolbar.html'"></ng-include>
   <% unless @no_leftbar %>
-    <pageslide id="sidebar-l" ps-open="leftbarOpen" ps-side="left" ng-include='"/application/leftbar.html"'></pageslide>
+    <pageslide id="sidebar-l" ps-open="tipsyconfig.leftbarOpen" ps-side="left" ng-include='"/application/leftbar.html"'></pageslide>
   <% end %>
   <div id="main-cont" class="grid">
     <div class="content grid-cell">
@@ -80,7 +80,7 @@
     </div>
   </aside>
   <% unless @no_rightbar %>
-    <pageslide id="sidebar-r" ps-open="rightbarOpen" ps-side="right" ng-include='"/application/rightbar.html"'></pageslide>
+    <pageslide id="sidebar-r" ps-open="tipsyconfig.rightbarOpen" ps-side="right" ng-include='"/application/rightbar.html"'></pageslide>
   <% end %>
   <footer class="in-app">
     <div class="grid grid--center row center aligner">
