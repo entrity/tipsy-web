@@ -5,6 +5,7 @@
   window.drink.userFlags    = <%= @user_flags.to_json.html_safe %>;
   window.drink.userTipVotes = <%= @user_tips.to_json.html_safe %>;
   window.drink.userVotes    = <%= @user_votes.to_json.html_safe %>;
+  window.drink._userFavId   = <%= @user_fav_id.to_json.html_safe %>;
 </script>
 <div id="drink-page" ng-controller="DrinkCtrl" itemscope itemtype="http://schema.org/Recipe">
   <div class="grid photos">
@@ -49,6 +50,7 @@
       </div>
     </div>
     <div class="votes grid-cell grid--shrink" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+      <a role="button" ng-click="favourite()"><i class="fa" ng-class="drink._userFavId==null ? 'fa-heart-o' : 'fa-heart'"></i></a>
       <div class="arrow up" role="button" aria-label="upvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', 1)"><i class="fa fa-thumbs-up" ng-class="drink._userVoteSign > 0 &amp;&amp; 'highlight'" ></i></a></div>
       <div class="score" itemprop="ratingValue"><noscript><%= @drink.score %></noscript>{{drink.score}}</div>
       <div class="arrow down" role="button" aria-label="downvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', -1)"><i class="fa fa-thumbs-down" ng-class="drink._userVoteSign < 0 &amp;&amp; 'highlight'" ></i></a></div>

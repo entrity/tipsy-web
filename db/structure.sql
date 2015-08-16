@@ -319,6 +319,68 @@ CREATE TABLE drinks_ingredients (
 
 
 --
+-- Name: favourites; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE favourites (
+    id integer NOT NULL,
+    user_id integer,
+    drink_id integer,
+    collection_id integer
+);
+
+
+--
+-- Name: favourites_collections; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE favourites_collections (
+    id integer NOT NULL,
+    user_id integer,
+    name character varying,
+    preview_url character varying
+);
+
+
+--
+-- Name: favourites_collections_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE favourites_collections_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: favourites_collections_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE favourites_collections_id_seq OWNED BY favourites_collections.id;
+
+
+--
+-- Name: favourites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE favourites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: favourites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE favourites_id_seq OWNED BY favourites.id;
+
+
+--
 -- Name: flags; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -827,6 +889,20 @@ ALTER TABLE ONLY drinks ALTER COLUMN id SET DEFAULT nextval('drinks_id_seq'::reg
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY favourites ALTER COLUMN id SET DEFAULT nextval('favourites_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY favourites_collections ALTER COLUMN id SET DEFAULT nextval('favourites_collections_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY flags ALTER COLUMN id SET DEFAULT nextval('flags_id_seq'::regclass);
 
 
@@ -929,6 +1005,22 @@ ALTER TABLE ONLY comments
 
 ALTER TABLE ONLY drinks
     ADD CONSTRAINT drinks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: favourites_collections_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY favourites_collections
+    ADD CONSTRAINT favourites_collections_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY favourites
+    ADD CONSTRAINT favourites_pkey PRIMARY KEY (id);
 
 
 --
@@ -1075,6 +1167,27 @@ CREATE INDEX index_drinks_ingredients_on_ingredient_id ON drinks_ingredients USI
 --
 
 CREATE INDEX index_drinks_on_name ON drinks USING btree (name);
+
+
+--
+-- Name: index_favourites_collections_on_user_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_favourites_collections_on_user_id_and_name ON favourites_collections USING btree (user_id, name);
+
+
+--
+-- Name: index_favourites_on_collection_id_and_drink_id_and_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_favourites_on_collection_id_and_drink_id_and_user_id ON favourites USING btree (collection_id, drink_id, user_id);
+
+
+--
+-- Name: index_favourites_on_user_id_and_drink_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_favourites_on_user_id_and_drink_id ON favourites USING btree (user_id, drink_id);
 
 
 --
@@ -1256,4 +1369,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150806004006');
 INSERT INTO schema_migrations (version) VALUES ('20150806235034');
 
 INSERT INTO schema_migrations (version) VALUES ('20150810235704');
+
+INSERT INTO schema_migrations (version) VALUES ('20150815175717');
 

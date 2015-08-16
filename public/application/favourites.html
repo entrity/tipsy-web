@@ -1,0 +1,29 @@
+<div>
+	<form ng-show="newCollection._toggled">
+		<label>Name</label>
+		<input type=text ng-model="newCollection.name">
+		<label>Preview URL (optional)</label>
+		<input type=text ng-model="newCollection.preview_url">
+		<a class="btn btn-primary" ng-click="saveCollection()">Save</a>
+	</form>
+	<div ng-hide="newCollection._toggled">
+		<div class="favourite-collection">
+			<a ng-click="newCollection._toggled=true"><i class="fa fa-plus-circle"></i> New Collection</a>
+		</div>
+		<div class="favourite-collection">
+			<a ng-click="clickCollection(null)">Unsorted</a>
+		</div>
+		<div class="favourite-collection" ng-repeat="collection in collections | orderBy: 'name'">
+			<a ng-click="clickCollection(collection)">{{collection.name}}</a>
+			<img ng-src="{{collection.preview_url}}">
+		</div>
+		<div ng-if="collection._show" ng-controller="FavouritesCollectionCtrl" ng-repeat="collection in collections">
+			<a class="btn btn-default" ng-click="collection._show=false">Hide</a>
+			<span ng-show="!isNaN(favourites.count)">{{favourites.count}} items in collection</span>
+			<a ng-repeat="fav in favourites">
+				{{fav.name}}
+				<img ng-src="{{fav.preview_url}}">
+			</a>
+		</div>
+	</div>
+</div>

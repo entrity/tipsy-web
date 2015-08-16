@@ -10,6 +10,8 @@ class Drink < ActiveRecord::Base
   has_many :photos, inverse_of: :drink
   has_many :revisions, inverse_of: :drink
 
+  has_one :photo, -> { order('score DESC') }
+
   validates :name, presence: true
 
   # Scope results to Drinks which include all of the indicated ingredients

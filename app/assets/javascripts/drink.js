@@ -133,6 +133,16 @@
 		Drink.query({'id[]':$scope.drink.related_drink_ids}, function (data) {
 			$scope.relatedDrinks = data.map(function (obj) { return new Drink(obj) });
 		});
+		$scope.favourite = function () {
+			$scope.requireLoggedIn(function () {
+				if ($scope.drink._userFavId == null)
+					$scope.openFavourites($scope.drink); // defined in favourites.js
+				else
+					$http.delete('/favourites/'+$scope.drink._userFavId+'.json')
+					.success(function () { $scope.drink._userFavId = null })
+					.error(RailsSupport.errorAlert);
+			});
+		};
 		$scope.flag = function () {
 			$scope.requireLoggedIn(function () {
 				$modal.open({
