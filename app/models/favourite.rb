@@ -6,6 +6,7 @@ class Favourite < ActiveRecord::Base
 
   validates :user, presence: true, uniqueness: {scope: [:drink_id, :collection_id]}
   validates :drink, presence: true
+  validates :collection, presence: true
 
   delegate :name, to: :drink, allow_nil: true
 

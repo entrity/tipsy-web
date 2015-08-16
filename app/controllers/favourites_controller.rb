@@ -9,7 +9,10 @@ class FavouritesController < ApplicationController
   def create
     @favourite = Favourite.new model_params
     @favourite.user = current_user
-    @favourite.save
+    if @favourite.save
+      @favourite.collection.pg_increment! :favourite_ct, 1
+      @favourite.collection.try :infer_preview_urls!
+    end
     respond_with @favourite
   end
 
@@ -22,7 +25,10 @@ class FavouritesController < ApplicationController
 
   def destroy
     if find_collection
-      @favourite.destroy
+      if @favourite.destroy
+        @favourite.collection.pg_increment! :favourite_ct, -1
+        @favourite.collection.try :infer_preview_urls!
+      end
       respond_with @favourite
     end
   end
