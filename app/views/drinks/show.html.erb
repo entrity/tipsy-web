@@ -177,8 +177,8 @@
   <div class="grid row tips center">
     <div class="grid-cell">
       <h3><%= @drink.name %> tips? Comments? Join the discussion!</h3>
-      <textarea ng-model="newComment.text"></textarea>
-      <a ng-click="createComment(newComment)">Save</a>
+      <textarea ng-model="newComment.text" ng-disabled="newComment._saving"></textarea>
+      <a ng-click="createComment(newComment)" ng-hide="newComment._saving">Save</a>
     </div>
   </div>
   <ng-include src="'/drinks/comments.html'"></ng-include>

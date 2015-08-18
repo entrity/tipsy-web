@@ -140,16 +140,19 @@
 		};
 		$scope.createComment = function (comment) {
 			if ($scope.requireLoggedIn()) {
+				$scope.newComment._saving = true;
 				$http.post('/comments.json',
 					angular.extend(comment, {drink_id: $scope.drink.id})
-				)
-				.success(function (data) {
+				).then(
+				function (response) {
 					delete $scope.newComment.text;
-					$scope.comments.push(data);
-				})
-				.error(function (data, status) {
-					RailsSupport.errorAlert(data, status);
-				})
+					$scope.newComment._saving = false;
+					$scope.comments.push(response.data);
+				},
+				function (response) {
+					RailsSupport.errorAlert(response.data, response.status);
+					$scope.newComment._saving = false;
+				});
 			}
 		};
 		$scope.vote = function (votable, votableType, sign) {
