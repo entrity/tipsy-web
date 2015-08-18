@@ -47,8 +47,8 @@
 						<img class="avatar" ng-src="{{getUser().tinyAvatar}}">
 					</div>
 					<div class="grid-cell">
-						<textarea ng-model="newComment.text" placeholder="Leave a comment"></textarea>
-						<a class="btn btn-primary btn-sm pull-right" ng-click="createComment(newComment)">Post</a>
+						<textarea ng-model="newComment.text" ng-disabled="newComment._saving" placeholder="Leave a comment"></textarea>
+						<a class="btn btn-primary btn-sm pull-right" ng-click="createComment(newComment)" ng-hide="newComment._saving">Post</a>
 					</div>
 				</div>
 			</div>

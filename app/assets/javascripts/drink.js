@@ -121,6 +121,7 @@
 		$scope.drink.setUserVoteSign($scope.drink, 'Drink');
 		$scope.drinkCtrl = new Object;
 		$scope.comments = window.drink.comments;
+		$scope.newComment = {};
 		$scope.tips = new Array;
 		// Iterate comments:
 		$scope.comments.forEach(function (comment) {
@@ -173,16 +174,18 @@
 		};
 		$scope.createComment = function (comment) {
 			$scope.requireLoggedIn(function () {
+				$scope.newComment._saving = true;
 				$http.post('/comments.json',
 					angular.extend(comment, {drink_id: $scope.drink.id})
-				)
-				.success(function (data) {
+				).then(
+				function (response) {
 					delete $scope.newComment.text;
-					$scope.comments.push(data);
-				})
-				.error(function (data, status) {
-					RailsSupport.errorAlert(data, status);
-				})
+					$scope.newComment._saving = false;
+					$scope.comments.push(response.data);
+				},
+				function (response) {
+					RailsSupport.errorAlert(response.data, response.status);
+				});
 			});
 		};
 		$scope.vote = function (votable, votableType, sign) {
@@ -216,9 +219,9 @@
 				$http.delete('/comments/'+comment.id+'.json')
 				.success(function (data, status, headers, config) {
 					var tipsIndex = $scope.tips.indexOf(comment);
-					if (tipsIndex) $scope.tips = $scope.tips.splice(tipsIndex, 1);
+					if (tipsIndex >= 0) $scope.tips.splice(tipsIndex, 1);
 					var commentsIndex = $scope.comments.indexOf(comment);
-					if (commentsIndex) $scope.comments = $scope.comments.splice(commentsIndex, 1);
+					if (commentsIndex >= 0) $scope.comments.splice(commentsIndex, 1);
 				})
 				.error(function (data, status, headers, config) {
 					console.error(data, status, headers, config);
