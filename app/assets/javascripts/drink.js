@@ -121,6 +121,7 @@
 		$scope.drink.setUserVoteSign($scope.drink, 'Drink');
 		$scope.drinkCtrl = new Object;
 		$scope.comments = window.drink.comments;
+		$scope.newComment = {};
 		$scope.tips = new Array;
 		// Iterate comments:
 		$scope.comments.forEach(function (comment) {
@@ -219,9 +220,9 @@
 				$http.delete('/comments/'+comment.id+'.json')
 				.success(function (data, status, headers, config) {
 					var tipsIndex = $scope.tips.indexOf(comment);
-					if (tipsIndex) $scope.tips = $scope.tips.splice(tipsIndex, 1);
+					if (tipsIndex >= 0) $scope.tips.splice(tipsIndex, 1);
 					var commentsIndex = $scope.comments.indexOf(comment);
-					if (commentsIndex) $scope.comments = $scope.comments.splice(commentsIndex, 1);
+					if (commentsIndex >= 0) $scope.comments.splice(commentsIndex, 1);
 				})
 				.error(function (data, status, headers, config) {
 					console.error(data, status, headers, config);
