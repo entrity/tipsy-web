@@ -510,6 +510,11 @@ nav .user li .rep-change {
 .dropdown-menu > li > a {
   padding: 3px 14px;
 }
+.dropdown-menu > li > a .fa {
+  min-width: 16px;
+  display: inline-block;
+}
+
 
 /*** CONTENT GLOBAL STYLES ***/
 
@@ -1635,7 +1640,7 @@ tipsy-image-editor a.btn:hover {
   max-width: 200px;
 }
 .account-settings .grid .grid-cell.form-item {
-  max-width: 186px;
+  max-width: 246px;
 }
 .account-settings .grid .grid-cell.avatar {
   max-width: 48px;
@@ -1646,8 +1651,18 @@ tipsy-image-editor a.btn:hover {
 .account-settings .profile {
   margin-bottom: 20px;
 }
+.account-settings input:not([type='checkbox']) {
+  height: 30px;
+  padding: 3px 6px;
+}
+.account-settings .form-control input:not([type='checkbox']),
+.account-settings .form-control textarea {
+  border-radius: 3px;
+  border: 1px solid lightgray;
+  width: 100%;
+}
 .account-settings .main .grid .grid-cell:first-child {
-  padding-right: 14px;
+  padding-right: 20px;
   text-align: right;
 }
 .account-settings .main .grid .avatar {

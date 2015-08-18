@@ -12,7 +12,6 @@
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="/whhg-font/css/whhg.css">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body ng-app="tipsy" id="profile-page">
@@ -26,8 +25,8 @@
           <img ng-src="{{user.thumbnail}}">
         </div>
         <div class="grid-cell">
-          <h1><%= link_to resource.name, resource.url_path %> / Profile</h1>
-          <h2>Edit your name, picture, etc</h2>
+          <h1><%= link_to resource.name, resource.url_path %> / Settings</h1>
+          <h2>Change your account settings</h2>
         </div>
       </div>
       <div class="grid nav" ng-init="tab = 1">
@@ -41,8 +40,8 @@
           <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
             <%= devise_error_messages! %>
             <div class="grid grid--center field">
-              <div class="grid-cell"><label>Link Account</label></div>
-              <div class="grid-cell">
+              <div class="grid-cell form-group form-group-lg"><label>Link Account</label></div>
+              <div class="grid-cell form-group form-group-lg">
                 <%- if devise_mapping.omniauthable? %>
                   <%- resource_class.omniauth_providers.each do |provider| %>
                     <%= link_to "Link #{provider.to_s.titleize} Account", user_omniauth_authorize_path(provider) unless current_user.identities.pluck(:provider).include?(provider.to_s) %>
@@ -51,54 +50,54 @@
               </div>
             </div>
             <div class="grid grid--center field">
-              <div class="grid-cell"><label>Profile Picture</label></div>
-              <div class="grid-cell form-item avatar">
+              <div class="grid-cell form-group form-group-lg"><label>Profile Picture</label></div>
+              <div class="grid-cell form-item avatar form-group form-group-lg">
                 <img ng-src="{{user.thumbnail}}"><a class="action edit-avatar" ng-click="openAvatarModal()">Change Profile Picture</a>
               </div>
             </div>
-            <div class="grid grid--top field">
-              <div class="grid-cell"><%= f.label :name %></div>
-              <div class="grid-cell form-item">
-                <%= f.text_field :name %>
+            <div class="grid grid--center field">
+              <div class="grid-cell form-group form-group-lg"><label>Full Name</label></div>
+              <div class="grid-cell form-item form-group form-group-lg">
+                <%= f.text_field :name, class: 'form-control' %>
               </div>
             </div>
             <div class="grid grid--top field">
-              <div class="grid-cell"><label>Nickname</label></div>
-              <div class="grid-cell form-item">
-                <%= f.text_field :nickname %>
+              <div class="grid-cell form-group form-group-lg"><label>Display Name</label></div>
+              <div class="grid-cell form-item form-group form-group-lg">
+                <%= f.text_field :nickname, class: 'form-control' %>
                 <small>Your Tipsyology URL: http://tipsyology.com/users/<strong>nickname</strong></small>
               </div>
             </div>
             <div class="grid grid--center field">
-              <div class="grid-cell"><label>Location</label></div>
-              <div class="grid-cell form-item"><%= f.text_field :location %></div>
+              <div class="grid-cell form-group form-group-lg"><label>Location</label></div>
+              <div class="grid-cell form-item form-group form-group-lg"><%= f.text_field :location, class: 'form-control' %></div>
             </div>
             <div class="grid grid--top field">
-              <div class="grid-cell"><label>Twitter</label></div>
-              <div class="grid-cell form-item">
-                <%= f.text_field :twitter %>
+              <div class="grid-cell form-group form-group-lg"><label>Twitter</label></div>
+              <div class="grid-cell form-item form-group form-group-lg">
+                <%= f.text_field :twitter, class: 'form-control' %>
                 <small>Enter your username so fans can find you on Twitter.</small>
               </div>
             </div>
             <div class="grid grid--center field">
-              <div class="grid-cell"><label>Bio</label></div>
-              <div class="grid-cell form-item"><%= f.text_area :bio %></div>
+              <div class="grid-cell form-group form-group-lg"><label>Short Bio</label></div>
+              <div class="grid-cell form-item form-group form-group-lg"><%= f.text_area :bio, class: 'form-control' %></div>
             </div>
 
             <div class="grid grid--center field">
-              <div class="grid-cell"><%= f.label :no_profanity %></div>
-              <div class="grid-cell form-item"><%= f.check_box :no_profanity %></div>
+              <div class="grid-cell form-group form-group-lg"><label>No Profanity</label></div>
+              <div class="grid-cell form-item form-group"><%= f.check_box :no_profanity %></div>
             </div>
 
             <div class="grid grid--center field">
-              <div class="grid-cell"><%= f.label :no_alcohol %></div>
-              <div class="grid-cell form-item"><%= f.check_box :no_alcohol %></div>
+              <div class="grid-cell form-group form-group-lg"><label>No Alcohol</label></div>
+              <div class="grid-cell form-item form-group"><%= f.check_box :no_alcohol%></div>
             </div>
 
             <div class="grid grid--center field">
-              <div class="grid-cell"></div>
-              <div class="grid-cell">
-                <div class="actions"><%= f.submit "Update" %></div>
+              <div class="grid-cell form-group form-group-lg"></div>
+              <div class="grid-cell form-group-lg">
+                <div class="actions"><%= f.submit "Update", class: 'btn btn-primary' %></div>
               </div>
             </div>
 
@@ -141,7 +140,7 @@
             <div class="grid grid--center field">
               <div class="grid-cell"></div>
               <div class="grid-cell">
-                <div class="actions"><%= f.submit "Update" %></div>
+                <div class="actions"><%= f.submit "Update", class: 'btn btn-primary' %></div>
               </div>
             </div>
 
@@ -160,7 +159,7 @@
           <div class="grid grid--center field">
             <div class="grid-cell"><label>Unhappy?</label></div>
             <div class="grid-cell">
-              <%= button_to "Deactivate my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %>
+              <%= button_to "Deactivate my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, class: 'btn btn-primary' %>
             </div>
           </div>
         </div>
