@@ -21,6 +21,8 @@ class User < ActiveRecord::Base
   validates_attachment_file_name :photo, :matches => [/png\Z/, /jpe?g\Z/]
 
   after_update :award_trophies_on_update
+  after_update :denormalize_avatar, if: :photo_updated_at_changed?
+  after_update :denormalize_nickname_if_changed
 
   # @return order of magnitude of `self.points`
   def log_points
@@ -186,6 +188,22 @@ class User < ActiveRecord::Base
       end
       if changes['no_alcohol'] && changes['no_alcohol'][1]
         Trophy.create_unique(self, TrophyCategory::NO_ALCOHOL)
+      end
+    end
+
+    def denormalize_avatar
+      Comment.where(user_id:id).update_all user_avatar: photo.url(:tiny)
+    end
+
+    def denormalize_nickname_if_changed
+      newval =
+      if nickname_changed?
+        nickname.blank? ? name : nickname
+      elsif nickname.blank? && name_changed?
+        name
+      end
+      if newval.present?
+        Comment.where(user_id:id).update_all user_name: newval
       end
     end
 

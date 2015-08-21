@@ -172,10 +172,10 @@
 			if ($scope.requireLoggedIn()) {
 				$http.put('/users.json', {user:{photo_data:{data_url:dataUrl, filename:filename}}})
 				.success(function(data, status, headers, config){
-					$scope.getUser(true).$promise.then(function getUserSuccess (data) {
+					$scope.getUser(function getUserSuccess (data) {
 						user.thumbnail = data.photo_url.replace(/original/, 'thumb');
 						$scope.$close();
-					});
+					}, null, true);
 				})
 				.error(function(data, status, headers, config){
 					RailsSupport.errorAlert(data);
