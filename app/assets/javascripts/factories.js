@@ -110,7 +110,7 @@
 			getNickname: {
 				configurable: false,
 				value: function getNickname () {
-					return this.nickname || this.name || 'User '+this.id;
+					return this.nickname || this.name || 'Anonymous';
 				},
 			},
 		});

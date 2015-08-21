@@ -38,6 +38,11 @@
         <%= f.password_field  :password, autocomplete: "off", :class => 'form-control', :placeholder => "Confirm Password" %>
       </div>
 
+      <div class="field input-group">
+        <div class="input-group-addon"><i class="fa fa-user"></i></div>
+        <%= f.text_field  :nickname, autocomplete: "off", :class => 'form-control', :placeholder => "Nickname (Optional)" %>
+      </div>
+
       <div class="actions">
         <%= f.submit "Log in", :class => 'btn btn-primary' %>
       </div>
