@@ -248,9 +248,10 @@
 			},
 			toggle: {
 				configurable: false,
-				value: function toggle (key) {
-					this.tipsyconfig[key] = !this.tipsyconfig[key];
-					localStorage.setItem(key, this.tipsyconfig[key]);
+				value: function toggle (key, object) {
+					object || (object = this.tipsyconfig);
+					object[key] = !object[key];
+					localStorage.setItem(key, object[key]);
 				}
 			},
 			toggleSidebar: { // deprecated
