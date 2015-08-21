@@ -8,6 +8,7 @@ class CommentsController < ApplicationController
     @comment.set_user(current_user)
     @comment.status = Flaggable::APPROVED
     if @comment.save
+      @comment.drink.pg_increment! :comment_ct
       current_user.increment_comment_ct!
     end
     respond_with @comment

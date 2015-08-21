@@ -47,7 +47,7 @@
       <a role="button" class="favit" ng-click="favourite()"><i class="fa" ng-class="drink._userFavId==null ? 'fa-heart-o' : 'fa-heart'"></i></a></h1>
       <%= tag :meta, content:@drink.comment_ct, itemprop:"commentCount" %>
       <div class="comments">
-        <a href="#comments">Comments (<%= @drink.comment_ct %>)</a>
+        <a ng-click="gotoFrag('comments')">Comments (<%= @drink.comment_ct %>)</a>
       </div>
     </div>
     <div class="votes grid-cell grid--shrink" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">

@@ -56,7 +56,8 @@
 		'ui.bootstrap',
 		'ui.select'
 	])
-	.run(['$rootScope', '$resource', '$modal', '$http', '$q', '$window', 'User', function ($rootScope, $resource, $modal, $http, $q, $window, User) {
+	.run(['$rootScope', '$resource', '$modal', '$http', '$q', '$location', '$anchorScroll', '$window', 'User',
+	function ($rootScope, $resource, $modal, $http, $q, $location, $anchorScroll, $window, User) {
 		Object.defineProperties($rootScope, {
 			addToCabinet: {
 				configurable: false,
@@ -102,7 +103,7 @@
 					if (successCallback) $rootScope.currentUser.$promise.then(function () {
 						if ($rootScope.currentUser.id)
 							successCallback($rootScope.currentUser);
-						else
+						else if (failureCallback)
 							failureCallback($rootScope.currentUser);
 					});
 					if (failureCallback) $rootScope.currentUser.$promise.then(null, function () {
@@ -116,6 +117,13 @@
 				configurable: false,
 				value: function (key) {
 					return window[key];
+				},
+			},
+			gotoFrag: {
+				configurable: false,
+				value: function gotoFrag (fragment) {
+					$location.hash(fragment);
+					$anchorScroll();
 				},
 			},
 			fetchOpenReviewCt: {
@@ -223,8 +231,7 @@
 				configurable: false,
 				value: function requireLoggedIn (successCallback, failureCallback) {
 					if (successCallback || failureCallback) {
-						this.getUser(successCallback, failureCallback);
-						this.getUser(null, function () {
+						this.getUser(successCallback, failureCallback||function(){
 							$rootScope.openLoginModal('This action requires you to log in.');
 						});
 					}

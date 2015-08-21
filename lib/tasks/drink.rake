@@ -1,4 +1,11 @@
 namespace :drink do
+  task :count_comments => :environment do
+    Drink.find_each do |drink|
+      comment_ct = Comment.where(drink_id:drink.id).count
+      drink.update_attributes! comment_ct: comment_ct
+    end
+  end
+
   task :set_related => :environment do
     start_time = Time.now
     Drink.find_each do |drink|
