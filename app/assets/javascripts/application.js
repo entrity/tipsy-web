@@ -56,7 +56,8 @@
 		'ui.bootstrap',
 		'ui.select'
 	])
-	.run(['$rootScope', '$resource', '$modal', '$http', '$q', '$window', 'User', function ($rootScope, $resource, $modal, $http, $q, $window, User) {
+	.run(['$rootScope', '$resource', '$modal', '$http', '$q', '$location', '$anchorScroll', '$window', 'User',
+	function ($rootScope, $resource, $modal, $http, $q, $location, $anchorScroll, $window, User) {
 		Object.defineProperties($rootScope, {
 			addToCabinet: {
 				configurable: false,
@@ -116,6 +117,13 @@
 				configurable: false,
 				value: function (key) {
 					return window[key];
+				},
+			},
+			gotoFrag: {
+				configurable: false,
+				value: function gotoFrag (fragment) {
+					$location.hash(fragment);
+					$anchorScroll();
 				},
 			},
 			fetchOpenReviewCt: {
