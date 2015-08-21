@@ -43,14 +43,14 @@
   </div>
   <div class="grid grid--center row center">
     <div class="grid-cell name">
-      <h1 itemprop="name"><%= @drink.name %></h1>
+      <h1 itemprop="name"><%= @drink.name %> 
+      <a role="button" class="favit" ng-click="favourite()"><i class="fa" ng-class="drink._userFavId==null ? 'fa-heart-o' : 'fa-heart'"></i></a></h1>
       <%= tag :meta, content:@drink.comment_ct, itemprop:"commentCount" %>
       <div class="comments">
-        <a href="#">Comments (<%= @drink.comment_ct %>)</a>
+        <a href="#comments">Comments (<%= @drink.comment_ct %>)</a>
       </div>
     </div>
     <div class="votes grid-cell grid--shrink" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-      <a role="button" ng-click="favourite()"><i class="fa" ng-class="drink._userFavId==null ? 'fa-heart-o' : 'fa-heart'"></i></a>
       <div class="arrow up" role="button" aria-label="upvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', 1)"><i class="fa fa-thumbs-up" ng-class="drink._userVoteSign > 0 &amp;&amp; 'highlight'" ></i></a></div>
       <div class="score" itemprop="ratingValue"><noscript><%= @drink.score %></noscript>{{drink.score}}</div>
       <div class="arrow down" role="button" aria-label="downvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', -1)"><i class="fa fa-thumbs-down" ng-class="drink._userVoteSign < 0 &amp;&amp; 'highlight'" ></i></a></div>

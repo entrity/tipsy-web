@@ -1,3 +1,34 @@
-<aside>
-	test
+<aside class="nano">
+	<div class="nano-content">
+		<div class="sidebar-controls">
+			<a class="btn btn-primary" title="Create a cocktail" href="/drinks/new" ng-click="visit('/drinks/new')"><i class="fa fa-plus-square"></i></a>
+			<a class="btn btn-primary" title="Collections" ng-click="openFavourites()"><i class="fa fa-heart"></i></a>
+		</div>
+		<div class="ingredients-list">
+			<ul>
+				<li>My Fridge <i class="icon-fridge"></i></li>
+				<li ng-repeat="item in cabinet track by item.id" class="item">
+					{{item.name}}
+					<a ng-click="removeFromCabinet(item)"><i class="fa fa-times"></i></a>
+				</li>
+				<li ng-show="!cabinet || !cabinet.length" style="font-style:italic">(empty)</li>
+				<li><a ng-click="loadCabinetToFuzzyFindResults()"><i class="fa fa-glass"></i> What can I make?</a></li>
+			</ul>
+		</div>
+		<div class="shopping-list">
+			<ul>
+				<li>Shopping List <i class="fa fa-shopping-cart"></i></li>
+				<li ng-repeat="item in shoppingList track by item.id" class="item">
+					{{item.name}}
+					<a ng-click="removeFromShoppingList(item)"><i class="fa fa-times"></i></a>
+				</li>
+				<li ng-show="!shoppingList || !shoppingList.length" style="font-style:italic">(empty)</li>
+				<li><a><i class="fa fa-cart-arrow-down"></i> Export shopping list</a></li>
+			</ul>
+		</div>
+    </div>
 </aside>
+
+<script type="text/javascript">
+  $(".nano").nanoScroller();
+</script>

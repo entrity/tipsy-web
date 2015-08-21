@@ -13,23 +13,11 @@
         <ng-include src="'/fuzzy-finder.html'"></ng-include>
       </div>
     </div>
-    <div class="grid-cell">
-      <a href="/drinks"><small>Browse <i class="fa fa-caret-down"></i></small></a>
-    </div>
     <!-- END UNIVERSAL USER NAV -->
-
-    <!-- MOBILE BURGER -->
-    <div class="mobile-hamburger grid-cell grid--shrink">
-      <i class="fa fa-bars"></i>
-    </div>
-    <!-- MOBILE BURGER -->
 
     <!-- START LOGGED OUT USER NAV -->
     <div class="logged-out grid-cell" ng-cloak ng-hide="isLoggedIn()">
       <div class="grid grid--center">
-        <div class="grid-cell">
-          <a ng-click="openSignInModal()"><small>Browse <i class="fa fa-caret-down"></i></small></a>
-        </div>
         <div class="grid-cell user">
           <a href="/users/sign_up/"><small>Sign up</small></a>
         </div>
@@ -41,12 +29,12 @@
     <!-- END LOGGED OUT USER NAV -->
 
     <!-- START LOGGED IN USER NAV -->
-    <div class="logged-in grid-cell" ng-cloak ng-show="isLoggedIn()">
+    <div class="logged-in grid-cell">
       <div class="grid grid--center">
-        <div class="grid-cell review" ng-show="openReviewCt">
+        <div class="grid-cell review" ng-cloak ng-show="isLoggedIn()" ng-show="openReviewCt">
           <a ng-click="openReviewModal()"><small>Review</small> <span class="badge">{{openReviewCt}}</span></a>
         </div>
-        <div class="grid-cell user rep-cont dropdown">
+        <div class="grid-cell user rep-cont dropdown" ng-cloak ng-show="isLoggedIn()">
           <!-- REP SUMMARY -->
           <div id="rep-alerts">
             <a ng-click="openRepChangesMenu($event)">
@@ -68,15 +56,19 @@
           </ul>
         </div>
         <!-- TROPHIES SUMMARY -->
-        <div class="grid-cell user trophie-cont">
+        <div class="grid-cell user trophie-cont" ng-cloak ng-show="isLoggedIn()">
           <a href="/user/trophies.html">
             <i class="fa fa-trophy gold"></i>   {{getUser().gold_trophy_ct||0}}
             <i class="fa fa-trophy silver"></i> {{getUser().silver_trophy_ct||0}}
             <i class="fa fa-trophy bronze"></i> {{getUser().bronze_trophy_ct||0}}
           </a>
         </div>
-        <div class="grid-cell user avatar-cont dropdown">
-          <!-- USER AVATAR -->
+        <!-- TROPHIES SUMMARY -->
+        <div class="grid-cell user favorites" ng-cloak ng-show="isLoggedIn()">
+          <i class="fa fa-heart"></i>
+        </div>
+        <!-- USER AVATAR -->
+        <div class="grid-cell user avatar-cont dropdown" ng-cloak ng-show="isLoggedIn()">
           <div class="grid" id="avatar-dropdown">
             <a class="avatar" ng-click="openToolbarMenu($event, 'avatar')">
               <img ng-src="{{getUser().tinyAvatar}}">

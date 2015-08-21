@@ -27,6 +27,9 @@ body {
   margin: 0;
   overflow-x: hidden;
   color: #212121;
+  position: relative;
+  transition-duration: 0.5s;
+  transition-property: top, bottom, left, right;
 }
 .disable-hover {
   pointer-events: none;
@@ -162,11 +165,7 @@ a:hover {
 }
 .wrapper {
   margin: 0 auto;
-}
-.mobile-hamburger {
-  display: none;
-  color: #000;
-  cursor: pointer;
+  min-width: 300px;
 }
 .logged-out-nav {
   position: fixed;
@@ -345,11 +344,12 @@ img.hr {
 header {
   clear: both;
   min-height: 56px;
-  min-width: 100%;
-  position: fixed;
+  width: 100%;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: 20;
+  min-width: 300px;
   border-bottom: 1px solid #ddd;
 }
 nav {
@@ -380,13 +380,16 @@ nav .logo {
 }
 nav .search {
   max-width: 300px;
-  margin-right: 16px;
+  margin-right: auto;
 }
 nav > .grid-cell:first-child {
   padding-right: 16px;
 }
 nav .fa-bars {
-  font-size: 14px;
+  font-size: 16px;
+  line-height: 56px;
+  width: 58px;
+  text-align: center;
 }
 nav .search .input-group {
   width: 100%;
@@ -440,6 +443,10 @@ nav .trophie-cont a i {
 }
 nav .trophie-cont a i:first-child {
   margin-left: 0;
+}
+nav .favorites .fa {
+  font-size: 21px;
+  color: #29BC7A;
 }
 nav .user {
   cursor: pointer;
@@ -690,65 +697,18 @@ nav .user li .rep-change {
   color:#939393;
   text-align: center;
 }
-.fancy-sidebar .sidebar-btn {
-  display: block;
-  height: 130px;
-  width: 28px;
-  background: url(/images/btn-sidebar.png) no-repeat;
-  position: absolute;
-  top: 6px;
-  left: -28px;
-  transition: all .4s ease;
-  cursor: pointer;
-}
-/*.fancy-sidebar .sidebar-btn:after {
-  content:'';
-  position: absolute;
-  width: 5px;
-  height: 41px;
-  top: 0;
-  right: -5px;
-  background-color: #267fdd;
-}
-.fancy-sidebar .sidebar-btn:hover {
-  background-color: #267fdd;
-} */
-.fancy-sidebar .sidebar-btn .fa {
-  color: #000;
-  position: absolute;
-  top: 50%;
-  left: -6px;
-  margin-top: -20px;
-  line-height: 36px;
-  width: 40px;
-  font-size: 14px;
-  text-align: center;
-  transition: all .4s ease;
-}
-.fancy-sidebar.open .sidebar-btn .fa {
-  color: #fff;
-  -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  transform: rotate(180deg);
-}
-.fancy-sidebar {
-  width:200px;
-  position: fixed;
-  top: 57px;
-  bottom: 0;
-  right: -203px;
-  padding: 16px 10px;
-  background-color: #1dbb73;
-  transition: all .4s ease;
-}
-.fancy-sidebar.open {
-  right: 0;
+#sidebar-r,
+#sidebar-l {
+  background-color: #262D2D;
+  height: 100vh !important;  
+  box-sizing: border-box;
+  -webkit-transform: translateZ(0);
+  overflow-y: scroll;
 }
 .sidebar-controls {
-  height:40px;
-  margin-bottom: 18px;
+  height: 57px;
+  line-height: 57px;
+  padding: 0 20px;
 }
 .ingredients-list {
   padding-bottom: 10px;
@@ -761,52 +721,59 @@ nav .user li .rep-change {
   color:#fff;
   border-radius: 4px;
 }
-.sidebar-list-first {
-  font-size:14px !important;
+#sidebar-r ul li:first-child {
+  font-size:16px !important;
   font-weight:600;
-  margin:0 10px;
-  padding: 3px 5px;
-  border-bottom: 1px dashed #fff;
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.05);
+}
+#sidebar-r ul li:first-child i {
+  float: right;
+  padding-right: 5px;
 }
 .ingredients-list ul li,
 .shopping-list ul li {
-  font-size:12px;
-  padding: 3px 5px;
-  margin: 2px 5px;
+  font-size:14px;
+  padding: 10px 20px;
 }
 .ingredients-list ul li.item,
 .shopping-list ul li.item {
   text-transform: capitalize;
-  border-radius: 4px;
   cursor: pointer;
   position: relative;
+  padding-right: 30px !important;
 }
 .ingredients-list ul li.item:hover,
 .shopping-list ul li.item:hover {
-  background: #fff;
-  color: #000;
+  background: rgba(0,0,0,0.2);
 }
 aside a {
   color: #fff;
   font-weight: bold;
 }
 aside a:hover {
-  color: #ddd;
+  color: #166D44;
 }
 aside li.item .fa {
   color: #000;
   position: absolute;
-  right: 5px;
+  right: 10px;
   top: 50%;
-  margin-top: -6px;
-  display: none;
+  text-align: center;
+  margin-top: -20px;
+  opacity: .5;
   transition: .3s;
+  width: 40px;
+  line-height: 40px;
+  font-size: 16px;
 }
 aside li.item:hover .fa {
-  display: initial;
+  color: #fff;
+  opacity: 1;
+  background: rgba(0,0,0,0.2);
 }
 aside li.item .fa:hover {
-  color: red;
+  background: rgba(0,0,0,0.5);
 }
 aside .btn-primary {
   background-color: #fff;
@@ -819,9 +786,6 @@ aside .btn-primary:hover {
   background-color: #ddd;
   border-color: #ddd;
   color: #000;
-}
-.sidebar-list-first i {
-  float: right;
 }
 .ingredients-list a,
 .shopping-list a {
@@ -1235,7 +1199,12 @@ aside .btn-primary:hover {
 #tips .grid > .grid-cell:last-child > .grid {
   padding-bottom: 5px;
 }
-
+#drink-page .favit {
+  color: #29BC7A;
+}
+#drink-page .favit:hover .fa:before {
+  content: "\f004";
+}
 
 /*** RECIPE EDITOR ***/
 
@@ -1731,11 +1700,11 @@ tipsy-image-editor a.btn:hover {
   position: absolute;
   overflow: scroll;
   overflow-x: hidden;
-  top: 10px;
-  right: 10px;
-  bottom: 10px;
-  left: 10px;
-  padding-right: 10px;
+  top: 0;
+  right: 20px;
+  bottom: 0;
+  left: 0;
+  padding-right: 0;
 }
 .nano > .nano-content:focus {
   outline: thin dotted;
@@ -1749,6 +1718,7 @@ tipsy-image-editor a.btn:hover {
 .nano > .nano-pane {
   background: rgba(0,0,0,.25);
   position: absolute;
+  display: block !important;
   width: 10px;
   right: 0;
   top: 0;
@@ -1838,22 +1808,31 @@ footer.in-app .row {
     min-width: 100% !important;
     min-height: 56px;
     height: auto;
-    padding: 0 10px;
+    padding: 0;
     flex-wrap: wrap;
+  }
+  nav .logo {
+    margin-right: auto;
+    margin-left: auto;
   }
   nav .search {
     display: none;
   }
-  nav .mobile-hamburger {
-    display: block;
-    flex: 0 1 auto;
-    margin-left: 20px;
-    margin-right: 10px;
+  nav > .grid-cell:first-child {
+    margin-right: 0;
+    padding-right: 0;
   }
-  nav .logged-in,
-  nav .logged-out {
+  nav .logged-out,
+  nav .logged-in .grid > .grid-cell {
     display: none;
-    flex: 100%;
+  }
+  nav .logged-in .grid > .grid-cell:last-child {
+    display: flex !important;
+  }
+
+  #drink-page .photos {
+    margin-right: -10px;
+    margin-left: -10px;
   }
   #main-cont {
     padding: 57px 10px 0 10px;
