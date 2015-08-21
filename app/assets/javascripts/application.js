@@ -103,7 +103,7 @@
 					if (successCallback) $rootScope.currentUser.$promise.then(function () {
 						if ($rootScope.currentUser.id)
 							successCallback($rootScope.currentUser);
-						else
+						else if (failureCallback)
 							failureCallback($rootScope.currentUser);
 					});
 					if (failureCallback) $rootScope.currentUser.$promise.then(null, function () {
@@ -231,8 +231,7 @@
 				configurable: false,
 				value: function requireLoggedIn (successCallback, failureCallback) {
 					if (successCallback || failureCallback) {
-						this.getUser(successCallback, failureCallback);
-						this.getUser(null, function () {
+						this.getUser(successCallback, failureCallback||function(){
 							$rootScope.openLoginModal('This action requires you to log in.');
 						});
 					}
