@@ -21,7 +21,7 @@
 							errStrings.push(key + ' ' + value);
 						});
 					}
-					alert(errStrings.join("\r\n"));
+					alert(errStrings.join("\r\n")||(status.toString()+' Error'));
 				}
 			},
 		});

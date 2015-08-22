@@ -6,6 +6,14 @@ namespace :drink do
     end
   end
 
+  task :count_votes => :environment do
+    Drink.find_each do |drink|
+      up_vote_ct = Vote.where(votable:drink, sign:1).count
+      dn_vote_ct = Vote.where(votable:drink, sign:-1).count
+      drink.update_attributes! up_vote_ct: up_vote_ct, dn_vote_ct: dn_vote_ct
+    end
+  end
+
   task :set_related => :environment do
     start_time = Time.now
     Drink.find_each do |drink|

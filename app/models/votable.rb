@@ -58,8 +58,8 @@ module Votable
       [PointDistributionCategory::COMMENT_UPVOTE, PointDistributionCategory::COMMENT_DOWNVOTE]
     when Photo
       [PointDistributionCategory::PHOTO_UPVOTE, PointDistributionCategory::PHOTO_DOWNVOTE]
-    when user && Drink
-      [PointDistributionCategory::DRINK_UPVOTE, PointDistributionCategory::DRINK_DOWNVOTE]
+    when Drink
+      user && [PointDistributionCategory::DRINK_UPVOTE, PointDistributionCategory::DRINK_DOWNVOTE]
     end
     if prev_sign < 0 # need to undistribute points from previous upvote
       award_single_point_distribution(up_cat, true)
@@ -76,6 +76,7 @@ module Votable
   private
 
     def award_single_point_distribution(category, negative)
+      return unless category
       points = category.points
       description = category.message
       if negative
