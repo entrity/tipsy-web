@@ -33,7 +33,16 @@ class Vote < ActiveRecord::Base
         if delta != 0
           votable.increment_score!(delta) # change points on votable itself
           votable.distribute_vote_points(prev_sign, sign) # change points on user (contributor)
+          if votable.respond_to?(:up_vote_ct)
+            votable.pg_increment!(:up_vote_ct) if sign == 1
+            votable.pg_increment!(:up_vote_ct, -1) if prev_sign == 1
+          end
+          if votable.respond_to?(:dn_vote_ct)
+            votable.pg_increment!(:dn_vote_ct) if sign == -1
+            votable.pg_increment!(:dn_vote_ct, -1) if prev_sign == -1
+          end
         end
+
       end
       # return
       true
