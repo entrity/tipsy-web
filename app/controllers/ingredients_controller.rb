@@ -4,7 +4,11 @@ class IngredientsController < ApplicationController
 
   def index
     @ingredients = Ingredient.default_scoped
-    @ingredients = @ingredients.fuzzy_find(params[:fuzzy]) if params[:fuzzy].present?
+    if params[:fuzzy].present?
+      @ingredients = @ingredients.fuzzy_find(params[:fuzzy])
+    elsif request.format.html?
+      @ingredients = @ingredients.order(:name)
+    end
     params[:exclude_ids].reject!{|item| item =~ /\D/ } if params[:exclude_ids].present?
     @ingredients = @ingredients.where('id NOT IN (?)', params[:exclude_ids]) if params[:exclude_ids].present?
     @ingredients = @ingredients.for_drink(params[:drink_id]) if params[:drink_id].present?

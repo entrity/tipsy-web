@@ -1,0 +1,8 @@
+<% @ingredients.each do |ingredient| %>
+  <ul>
+    <li>
+      <%= link_to ingredient.name, ingredient.url_path %>
+    </li>
+  </ul>
+<% end %>
+<%= will_paginate @ingredients %>
