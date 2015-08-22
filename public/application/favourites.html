@@ -17,14 +17,14 @@
 				{{collection.name}}
 				<span>{{collection.favourite_ct}} items in collection</span>
 			</a>
-		</div>
-		<div ng-if="collection._show" ng-controller="FavouritesCollectionCtrl" ng-repeat="collection in collections">
-			<a class="btn btn-default" ng-click="collection._show=false">Hide</a>
-			<span>{{collection.favourite_ct}} items in collection</span>
-			<a ng-repeat="fav in favourites">
-				{{fav.name}}
-				<img ng-src="{{fav.preview_url}}">
-			</a>
+			<div ng-if="collection._show" ng-controller="FavouritesCollectionCtrl">
+				<a class="btn btn-default" ng-click="collection._show=false">Hide</a>
+				<span>{{collection.favourite_ct}} items in collection</span>
+				<a ng-repeat="fav in favourites" ng-href="/drinks/{{fav.drink_id}}.html">
+					{{fav.name}}
+					<img ng-src="{{fav.preview_url}}">
+				</a>
+			</div>
 		</div>
 	</div>
 </div>

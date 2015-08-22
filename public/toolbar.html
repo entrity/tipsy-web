@@ -65,7 +65,7 @@
         </div>
         <!-- TROPHIES SUMMARY -->
         <div class="grid-cell user favorites" ng-cloak ng-show="isLoggedIn()">
-          <i class="fa fa-heart"></i>
+          <a ng-click="openFavourites()"><i class="fa fa-heart"></i></a>
         </div>
         <!-- USER AVATAR -->
         <div class="grid-cell user avatar-cont dropdown" ng-cloak ng-show="isLoggedIn()">
