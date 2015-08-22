@@ -106,9 +106,14 @@
 	}])
 	.controller('Ingredient.EditCtrl', ['$scope', 'Ingredient', 'IngredientRevision', 'RailsSupport', function ($scope, Ingredient, IngredientRevision, RailsSupport) {
 		var id = getUrlId();
-		$scope.ingredient = Ingredient.get({id:id});
+		if (id == null) {
+			$scope.ingredient = new Ingredient
+			$scope.ingredient.$promise = $scope.createResolvedPromise($scope.ingredient);
+		}
+		else
+			$scope.ingredient = Ingredient.get({id:id});
 		$scope.revision = new IngredientRevision();
-		$scope.editPage = {idsToExcludeFromSearch:[id]};
+		$scope.editPage = {idsToExcludeFromSearch:(id == null ? [] : [id])};
 		// Build description text editor
 		var editor = new Markdown.Editor(Markdown.getSanitizingConverter());
 		// Callback on ingredient loaded

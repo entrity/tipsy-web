@@ -18,9 +18,9 @@ class IngredientRevision < ActiveRecord::Base
 
   validates :name, presence: true
   validates :user, presence: true
-  validates :ingredient, presence: true
 
   def publish!
+    self.patchable = self.ingredient = Ingredient.new unless ingredient
     user.increment_revision_ct! unless flags.limit(1).count > 0 # If any flags are present, then this has already been published once and doesn't merit distribution of counts/points
     super
     if canonical_id != prev_canonical_id
