@@ -1,0 +1,8 @@
+<% @drinks.each do |drink| %>
+  <ul>
+    <li>
+      <%= link_to drink.name, drink.url_path %>
+    </li>
+  </ul>
+<% end %>
+<%= will_paginate @drinks %>
