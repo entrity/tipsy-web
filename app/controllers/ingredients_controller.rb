@@ -5,6 +5,7 @@ class IngredientsController < ApplicationController
   def index
     @ingredients = Ingredient.default_scoped
     @ingredients = @ingredients.fuzzy_find(params[:fuzzy]) if params[:fuzzy].present?
+    params[:exclude_ids].reject!{|item| item =~ /\D/ } if params[:exclude_ids].present?
     @ingredients = @ingredients.where('id NOT IN (?)', params[:exclude_ids]) if params[:exclude_ids].present?
     @ingredients = @ingredients.for_drink(params[:drink_id]) if params[:drink_id].present?
     @ingredients = @ingredients.select(params[:select]) if params[:select].present?
@@ -28,6 +29,7 @@ class IngredientsController < ApplicationController
   def edit
     render layout:'application', text:%q(<ng-include src="'/ingredients/edit.html'"></ng-include>)
   end
+  alias_method :new, :edit
 
   def names
     if params[:id].blank?

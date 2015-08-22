@@ -6,7 +6,7 @@
 		<br>
 		<label><input type=checkbox ng-change="aliasCheckboxToggled()" ng-model="editPage.aliasNeeded"> &nbsp;This ingredient is an alias for a more generic ingredient</label>
 		<br>
-		<em>(e.g. <strong>bitter</strong> is an alias for <strong>bitters</strong> and <strong>Absolut vodka</strong> is an alias for <strong>vodka</strong>)</em>
+		<em>(e.g. <strong>bitter</strong> is an alias for <strong>bitters</strong> and <strong>Absolut vodka</strong> is an alias for <strong>vodka</strong>, but <u>not</u> vice versa)</em>
 		<div ng-show="editPage.aliasNeeded">
 			<ingredient-finder data-ingredient="editPage.canonical" data-exclude-ids="editPage.idsToExcludeFromSearch"></ingredient-finder>
 		</div>

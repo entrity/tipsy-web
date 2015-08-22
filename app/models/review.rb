@@ -75,13 +75,22 @@ class Review < ActiveRecord::Base
     )
     # If this Review is closed, set status of reviewable, distribute points to voters
     unless reload.open
-      if points > 0
-        reviewable.publish!
-      else
-        reviewable.update_attributes! status:status
-      end
+      reviewable.update_attributes! status:status
+      reviewable.publish! if points > 0
       award_points
     end
   end
+
+  private
+
+    def status
+      if points > 0
+        Flaggable::APPROVED
+      elsif points < 0
+        Flaggable::REJECTED
+      else
+        Flaggable::NEEDS_REVIEW
+      end
+    end
 
 end

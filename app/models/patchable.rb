@@ -25,36 +25,34 @@ module Patchable
   end
 
   def publish!
-    super
-    # Get latest approved revision (or current revision's parent, in case of data failure)
-    last_revision = patchable.revisions.where(status:Flaggable::APPROVED).reload.last
     # Set revision_id
     patchable.revision_id = id
     # Iterate publishable fields
     self.class.publishable_fields.each do |obj|
-      obj.set(self, last_revision, false) 
+      obj.patch? ? obj.patch(self, false) : obj.set(self, patchable)
     end
     # Yield
     yield if block_given?
     # Save changes
     patchable.save!
+    super # Flaggable.publish!
   end
 
   # Set status and rollback revisable's revision
   def unpublish!
-    super
     # Get latest approved revision (or current revision's parent, in case of data failure)
     last_revision = patchable.revisions.where(status:Flaggable::APPROVED).last || parent
     # Set revision_id
     patchable.revision_id = last_revision.try(:id)
     # Iterate publishable fields
     self.class.publishable_fields.each do |obj|
-      obj.set(self, last_revision, true)
+      obj.patch? ? obj.patch(self, true) : obj.set(last_revision, patchable)
     end
     # Yield
     yield if block_given?
     # Save changes
     patchable.save!
+    super # Flaggable.publish!
   end
 
   class Field
@@ -71,18 +69,23 @@ module Patchable
       @opts = opts
     end
 
-    # Set patchable[foreign_key], whether by patch or simple copy
-    def set revision, latest_approved_revision, reverse=false
-      if @opts[:patch] # Patch difference between
-        prev   = reverse ? curval(revision) : preval(revision)
-        post   = reverse ? preval(revision) : curval(revision)
-        target = revision.patchable[foreign_key]
-        revision.patchable.assign_attributes(foreign_key => Patchable.patch(prev||'', post||'', target||''))
-      else             # Simple value copy
-        val = curval(latest_approved_revision)
-        unless val.nil? && @opts[:allow_nil] == false
-          revision.patchable.assign_attributes(foreign_key => curval(latest_approved_revision))
-        end
+    def patch?
+      @opts[:patch] # Patch difference between
+    end
+
+    # Set patchable[foreign_key] by patch
+    def patch revision, reverse=false
+      prev, post = reverse ? [curval(revision), preval(revision)] : [preval(revision), curval(revision)]
+      target     = revision.patchable[foreign_key]
+      revision.patchable.assign_attributes(foreign_key => Patchable.patch(prev||'', post||'', target||''))  
+    end
+
+    # Set patchable[foreign_key] by simple copy
+    # @param patchable is needed becaues revision may be nil
+    def set revision, patchable
+      val = curval(revision)
+      unless val.nil? && @opts[:allow_nil] == false
+        patchable.assign_attributes(foreign_key =>  val)
       end
     end
 

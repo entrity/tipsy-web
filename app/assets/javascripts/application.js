@@ -77,7 +77,7 @@
 			},
 			createResolvedPromise: {
 				configurable: false,
-				value: function (val) {
+				value: function createResolvedPromise (val) {
 					var deferred = $q.defer();
 					deferred.resolve(val);
 					return deferred.promise;
