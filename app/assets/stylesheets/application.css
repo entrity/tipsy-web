@@ -1689,7 +1689,12 @@ tipsy-image-editor a.btn:hover {
   background: #eee;
 }
 
+/*** FAVOURITES STYLES ***/
 
+.favourite-collection img {
+  width: 64px;
+  height: 64px;
+}
 
 /*** NANO SCROLL STYLES ***/
 
