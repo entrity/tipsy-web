@@ -52,7 +52,7 @@
 				var reviewable = $scope.reviewable = data.reviewable;
 				// Get reference to flags
 				$scope.flags = data.flags;
-				// Preprocess 
+				// Preprocess
 				switch ($scope.review.reviewable_type) {
 					case "Revision":
 						var revision = $scope.reviewable;
@@ -93,26 +93,33 @@
 						reviewable.mediumUrl = reviewable.url.replace(/original/, 'medium');
 						break;
 				}
-				$scope.vote = 0;
+				$scope.castVote.status = 0;
 			}, function () {
 				console.error('Failed to fetch review');
 				console.error(arguments);
-				$scope.vote.success = window.FAILURE;
+				$scope.castVote.status = -1;
 			});
 		}
-		$scope.vote = function (coefficient) {
-			$http.post('/reviews/'+$scope.review.id+'/vote.json', {coefficient:coefficient})
-			.success(function (data, status, headers, config) {
-				$scope.vote.status = window.SUCCESS;
-				$scope.fetchOpenReviewCt();
-			})
-			.error(function (data, status, headers, config) {
-				console.error('Failed to complete vote');
-				console.error(arguments);
-				RailsSupport.errorAlert(data);
-				$scope.fetchOpenReviewCt();
-			});
-		};
+		Object.defineProperties($scope, {
+			castVote: {
+				value: function castVote (coefficient) {
+					$http.post('/reviews/'+$scope.review.id+'/vote.json', {coefficient:coefficient})
+					.success(function (data, status, headers, config) {
+						$scope.castVote.status = 1;
+						$scope.fetchOpenReviewCt();
+						jQuery('div.modal').each(function (i, elem) {
+							elem.scrollTop = 0;
+						});
+					})
+					.error(function (data, status, headers, config) {
+						console.error('Failed to complete vote');
+						console.error(arguments);
+						RailsSupport.errorAlert(data);
+						$scope.fetchOpenReviewCt();
+					});
+				}
+			},
+		})
 		$scope.fetchNextReview();
 	}])
 	;
