@@ -77,4 +77,5 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+  load 'lib/run_kswitch.rb'
 end
