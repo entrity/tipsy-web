@@ -44,10 +44,7 @@
 		return Revision;
 	}])
 	.factory('IngredientSearch', ['Ingredient', function (Ingredient) {
-		var IngredientSearch = function (ingredient, idsToExclude) {
-			this.choice = ingredient;
-			this.idsToExclude = idsToExclude;
-		};
+		var IngredientSearch = function (ingredient, idsToExclude) {};
 		Object.defineProperties(IngredientSearch.prototype, {
 			choices: {
 				get: function () {
@@ -63,6 +60,7 @@
 				}
 			},
 			selected: {
+				writable: true,
 				value: function (item, ingredient) {
 					ingredient.ingredient_id = item.id;
 				}
@@ -79,11 +77,10 @@
 					</ui-select-choices> \
 				</ui-select>',
 			link: function (scope, elem, attrs) {
-				var ingredient;
-				var idsToExclude;
-				if (attrs.ingredient) ingredient = scope.$eval(attrs.ingredient);
-				if (attrs.excludeIds) idsToExclude = scope.$eval(attrs.excludeIds);
-				scope.ingredientSearch = new IngredientSearch(ingredient, idsToExclude);
+				scope.ingredientSearch = new IngredientSearch;
+				if (attrs.ingredient) scope.ingredientSearch.choice       = scope.$eval(attrs.ingredient);
+				if (attrs.excludeIds) scope.ingredientSearch.idsToExclude = scope.$eval(attrs.excludeIds);
+				if (attrs.onSelected) scope.ingredientSearch.selected     = scope.$eval(attrs.onSelected);
 			},
 		}
 	}])
@@ -114,6 +111,9 @@
 			$scope.ingredient = Ingredient.get({id:id});
 		$scope.revision = new IngredientRevision();
 		$scope.editPage = {idsToExcludeFromSearch:(id == null ? [] : [id])};
+		$scope.editPage.canonicalIngredientSelected = function canonicalIdSelected (item) {
+			$scope.revision.canonical_id = item.id;
+		};
 		// Build description text editor
 		var editor = new Markdown.Editor(Markdown.getSanitizingConverter());
 		// Callback on ingredient loaded

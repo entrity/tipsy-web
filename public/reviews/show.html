@@ -1,123 +1,136 @@
-<h1 title="Review {{review.id}}">Review</h1>
-<style>
-	#review .comparison div.grid-cell {
-		border: 1px dotted gray;
-		margin: 4px;
-		padding: 4px;
-		white-space: pre;
-	}
-</style>
-<div ng-switch="review.reviewable_type" id="review">
-	<div ng-if="flags && flags.length">
-		<h2>Motivation for Flag(s)</h2>
-		<div ng-repeat="flag in flags" ng-bind="flag.description"></div>
-	</div>
-	<!-- REVISION -->
-	<div ng-switch-when="Revision" class="comparison">
-
-		<h2>Name</h2>
-		<div class="grid">
-			<label class="grid-cell">Diff</label>
-			<label class="grid-cell">New value</label>
-		</div>
-		<div class="grid">
-			<div class="grid-cell" ng-bind-html="diff.prev('name')"></div>
-			<div class="grid-cell" ng-bind-html="diff.post('name')"></div>
-		</div>
-
-		<h2>Description</h2>
-		<div class="grid">
-			<label class="grid-cell">Diff</label>
-			<label class="grid-cell">New value</label>
-		</div>
-		<div class="grid">
-			<div class="grid-cell" ng-bind-html="diff.prev('description')"></div>
-			<div class="grid-cell" ng-bind-html="diff.post('description')"></div>
-		</div>
-
-		<h2>Prep Time</h2>
-		<div class="grid">
-			<label class="grid-cell">Diff</label>
-			<label class="grid-cell">New value</label>
-		</div>
-		<div class="grid">
-			<div class="grid-cell" ng-bind-html="diff.prev('prep_time')"></div>
-			<div class="grid-cell" ng-bind-html="diff.post('prep_time')"></div>
-		</div>
-
-		<h2>Calories</h2>
-		<div class="grid">
-			<label class="grid-cell">Diff</label>
-			<label class="grid-cell">New value</label>
-		</div>
-		<div class="grid">
-			<div class="grid-cell" ng-bind-html="diff.prev('calories')"></div>
-			<div class="grid-cell" ng-bind-html="diff.post('calories')"></div>
-		</div>
-
-		<h2>Directions</h2>
-		<div class="grid">
-			<label class="grid-cell">Diff</label>
-			<label class="grid-cell">New value</label>
-		</div>
-		<div class="grid">
-			<div class="grid-cell" ng-bind-html="diff.prev('instructions')"></div>
-			<div class="grid-cell" ng-bind-html="diff.post('instructions')"></div>
-		</div>
-
-		<h2>Ingredients</h2>
-		<div class="grid">
-			<label class="grid-cell">Diff</label>
-			<label class="grid-cell">New value</label>
-		</div>
-		<div class="grid ingredient-diff">
-			<div class="grid-cell" ng-bind-html="diff.prev('ingredients')"></div>
-			<div class="grid-cell" ng-bind-html="diff.post('ingredients')"></div>
-		</div>
-
-	</div>
-	<div ng-switch-when="IngredientRevision" class="comparison">
-
-		<h2>Name</h2>
-		<div class="grid">
-			<label class="grid-cell">Diff</label>
-			<label class="grid-cell">New value</label>
-		</div>
-		<div class="grid">
-			<div class="grid-cell" ng-bind-html="diff.name || '(no change)'"></div>
-			<div class="grid-cell" ng-bind-html="reviewable.name"></div>
-		</div>
-
-		<h2>Canonical Ingredient</h2>
-		<div class="grid">
-			<label class="grid-cell">Diff</label>
-			<label class="grid-cell">New value</label>
-		</div>
-		<div class="grid">
-			<div class="grid-cell" ng-bind-html="diff.canonical_id || '(no change)'"></div>
-			<div class="grid-cell" ng-bind-html="reviewable.canonical_id"></div>
-		</div>
-
-		<h2>Description</h2>
-		<div class="grid">
-			<label class="grid-cell">Diff</label>
-			<label class="grid-cell">New value</label>
-		</div>
-		<div class="grid">
-			<div class="grid-cell" ng-bind-html="diff.description"></div>
-			<div class="grid-cell" ng-bind-html="converter.makeHtml(reviewable.description || '') || '(empty)'"></div>
-		</div>
-
-	</div>
-	<div ng-switch-when="Photo" class="comparison">
-		<div>
-			<img src="{{reviewable.mediumUrl}}">
-			<a href="{{reviewable.url}}" target="_blank"><i class="fa fa-search-plus"></i> View Full Size</a>
-		</div>
-		<div>
-		</div>
-	</div>
+<div ng-show="castVote.status==1">
+	<p>Thanks! Would you like to perform another review?</p>
+	<p>
+		<a class="btn btn-primary" ng-click="fetchNextReview()">Yes</a>
+		<a class="btn btn-default" ng-click="$close()">Maybe later</a>
+	</p>
 </div>
-<a class="btn btn-default" ng-click="vote(-1)"><i class="icon-panda"></i> Reject</a>
-<a class="btn btn-default" ng-click="vote(0)"><i class="icon-lips"></i> Abstain</a>
-<a class="btn btn-default" ng-click="vote(1)"><i class="fa fa-check-circle"></i> Approve</a>
+<div ng-show="castVote.status==-1">
+	<p>Alas! It appears that there are no more reviews awaiting your vote at this time. We need to wait on other users to contribute further changes.</p>
+	<p><a class="btn btn-default" ng-click="$close()">Okee dokee</a></p>
+</div>
+<div ng-show="!castVote.status">
+	<h1 title="Review {{review.id}}">Review</h1>
+	<style>
+		#review .comparison div.grid-cell {
+			border: 1px dotted gray;
+			margin: 4px;
+			padding: 4px;
+			white-space: pre;
+		}
+	</style>
+	<div ng-switch="review.reviewable_type" id="review">
+		<div ng-if="flags && flags.length">
+			<h2>Motivation for Flag(s)</h2>
+			<div ng-repeat="flag in flags" ng-bind="flag.description"></div>
+		</div>
+		<!-- REVISION -->
+		<div ng-switch-when="Revision" class="comparison">
+
+			<h2>Name</h2>
+			<div class="grid">
+				<label class="grid-cell">Diff</label>
+				<label class="grid-cell">New value</label>
+			</div>
+			<div class="grid">
+				<div class="grid-cell" ng-bind-html="diff.prev('name')"></div>
+				<div class="grid-cell" ng-bind-html="diff.post('name')"></div>
+			</div>
+
+			<h2>Description</h2>
+			<div class="grid">
+				<label class="grid-cell">Diff</label>
+				<label class="grid-cell">New value</label>
+			</div>
+			<div class="grid">
+				<div class="grid-cell" ng-bind-html="diff.prev('description')"></div>
+				<div class="grid-cell" ng-bind-html="diff.post('description')"></div>
+			</div>
+
+			<h2>Prep Time</h2>
+			<div class="grid">
+				<label class="grid-cell">Diff</label>
+				<label class="grid-cell">New value</label>
+			</div>
+			<div class="grid">
+				<div class="grid-cell" ng-bind-html="diff.prev('prep_time')"></div>
+				<div class="grid-cell" ng-bind-html="diff.post('prep_time')"></div>
+			</div>
+
+			<h2>Calories</h2>
+			<div class="grid">
+				<label class="grid-cell">Diff</label>
+				<label class="grid-cell">New value</label>
+			</div>
+			<div class="grid">
+				<div class="grid-cell" ng-bind-html="diff.prev('calories')"></div>
+				<div class="grid-cell" ng-bind-html="diff.post('calories')"></div>
+			</div>
+
+			<h2>Directions</h2>
+			<div class="grid">
+				<label class="grid-cell">Diff</label>
+				<label class="grid-cell">New value</label>
+			</div>
+			<div class="grid">
+				<div class="grid-cell" ng-bind-html="diff.prev('instructions')"></div>
+				<div class="grid-cell" ng-bind-html="diff.post('instructions')"></div>
+			</div>
+
+			<h2>Ingredients</h2>
+			<div class="grid">
+				<label class="grid-cell">Diff</label>
+				<label class="grid-cell">New value</label>
+			</div>
+			<div class="grid ingredient-diff">
+				<div class="grid-cell" ng-bind-html="diff.prev('ingredients')"></div>
+				<div class="grid-cell" ng-bind-html="diff.post('ingredients')"></div>
+			</div>
+
+		</div>
+		<div ng-switch-when="IngredientRevision" class="comparison">
+
+			<h2>Name</h2>
+			<div class="grid">
+				<label class="grid-cell">Diff</label>
+				<label class="grid-cell">New value</label>
+			</div>
+			<div class="grid">
+				<div class="grid-cell" ng-bind-html="diff.prev('name')"></div>
+				<div class="grid-cell" ng-bind-html="diff.post('name')"></div>
+			</div>
+
+			<h2>Canonical Ingredient</h2>
+			<div class="grid">
+				<label class="grid-cell">Diff</label>
+				<label class="grid-cell">New value</label>
+			</div>
+			<div class="grid">
+				<div class="grid-cell" ng-bind-html="diff.prev('canonicalName')"></div>
+				<div class="grid-cell" ng-bind-html="diff.post('canonicalName')"></div>
+			</div>
+
+			<h2>Description</h2>
+			<div class="grid">
+				<label class="grid-cell">Diff</label>
+				<label class="grid-cell">New value</label>
+			</div>
+			<div class="grid">
+				<div class="grid-cell" ng-bind-html="diff.prev('description')"></div>
+				<div class="grid-cell" ng-bind-html="diff.post('description')"></div>
+			</div>
+
+		</div>
+		<div ng-switch-when="Photo" class="comparison">
+			<div>
+				<img src="{{reviewable.mediumUrl}}">
+				<a href="{{reviewable.url}}" target="_blank"><i class="fa fa-search-plus"></i> View Full Size</a>
+			</div>
+			<div>
+			</div>
+		</div>
+	</div>
+	<a class="btn btn-default" ng-click="castVote(-1)"><i class="icon-panda"></i> Reject</a>
+	<a class="btn btn-default" ng-click="castVote(0)"><i class="icon-lips"></i> Abstain</a>
+	<a class="btn btn-default" ng-click="castVote(1)"><i class="fa fa-check-circle"></i> Approve</a>
+</div>

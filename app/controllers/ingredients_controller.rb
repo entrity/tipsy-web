@@ -10,6 +10,7 @@ class IngredientsController < ApplicationController
       @ingredients = @ingredients.order(:name)
     end
     params[:exclude_ids].reject!{|item| item =~ /\D/ } if params[:exclude_ids].present?
+    @ingredients = @ingredients.where(id:params[:id]) if params[:id].present?
     @ingredients = @ingredients.where('id NOT IN (?)', params[:exclude_ids]) if params[:exclude_ids].present?
     @ingredients = @ingredients.for_drink(params[:drink_id]) if params[:drink_id].present?
     @ingredients = @ingredients.select(params[:select]) if params[:select].present?
