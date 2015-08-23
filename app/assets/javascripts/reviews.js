@@ -16,7 +16,9 @@
 					case "Revision":
 						// Make diff html for description
 						$scope.diff.description = new Differ(reviewable.prev_description, reviewable.description).prettyMarkdown();
-						$scope.diff.instruction = new Differ(reviewable.prev_instruction, reviewable.instructions).prettyMarkdown();
+						prevInstruction = JSON.parse(reviewable.prev_instruction||'[]').join("\n")
+						currInstruction = JSON.parse(reviewable.instructions||'[]').join("\n")
+						$scope.diff.instruction = new Differ(prevInstruction, currInstruction).prettyMarkdown();
 						// Get unified list of ingredients (prev & current)
 						if (!reviewable.ingredients) reviewable.ingredients = [];
 						if (!reviewable.prev_ingredients) reviewable.prev_ingredients = [];

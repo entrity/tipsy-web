@@ -128,7 +128,7 @@
 		}
 		$scope.save = function () {
 			$scope.revision.$save(null, function (data) {
-				// success
+				window.scrollTo(0,0);
 			}, function (httpResponse) {
 				RailsSupport.errorAlert(httpResponse);
 			});

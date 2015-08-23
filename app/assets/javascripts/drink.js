@@ -31,7 +31,7 @@
 				configurable: false,
 			},
 			getUrl: {
-				value: function () {
+				value: function getUrl () {
 					var nameSlug = this.name ? '-' + this.name.toLowerCase().replace(/[^\w]+/g, '-') : '';
 					return '/recipe/'+this.id+nameSlug;
 				},
@@ -93,6 +93,14 @@
 	.factory('Revision', ['$resource', 'Drink', function ($resource, Drink) {
 		var Revision = $resource('/revisions/:id.json', {id:'@id'});
 		Object.defineProperties(Revision.prototype, {
+			dumpSteps: { // set this.instructions from this.steps
+				value: function dumpSteps () {
+					this.instructions = JSON.stringify(this.steps.map(function (stepObj) {
+						return stepObj.text
+					}));
+				},
+				configurable: false,
+			},
 			// Copy select attributes from drink
 			loadDrink: {
 				configurable: false,
@@ -111,8 +119,18 @@
 					this.prev_ingredients = Drink.ingredients({id:drink.id}, function () {
 						thisRevision.ingredients = angular.copy(thisRevision.prev_ingredients);
 					});
+					this.loadSteps();
 				},
-			}
+			},
+			loadSteps: { // set this.steps from this.instructions
+				value: function loadSteps () {
+					this.steps = JSON.parse(this.instructions||'[]').map(function (text) {
+						return {text:text}
+					});
+					if (!this.steps.length) this.steps = [{}];
+				},
+				configurable: false,
+			},
 		});
 		return Revision;
 	}])
@@ -271,11 +289,9 @@
 			$scope.drink.$promise.then(function () {
 				$scope.revision.loadDrink($scope.drink);
 				descriptionEditor.run();
-				instructionEditor.run();
 			});
 		} else { // action for new, but not edit
 			descriptionEditor.run();
-			instructionEditor.run();
 		}
 		$scope.addIngredient = function () {
 			if (!$scope.revision.ingredients) $scope.revision.ingredients = [];
@@ -285,8 +301,10 @@
 			if (!isNaN(index) && index >= 0) $scope.revision.ingredients.splice(index, 1);
 		}
 		$scope.save = function () {
+			$scope.revision.dumpSteps();
 			$scope.revision.$save(null, function (data) {
-				// success
+				window.scrollTo(0,0);
+				$scope.revision.loadSteps();
 			}, function () {
 				RailsSupport.errorAlert(data);
 			});
