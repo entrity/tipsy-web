@@ -38,7 +38,7 @@
 					var converter = Markdown.getSanitizingConverter();
 					this.prev = converter.makeHtml(this.prev);
 					this.post = converter.makeHtml(this.post);
-					return this.prettyHtml(prev, post);
+					return this.prettyHtml(this.prev, this.post);
 				}
 			},
 		});
