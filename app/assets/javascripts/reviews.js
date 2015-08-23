@@ -36,8 +36,8 @@
 		});
 		return ReviewDiff;
 	}])
-	.controller('ReviewCtrl', ['$scope', '$resource', '$http', '$location', 'Drink', 'RailsSupport', 'ReviewDiff', 
-	function ($scope, $resource, $http, $location, Drink, RailsSupport, ReviewDiff) {
+	.controller('ReviewCtrl', ['$scope', '$resource', '$http', '$location', 'Drink', 'Ingredient', 'RailsSupport', 'ReviewDiff',
+	function ($scope, $resource, $http, $location, Drink, Ingredient, RailsSupport, ReviewDiff) {
 		function recipeInstructionsToText (json) {
 			return JSON.parse(json||'[]').map(function (item) {
 				return "&middot; " + item.trim();
@@ -86,6 +86,24 @@
 								var prevIngredients = reviewable.prev_ingredients.map(ingredientToText).sort().join("\n");
 								var postIngredients = reviewable.ingredients.map(ingredientToText).sort().join("\n");
 								diff.set('ingredients', prevIngredients, postIngredients, true);
+							});
+						});
+						break;
+					case "IngredientRevision":
+						var ingredient = Ingredient.get({id:$scope.reviewable.ingredient_id}, function () {
+							var diff = $scope.diff = new ReviewDiff(ingredient, $scope.reviewable);
+							var ingredientIdQueryStringPieces = [];
+							if (reviewable.canonical_id) ingredientIdQueryStringPieces.push('id[]='+reviewable.canonical_id);
+							if (reviewable.prev_canonical_id) ingredientIdQueryStringPieces.push('id[]='+reviewable.prev_canonical_id);
+							$http.get('/ingredients.json?'+ingredientIdQueryStringPieces.join('&'))
+							.success(function (data) {
+								data.forEach(function (ingredient) {
+									if (ingredient.id == reviewable.canonical_id)
+										reviewable.canonicalName = ingredient.name;
+									else if (ingredient.id == reviewable.prev_canonical_id)
+										reviewable.prevCanonicalName = ingredient.name;
+								});
+								diff.set('canonicalName', reviewable.prevCanonicalName, reviewable.canonicalName);
 							});
 						});
 						break;

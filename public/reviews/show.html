@@ -96,8 +96,8 @@
 				<label class="grid-cell">New value</label>
 			</div>
 			<div class="grid">
-				<div class="grid-cell" ng-bind-html="diff.name || '(no change)'"></div>
-				<div class="grid-cell" ng-bind-html="reviewable.name"></div>
+				<div class="grid-cell" ng-bind-html="diff.prev('name')"></div>
+				<div class="grid-cell" ng-bind-html="diff.post('name')"></div>
 			</div>
 
 			<h2>Canonical Ingredient</h2>
@@ -106,8 +106,8 @@
 				<label class="grid-cell">New value</label>
 			</div>
 			<div class="grid">
-				<div class="grid-cell" ng-bind-html="diff.canonical_id || '(no change)'"></div>
-				<div class="grid-cell" ng-bind-html="reviewable.canonical_id"></div>
+				<div class="grid-cell" ng-bind-html="diff.prev('canonicalName')"></div>
+				<div class="grid-cell" ng-bind-html="diff.post('canonicalName')"></div>
 			</div>
 
 			<h2>Description</h2>
@@ -116,8 +116,8 @@
 				<label class="grid-cell">New value</label>
 			</div>
 			<div class="grid">
-				<div class="grid-cell" ng-bind-html="diff.description"></div>
-				<div class="grid-cell" ng-bind-html="converter.makeHtml(reviewable.description || '') || '(empty)'"></div>
+				<div class="grid-cell" ng-bind-html="diff.prev('description')"></div>
+				<div class="grid-cell" ng-bind-html="diff.post('description')"></div>
 			</div>
 
 		</div>
