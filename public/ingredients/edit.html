@@ -8,7 +8,7 @@
 		<br>
 		<em>(e.g. <strong>bitter</strong> is an alias for <strong>bitters</strong> and <strong>Absolut vodka</strong> is an alias for <strong>vodka</strong>, but <u>not</u> vice versa)</em>
 		<div ng-show="editPage.aliasNeeded">
-			<ingredient-finder data-ingredient="editPage.canonical" data-exclude-ids="editPage.idsToExcludeFromSearch"></ingredient-finder>
+			<ingredient-finder data-ingredient="editPage.canonical" data-on-selected="editPage.canonicalIngredientSelected" data-exclude-ids="editPage.idsToExcludeFromSearch"></ingredient-finder>
 		</div>
 		<h3>Description</h3>
 		<div id="wmd-button-bar"></div>
