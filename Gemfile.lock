@@ -88,6 +88,9 @@ GEM
     diff_match_patch_native (1.0.2)
       rice (>= 1.4.2)
     erubis (2.7.0)
+    exception_notification (4.1.1)
+      actionmailer (>= 3.0.4)
+      activesupport (>= 3.0.4)
     execjs (2.5.2)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
@@ -256,6 +259,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   devise (~> 3.5.1)
   diff_match_patch_native (~> 1.0.2)
+  exception_notification (~> 4.1.1)
   factory_girl_rails
   jbuilder (~> 2.0)
   jquery-rails

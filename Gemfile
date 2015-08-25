@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'devise', '~> 3.5.1'
 gem 'diff_match_patch_native', '~> 1.0.2'
+gem 'exception_notification', '~> 4.1.1'
 gem 'omniauth-facebook'
 gem 'paperclip', '~> 4.3'
 gem 'responders', '~> 2.0'
