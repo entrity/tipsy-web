@@ -95,9 +95,12 @@
 		Object.defineProperties(Revision.prototype, {
 			dumpSteps: { // set this.instructions from this.steps
 				value: function dumpSteps () {
-					this.instructions = JSON.stringify(this.steps.map(function (stepObj) {
+					var steps = this.steps.grep(function (stepObj) {
+						return stepObj.text && stepObj.text.length;
+					}).map(function (stepObj) {
 						return stepObj.text
-					}));
+					});
+					this.instructions = JSON.stringify(steps);
 				},
 				configurable: false,
 			},
@@ -130,6 +133,10 @@
 					if (!this.steps.length) this.steps = [{}];
 				},
 				configurable: false,
+			},
+			steps: {
+				value: [{}],
+				writable: true,
 			},
 		});
 		return Revision;
