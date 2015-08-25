@@ -209,7 +209,10 @@
           <a class="grid-cell cards" ng-repeat="drink in relatedDrinks" ng-href="{{drink.getUrl()}}">
             <div class="grid grid--center">
               <div class="grid-cell">
-                <div class="image"><i class="fa fa-glass"></i></div>
+                <div class="image">
+                  <img ng-if="drink.photo_url" ng-src="{{drink.photo_url}}" height="146" width="172"></i>
+                  <i ng-hide="drink.photo_url" class="fa fa-glass"></i>
+                </div>
               </div>
               <div class="grid-cell">
                 <span class="name" ng-bind="drink.name"></span>

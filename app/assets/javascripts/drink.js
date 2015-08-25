@@ -156,7 +156,7 @@
 			$scope.drink.setUserVoteSign(comment, 'Comment');  // identify votes by current user
 		});
 		// Fetch related drinks
-		Drink.query({'id[]':$scope.drink.related_drink_ids}, function (data) {
+		Drink.query({'id[]':$scope.drink.related_drink_ids, with_photo:1}, function (data) {
 			$scope.relatedDrinks = data.map(function (obj) { return new Drink(obj) });
 		});
 		$scope.favourite = function () {
