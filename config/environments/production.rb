@@ -1,4 +1,11 @@
 Rails.application.configure do
+  # Exception Notification
+  Rails.application.config.middleware.use ExceptionNotification::Rack,
+  :email => {
+    :email_prefix => "[Tipsy ERR] ",
+    :sender_address => %{"TipsyERR" <deploy@tipsyology.com>},
+    :exception_recipients => Rails.application.secrets['exception_notification_recipients']
+  }
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
