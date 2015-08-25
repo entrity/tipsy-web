@@ -22,6 +22,14 @@ class DrinksController < ApplicationController
       @drinks = @drinks.paginate page:params[:page], per_page:MAX_RESULTS
       set_pagination_headers @drinks
     end
+    if params[:with_photo]
+      @drinks.includes(:photo)
+      @drinks = @drinks.map do |drink|
+        hash = drink.as_json
+        hash['photo_url'] = drink.photo.file.url(:medium) if drink.photo.present?
+        hash
+      end
+    end
     respond_with @drinks
   end
 
