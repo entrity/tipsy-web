@@ -55,18 +55,6 @@
             <li ng-show="!(toolbar.repChanges && toolbar.repChanges.length)"><em>No new point distributions</em></li>
           </ul>
         </div>
-        <!-- TROPHIES SUMMARY -->
-        <div class="grid-cell user trophie-cont" ng-cloak ng-show="isLoggedIn()">
-          <a href="/user/trophies.html">
-            <i class="fa fa-trophy gold"></i>   {{getUser().gold_trophy_ct||0}}
-            <i class="fa fa-trophy silver"></i> {{getUser().silver_trophy_ct||0}}
-            <i class="fa fa-trophy bronze"></i> {{getUser().bronze_trophy_ct||0}}
-          </a>
-        </div>
-        <!-- TROPHIES SUMMARY -->
-        <div class="grid-cell user favorites" ng-cloak ng-show="isLoggedIn()">
-          <a ng-click="openFavourites()"><i class="fa fa-heart"></i></a>
-        </div>
         <!-- USER AVATAR -->
         <div class="grid-cell user avatar-cont dropdown" ng-cloak ng-show="isLoggedIn()">
           <div class="grid" id="avatar-dropdown">
@@ -81,7 +69,7 @@
             <li><a href="/users/sign_out" ng-click="visit('/users/sign_out', $event)"><i class="fa fa-sign-out"></i> Log out</a></li>
           </ul>
         </div>
-        <div class="grid-cell grid--shrink">
+        <div class="grid-cell grid--shrink" ng-cloak ng-show="isLoggedIn()">
           <a ng-click="toggle('rightbarOpen')"><i class="fa fa-bars"></i></a>
         </div>
       </div>

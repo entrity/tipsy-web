@@ -1,8 +1,14 @@
-<aside class="nano">
+<aside class="nano" ng-cloak ng-show="isLoggedIn()">
 	<div class="nano-content">
 		<div class="sidebar-controls">
 			<a class="btn btn-primary" title="Create a cocktail" href="/drinks/new" ng-click="visit('/drinks/new')"><i class="fa fa-plus-square"></i></a>
 			<a class="btn btn-primary" title="Collections" ng-click="openFavourites()"><i class="fa fa-heart"></i></a>
+			<!-- TROPHIES SUMMARY -->
+			<a class="user trophie-cont pull-right" href="/user/trophies.html">
+				<i class="fa fa-trophy gold"></i>   {{getUser().gold_trophy_ct||0}}
+				<i class="fa fa-trophy silver"></i> {{getUser().silver_trophy_ct||0}}
+				<i class="fa fa-trophy bronze"></i> {{getUser().bronze_trophy_ct||0}}
+			</a>
 		</div>
 		<div class="ingredients-list">
 			<ul>
@@ -26,9 +32,9 @@
 				<li><a><i class="fa fa-cart-arrow-down"></i> Export shopping list</a></li>
 			</ul>
 		</div>
-    </div>
+	</div>
 </aside>
 
 <script type="text/javascript">
-  $(".nano").nanoScroller();
+ 	$(".nano").nanoScroller();
 </script>

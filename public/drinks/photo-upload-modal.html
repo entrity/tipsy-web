@@ -8,19 +8,21 @@
 	<progressbar class="progress-striped active" type="{{uploader.progress == 100 ? (uploader.errors ? 'danger' : 'success') : null}}" value="uploader.progress"></progressbar>
 	<div ng-hide="uploader.success">
 		<form action="/file-upload" class="dropzone" id="my-awesome-dropzone"></form>
-		<p>
+		<h2 class="text-center"> Select images to upload</h2>
+		<div class="upload">
 			<input type="file" ngf-select ng-model="imgFiles" ng-model-rejected="rejFiles" ngf-capture="'camera'" accept="image/*" ngf-accept="'image/*'">
-		</p>
-		<p>
+		</div>
+		<p class="text-center">
 			<label>Title/description</label>
 			<input type="text" ng-model="uploader.data.alt">
 		</p>
-		<p>
-			<a class="btn btn-primary" ng-click="upload()">Submit</a>
-		</p>
+		<p class="text-center"><button class="btn btn-primary" ng-click="upload()"><i class="fa fa-cloud-upload"></i> Upload Images</button></p>
 	</div>
 	<div ng-show="uploader.success" class="green">
-		<p>Thank you. Your submission is pending approval and will be published if approved.</p>
-		<p><a class="btn btn-success" ng-click="$close()">Close</a></p>
+		<span class="notice-success">
+			<i class="fa fa-check-circle-o"></i>
+			<p class="text-center">Thank you. Your submission is pending approval and will be published if approved.</p>
+			<button class="btn btn-success" ng-click="$close()">Close</button>
+		</span>
 	</div>
 </div>

@@ -2,7 +2,7 @@
 
 #gallery {
   width: 100%;
-  min-height: 330px;
+  min-height: 430px;
 }
 #gallery img.slide {
   width: 100%;
@@ -13,6 +13,7 @@
   min-width: initial;
   min-height: initial;
   cursor: pointer;
+  color: #fff;
 }
 #drink-page #gallery #gallery-ctrl {
   position: absolute;
@@ -28,17 +29,26 @@
 }
 #drink-page #gallery .arrow {
   position: absolute;
-  font-size: 30px;
+  width:60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.3);
+  line-height: 55px;
+  text-align: center;
+  font-size: 50px;
   top: 50%;
-  margin-top: -15px;
+  margin-top: -25px;
   z-index: 7;
   display: none;
+  color: #fff;
 }
 #gallery .arrow.prev {
   left: 36px;
+  padding-right: 6px;
 }
 #gallery .arrow.next {
   right: 36px;
+  padding-left: 6px;
 }
 #drink-page #gallery:hover .arrow,
 #drink-page #gallery:hover #gallery-ctrl {
@@ -47,6 +57,9 @@
 #drink-page #gallery .arrow:hover,
 #drink-page #gallery #gallery-ctrl:hover {
   opacity: 1;
+}
+#drink-page #gallery:hover .nav {
+  background: rgba(0,0,0,0.3);
 }
 #drink-page #gallery .nav {
     bottom: 0;
@@ -59,6 +72,7 @@
     text-align: center;
     width: 100%;
     z-index: 5;
+    transition: all .4s;
 }
 #drink-page #gallery .nav li {
     border: 3px solid transparent;
@@ -79,6 +93,7 @@
 }
 #drink-page .slider {
     position: relative;
+    margin-bottom: 0;
 
     -webkit-perspective: 1000px;
     -moz-perspective: 1000px;
@@ -94,7 +109,7 @@
 }
 #drink-page .slide {
     position: absolute;
-    top: -50%;
+    bottom: -50%;
     left: 0;
 }
 .slide.ng-hide-add {

@@ -53,11 +53,11 @@
 				</div>
 			</div>
 		</div>
-		<section class="grid row" itemscope itemtype="https://schema.org/UserComments">
+		<section id="comments" class="grid row" itemscope itemtype="https://schema.org/UserComments">
 			<div class="grid-cell">
 				<h3>Comments</h3>
 				<span class="no-comments" ng-hide="comments.length"><i class="fa fa-commenting-o"></i> This drink currently has no comments. Be the first to share your thoughts!</span>
-				<div id="comments" ng-repeat="comment in comments">
+				<div class="comment" ng-repeat="comment in comments">
 					<div class="grid">
 						<div class="grid-cell grid--shrink">
 							<img class="avatar" ng-src="{{comment.user_avatar}}">

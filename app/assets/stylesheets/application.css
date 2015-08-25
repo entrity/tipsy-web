@@ -386,7 +386,7 @@ nav > .grid-cell:first-child {
   padding-right: 16px;
 }
 nav .fa-bars {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 56px;
   width: 58px;
   text-align: center;
@@ -443,10 +443,6 @@ nav .trophie-cont a i {
 }
 nav .trophie-cont a i:first-child {
   margin-left: 0;
-}
-nav .favorites .fa {
-  font-size: 21px;
-  color: #29BC7A;
 }
 nav .user {
   cursor: pointer;
@@ -708,7 +704,9 @@ nav .user li .rep-change {
 .sidebar-controls {
   height: 57px;
   line-height: 57px;
-  padding: 0 20px;
+}
+.sidebar-controls .btn:first-child {
+  margin-left: 20px;
 }
 .ingredients-list {
   padding-bottom: 10px;
@@ -751,8 +749,8 @@ aside a {
   color: #fff;
   font-weight: bold;
 }
-aside a:hover {
-  color: #166D44;
+aside li:hover {
+  background: rgba(0,0,0,0.2);
 }
 aside li.item .fa {
   color: #000;
@@ -786,6 +784,14 @@ aside .btn-primary:hover {
   background-color: #ddd;
   border-color: #ddd;
   color: #000;
+}
+aside .trophie-cont {
+  padding: 0 20px;
+  cursor: pointer;
+  transition: all .4s;
+}
+aside .trophie-cont:hover {
+  background: rgba(0,0,0,0.2);
 }
 .ingredients-list a,
 .shopping-list a {
@@ -983,7 +989,7 @@ aside .btn-primary:hover {
   max-width: 600px;
 }
 #drink-page .photos {
-  min-height: 330px;
+  min-height: 430px;
   border-bottom: 1px solid #ededed;
   background: url(/images/img-upload.png) no-repeat center #FBFBFB;
   background-position: calc(50% + 8px) calc(50% - 30px);
@@ -993,8 +999,11 @@ aside .btn-primary:hover {
 }
 #drink-page .add-photo {
   position: absolute;
-  bottom: 16%;
+  bottom: 12%;
   width: 100%;
+}
+#drink-page .add-photo button {
+  margin-top: 14px;
 }
 #drink-page .row,
 #recipe-editor .row,
@@ -1118,16 +1127,22 @@ aside .btn-primary:hover {
   background: #ddd;
   color: #888;
 }
+#drink-page .similar-drinks {
+  max-width: 100%;
+  width: 100%;
+  padding: 0 40px;
+}
 #drink-page .similar-drinks h3 {
   margin-bottom: 20px;
+  text-align: center;
 }
 #drink-page .similar-drinks > .grid-cell > .grid {
   justify-content: center;
   flex-wrap: wrap;
 }
 #drink-page .similar-drinks > .grid-cell > .grid > .grid-cell {
-  min-width: 50%;
-  max-width: 50%;
+  min-width: 200px;
+  max-width: 200px;
 }
 #drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid,
 #drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid > .grid-cell {
@@ -1217,6 +1232,9 @@ aside .btn-primary:hover {
 #recipe-editor .form-group {
   margin-bottom: 0;
 }
+#recipe-editor .description textarea {
+  max-width: 598px;
+}
 #recipe-editor .directions .step {
   position: relative;
   display: block;
@@ -1240,6 +1258,10 @@ aside .btn-primary:hover {
   counter-increment: step;
   content: counter(step);
 }
+#recipe-editor .directions textarea {
+  max-width: 504.84px;
+  width: 100%;
+}
 #recipe-editor .form-group .qty {
   width: 160px;
   flex: 0 1 auto;
@@ -1255,9 +1277,10 @@ aside .btn-primary:hover {
 #recipe-editor .ingredients li.grid .grid-cell:last-child {
   padding-right: 0;
 }
-#recipe-editor .ingredients li.grid .grid-cell .fa {
+#recipe-editor .fa-times-circle {
   opacity: 0.7;
   font-size: 14px;
+  color: red;
 }
 #recipe-editor .ingredients li.grid .grid-cell:first-child:hover .fa {
   opacity: 1;
@@ -1409,15 +1432,28 @@ tipsy-image-editor a.btn:hover {
   width: 90%;
 }
 .uploader {
-  padding: 10px 10px 0 10px;
+  padding: 0 20px 20px 20px;
 }
-
+.uploader .progress-striped {
+  margin-right: -20px;
+  margin-left: -20px;
+  border-radius: 0;
+}
+.uploader button {
+  margin-top: 20px;
+}
+.uploader div.upload {
+  display: block;
+  width: 220px !important;
+  margin: 20px auto 25px auto;
+  overflow: hidden;
+}
 /*** DRINK PAGE STYLES:Comments ***/
 
-#comments:last-child {
+#comments .comment:last-child {
   margin-bottom: 0;
 }
-#comments .comment-id {
+#comments .comment .comment-id {
   flex: 0 1 auto;
   width: 100%;
 }
@@ -1429,25 +1465,25 @@ tipsy-image-editor a.btn:hover {
   padding: 0 !important;
 }
 .comments-cont section h3,
-.comments-cont #comments {
+.comments-cont #comments .comment {
   padding: 1em;
   margin-bottom: 0 !important;
   border-bottom: 1px solid lightgray;
 }
-.comments-cont #comments:last-child {
+.comments-cont #comments .comment:last-child {
   border-bottom: none;
 }
-.comments-cont #comments > .grid .grid-cell:first-child {
+.comments-cont #comments .comment > .grid .grid-cell:first-child {
   padding-right: 1em;
 }
-.comments-cont #comments .name,
+.comments-cont #comments .comment .name,
 #tips .name {
   font-weight: bold;
 }
-.comments-cont #comments .date {
+.comments-cont #comments .comment .date {
     opacity: .6;
 }
-.comments-cont #comments .date:before {
+.comments-cont #comments .comment .date:before {
     content: "\00b7";
 }
 .comments-cont .grid:first-child h3 {
@@ -1558,20 +1594,20 @@ tipsy-image-editor a.btn:hover {
 .comment-actions span:last-child:before {
   display: none;
 }
-#comments .comment-actions span:last-child {
+#comments .comment .comment-actions span:last-child {
   opacity: 0;
   transition: all .4s;
 }
-#comments:hover .comment-actions span:last-child {
+#comments .comment:hover .comment-actions span:last-child {
   opacity: 1;
 }
-#comments .comment-id .grid:first-child {
+#comments .comment .comment-id .grid:first-child {
   padding-bottom: 5px;
 }
-#comments .comment-vote .fa-thumbs-o-up {
+#comments .comment .comment-vote .fa-thumbs-o-up {
   padding-left: 5px;
 }
-#comments .comment-vote .fa-thumbs-o-down {
+#comments .comment .comment-vote .fa-thumbs-o-down {
   padding-left: 5px;
 }
 
@@ -1809,21 +1845,28 @@ footer.in-app .row {
 
 /* NOTICE STYLES */
 
-.notice-error {
+.notice-error,
+.notice-success {
   padding: 10px 0;
   display: block;
   opacity: .8;
   text-align: center;
 }
-.notice-error .fa {
+.notice-error .fa,
+.notice-success .fa {
   display: block;
   text-align: center;
   font-size: 30px;
   margin-bottom: 20px;
 }
-.notice-error button {
+.notice-error button,
+.notice-success button {
   text-align: center;
   margin-top: 20px;
+}
+.notice-success .fa {
+  font-size: 60px;
+  color: #51BE38;
 }
 
 /* BOOTSTRAP OVERRIIDES */
@@ -1844,6 +1887,15 @@ footer.in-app .row {
 }
 .modal-content p {
   margin-bottom: 0;
+}
+.checkbox input[type=checkbox], 
+.checkbox-inline input[type=checkbox], 
+.radio input[type=radio], 
+.radio-inline input[type=radio],
+input[type=checkbox], 
+input[type=radio] {
+  position: relative;
+  bottom: -2px;
 }
 
 @media screen and (max-width: 785px) {

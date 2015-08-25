@@ -24,12 +24,11 @@
           <br>
           <a ng-click="flagPhoto()"><i class="fa fa-flag" ng-class="isPhotoUserFlagged() &amp;&amp; 'highlight'"></i></a>
           <a ng-href="{{photos[photos.activeIndex].originalUrl}}" target="_blank"><i class="fa fa-search-plus"></i></a>
-          <a><i class="fa fa-share-alt"></i></a>
           <br>
-          <a ng-click="openPhotoUploadModal()"><i class="fa fa-plus-square"></i> Upload your own photo!</a>
+          <a class="add-photo" ng-click="openPhotoUploadModal()"><i class="fa fa-camera"></i></a>
         </div>
-        <a class="arrow prev" ng-click="showPrevPhoto()"><i class="fa fa-arrow-left"></i></a>
-        <a class="arrow next" ng-click="showNextPhoto()"><i class="fa fa-arrow-right"></i></a>
+        <a class="arrow prev" ng-click="showPrevPhoto()"><i class="fa fa-angle-left"></i></a>
+        <a class="arrow next" ng-click="showNextPhoto()"><i class="fa fa-angle-right"></i></a>
         <ul class="nav">
           <li ng-repeat="photo in photos" ng-class="{'active':isActive($index)}">
             <img ng-src="{{photo.thumb}}" alt="{{photo.alt}}" title="{{photo.alt}}" ng-click="showPhoto($index);" />
@@ -37,7 +36,7 @@
         </ul>
       </div>
       <div ng-hide="photos.length" class="add-photo row text-center">
-        No photos have been posted for this drink.<br><a class="btn btn-default btn-small" ng-click="openPhotoUploadModal()">Add your own!</a>
+        No photos have been posted for this drink.<br><button class="btn btn-default btn-small" ng-click="openPhotoUploadModal()">Add your own!</button>
       </div>
     </div>
   </div>
@@ -176,14 +175,7 @@
       </div>
     </div>
   </div>
-  <!-- TIPS (COMMENTS) -->
-  <div class="grid row tips center">
-    <div class="grid-cell">
-      <h3><%= @drink.name %> tips? Comments? Join the discussion!</h3>
-      <textarea ng-model="newComment.text" ng-disabled="newComment._saving"></textarea>
-      <a ng-click="createComment(newComment)" ng-hide="newComment._saving">Save</a>
-    </div>
-  </div>
+  <!-- TIPS -->
   <ng-include src="'/drinks/comments.html'"></ng-include>
   <!-- COMMENTS -->
   <div class="grid row tips center">
