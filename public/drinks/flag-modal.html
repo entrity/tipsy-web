@@ -1,5 +1,5 @@
 <div class="modal-header">
-	<button type="button" class="close" ng-click="close()">&times;</button>
+	<button type="button" class="close" ng-click="$close()">&times;</button>
 	<h4 class="modal-title">Flag Revision</h4>
 </div>
 <div ng-controller="Drink.FlagModalCtrl" id="drink-flag-modal">
@@ -33,7 +33,7 @@
 		<span class="notice-error">
 			<i class="fa fa-flag-o"></i>
 			<p class="text-center"><em>We cannot find any saved revisions for this page, so it looks like there's nothing to flag.</em></p>
-			<button type="button" class="btn btn-default" ng-click="close()">Close</button>
+			<button type="button" class="btn btn-default" ng-click="$close()">Close</button>
 		</span>
 	</div>
 </div>
