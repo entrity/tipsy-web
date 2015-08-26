@@ -91,7 +91,7 @@
 			},
 			getUser: {
 				configurable: false,
-				value: function getUser (successCallback, failureCallback, forceReload) {
+				value: function getUser (callback, forceReload) {
 					// Fetch user from API
 					if (forceReload || !$rootScope.currentUser) {
 						window.user = $rootScope.currentUser = $resource('/users/0.json').get(null, function (data) {
@@ -100,15 +100,14 @@
 						});
 					}
 					// Schedule callbacks
-					if (successCallback) $rootScope.currentUser.$promise.then(function () {
-						if ($rootScope.currentUser.id)
-							successCallback($rootScope.currentUser);
-						else if (failureCallback)
-							failureCallback($rootScope.currentUser);
-					});
-					if (failureCallback) $rootScope.currentUser.$promise.then(null, function () {
-						failureCallback($rootScope.currentUser);
-					});
+					if (callback) $rootScope.currentUser.$promise.then(
+						function () {
+							callback($rootScope.currentUser);
+						},
+						function () {
+							callback($rootScope.currentUser);
+						}
+					);
 					// Return
 					return $rootScope.currentUser;
 				}
@@ -140,6 +139,14 @@
 					});
 				}
 			},
+			ifUser: {
+				value: function (successCallback, failureCallback) {
+					this.getUser(function (user) {
+						if (user.id) (typeof(successCallback) === 'function') && successCallback(user);
+						else         (typeof(failureCallback) === 'function') && failureCallback(user);
+					});
+				}
+			},
 			isInCabinet: {
 				configurable: false,
 				value: function isInCabinet (id) {
@@ -162,10 +169,11 @@
 					return false;
 				}
 			},
+			// Should only be called in views. For other uses, use this.ifUser()
 			isLoggedIn: {
 				configurable: false,
 				value: function (forceReload) {
-					return this.getUser(null, null, forceReload).id;
+					return this.getUser(null, forceReload).id;
 				}
 			},
 			isToggled: {
@@ -231,7 +239,7 @@
 				configurable: false,
 				value: function requireLoggedIn (successCallback, failureCallback) {
 					if (successCallback || failureCallback) {
-						this.getUser(successCallback, failureCallback||function(){
+						this.ifUser(successCallback, failureCallback||function(){
 							$rootScope.openLoginModal('This action requires you to log in.');
 						});
 					}

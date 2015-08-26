@@ -172,7 +172,7 @@
 			if ($scope.requireLoggedIn()) {
 				$http.put('/users.json', {user:{photo_data:{data_url:dataUrl, filename:filename}}})
 				.success(function(data, status, headers, config){
-					$scope.getUser(function getUserSuccess (data) {
+					$scope.ifUser(function getUserSuccess (data) {
 						user.thumbnail = data.photo_url.replace(/original/, 'thumb');
 						$scope.$close();
 					}, null, true);
