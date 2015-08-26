@@ -104,6 +104,10 @@
 				},
 				configurable: false,
 			},
+			ingredients: {
+				value: [{}],
+				writable: true,
+			},
 			// Copy select attributes from drink
 			loadDrink: {
 				configurable: false,
@@ -120,7 +124,7 @@
 					// Fetch ingredients from server
 					var thisRevision = this;
 					this.prev_ingredients = Drink.ingredients({id:drink.id}, function () {
-						thisRevision.ingredients = angular.copy(thisRevision.prev_ingredients);
+						thisRevision.ingredients = angular.copy(thisRevision.prev_ingredients) || [{}];
 					});
 					this.loadSteps();
 				},
