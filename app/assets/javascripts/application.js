@@ -263,9 +263,9 @@
 			},
 			toggle: {
 				configurable: false,
-				value: function toggle (key, object) {
+				value: function toggle (key, object, value) {
 					object || (object = this.tipsyconfig);
-					object[key] = !object[key];
+					object[key] = value == null ? !object[key] : value;
 					localStorage.setItem(key, object[key]);
 				}
 			},
@@ -313,6 +313,9 @@
 		$rootScope.sidebar.open = JSON.parse(localStorage.getItem('sidebar.open')||false);
 		$rootScope.isToggled('leftbarOpen');
 		$rootScope.isToggled('rightbarOpen');
+		$rootScope.ifUser(null, function (user) {
+			if (!user.id) $rootScope.toggle('rightbarOpen', null, false);
+		});
 	}])
 	.filter('tipsyFindableClass', function () {
 		return function (item) {
