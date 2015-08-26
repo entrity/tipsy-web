@@ -1982,4 +1982,18 @@ input[type=radio] {
   .full-bleed .cards {
     min-width: 100% !important;
   }
+  #first .grid {
+    flex-direction: column;
+  }
+  .logged-out-nav {
+    position: static;
+    display: block;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+  }
+  .signin.grid .grid-cell, .splash.grid .grid-cell {
+    flex: 0 1 auto;
+    margin-top: 25%;
+  }
 }
