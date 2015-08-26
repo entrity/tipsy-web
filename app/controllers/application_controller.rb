@@ -22,7 +22,7 @@ private
     if request.referer == sign_in_url
       root_path
     else
-      stored_location_for(resource) || request.referer || root_path
+      request.referer || root_path
     end
   end
 
