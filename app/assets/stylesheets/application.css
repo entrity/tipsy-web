@@ -798,24 +798,26 @@ aside .trophie-cont:hover {
   text-decoration: none;
   cursor: pointer;
 }
+#landing .search {
+  max-width: 300px;
+  margin: auto;
+}
 .signin.grid.modal-content {
   height: initial;
   padding: 32px;
 }
 .signin.grid {
-  height: calc(100% - 40px);
-  height: -o-calc(100% - 40px);
-  height: -webkit-calc(100% - 40px);
-  height: -moz-calc(100% - 40px);
+  height: 100vh;
   background-color: #2b334f;
   color: #fff;
+  flex-direction: column;
 }
-.signin.grid .grid-cell,
-.splash.grid .grid-cell {
-  margin: 0 auto 10% auto; 
+.signin.grid .grid-cell:first-child,
+.splash.grid .grid-cell:first-child {
+  margin: auto; 
   max-width: 260px;
-  border-radius: 4px; 
   box-sizing: border-box;
+  flex: 0 1 auto;
 }
 .signin.grid .grid-cell .logo,
 .splash.grid .grid-cell .logo {
@@ -1823,14 +1825,13 @@ footer {
   text-align: center;
 }
 footer.fixed {
-  /*position: fixed;*/
   max-width: 100%;
   width: 100%;
-  bottom: 0;
   padding: 10px 0;
   text-align: center;
   background: transparent;
   color: #fff;
+  flex: 0 1 auto;
 }
 footer.fixed {
   background: #181a1a;
@@ -1982,7 +1983,8 @@ input[type=radio] {
   .full-bleed .cards {
     min-width: 100% !important;
   }
-  #first .grid {
+  .splash.grid,
+  .signin.grid {
     flex-direction: column;
   }
   .logged-out-nav {
@@ -1992,8 +1994,14 @@ input[type=radio] {
     width: 100%;
     text-align: center;
   }
-  .signin.grid .grid-cell, .splash.grid .grid-cell {
+  .signin.grid .grid-cell,
+  .splash.grid .grid-cell {
     flex: 0 1 auto;
+  }
+  .splash.grid .grid-cell {
     margin-top: 25%;
+   }
+  .signin.grid .grid-cell:first-child {
+    margin: auto;
   }
 }
