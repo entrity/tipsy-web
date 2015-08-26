@@ -1574,7 +1574,20 @@ tipsy-image-editor a.btn:hover {
 }
 .comment-actions {
   display: block;
-  padding-top: 7px;
+  padding-top: 18px;
+}
+.comment-actions a {
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+  border-radius: 50%;
+  color: #8899a6;
+  border: 1px solid rgba(136, 153, 166, 0.5);
+  text-align: center;
+}
+.comment-actions a:hover {
+  background-color: #E1E8ED;
 }
 .comment-actions span {
   position: relative;
@@ -1590,11 +1603,6 @@ tipsy-image-editor a.btn:hover {
 .comment-actions span:first-child {
   padding-left: 0;
   margin-left: 0;
-}
-.comment-actions span:before {
-  content: "\00b7";
-  position: absolute;
-  left: -3px;
 }
 .comment-actions span:first-child:before,
 .comment-actions span:last-child:before {
@@ -1613,20 +1621,20 @@ tipsy-image-editor a.btn:hover {
   opacity: 1;
   transition: all .4s;
 }
-#comments .comment .comment-id .grid:first-child {
-  padding-bottom: 5px;
+.comment-actions .comment-vote a:first-child {
+  margin-right: 4px;
 }
-#comments .comment .comment-vote .fa-thumbs-o-up {
-  padding-left: 5px;
+.comment-actions .comment-vote a:last-child {
+  margin-left: 4px;
 }
-#comments .comment .comment-vote .fa-thumbs-o-up:hover:before {
+#comments .comment .comment-vote a:hover .fa-thumbs-o-up:before {
   content:'\f164';
 }
-#comments .comment .comment-vote .fa-thumbs-o-down {
-  padding-left: 5px;
-}
-#comments .comment .comment-vote .fa-thumbs-o-down:hover:before {
+#comments .comment .comment-vote a:hover .fa-thumbs-o-down:before {
   content:'\f165';
+}
+.comment-actions .tip .fa-lightbulb-o {
+  margin-right: 6px;
 }
 
 /*** ACCOUNT SETTINGS ***/
