@@ -74,21 +74,21 @@
 									<span itemprop="commentText" ng-bind="comment.text"></span>
 									<div class="comment-actions">
 										<span class="comment-reply">
-											<a tooltip="Reply" href=""> <i class="fa fa-reply"></i></a>
+											<a tooltip="Reply" tooltip-append-to-body="true" href=""> <i class="fa fa-reply"></i></a>
 										</span>
 										<span class="comment-vote">
-											<a tooltip="Like" ng-click="vote(comment, 'Comment', 1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment._userVoteSign > 0) && 'highlight'"></i></a>
+											<a tooltip="Like" tooltip-append-to-body="true" ng-click="vote(comment, 'Comment', 1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment._userVoteSign > 0) && 'highlight'"></i></a>
 											{{comment.score}}
-											<a tooltip="Dislike" ng-click="vote(comment, 'Comment', -1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment._userVoteSign < 0) && 'highlight'"></i></a>
+											<a tooltip="Dislike" tooltip-append-to-body="true" ng-click="vote(comment, 'Comment', -1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment._userVoteSign < 0) && 'highlight'"></i></a>
 										</span>
 										<span ng-if="comment.user_id == getUser().id">
 											<a tooltip="Delete" ng-click="removeComment(comment)"> <i class="fa fa-trash-o"></i></a>
 										</span>
 										<span class="comment-flag tip" ng-hide="comment.user_id == getUser().id">
-											Helpful comment? Mark it as a tip <a tooltip="Helpful" class="btn btn-default btn-xs" ng-click="tipComment(comment)" title="Mark as a useful tip (only actual tips should be voted)"><i class="fa fa-lightbulb-o"></i> Tip</a>
+											Helpful comment? Mark it as a tip <a tooltip="Helpful" tooltip-append-to-body="true" class="btn btn-default btn-xs" ng-click="tipComment(comment)" title="Mark as a useful tip (only actual tips should be voted)"><i class="fa fa-lightbulb-o"></i> Tip</a>
 										</span>
 										<span class="comment-flag inappropriate pull-right" ng-hide="comment.user_id == getUser().id">
-											<a tooltip="Report Comment" ng-click="flagComment(comment)" title="Flag comment as inappropriate"><i class="fa fa-flag" ng-class="comment._isUserFlagged &amp;&amp; 'highlight'"></i></a>
+											<a tooltip="Report" tooltip-append-to-body="true" ng-click="flagComment(comment)" title="Flag comment as inappropriate"><i class="fa fa-flag" ng-class="comment._isUserFlagged &amp;&amp; 'highlight'"></i></a>
 										</span>
 									</div>
 								</div>

@@ -43,16 +43,16 @@
   <div class="grid grid--center row center">
     <div class="grid-cell name">
       <h1 itemprop="name"><%= @drink.name %> 
-      <a role="button" class="favit" ng-click="favourite()"><i class="fa" ng-class="drink._userFavId==null ? 'fa-heart-o' : 'fa-heart'"></i></a></h1>
+      <a tooltip="Favorite" tooltip-append-to-body="true" role="button" class="favit" ng-click="favourite()"><i class="fa" ng-class="drink._userFavId==null ? 'fa-heart-o' : 'fa-heart'"></i></a></h1>
       <%= tag :meta, content:@drink.comment_ct, itemprop:"commentCount" %>
       <div class="comments">
         <a ng-click="gotoFrag('comments')">Comments (<%= @drink.comment_ct %>)</a>
       </div>
     </div>
     <div class="votes grid-cell grid--shrink" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-      <div class="arrow up" role="button" aria-label="upvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', 1)"><i class="fa fa-thumbs-up" ng-class="drink._userVoteSign > 0 &amp;&amp; 'highlight'" ></i></a></div>
-      <div class="score" itemprop="ratingValue"><noscript><%= @drink.score %></noscript>{{drink.score}}</div>
-      <div class="arrow down" role="button" aria-label="downvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', -1)"><i class="fa fa-thumbs-down" ng-class="drink._userVoteSign < 0 &amp;&amp; 'highlight'" ></i></a></div>
+      <div tooltip="Like" tooltip-append-to-body="true" class="arrow up" role="button" aria-label="upvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', 1)"><i class="fa fa-thumbs-up" ng-class="drink._userVoteSign > 0 &amp;&amp; 'highlight'" ></i></a></div>
+      <div tooltip="Score" tooltip-append-to-body="true" class="score" itemprop="ratingValue"><noscript><%= @drink.score %></noscript>{{drink.score}}</div>
+      <div tooltip="Dislike" tooltip-append-to-body="true" class="arrow down" role="button" aria-label="downvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', -1)"><i class="fa fa-thumbs-down" ng-class="drink._userVoteSign < 0 &amp;&amp; 'highlight'" ></i></a></div>
     </div>
   </div>
   <div class="grid row center">
@@ -72,7 +72,7 @@
     <div class="grid-cell prep-time">
       <p>
         Prep time:
-        <a ng-click="loadEditView()" class="fa fa-pencil"></a>
+        <a tooltip="Edit" tooltip-append-to-body="true" ng-click="loadEditView()" class="fa fa-pencil"></a>
         <br>
         <span itemprop="prepTime">
           <% if @drink.prep_time %>
@@ -86,7 +86,7 @@
     <div class="grid-cell calorie-count" itemprop="nutrition" itemscope itemtype="http://schema.org/NutritionInformation">
       <p>
         Calories:
-        <a ng-click="loadEditView()" class="fa fa-pencil"></a>
+        <a tooltip="Edit" tooltip-append-to-body="true" ng-click="loadEditView()" class="fa fa-pencil"></a>
         <br>
         <span itemprop="calories">
           <% if @drink.calories %>
@@ -102,8 +102,8 @@
     <div class="grid-cell">
       <h3>
         Description
-        <a ng-click="loadEditView()" class="fa fa-pencil"></a>
-        <a ng-click="flag()" class="fa fa-flag"></a>
+        <a tooltip="Edit" tooltip-append-to-body="true" ng-click="loadEditView()" class="fa fa-pencil"></a>
+        <a tooltip="Report" tooltip-append-to-body="true" ng-click="flag()" class="fa fa-flag"></a>
       </h3>
       <div>
         <% if @drink.description.present? %>
@@ -127,17 +127,17 @@
         <div class="grid-cell">
           <h3>
             Ingredients
-            <a ng-click="loadEditView()" class="fa fa-pencil"></a>
+            <a tooltip="Edit" tooltip-append-to-body="true" ng-click="loadEditView()" class="fa fa-pencil"></a>
           </h3>
         </div>
       </div>
       <% @ingredients.each do |ingredient| %>
         <div class="grid grid--center ingredient" itemprop="recipeIngredient">
           <div class="grid-cell actions">
-            <a ng-click="addToCabinet(<%= drink_ingredient_json ingredient %>)" title="Add to My Fridge" ng-class="isInCabinet(<%= ingredient.ingredient_id %>) &amp;&amp; 'active'">
+            <a tooltip="Add to fridge" tooltip-append-to-body="true" ng-click="addToCabinet(<%= drink_ingredient_json ingredient %>)" title="Add to My Fridge" ng-class="isInCabinet(<%= ingredient.ingredient_id %>) &amp;&amp; 'active'">
               <i class="sprite sprite-fridge"></i>
             </a>
-            <a ng-click="addToShoppingList(<%= drink_ingredient_json ingredient %>)" title="Add to Shopping List" ng-class="isInShoppingList(<%= ingredient.ingredient_id %>) &amp;&amp; 'active'">
+            <a tooltip="Add to shopping list" tooltip-append-to-body="true" ng-click="addToShoppingList(<%= drink_ingredient_json ingredient %>)" title="Add to Shopping List" ng-class="isInShoppingList(<%= ingredient.ingredient_id %>) &amp;&amp; 'active'">
               <i class="sprite sprite-shopping-cart"></i>
             </a>
           </div>
@@ -156,8 +156,8 @@
         <div class="grid-cell">
           <h3>
             Recipe Directions
-            <a ng-click="loadEditView()" class="fa fa-pencil"></a>
-            <a ng-click="flag()" class="fa fa-flag"></a>
+            <a tooltip="Edit" tooltip-append-to-body="true" ng-click="loadEditView()" class="fa fa-pencil"></a>
+            <a tooltip="Report" tooltip-append-to-body="true" ng-click="flag()" class="fa fa-flag"></a>
           </h3>
           <p itemprop="recipeInstructions">
             <% if @drink.instructions.present? %>
@@ -219,8 +219,8 @@
               </div>
               <div class="grid-cell">
                 <div class="grid grid--center">
-                  <div class="grid-cell"><i class="fa fa-flask"></i> <small>{{drink.ingredient_ct || 0}}</small></div>
-                  <div class="grid-cell"><i class="fa fa-thumbs-up"></i> <small>{{drink.up_vote_ct || 0}}</small></div>
+                  <div tooltip="Ingredients" tooltip-append-to-body="true" class="grid-cell"><i class="fa fa-flask"></i> <small>{{drink.ingredient_ct || 0}}</small></div>
+                  <div tooltip="Score" tooltip-append-to-body="true" class="grid-cell"><i class="fa fa-thumbs-up"></i> <small>{{drink.up_vote_ct || 0}}</small></div>
                 </div>
               </div>
             </div>
