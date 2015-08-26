@@ -83,7 +83,7 @@
 										</span>
 										<span ng-if="comment.user_id == getUser().id"><a ng-click="removeComment(comment)"> Delete</a></span>
 										<span class="comment-flag tip" ng-hide="comment.user_id == getUser().id">
-											Was this comment helpful? Flag it as a tip <a class="btn btn-default btn-xs" ng-click="tipComment(comment)" title="Mark as a useful tip (only actual tips should be voted)"><i class="fa fa-flag"></i> Tip</a>
+											Was this comment helpful? Mark it as a tip <a class="btn btn-default btn-xs" ng-click="tipComment(comment)" title="Mark as a useful tip (only actual tips should be voted)"><i class="fa fa-lightbulb-o"></i> Tip</a>
 										</span>
 										<span class="comment-flag inappropriate pull-right" ng-hide="comment.user_id == getUser().id">
 											<a ng-click="flagComment(comment)" title="Flag comment as inappropriate"><i class="fa fa-flag" ng-class="comment._isUserFlagged &amp;&amp; 'highlight'"></i></a>

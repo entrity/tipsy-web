@@ -989,13 +989,18 @@ aside .trophie-cont:hover {
   max-width: 600px;
 }
 #drink-page .photos {
-  min-height: 430px;
+  min-height: 50vh;
   border-bottom: 1px solid #ededed;
   background: url(/images/img-upload.png) no-repeat center #FBFBFB;
   background-position: calc(50% + 8px) calc(50% - 30px);
   margin-bottom: 30px;
   overflow: hidden;
   position: relative;
+}
+.info-wrap {
+  background-color: #fff;
+  position: relative;
+  z-index: 1;
 }
 #drink-page .add-photo {
   position: absolute;
@@ -1580,6 +1585,7 @@ tipsy-image-editor a.btn:hover {
 }
 .comment-actions span .fa {
   font-size: 14px;
+  width: 14px;
 }
 .comment-actions span:first-child {
   padding-left: 0;
@@ -1594,12 +1600,18 @@ tipsy-image-editor a.btn:hover {
 .comment-actions span:last-child:before {
   display: none;
 }
-#comments .comment .comment-actions span:last-child {
+#comments .comment .comment-actions span:last-child a {
   opacity: 0;
   transition: all .4s;
+  color: #000;
 }
-#comments .comment:hover .comment-actions span:last-child {
+#comments .comment:hover .comment-actions span:last-child a {
+  opacity: .5;
+  transition: all .4s;
+}
+#comments .comment:hover .comment-actions span:last-child a:hover {
   opacity: 1;
+  transition: all .4s;
 }
 #comments .comment .comment-id .grid:first-child {
   padding-bottom: 5px;
@@ -1607,8 +1619,14 @@ tipsy-image-editor a.btn:hover {
 #comments .comment .comment-vote .fa-thumbs-o-up {
   padding-left: 5px;
 }
+#comments .comment .comment-vote .fa-thumbs-o-up:hover:before {
+  content:'\f164';
+}
 #comments .comment .comment-vote .fa-thumbs-o-down {
   padding-left: 5px;
+}
+#comments .comment .comment-vote .fa-thumbs-o-down:hover:before {
+  content:'\f165';
 }
 
 /*** ACCOUNT SETTINGS ***/
@@ -1896,6 +1914,14 @@ input[type=checkbox],
 input[type=radio] {
   position: relative;
   bottom: -2px;
+}
+@media screen and (max-width: 1165px) {
+  #gallery img.slide {
+    width: auto;
+    height: 50vh;
+    min-width:100%;
+    bottom: 0;
+  }
 }
 
 @media screen and (max-width: 785px) {
