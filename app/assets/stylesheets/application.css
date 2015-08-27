@@ -926,6 +926,9 @@ aside .trophie-cont:hover {
 .grid--center {
   align-items: center;
 }
+.grid--column {
+  flex-direction: column;
+}
 /* Alignment per cell */
 .grid-cell--top {
   align-self: flex-start;
@@ -967,6 +970,66 @@ aside .trophie-cont:hover {
 .fa-caret-up.highlight,
 .fa-caret-down.highlight {
   color: orange;
+}
+/*** HOME STYLES ***/
+
+#home > .hero {
+  background: url('/images/drinks/summer-cocktails.jpg') center center;
+  min-height: 33vh;
+  position: relative;
+}
+#home > .hero:after {
+  content: '';
+  position: absolute;
+  background: rgba(0,0,0,0.3);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+.hero h1 {
+  color: #fff;
+  font-size: 3.6em;
+  font-weight: 600;
+  display: block;
+  text-align: center;
+  text-shadow: 0 3px 3px rgba(0,0,0,0.6);
+  position: relative;
+  z-index: 2;
+}
+.hero h4 {
+  color: #fff;
+  font-size: 2.1em;
+  font-weight: 600;
+  display: block;
+  text-align: center;
+  text-shadow: 0 3px 3px rgba(0,0,0,0.6);
+  position: relative;
+  z-index: 2;
+}
+#home h2 {
+  font-size: 2.1em;
+  padding-bottom: 10px;
+  border-bottom: 1px solid lightgray;
+  margin: 40px 0 10px 0;
+}
+#home .top-lists > .grid > .grid-cell {
+  margin-right: 60px;
+}
+#home .top-lists > .grid > .grid-cell:last-child {
+  margin-right: 0;
+}
+#home .item {
+  height: 40px;
+  padding: 3px 0;
+  margin: 5px 0;
+}
+#home .item .grid-cell {
+  padding-right: 15px;
+}
+#home .item .grid-cell:last-child {
+  padding-right: 0;
 }
 
 /*** DRINK/INGREDIENT/RECIPE-EDITOR/TIPS STYLES ***/
