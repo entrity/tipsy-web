@@ -7,7 +7,7 @@
 	.directive('tipsyImageEditor', [function () {
 		return {
 			restrict: 'E',
-			template: '<div ng-show="isFileReaderSupported" style="min-height:700px; position:relative">\n<!-- No NG binding support for file input. Therefore, we attach behaviour in the link fn. --><input type=file ng-hide="file">\n<div ng-show="file"><img style="max-width:900px; max-height:900px;"><div class="overlay"><div class="overlay-inner"></div></div><a class="btn btn-primary btn-tiny" ng-click="triggerSaveImage()" >Save</a></div>\n</div>\n<span ng-hide="isFileReaderSupported">Your browser does not support FileReader, so image uploads are disabled.</span>',
+			template: '<div ng-show="isFileReaderSupported" style="min-height:700px; position:relative" stop-event="touchend">\n<!-- No NG binding support for file input. Therefore, we attach behaviour in the link fn. --><input type=file ng-hide="file">\n<div ng-show="file"><img style="max-width:900px; max-height:900px;"><div class="overlay"><div class="overlay-inner"></div></div><a class="btn btn-primary btn-tiny" ng-click="triggerSaveImage()" >Save</a></div>\n</div>\n<span ng-hide="isFileReaderSupported">Your browser does not support FileReader, so image uploads are disabled.</span>',
 			controller: ['$scope', function ($scope) {
 				$scope.file = null;
 				$scope.isFileReaderSupported = !!FileReader;
@@ -172,7 +172,7 @@
 			if ($scope.requireLoggedIn()) {
 				$http.put('/users.json', {user:{photo_data:{data_url:dataUrl, filename:filename}}})
 				.success(function(data, status, headers, config){
-					$scope.getUser(function getUserSuccess (data) {
+					$scope.ifUser(function getUserSuccess (data) {
 						user.thumbnail = data.photo_url.replace(/original/, 'thumb');
 						$scope.$close();
 					}, null, true);
