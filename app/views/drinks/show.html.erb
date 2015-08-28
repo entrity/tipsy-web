@@ -18,14 +18,7 @@
       <div id="gallery" class="slider" ng-if="photos.length">
         <img ng-repeat="photo in photos" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{photo.activeUrl}}" />
         <div id="gallery-ctrl">
-          <a ng-click="votePhoto(1)"><i class="fa fa-thumbs-up" ng-class="getActivePhoto()._userVoteSign > 0 &amp;&amp; 'highlight'"></i></a>
-          <span ng-bind="getActivePhoto().score"></span>
-          <a ng-click="votePhoto(-1)"><i class="fa fa-thumbs-down" ng-class="getActivePhoto()._userVoteSign < 0 &amp;&amp; 'highlight'"></i></a>
-          <br>
-          <a ng-click="flagPhoto()"><i class="fa fa-flag" ng-class="isPhotoUserFlagged() &amp;&amp; 'highlight'"></i></a>
-          <a ng-href="{{photos[photos.activeIndex].originalUrl}}" target="_blank"><i class="fa fa-search-plus"></i></a>
-          <br>
-          <a class="" ng-click="openPhotoUploadModal()"><i class="fa fa-camera"></i></a>
+          <a tooltip="Like" tooltip-append-to-body="true" ng-click="votePhoto(1)"><i class="fa fa-thumbs-up" ng-class="getActivePhoto()._userVoteSign > 0 &amp;&amp; 'highlight'"></i></a><a tooltip="Score" tooltip-append-to-body="true" class="votes"><span ng-bind="getActivePhoto().score"></span></a><a tooltip="Dislike" tooltip-append-to-body="true" ng-click="votePhoto(-1)"><i class="fa fa-thumbs-down" ng-class="getActivePhoto()._userVoteSign < 0 &amp;&amp; 'highlight'"></i></a><a tooltip="Report Photo" tooltip-append-to-body="true" ng-click="flagPhoto()"><i class="fa fa-flag" ng-class="isPhotoUserFlagged() &amp;&amp; 'highlight'"></i></a><a tooltip="Upload" tooltip-append-to-body="true" class="" ng-click="openPhotoUploadModal()"><i class="fa fa-camera"></i></a>
         </div>
         <a class="arrow prev" ng-click="showPrevPhoto()"><i class="fa fa-angle-left"></i></a>
         <a class="arrow next" ng-click="showNextPhoto()"><i class="fa fa-angle-right"></i></a>
@@ -50,9 +43,7 @@
       </div>
     </div>
     <div class="votes grid-cell grid--shrink" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-      <div tooltip="Like" tooltip-append-to-body="true" class="arrow up" role="button" aria-label="upvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', 1)"><i class="fa fa-thumbs-up" ng-class="drink._userVoteSign > 0 &amp;&amp; 'highlight'" ></i></a></div>
-      <div tooltip="Score" tooltip-append-to-body="true" class="score" itemprop="ratingValue"><noscript><%= @drink.score %></noscript>{{drink.score}}</div>
-      <div tooltip="Dislike" tooltip-append-to-body="true" class="arrow down" role="button" aria-label="downvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', -1)"><i class="fa fa-thumbs-down" ng-class="drink._userVoteSign < 0 &amp;&amp; 'highlight'" ></i></a></div>
+      <div tooltip="Like" tooltip-append-to-body="true" class="arrow up" role="button" aria-label="upvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', 1)"><i class="fa fa-thumbs-up" ng-class="drink._userVoteSign > 0 &amp;&amp; 'highlight'" ></i></a></div><div tooltip="Score" tooltip-append-to-body="true" class="score" itemprop="ratingValue"><noscript><%= @drink.score %></noscript>{{drink.score}}</div><div tooltip="Dislike" tooltip-append-to-body="true" class="arrow down" role="button" aria-label="downvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', -1)"><i class="fa fa-thumbs-down" ng-class="drink._userVoteSign < 0 &amp;&amp; 'highlight'" ></i></a></div>
     </div>
   </div>
   <div class="grid row center">

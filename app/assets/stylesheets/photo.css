@@ -17,10 +17,46 @@
 }
 #drink-page #gallery #gallery-ctrl {
   position: absolute;
-  top: 50%;
-  margin-top: -20px;
+  top: 10px;
   z-index: 7;
   display: none;
+}
+#drink-page #gallery #gallery-ctrl a {
+  display: inline-block;
+  border: 1px solid rgba(136, 153, 166, 0.5);
+  color: #8899a6;
+  line-height: 29px;
+  height:32px;
+  text-align: center;
+  font-size: 16px;
+  background-color: #fff;
+  border-left: none;
+  border-right: none;
+  padding-left: .7em;
+  padding-right: .7em;
+}
+#drink-page #gallery #gallery-ctrl a:hover,
+#drink-page #gallery-ctrl a .fa-flag:hover {
+  background-color: #E1E8ED;
+  color: #8899a6;
+}
+#drink-page #gallery #gallery-ctrl a.votes {
+  cursor: default;
+}
+#drink-page #gallery #gallery-ctrl a.votes span {
+  font-size: 13px;
+}
+#drink-page #gallery #gallery-ctrl a.votes:hover {
+  background-color: #fff;
+  color: #212121;
+}
+#drink-page #gallery #gallery-ctrl a:first-child {
+  border-radius: 4px 0 0 4px;
+  border-left: 1px solid rgba(136, 153, 166, 0.5);
+}
+#drink-page #gallery #gallery-ctrl a:last-child {
+  border-radius: 0 4px 4px 0;
+  border-right: 1px solid rgba(136, 153, 166, 0.5);
 }
 #gallery-ctrl {
   width: 50%;
@@ -29,26 +65,43 @@
 }
 #drink-page #gallery .arrow {
   position: absolute;
-  width:60px;
-  height: 60px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.3);
-  line-height: 55px;
-  text-align: center;
+  width: 50%;
+  height: 100%;
+  line-height: 100%;
   font-size: 50px;
-  top: 50%;
-  margin-top: -25px;
-  z-index: 7;
+  top: 0;
+  z-index: 3;
   display: none;
   color: #fff;
 }
 #gallery .arrow.prev {
-  left: 36px;
-  padding-right: 6px;
+  left: 0;
+  text-align: left;
+  padding-left: 33px;
 }
 #gallery .arrow.next {
+  right: 0;
+  text-align: right;
+  padding-right: 33px;
+}
+#gallery .arrow i {
+  position: absolute;
+  top: 50%;
+  margin-top: -50px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(0,0,0,0.3);
+  text-align: center;
+  line-height: 55px;
+}
+#gallery .arrow.prev i {
+  left: 36px;
+  padding-right: 5px;
+}
+#gallery .arrow.next i {
   right: 36px;
-  padding-left: 6px;
+  padding-left: 5px;
 }
 #drink-page #gallery:hover .arrow,
 #drink-page #gallery:hover #gallery-ctrl {
@@ -95,17 +148,10 @@
     position: relative;
     margin-bottom: 0;
 
-    -webkit-perspective: 1000px;
-    -moz-perspective: 1000px;
-    -ms-perspective: 1000px;
-    -o-perspective: 1000px;
-    perspective: 1000px;
-
-    -webkit-transform-style: preserve-3d;
-    -moz-transform-style: preserve-3d;
-    -ms-transform-style: preserve-3d;
-    -o-transform-style: preserve-3d;
-    transform-style: preserve-3d;
+    -webkit-transition: opacity .6s ease-in-out;
+    -moz-transition: opacity .6s ease-in-out;
+    -o-transition: opacity .6s ease-in-out;
+    transition: opacity .6s ease-in-out;
 }
 #drink-page .slide {
     position: absolute;
@@ -115,36 +161,24 @@
 .slide.ng-hide-add {
     opacity:1;
 
-    -webkit-transform: rotateX(0deg) rotateY(0deg);
-    -moz-transform: rotateX(0deg) rotateY(0deg);
-    -ms-transform: rotateX(0deg) rotateY(0deg);
-    -o-transform: rotateX(0deg) rotateY(0deg);
-    transform: rotateX(0deg) rotateY(0deg);
-
-    -webkit-transform-origin: right top 0;
-    -moz-transform-origin: right top 0;
-    -ms-transform-origin: right top 0;
-    -o-transform-origin: right top 0;
-    transform-origin: right top 0;
-
-    -webkit-transition:1s linear all;
-    -moz-transition:1s linear all;
-    -o-transition:1s linear all;
-    transition:1s linear all;
+    -webkit-transition: opacity .6s ease-in-out;
+    -moz-transition: opacity .6s ease-in-out;
+    -o-transition: opacity .6s ease-in-out;
+    transition: opacity .6s ease-in-out;
 }
 .slide.ng-hide-add-active {
     opacity:0;
-    -webkit-transform: rotateX(50deg) rotateY(30deg);
-    -moz-transform: rotateX(50deg) rotateY(30deg);
-    -ms-transform: rotateX(50deg) rotateY(30deg);
-    -o-transform: rotateX(50deg) rotateY(30deg);
-    transform: rotateX(50deg) rotateY(30deg);
+    
+    -webkit-transition: opacity .6s ease-in-out;
+    -moz-transition: opacity .6s ease-in-out;
+    -o-transition: opacity .6s ease-in-out;
+    transition: opacity .6s ease-in-out;
 }
 .slide.ng-hide-remove {
-    -webkit-transition:1s linear all;
-    -moz-transition:1s linear all;
-    -o-transition:1s linear all;
-    transition:1s linear all;
+    -webkit-transition: opacity .6s ease-in-out;
+    -moz-transition: opacity .6s ease-in-out;
+    -o-transition: opacity .6s ease-in-out;
+    transition: opacity .6s ease-in-out;
     opacity:0;
 }
 .slide.ng-hide-remove-active {
