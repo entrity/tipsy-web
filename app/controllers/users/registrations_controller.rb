@@ -15,7 +15,20 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
 
     def account_update_params
-      super.merge(params.require(:user).permit(:photo_data => [:data_url, :filename]))
+      super.merge(params.require(:user).permit([
+        {:photo_data => [:data_url, :filename]},
+        :name,
+        :nickname,
+        :location,
+        :twitter,
+        :bio,
+        :no_profanity,
+        :no_alochol,
+        :password,
+        :email,
+        :password_confirmation,
+        :current_password,
+      ]))
     end
 
 end

@@ -38,6 +38,11 @@
         <%= f.password_field  :password, autocomplete: "off", :class => 'form-control', :placeholder => "Confirm Password" %>
       </div>
 
+      <div class="field input-group">
+        <div class="input-group-addon"><i class="fa fa-user"></i></div>
+        <%= f.text_field  :nickname, autocomplete: "off", :class => 'form-control', :placeholder => "Nickname (Optional)" %>
+      </div>
+
       <div class="actions">
         <%= f.submit "Log in", :class => 'btn btn-primary' %>
       </div>
@@ -46,17 +51,17 @@
     <%= render "devise/shared/links" %>
 
   </div>
+  <footer class="grid-cell grid--center fixed">
+    <div class="grid">
+      <div class="grid-cell socials">
+        <a href="" title="Tipsyology on Google+"><i class="fa fa-google-plus"></i></a>
+        <a href="" title="Tipsyology on Facebook"><i class="fa fa-facebook"></i></a>
+        <a href="" title="Tipsyology on Twitter"><i class="fa fa-twitter"></i></a>
+        <a href="" title="Tipsyology on Linkedin"><i class="fa fa-linkedin"></i></a>
+      </div>
+      <div class="grid-cell copyright">
+        Copyright stuff
+      </div>
+    </div>
+  </footer>
 </div>
-<footer class="fixed">
-  <div class="grid">
-    <div class="grid-cell socials">
-      <a href="" title="Tipsyology on Google+"><i class="fa fa-google-plus"></i></a>
-      <a href="" title="Tipsyology on Facebook"><i class="fa fa-facebook"></i></a>
-      <a href="" title="Tipsyology on Twitter"><i class="fa fa-twitter"></i></a>
-      <a href="" title="Tipsyology on Linkedin"><i class="fa fa-linkedin"></i></a>
-    </div>
-    <div class="grid-cell copyright">
-      Copyright stuff
-    </div>
-  </div>
-</footer>

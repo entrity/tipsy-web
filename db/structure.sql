@@ -51,6 +51,20 @@ CREATE EXTENSION IF NOT EXISTS hstore WITH SCHEMA public;
 COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs';
 
 
+--
+-- Name: intarray; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS intarray WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION intarray; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION intarray IS 'functions, operators, and index support for 1-D arrays of integers';
+
+
 SET search_path = public, pg_catalog;
 
 --
@@ -144,9 +158,61 @@ CREATE FUNCTION flag_record(s_table_name text, i_user_id integer, i_flaggable_id
 $$;
 
 
+--
+-- Name: insert_unique_trophy(integer, integer); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION insert_unique_trophy(i_user_id integer, i_category_id integer) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+      DECLARE i_duplicate_ct INT;
+      BEGIN
+        LOCK ONLY trophies IN SHARE MODE;
+        SELECT COUNT(*) FROM trophies WHERE user_id = i_user_id AND category_id = i_category_id LIMIT 1 INTO i_duplicate_ct;
+        IF (i_duplicate_ct = 0) THEN
+          INSERT INTO trophies (user_id, category_id, created_at) VALUES (i_user_id, i_category_id, current_timestamp);
+          RETURN TRUE;
+        ELSE
+          RETURN FALSE;
+        END IF;
+      END;
+      $$;
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
+
+--
+-- Name: comment_tip_votes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE comment_tip_votes (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    comment_id integer NOT NULL,
+    created_at timestamp without time zone
+);
+
+
+--
+-- Name: comment_tip_votes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE comment_tip_votes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: comment_tip_votes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE comment_tip_votes_id_seq OWNED BY comment_tip_votes.id;
+
 
 --
 -- Name: comments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
@@ -213,7 +279,9 @@ CREATE TABLE drinks (
     author_id integer,
     calories smallint,
     prep_time text,
-    required_ingredient_ids integer[]
+    required_canonical_ingredient_ids integer[],
+    user_id integer,
+    related_drink_ids integer[] DEFAULT '{}'::integer[]
 );
 
 
@@ -244,8 +312,73 @@ CREATE TABLE drinks_ingredients (
     drink_id integer,
     ingredient_id integer,
     qty character varying,
-    optional boolean DEFAULT false
+    optional boolean DEFAULT false,
+    canonical_id integer,
+    sort integer DEFAULT 0
 );
+
+
+--
+-- Name: favourites; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE favourites (
+    id integer NOT NULL,
+    user_id integer,
+    drink_id integer,
+    collection_id integer
+);
+
+
+--
+-- Name: favourites_collections; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE favourites_collections (
+    id integer NOT NULL,
+    user_id integer,
+    name character varying,
+    preview_urls character varying[],
+    favourite_ct integer DEFAULT 0
+);
+
+
+--
+-- Name: favourites_collections_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE favourites_collections_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: favourites_collections_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE favourites_collections_id_seq OWNED BY favourites_collections.id;
+
+
+--
+-- Name: favourites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE favourites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: favourites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE favourites_id_seq OWNED BY favourites.id;
 
 
 --
@@ -260,7 +393,8 @@ CREATE TABLE flags (
     flag_bits smallint DEFAULT 0,
     flag_pts smallint NOT NULL,
     created_at timestamp without time zone,
-    description text
+    description text,
+    tallied integer
 );
 
 
@@ -327,6 +461,45 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 
 --
+-- Name: ingredient_revisions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE ingredient_revisions (
+    id integer NOT NULL,
+    user_id integer,
+    ingredient_id integer,
+    parent_id integer,
+    name character varying,
+    description text,
+    prev_description text,
+    canonical_id integer,
+    prev_canonical_id integer,
+    flag_pts smallint DEFAULT 0,
+    status smallint DEFAULT 0,
+    created_at timestamp without time zone
+);
+
+
+--
+-- Name: ingredient_revisions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE ingredient_revisions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ingredient_revisions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE ingredient_revisions_id_seq OWNED BY ingredient_revisions.id;
+
+
+--
 -- Name: ingredients; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -334,7 +507,8 @@ CREATE TABLE ingredients (
     id integer NOT NULL,
     name text NOT NULL,
     description text,
-    revision_id integer
+    revision_id integer,
+    canonical_id integer
 );
 
 
@@ -561,6 +735,37 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: trophies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE trophies (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    category_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: trophies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE trophies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: trophies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE trophies_id_seq OWNED BY trophies.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -597,7 +802,13 @@ CREATE TABLE users (
     nickname character varying,
     bio text,
     twitter character varying,
-    location character varying
+    location character varying,
+    gold_trophy_ct integer DEFAULT 0,
+    silver_trophy_ct integer DEFAULT 0,
+    bronze_trophy_ct integer DEFAULT 0,
+    comment_ct integer DEFAULT 0,
+    revision_ct integer DEFAULT 0,
+    photo_ct integer DEFAULT 0
 );
 
 
@@ -658,6 +869,13 @@ ALTER SEQUENCE votes_id_seq OWNED BY votes.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY comment_tip_votes ALTER COLUMN id SET DEFAULT nextval('comment_tip_votes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY comments ALTER COLUMN id SET DEFAULT nextval('comments_id_seq'::regclass);
 
 
@@ -672,6 +890,20 @@ ALTER TABLE ONLY drinks ALTER COLUMN id SET DEFAULT nextval('drinks_id_seq'::reg
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY favourites ALTER COLUMN id SET DEFAULT nextval('favourites_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY favourites_collections ALTER COLUMN id SET DEFAULT nextval('favourites_collections_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY flags ALTER COLUMN id SET DEFAULT nextval('flags_id_seq'::regclass);
 
 
@@ -680,6 +912,13 @@ ALTER TABLE ONLY flags ALTER COLUMN id SET DEFAULT nextval('flags_id_seq'::regcl
 --
 
 ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ingredient_revisions ALTER COLUMN id SET DEFAULT nextval('ingredient_revisions_id_seq'::regclass);
 
 
 --
@@ -728,6 +967,13 @@ ALTER TABLE ONLY revisions ALTER COLUMN id SET DEFAULT nextval('revisions_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY trophies ALTER COLUMN id SET DEFAULT nextval('trophies_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
@@ -736,6 +982,14 @@ ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regcl
 --
 
 ALTER TABLE ONLY votes ALTER COLUMN id SET DEFAULT nextval('votes_id_seq'::regclass);
+
+
+--
+-- Name: comment_tip_votes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY comment_tip_votes
+    ADD CONSTRAINT comment_tip_votes_pkey PRIMARY KEY (id);
 
 
 --
@@ -752,6 +1006,22 @@ ALTER TABLE ONLY comments
 
 ALTER TABLE ONLY drinks
     ADD CONSTRAINT drinks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: favourites_collections_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY favourites_collections
+    ADD CONSTRAINT favourites_collections_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY favourites
+    ADD CONSTRAINT favourites_pkey PRIMARY KEY (id);
 
 
 --
@@ -776,6 +1046,14 @@ ALTER TABLE ONLY glasses
 
 ALTER TABLE ONLY identities
     ADD CONSTRAINT identities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ingredient_revisions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY ingredient_revisions
+    ADD CONSTRAINT ingredient_revisions_pkey PRIMARY KEY (id);
 
 
 --
@@ -827,6 +1105,14 @@ ALTER TABLE ONLY revisions
 
 
 --
+-- Name: trophies_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY trophies
+    ADD CONSTRAINT trophies_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -840,6 +1126,13 @@ ALTER TABLE ONLY users
 
 ALTER TABLE ONLY votes
     ADD CONSTRAINT votes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_comment_tip_votes_on_user_id_and_comment_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_comment_tip_votes_on_user_id_and_comment_id ON comment_tip_votes USING btree (user_id, comment_id);
 
 
 --
@@ -857,10 +1150,10 @@ CREATE INDEX index_comments_on_user_id ON comments USING btree (user_id);
 
 
 --
--- Name: index_drinks_ingredients_on_drink_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_drinks_ingredients_on_drink_id_and_sort; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_drinks_ingredients_on_drink_id ON drinks_ingredients USING btree (drink_id);
+CREATE INDEX index_drinks_ingredients_on_drink_id_and_sort ON drinks_ingredients USING btree (drink_id, sort);
 
 
 --
@@ -878,10 +1171,45 @@ CREATE INDEX index_drinks_on_name ON drinks USING btree (name);
 
 
 --
+-- Name: index_favourites_collections_on_user_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_favourites_collections_on_user_id_and_name ON favourites_collections USING btree (user_id, name);
+
+
+--
+-- Name: index_favourites_on_collection_id_and_drink_id_and_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_favourites_on_collection_id_and_drink_id_and_user_id ON favourites USING btree (collection_id, drink_id, user_id);
+
+
+--
+-- Name: index_favourites_on_user_id_and_drink_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_favourites_on_user_id_and_drink_id ON favourites USING btree (user_id, drink_id);
+
+
+--
 -- Name: index_flags; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_flags ON flags USING btree (user_id, flaggable_id, flaggable_type);
+
+
+--
+-- Name: index_ingredient_revisions_on_ingredient_id_and_user_id_and_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_ingredient_revisions_on_ingredient_id_and_user_id_and_id ON ingredient_revisions USING btree (ingredient_id, user_id, id);
+
+
+--
+-- Name: index_ingredients_on_canonical_id_and_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_ingredients_on_canonical_id_and_id ON ingredients USING btree (canonical_id, id);
 
 
 --
@@ -1024,4 +1352,24 @@ INSERT INTO schema_migrations (version) VALUES ('20150725173001');
 INSERT INTO schema_migrations (version) VALUES ('20150725174022');
 
 INSERT INTO schema_migrations (version) VALUES ('20150726180135');
+
+INSERT INTO schema_migrations (version) VALUES ('20150728010414');
+
+INSERT INTO schema_migrations (version) VALUES ('20150729003919');
+
+INSERT INTO schema_migrations (version) VALUES ('20150730032132');
+
+INSERT INTO schema_migrations (version) VALUES ('20150803235732');
+
+INSERT INTO schema_migrations (version) VALUES ('20150803235836');
+
+INSERT INTO schema_migrations (version) VALUES ('20150806001328');
+
+INSERT INTO schema_migrations (version) VALUES ('20150806004006');
+
+INSERT INTO schema_migrations (version) VALUES ('20150806235034');
+
+INSERT INTO schema_migrations (version) VALUES ('20150810235704');
+
+INSERT INTO schema_migrations (version) VALUES ('20150815175717');
 

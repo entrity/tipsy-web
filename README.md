@@ -3,8 +3,8 @@
 ### System dependencies
 
 * Ruby 2.2
-* Bower
-* Postgresql
+* Bower 1.4.1
+* PostgreSQL 9.3.9
 
 ### How to set up dev env
 

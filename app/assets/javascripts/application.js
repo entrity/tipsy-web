@@ -14,29 +14,38 @@
 //= require 'angular-animate/angular-animate'
 //= require 'angular-aria/angular-aria.min'
 //= require 'angular-bootstrap/ui-bootstrap-tpls.min'
+//= require 'angular-drag-and-drop-lists/angular-drag-and-drop-lists.min'
 //= require 'angular-resource/angular-resource.min'
 //= require 'angular-route/angular-route.min'
 //= require 'angular-sanitize/angular-sanitize.min'
 //= require 'angular-touch/angular-touch.min'
 //= require 'angular-ui-select/dist/select.min'
 //= require google-diff-match-patch/diff_match_patch
+//= require hammerjs/hammer.min.js
 //= require ng-file-upload/ng-file-upload.min
+//= require ng-pageslide/dist/angular-pageslide-directive.min
 //= require pagedown/Markdown.Converter
 //= require pagedown/Markdown.Sanitizer
 //= require pagedown/Markdown.Editor
+//= require ryanmullins-angular-hammer/angular.hammer.min
 //= require image-resize-crop-canvas/component
-//= require turbolinks
 //= require ui-bootstrap
+//= require jquery.toolbar.min
+//= require bootstrap-slider
 //= require_tree .
 
 (function(){
 
 	angular.module('tipsy', [
+		'dndLists',
+		'hmTouchEvents',
 		'ngAria',
 		'ngResource',
 		'ngSanitize',
+		'pageslide-directive',
 		'tipsy.drink',
 		'tipsy.factories',
+		'tipsy.favourites',
 		'tipsy.find',
 		'tipsy.image',
 		'tipsy.ingredient',
@@ -47,7 +56,8 @@
 		'ui.bootstrap',
 		'ui.select'
 	])
-	.run(['$rootScope', '$resource', '$modal', '$http', '$templateCache', '$q', function ($rootScope, $resource, $modal, $http, $templateCache, $q) {
+	.run(['$rootScope', '$resource', '$modal', '$http', '$q', '$location', '$anchorScroll', '$window', 'User',
+	function ($rootScope, $resource, $modal, $http, $q, $location, $anchorScroll, $window, User) {
 		Object.defineProperties($rootScope, {
 			addToCabinet: {
 				configurable: false,
@@ -67,7 +77,7 @@
 			},
 			createResolvedPromise: {
 				configurable: false,
-				value: function (val) {
+				value: function createResolvedPromise (val) {
 					var deferred = $q.defer();
 					deferred.resolve(val);
 					return deferred.promise;
@@ -81,15 +91,39 @@
 			},
 			getUser: {
 				configurable: false,
-				value: function (forceReload) {
+				value: function getUser (callback, forceReload) {
+					// Fetch user from API
 					if (forceReload || !$rootScope.currentUser) {
-						$rootScope.currentUser = $resource('/users/0.json').get(null, function (data) {
-							if (data.photo_url) data.tinyAvatar = data.photo_url.replace(/original/, 'tiny')
+						window.user = $rootScope.currentUser = $resource('/users/0.json').get(null, function (data) {
+							if (data.photo_url) data.tinyAvatar = data.photo_url.replace(/original/, 'tiny');
+							window.user = $rootScope.currentUser = new User(data);
 						});
-						window.user = $rootScope.currentUser;
 					}
+					// Schedule callbacks
+					if (callback) $rootScope.currentUser.$promise.then(
+						function () {
+							callback($rootScope.currentUser);
+						},
+						function () {
+							callback($rootScope.currentUser);
+						}
+					);
+					// Return
 					return $rootScope.currentUser;
 				}
+			},
+			getWindowVal: {
+				configurable: false,
+				value: function (key) {
+					return window[key];
+				},
+			},
+			gotoFrag: {
+				configurable: false,
+				value: function gotoFrag (fragment) {
+					$location.hash(fragment);
+					$anchorScroll();
+				},
 			},
 			fetchOpenReviewCt: {
 				configurable: false,
@@ -105,15 +139,53 @@
 					});
 				}
 			},
+			ifUser: {
+				value: function (successCallback, failureCallback) {
+					this.getUser(function (user) {
+						if (user.id) (typeof(successCallback) === 'function') && successCallback(user);
+						else         (typeof(failureCallback) === 'function') && failureCallback(user);
+					});
+				}
+			},
+			isInCabinet: {
+				configurable: false,
+				value: function isInCabinet (id) {
+					if (typeof(id) === "object") id = id.id;
+					if (typeof(id) === "string") id = parseInt(id);
+					for (var i = 0; i < this.cabinet.length; i++) {
+						if (this.cabinet[i].id == id) return true;
+					}
+					return false;
+				}
+			},
+			isInShoppingList: {
+				configurable: false,
+				value: function isInShoppingList (id) {
+					if (typeof(id) === "object") id = id.id;
+					if (typeof(id) === "string") id = parseInt(id);
+					for (var i = 0; i < this.shoppingList.length; i++) {
+						if (this.shoppingList[i].id == id) return true;
+					}
+					return false;
+				}
+			},
+			// Should only be called in views. For other uses, use this.ifUser()
 			isLoggedIn: {
 				configurable: false,
 				value: function (forceReload) {
-					return $rootScope.getUser(forceReload).id;
+					return this.getUser(null, forceReload).id;
+				}
+			},
+			isToggled: {
+				configurable: false,
+				value: function isToggled (key) {
+					if (!(key in this.tipsyconfig)) this.tipsyconfig[key] = JSON.parse(localStorage.getItem(key));
+					return this.tipsyconfig[key];
 				}
 			},
 			loadCabinetToFuzzyFindResults: {
 				configurable: false,
-				value: function () {
+				value: function loadCabinetToFuzzyFindResults () {
 					this.finder.ingredients = angular.copy(this.cabinet);
 					this.finder.fetchDrinksForIngredients();
 				}
@@ -145,6 +217,12 @@
 					})
 				}
 			},
+			parsePsqlIntarray: {
+				configurable: false,
+				value: function parsePsqlIntarray (text) {
+					text.substr(1, text.length-2).split(',').map(function (num) { return parseInt(num) });
+				}
+			},
 			removeFromCabinet:{
 				configurable: false,
 				value: function (ingredient) {
@@ -159,8 +237,13 @@
 			},
 			requireLoggedIn: {
 				configurable: false,
-				value: function () {
-					if (this.isLoggedIn())
+				value: function requireLoggedIn (successCallback, failureCallback) {
+					if (successCallback || failureCallback) {
+						this.ifUser(successCallback, failureCallback||function(){
+							$rootScope.openLoginModal('This action requires you to log in.');
+						});
+					}
+					else if (this.isLoggedIn())
 						return true;
 					else
 						this.openLoginModal('This action requires you to log in.');
@@ -169,6 +252,39 @@
 			shoppingList: {
 				configurable: false,
 				value: JSON.parse(localStorage.getItem('shoppingList')) || []
+			},
+			sidebar: {
+				configurable: false,
+				value: {} // just for holding config options
+			},
+			tipsyconfig: {
+				configurable: false,
+				value: {} // just for holding config options
+			},
+			toggle: {
+				configurable: false,
+				value: function toggle (key, object, value) {
+					object || (object = this.tipsyconfig);
+					object[key] = value == null ? !object[key] : value;
+					localStorage.setItem(key, object[key]);
+				}
+			},
+			toggleSidebar: { // deprecated
+				configurable: false,
+				value: function toggleSidebar () {
+					this.sidebar.open = !this.sidebar.open;
+					localStorage.setItem('sidebar.open', this.sidebar.open);
+				}
+			},
+			visit: {
+				configurable: false,
+				value: function visit (url, event) {
+					if (event) {
+						event.stopPropagation();
+						event.preventDefault();
+					}
+					$window.location.href = url;
+				}
 			},
 		});
 		/* Support fns */
@@ -194,6 +310,12 @@
 		/* Initialization calls */
 		while (removeDuplicatesFromAside($rootScope.cabinet)) {}
 		while (removeDuplicatesFromAside($rootScope.shoppingList)) {}
+		$rootScope.sidebar.open = JSON.parse(localStorage.getItem('sidebar.open')||false);
+		$rootScope.isToggled('leftbarOpen');
+		$rootScope.isToggled('rightbarOpen');
+		$rootScope.ifUser(null, function (user) {
+			if (!user.id) $rootScope.toggle('rightbarOpen', null, false);
+		});
 	}])
 	.filter('tipsyFindableClass', function () {
 		return function (item) {

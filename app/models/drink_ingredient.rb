@@ -4,4 +4,5 @@ class DrinkIngredient < ActiveRecord::Base
   belongs_to :ingredient
   delegate :name, to: :ingredient
   delegate :name, to: :drink, prefix: true
+  delegate :url_path, to: :ingredient
 end

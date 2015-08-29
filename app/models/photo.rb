@@ -5,7 +5,7 @@ class Photo < ActiveRecord::Base
   belongs_to :drink, inverse_of: :photos
   belongs_to :user, inverse_of: :photos
 
-  has_attached_file :file, :styles => { :medium => "400x400>", :thumb => "100x66>" }
+  has_attached_file :file, :styles => { :large => "1060", :medium => "400x400>", :thumb => "100x66>" }
 
   validates_with AttachmentPresenceValidator, :attributes => :file
   validates_with AttachmentContentTypeValidator, :attributes => :file, :content_type => ["image/jpeg", "image/png"]
@@ -16,6 +16,11 @@ class Photo < ActiveRecord::Base
 
   def medium_url
     file.url(:medium)
+  end
+
+  def publish!
+    super
+    user.increment_photo_ct!
   end
   
   # @override

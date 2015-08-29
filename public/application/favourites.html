@@ -1,0 +1,30 @@
+<div>
+	<form ng-show="newCollection._toggled">
+		<label>Name</label>
+		<input type=text ng-model="newCollection.name">
+		<a class="btn btn-primary" ng-click="saveCollection()">Save</a>
+	</form>
+	<div ng-hide="newCollection._toggled">
+		<div class="favourite-collection">
+			<a ng-click="newCollection._toggled=true"><i class="fa fa-plus-circle"></i> New Collection</a>
+		</div>
+		<div class="favourite-collection" ng-repeat="collection in collections | orderBy: 'name'">
+			<a ng-click="clickCollection(collection)">
+				<img ng-src="{{collection.preview_urls[0] || '/images/anonymous.jpg'}}">
+				<img ng-src="{{collection.preview_urls[1] || '/images/anonymous.jpg'}}">
+				<img ng-src="{{collection.preview_urls[2] || '/images/anonymous.jpg'}}">
+				<img ng-src="{{collection.preview_urls[3] || '/images/anonymous.jpg'}}">
+				{{collection.name}}
+				<span>{{collection.favourite_ct}} items in collection</span>
+			</a>
+			<div ng-if="collection._show" ng-controller="FavouritesCollectionCtrl">
+				<a class="btn btn-default" ng-click="collection._show=false">Hide</a>
+				<span>{{collection.favourite_ct}} items in collection</span>
+				<a ng-repeat="fav in favourites" ng-href="/drinks/{{fav.drink_id}}.html">
+					{{fav.name}}
+					<img ng-src="{{fav.preview_url}}">
+				</a>
+			</div>
+		</div>
+	</div>
+</div>

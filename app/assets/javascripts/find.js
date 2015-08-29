@@ -1,14 +1,16 @@
 (function () {
 	angular.module('tipsy.find', [])
-	.controller('FindCtrl', ['$rootScope', '$scope', '$resource', '$location', 'Drink', function ($rootScope, $scope, $resource, $location, Drink) {
+	.controller('FindCtrl', ['$rootScope', '$scope', '$resource', '$location', 'Drink', 'Ingredient', function ($rootScope, $scope, $resource, $location, Drink, Ingredient) {
 		$rootScope.finder = {findables:[]};
 		$scope.finder.ingredients = [];
 		$scope.finder.options = new Object;
 		$scope.finder.fetchFindables = function ($select) {
 			var searchTerm = $select.search;
 			if (searchTerm && searchTerm.length > 0) {
+				var ingredientIds = this.ingredients.map(function (item) { return item.id });
 				var params = {
 					fuzzy: searchTerm,
+					'exclude_ingredient_ids[]': ingredientIds,
 					profane: !$scope.finder.options.noProfanity,
 					drinks: !(this.ingredients && this.ingredients.length)
 				}
@@ -27,12 +29,12 @@
 				switch (parseInt($item.type)) {
 					case window.DRINK:
 						var url = new Drink($item).getUrl();
-						Turbolinks.visit(url); break;
+						$scope.visit(url); break;
 					case window.INGREDIENT:
 						this.findables = [];
 						delete $select.search;
 						delete $select.selected;
-						if ($scope.onSplashScreen) Turbolinks.visit('/?ingredient_id='+$item.id);
+						if ($scope.onSplashScreen) $scope.visit('/?ingredient_id='+$item.id);
 						else $scope.finder.addIngredient($item);
 						break;
 					default:
@@ -42,12 +44,18 @@
 		}
 		// Add ingredient to $scope.finder.ingredients and fetch drink results
 		$scope.finder.addIngredient = function (ingredient) {
-			this.ingredients.push(ingredient);
+			this.ingredients.push(new Ingredient(ingredient));
+			angular.element('body').animate({scrollTop:0}, 200);
 			this.fetchDrinksForIngredients();
 		}
 		$scope.finder.removeIngredient = function (index) {
-			this.ingredients.splice(index, 1);
-			this.fetchDrinksForIngredients();
+			if (index == null) {
+				this.ingredients = [];
+				this.drinks = [];
+			} else {
+				this.ingredients.splice(index, 1);
+				this.fetchDrinksForIngredients();
+			}
 		}
 		$scope.finder.loadNextPage = function () {
 			var pageNumber = (this.drinks.page || 0) + 1;
@@ -55,16 +63,23 @@
 		}
 		// Define array or (append if array already exists) $scope.finder.drinks
 		$scope.finder.fetchDrinksForIngredients = function (pageNumber, append) {
-			if (!($scope.finder.ingredients && $scope.finder.ingredients.length && $scope.finder.ingredients.length > 1)) return;
-			var ingredientIds = $scope.finder.ingredients.map(function (ingredient) {
-				return ingredient.id;
+			if (!($scope.finder.ingredients && $scope.finder.ingredients.length)) return;
+			var ingredientIds = [], canonicalIngredientIds = [];
+			$scope.finder.ingredients.forEach(function (ingredient) {
+				if (isNaN(ingredient.canonical_id))
+					ingredientIds.push(ingredient.id);
+				else
+					canonicalIngredientIds.push(ingredient.canonical_id);
 			});
 			var drinks = $resource('/drinks/:id.json').query({
 				'ingredient_id[]':ingredientIds,
-				'select[]':['id', 'name', 'comment_ct', 'score'],
+				'canonical_ingredient_id[]':canonicalIngredientIds,
+				'select[]':['id', 'name', 'comment_ct', 'up_vote_ct', 'ingredient_ct'],
 				page: (pageNumber || 1),
 				profane: ($scope.finder.options.noProfanity ? false : null),
 			}, function (data, responseHeaders) {
+				// make Drinks from data
+				drinks = drinks.map(function (datum) { return new Drink(datum) });
 				if (append && $scope.finder.drinks)
 					$scope.finder.drinks = $scope.finder.drinks.concat(drinks);
 				else
@@ -91,6 +106,17 @@
 					}
 				}
 			});
+			// Fetch suggestions if due
+			if ($scope.finder.ingredients.length >= 3) {
+				$scope.finder.suggestions = $resource('/drinks/suggestions.json').get(
+					{'ingredient_id[]':ingredientIds,'canonical_ingredient_id[]':canonicalIngredientIds},
+					function (data) {
+						$scope.finder.suggestions.drinks = $scope.finder.suggestions.drinks.map(function (obj) { return new Drink(obj) })
+					}
+				);
+			} else {
+				$scope.finder.suggestions = [];
+			}
 		}
 		$scope.finder.hideIngredientCtls = function hideIngredientCtls () {
 			this.ingredients.forEach(function (ingredient) {
@@ -107,10 +133,27 @@
 				);
 			}
 		}
+		// Subtract array b from a (a - b)
+		function arrayDifference (a, b) {
+			var difference = [];
+			var mapB = {};
+			for (var i in b) mapB[b[i]] = true;
+			for (var i in a) if (!mapB[a[i]]) difference.push(a[i]);
+			return difference;
+		}
+		// Return an int array parsed from Posgres array
+		function toIntArray (str) {
+			if (str && str.length)
+				return JSON.parse(str.substr(1, str.length-2));
+			else
+				return [];
+		}
 	}])
 	;
-	
+
 	function compareFuzzyFindResults (a, b, searchTerm) {
+		var levenshteinDifference = a.distance - b.distance;
+		if (levenshteinDifference != 0) return levenshteinDifference;
 		var searchTermIndex = 0;
 		var length = Math.min(a.length, b.length);
 		for (var i = 0; i < length; i++) {

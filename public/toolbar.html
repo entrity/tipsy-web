@@ -1,9 +1,12 @@
-<header>
+<header ng-class="{'left-open':isToggled('leftbarOpen'), 'right-open':isToggled('rightbarOpen')}">
   <nav class="grid grid--center" ng-controller="ToolbarCtrl">
 
     <!-- START UNIVERSAL USER NAV -->
+    <div class="grid-cell grid--shrink" style="display: none;">
+      <a ng-click="toggle('leftbarOpen')"><i class="fa fa-bars"></i></a>
+    </div>
     <div class="logo grid-cell">
-      <a href="/"><img src="/images/tipsyology-logo.png" /></a>
+      <a href="/" ng-click="visit('/')"><img src="/images/tipsyology-logo.png" /></a>
     </div>
     <div class="search grid-cell">
       <div class="input-group">
@@ -15,9 +18,6 @@
     <!-- START LOGGED OUT USER NAV -->
     <div class="logged-out grid-cell" ng-cloak ng-hide="isLoggedIn()">
       <div class="grid grid--center">
-        <div class="grid-cell">
-          <a ng-click="openSignInModal()"><small>Browse <i class="fa fa-caret-down"></i></small></a>
-        </div>
         <div class="grid-cell user">
           <a href="/users/sign_up/"><small>Sign up</small></a>
         </div>
@@ -29,15 +29,12 @@
     <!-- END LOGGED OUT USER NAV -->
 
     <!-- START LOGGED IN USER NAV -->
-    <div class="logged-in grid-cell" ng-cloak ng-show="isLoggedIn()">
+    <div class="logged-in grid-cell">
       <div class="grid grid--center">
-        <div class="grid-cell">
-          <a href="/drinks"><small>Browse <i class="fa fa-caret-down"></i></small></a>
-        </div>
-        <div class="grid-cell review" ng-show="openReviewCt">
+        <div class="grid-cell review" ng-cloak ng-show="isLoggedIn()" ng-show="openReviewCt">
           <a ng-click="openReviewModal()"><small>Review</small> <span class="badge">{{openReviewCt}}</span></a>
         </div>
-        <div class="grid-cell user rep-cont dropdown">
+        <div class="grid-cell user rep-cont dropdown" ng-cloak ng-show="isLoggedIn()">
           <!-- REP SUMMARY -->
           <div id="rep-alerts">
             <a ng-click="openRepChangesMenu($event)">
@@ -58,16 +55,8 @@
             <li ng-show="!(toolbar.repChanges && toolbar.repChanges.length)"><em>No new point distributions</em></li>
           </ul>
         </div>
-        <!-- TROPHIES SUMMARY -->
-        <div class="grid-cell user trophie-cont">
-          <a href="#">
-            <i class="fa fa-trophy gold"></i> {{getUser().goldBadgeCt||0}}
-            <i class="fa fa-trophy silver"></i> {{getUser().silverBadgeCt||0}}
-            <i class="fa fa-trophy bronze"></i> {{getUser().bronzeBadgeCt||0}}
-          </a>
-        </div>
-        <div class="grid-cell user avatar-cont dropdown">
-          <!-- USER AVATAR -->
+        <!-- USER AVATAR -->
+        <div class="grid-cell user avatar-cont dropdown" ng-cloak ng-show="isLoggedIn()">
           <div class="grid" id="avatar-dropdown">
             <a class="avatar" ng-click="openToolbarMenu($event, 'avatar')">
               <img ng-src="{{getUser().tinyAvatar}}">
@@ -75,10 +64,13 @@
           </div>
           <!-- USER DROPDOWN -->
           <ul class="dropdown-menu dropdown-menu-right" ng-show="toolbar.avatar">
-            <li><a href="/users/edit"><i class="fa fa-user"></i> Markham Anderson</a></li>
-            <li><a href="/users/edit"><i class="fa fa-cog"></i> Account Settings</a></li>
-            <li><a href="/users/sign_out"><i class="fa fa-sign-out"></i> Log out</a></li>
+            <li><a href="/users/edit"><i class="fa fa-user"></i> Profile</a></li>
+            <li><a href="/users/edit"><i class="fa fa-cog"></i> Setting</a></li>
+            <li><a href="/users/sign_out" ng-click="visit('/users/sign_out', $event)"><i class="fa fa-sign-out"></i> Log out</a></li>
           </ul>
+        </div>
+        <div class="grid-cell grid--shrink" ng-cloak ng-show="isLoggedIn()">
+          <a ng-click="toggle('rightbarOpen')"><i class="fa fa-bars"></i></a>
         </div>
       </div>
     </div>

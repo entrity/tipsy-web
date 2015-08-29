@@ -7,92 +7,81 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tipsyology</title>
   <meta property="og:site_name" content="Tipsyology - Discover, create and share all things tipsy!">
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site"     content="@tipsyology" />
   <meta property="fb:app_id"    content="1586283884980033" />
   <% if @canonical_url.present? %>
-    <%= tag :link, rel: 'canonical', href: @canonical_url %>
-    <%= tag :meta,   property: 'og:url',         content: @canonical_url %>
+    <%= tag :link,   rel:      'canonical',           href: @canonical_url %>
+    <%= tag :meta,   property: 'og:url',              content: @canonical_url %>
   <% end %>
   <% if @drink %>
     <meta property="og:type" content="recipe" />
-    <%= tag :meta,   property: 'og:title',       content: "#{@drink.name} cocktail" %>
-    <%= tag :meta,   property: 'og:description', content: (@drink.description || "How to make a #{@drink.name}")[0...300] %>
+    <%= tag :meta,   property: 'og:title',            content: "The #{@drink.name} Cocktail" %>
+    <%= tag :meta,   property: 'og:description',      content: (@drink.description || "Learn how to make a #{@drink.name} cocktail and thousands of other drinks @ Tipsyology.com")[0...300] %>
   <% end -%>
-  <%= tag :meta,     property: 'og:image',       content: (@meta_photo || '/images/labcoat.png') %>
+  <%= tag :meta,     property: 'og:image',            content: (@meta_photo || '/images/labcoat.png') %>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800'>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="/whhg-font/css/whhg.css">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="/js/jquery.nanoscroller.min.js"></script>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <link rel="shortcut icon" href="/images/favicon.png">
 </head>
-<body ng-app='tipsy'>
+<body ng-app='tipsy' itemscope itemtype="http://schema.org/WebPage">
+  <% if @canonical_url.present? %>
+    <%= tag :meta, itemprop: 'url', content: @canonical_url %>
+  <% end %>
 
 <div class="wrapper">
   <ng-include src="'/toolbar.html'"></ng-include>
+  <% unless @no_leftbar %>
+    <pageslide id="sidebar-l" ps-open="tipsyconfig.leftbarOpen" ps-squeeze="true" ps-side="left" ng-include='"/application/leftbar.html"'></pageslide>
+  <% end %>
   <div id="main-cont" class="grid">
     <div class="content grid-cell">
       <ng-include src="'/find-results.html'" ng-if="finder.ingredients.length"></ng-include>
-      <div ng-hide="hideRailsContent"><%= yield %></div>
+      <div ng-hide="finder.ingredients.length"><%= yield %></div>
     </div>
   </div>
-  <aside class="fancy-sidebar grid-cell nano">
-    <div class="sidebar-btn">
-      <i class="fa fa-bars"></i>
-    </div>
-    <div class="nano-content">
-      <div class="sidebar-controls">
-        <a class="btn btn-primary" title="Create a cocktail"><i class="fa fa-plus-square"></i></a>
-        <a class="btn btn-primary" title="Collections"><i class="fa fa-heart"></i></a>
-      </div>
-      <div class="ingredients-list">
-        <ul>
-          <li class="sidebar-list-first">My Fridge <i class="icon-fridge"></i></li>
-          <li ng-repeat="item in cabinet track by item.id" class="item">
-            {{item.name}}
-            <a ng-click="removeFromCabinet(item)"><i class="fa fa-times"></i></a>
-          </li>
-          <li ng-show="!cabinet || !cabinet.length" style="font-style:italic">(empty)</li>
-          <li><a ng-click="loadCabinetToFuzzyFindResults()"><i class="fa fa-glass"></i> What can I make?</a></li>
-        </ul>
-      </div>
-      <div class="shopping-list">
-        <ul>
-          <li class="sidebar-list-first">Shopping List <i class="fa fa-shopping-cart"></i></li>
-          <li ng-repeat="item in shoppingList track by item.id" class="item">
-            {{item.name}}
-            <a ng-click="removeFromShoppingList(item)"><i class="fa fa-times"></i></a>
-          </li>
-          <li ng-show="!shoppingList || !shoppingList.length" style="font-style:italic">(empty)</li>
-          <li><a><i class="fa fa-cart-arrow-down"></i> Export shopping list</a></li>
-        </ul>
-      </div>
-    </div>
-  </aside>
+  <% unless @no_rightbar %>
+    <pageslide id="sidebar-r" ps-open="tipsyconfig.rightbarOpen" ps-squeeze="true" ps-side="right" ng-include='"/application/rightbar.html"'></pageslide>
+  <% end %>
   <footer class="in-app">
-    <div class="grid grid--center center">
-        <div class="grid-cell socials">
-          <a href="" title="Tipsyology on Google+"><i class="fa fa-google-plus"></i></a>
-          <a href="" title="Tipsyology on Facebook"><i class="fa fa-facebook"></i></a>
-          <a href="" title="Tipsyology on Twitter"><i class="fa fa-twitter"></i></a>
-          <a href="" title="Tipsyology on Linkedin"><i class="fa fa-linkedin"></i></a>
-        </div>
-        <div class="grid-cell copyright">
-          Copyright stuff
-        </div>
+    <div class="grid grid--center row center aligner">
+      <div class="grid-cell copyright grid--shrink">
+        &copy; 2015 Tipsyology &nbsp; | &nbsp; <a href="/tos.html">Terms of Use</a> &nbsp; | &nbsp; <a href="https://github.com/entrity/tipsy-web-public/issues/new">Report a Bug &nbsp;<i class="fa fa-bug"></i></a>
+      </div>
+    </div>
+    <div class="grid grid--center row center aligner">
+      <div class="grid-cell socials grid--shrink">
+        <a href="" title="Tipsyology on Facebook"><i class="fa fa-facebook"></i></a>
+        <a href="" title="Tipsyology on Twitter"><i class="fa fa-twitter"></i></a>
+        <a href="" title="Tipsyology on Google+"><i class="fa fa-google-plus"></i></a>
+        <a href="" title="Tipsyology on Linkedin"><i class="fa fa-linkedin"></i></a>
+      </div>
     </div>
   </footer>
 </div>
 <script type="text/javascript">
   $(".nano").nanoScroller();
 
-  $(document).ready(function(){
-    $(".sidebar-btn").click(function(){
-      $(".fancy-sidebar").toggleClass( "open" );
-    })
-  })
+  var body = document.body,
+    timer;
+
+  window.addEventListener('scroll', function() {
+    clearTimeout(timer);
+    if(!body.classList.contains('disable-hover')) {
+      body.classList.add('disable-hover')
+    }
+    
+    timer = setTimeout(function(){
+      body.classList.remove('disable-hover')
+    },500);
+  }, false);
 </script>
 </body>
 </html>

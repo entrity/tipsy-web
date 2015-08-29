@@ -36,6 +36,12 @@ set :keep_releases, 5
 
 namespace :deploy do
 
+  before :restart, :cp_robots do
+    on roles(:web) do
+      execute "if [[ -r #{shared_path}/public/robots.txt ]]; then rm #{release_path}/public/robots.txt; ln #{shared_path}/public/robots.txt #{release_path}/public/; fi"
+    end
+  end
+
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:

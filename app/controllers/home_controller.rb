@@ -5,7 +5,7 @@ layout nil
     # Presence of params[:ingredient_id] indicates that this request comes as a consequence
     # of the user selecting an ingredient from the fuzzy finder on the splash screen.
     if user_signed_in? || params[:ingredient_id].present?
-      render html: nil, layout: 'application'
+      render 'signed_in_home', layout: 'application'
     else
       render layout: nil
     end
@@ -15,7 +15,11 @@ layout nil
     if params[:fuzzy].blank?
       render json:{errors:['Missing search parameter']}, status:406
     else
-      opts = {profane:parse_bool(:profane), drinks:parse_bool(:drinks)}
+      opts = {
+        profane:                parse_bool(:profane),
+        drinks:                 parse_bool(:drinks),
+        exclude_ingredient_ids: params[:exclude_ingredient_ids],
+      }
       hashes = FuzzyFindable.autocomplete(params[:fuzzy], opts)
       render json:hashes
     end

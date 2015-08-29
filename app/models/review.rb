@@ -4,7 +4,7 @@ class Review < ActiveRecord::Base
   belongs_to :contributor, class_name: 'User'
   belongs_to :reviewable, polymorphic: true
 
-  has_many :votes, class_name: 'ReviewVotes'
+  has_many :votes, class_name: 'ReviewVote'
 
   validates :contributor, presence: true
 
@@ -16,9 +16,24 @@ class Review < ActiveRecord::Base
     if points == 0
       raise 'Points are not to be awarded when Review.points is zero'
     end
-    operator = points > 0 ? '>' : '<'
-    votes.where("points #{operator} 0").each do |vote|
-      vote.award_points!
+    # Increment user vote cts; award points; award trophies
+    votes.each do |vote|
+      if (vote.points <=> 0) == (points <=> 0)
+        PointDistribution.award_winning_vote(vote.user_id, vote)
+        vote.user.increment_majority_votes!
+      else
+        vote.user.increment_minority_votes!
+      end
+    end
+    # Increment flag cts and award trophies
+    flags = reviewable.flags.where(tallied: false)
+    flags.update_all tallied: true
+    flags.each do |flag|
+      if points > 0
+        flag.user.increment_helpful_flags!
+      else
+        flag.user.increment_unhelpful_flags!
+      end
     end
   end
 
@@ -60,13 +75,22 @@ class Review < ActiveRecord::Base
     )
     # If this Review is closed, set status of reviewable, distribute points to voters
     unless reload.open
-      if points > 0
-        reviewable.publish!
-      else
-        reviewable.update_attributes! status:status
-      end
+      reviewable.update_attributes! status:status
+      reviewable.publish! if points > 0
       award_points
     end
   end
+
+  private
+
+    def status
+      if points > 0
+        Flaggable::APPROVED
+      elsif points < 0
+        Flaggable::REJECTED
+      else
+        Flaggable::NEEDS_REVIEW
+      end
+    end
 
 end

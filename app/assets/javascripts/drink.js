@@ -31,7 +31,7 @@
 				configurable: false,
 			},
 			getUrl: {
-				value: function () {
+				value: function getUrl () {
 					var nameSlug = this.name ? '-' + this.name.toLowerCase().replace(/[^\w]+/g, '-') : '';
 					return '/recipe/'+this.id+nameSlug;
 				},
@@ -40,6 +40,20 @@
 			getUserFlagsMap: {
 				value: function getUserFlagsMap () {
 					return this.getMap('userFlagsMap', this.userFlags, 'flaggable_type', 'flaggable_id');
+				},
+				configurable: false,
+			},
+			getUserTipVotesMap: {
+				// @return map of comment_id to CommentTipVote
+				value: function getUserTipVotesMap () {
+					if (!this.userTipVotesMap && this.userTipVotes) {
+						var drink = this;
+						this.userTipVotesMap = {};
+						this.userTipVotes.forEach(function (tipVote) {
+							drink.userTipVotesMap[tipVote.comment_id] = tipVote;
+						});
+					}
+					return this.userTipVotesMap;
 				},
 				configurable: false,
 			},
@@ -57,6 +71,14 @@
 				},
 				configurable: false,
 			},
+			setUserTipVote: {
+				value: function setUserTipVote (comment) {
+					var map;
+					if (map = this.getUserTipVotesMap())
+						comment._isUserTipVoted = map[comment.id];
+				},
+				configurable: false,
+			},
 			setUserVoteSign: {
 				value: function setUserVoteSign (votable, votableType) {
 					var map;
@@ -68,9 +90,24 @@
 		});
 		return Drink;
 	}])
-	.factory('Revision', ['$resource', function ($resource) {
+	.factory('Revision', ['$resource', 'Drink', function ($resource, Drink) {
 		var Revision = $resource('/revisions/:id.json', {id:'@id'});
 		Object.defineProperties(Revision.prototype, {
+			dumpSteps: { // set this.instructions from this.steps
+				value: function dumpSteps () {
+					var steps = this.steps.grep(function (stepObj) {
+						return stepObj.text && stepObj.text.length;
+					}).map(function (stepObj) {
+						return stepObj.text
+					});
+					this.instructions = JSON.stringify(steps);
+				},
+				configurable: false,
+			},
+			ingredients: {
+				value: [{}],
+				writable: true,
+			},
 			// Copy select attributes from drink
 			loadDrink: {
 				configurable: false,
@@ -81,15 +118,30 @@
 						this[key] = drink[key];
 					}
 					this.drink_id = drink.id;
-					this.revision_id = drink.revision_id;
+					this.parent_id = drink.revision_id;
 					this.prev_description = drink.description;
 					this.prev_instruction = drink.instructions;
 					// Fetch ingredients from server
-					this.prev_ingredients = Drink.ingredients({id:id}, function () {
-						this.ingredients = angular.copy(this.prev_ingredients);
+					var thisRevision = this;
+					this.prev_ingredients = Drink.ingredients({id:drink.id}, function () {
+						thisRevision.ingredients = angular.copy(thisRevision.prev_ingredients) || [{}];
 					});
+					this.loadSteps();
 				},
-			}
+			},
+			loadSteps: { // set this.steps from this.instructions
+				value: function loadSteps () {
+					this.steps = JSON.parse(this.instructions||'[]').map(function (text) {
+						return {text:text}
+					});
+					if (!this.steps.length) this.steps = [{}];
+				},
+				configurable: false,
+			},
+			steps: {
+				value: [{}],
+				writable: true,
+			},
 		});
 		return Revision;
 	}])
@@ -98,30 +150,46 @@
 		$scope.drink.setUserVoteSign($scope.drink, 'Drink');
 		$scope.drinkCtrl = new Object;
 		$scope.comments = window.drink.comments;
+		$scope.newComment = {};
 		$scope.tips = new Array;
 		// Iterate comments:
 		$scope.comments.forEach(function (comment) {
-			if (comment.tip_pts) tips.push(comment); // identify tips
+			if (comment.tip_pts) $scope.tips.push(comment);    // identify tips
+			$scope.drink.setUserTipVote(comment);              // identify tip votes by current user
 			$scope.drink.setIsUserFlagged(comment, 'Comment'); // identify flags by current user
-			$scope.drink.setUserVoteSign(comment, 'Comment'); // identify votes by current user
+			$scope.drink.setUserVoteSign(comment, 'Comment');  // identify votes by current user
 		});
+		// Fetch related drinks
+		Drink.query({'id[]':$scope.drink.related_drink_ids, with_photo:1}, function (data) {
+			$scope.relatedDrinks = data.map(function (obj) { return new Drink(obj) });
+		});
+		$scope.favourite = function () {
+			$scope.requireLoggedIn(function () {
+				if ($scope.drink._userFavId == null)
+					$scope.openFavourites($scope.drink); // defined in favourites.js
+				else
+					$http.delete('/favourites/'+$scope.drink._userFavId+'.json')
+					.success(function () { $scope.drink._userFavId = null })
+					.error(RailsSupport.errorAlert);
+			});
+		};
 		$scope.flag = function () {
-			if ($scope.requireLoggedIn()) {
+			$scope.requireLoggedIn(function () {
 				$modal.open({
 					animation: true,
 					templateUrl: '/drinks/flag-modal.html',
 					size: 'lg',
 				});
-			}
+			});
 		};
 		$scope.loadEditView = function () {
-			if ($scope.requireLoggedIn()) {
+			$scope.requireLoggedIn(function () {
 				var id = getDrinkId($scope);
-				Turbolinks.visit('/drinks/'+id+'/edit.html');
-			}
+				$scope.visit('/drinks/'+id+'/edit.html');
+			});
 		};
 		$scope.openPhotoUploadModal = function () {
-			if ($scope.requireLoggedIn()) {
+			$scope.requireLoggedIn(function () {
 				var modalInstance = $modal.open({
 					animation: true,
 					controller: 'Drink.PhotoUploadCtrl',
@@ -131,24 +199,27 @@
 						drink: function () { return $scope.drink }
 					},
 				});
-			}
+			});
 		};
 		$scope.createComment = function (comment) {
-			if ($scope.requireLoggedIn()) {
+			$scope.requireLoggedIn(function () {
+				$scope.newComment._saving = true;
 				$http.post('/comments.json',
 					angular.extend(comment, {drink_id: $scope.drink.id})
-				)
-				.success(function (data) {
+				).then(
+				function (response) {
 					delete $scope.newComment.text;
-					$scope.comments.push(data);
-				})
-				.error(function (data) {
-					RailsSupport.errorAlert(data);
-				})
-			}
+					$scope.newComment._saving = false;
+					$scope.comments.push(response.data);
+				},
+				function (response) {
+					RailsSupport.errorAlert(response.data, response.status);
+					$scope.newComment._saving = false;
+				});
+			});
 		};
 		$scope.vote = function (votable, votableType, sign) {
-			if ($scope.requireLoggedIn()) {
+			$scope.requireLoggedIn(function () {
 				if (sign) sign = sign > 0 ? 1 : -1; // ensure sign in {-1,0,1}
 				var prevSign = votable._userVoteSign || 0;
 				if (prevSign == sign) sign = 0; // undo existing vote if current vote has a sign
@@ -164,56 +235,94 @@
 				})
 				.error(function (data, status, headers, config) {
 					console.error(data, status, headers, config);
-					RailsSupport.errorAlert(data);
+					RailsSupport.errorAlert(data, status);
 				});
-			}
+			});
 		};
 		$scope.flagComment = function (comment) {
-			if ($scope.requireLoggedIn()) new Flagger(this, comment, 'Comment');
+			$scope.requireLoggedIn(function () {
+				new Flagger(this, comment, 'Comment');
+			});
 		}
 		$scope.removeComment = function (comment) {
-			if ($scope.requireLoggedIn()) {
+			$scope.requireLoggedIn(function () {
 				$http.delete('/comments/'+comment.id+'.json')
 				.success(function (data, status, headers, config) {
 					var tipsIndex = $scope.tips.indexOf(comment);
-					if (tipsIndex) $scope.tips = $scope.tips.splice(tipsIndex, 1);
+					if (tipsIndex >= 0) $scope.tips.splice(tipsIndex, 1);
 					var commentsIndex = $scope.comments.indexOf(comment);
-					if (commentsIndex) $scope.comments = $scope.comments.splice(commentsIndex, 1);
+					if (commentsIndex >= 0) $scope.comments.splice(commentsIndex, 1);
 				})
 				.error(function (data, status, headers, config) {
 					console.error(data, status, headers, config);
 					alert('Failed to delete comment. See javascript console for details');
 				});
-			}
+			});
+		};
+		$scope.tipComment = function (comment) {
+			$scope.requireLoggedIn(function (user) {
+				if (user.id === comment.user_id) {
+					alert('You cannot vote on your own comment');
+					return;
+				}
+				var urlSuffix, successValue, alertAction;
+				if (comment._isUserTipVoted) {
+					urlSuffix    = 'unvote';
+					successValue = false;
+					alertAction  = 'untip';
+				} else {
+					urlSuffix    = 'vote';
+					successValue = true;
+					alertAction  = 'tip';
+				}
+				$http.post('/comments/'+comment.id+'/'+urlSuffix+'_tip.json')
+				.success(function (data, status, headers, config) {
+					comment._isUserTipVoted = successValue;
+				})
+				.error(function (data, status, headers, config) {
+					console.error(data, status, headers, config);
+					alert('Failed to '+alertAction+' comment. See javascript console for details');
+				});
+			});
 		};
 	}])
-	.controller('Drink.EditCtrl', ['$scope', 'Drink', 'Revision', function ($scope, Drink, Revision) {
-		var id = getDrinkId($scope);
-		$scope.drink = Drink.get({id:id});
+	.controller('Drink.EditCtrl', ['$scope', 'Drink', 'Revision', 'RailsSupport', function ($scope, Drink, Revision, RailsSupport) {
 		$scope.revision = new Revision();
-		$scope.drink.$promise.then(function () {
-			$scope.revision.loadDrink($scope.drink);
-		});
+		// Build description text editor
+		var descriptionEditor = new Markdown.Editor(Markdown.getSanitizingConverter());
+		// Build instructions text editor
+		var instructionEditor = new Markdown.Editor(Markdown.getSanitizingConverter(), '-instructions');
+		// Get drink id and act on it (but it won't be present if this is creating a revision for a new -- nonexistent -- drink)
+		var id = getDrinkId($scope);
+		if (id != null) { // could be 0, which is falsey
+			$scope.drink = Drink.get({id:id});
+			// Drink loaded callback
+			$scope.drink.$promise.then(function () {
+				$scope.revision.loadDrink($scope.drink);
+				descriptionEditor.run();
+			});
+		} else { // action for new, but not edit
+			descriptionEditor.run();
+		}
 		$scope.addIngredient = function () {
+			if (!$scope.revision.ingredients) $scope.revision.ingredients = [];
 			$scope.revision.ingredients.push(new Object);
 		}
 		$scope.removeIngredient = function (index) {
 			if (!isNaN(index) && index >= 0) $scope.revision.ingredients.splice(index, 1);
 		}
 		$scope.save = function () {
+			$scope.revision.dumpSteps();
 			$scope.revision.$save(null, function (data) {
-				// success
+				window.scrollTo(0,0);
+				$scope.revision.loadSteps();
 			}, function () {
-				// failure
+				RailsSupport.errorAlert(data);
 			});
 		}
 		$scope.visitDrink = function () {
-			Turbolinks.visit($scope.drink.getUrl());
+			$scope.visit($scope.drink.getUrl());
 		}
-		// Start description text editor
-		new Markdown.Editor(Markdown.getSanitizingConverter()).run();
-		// Start instructions text editor
-		new Markdown.Editor(Markdown.getSanitizingConverter(), '-instructions').run();
 	}])
 	.controller('Drink.FlagModalCtrl', ['$scope', '$resource', 'Differ', 'Flagger', function ($scope, $resource, Differ, Flagger) {
 		$scope.revisions = $resource('/drinks/'+getDrinkId($scope)+'/revisions.json').query(null, function (data) {
@@ -222,8 +331,12 @@
 				revision.$instructionDiff = new Differ(revision.prev_instruction, revision.instructions).prettyHtml();
 			});
 		});
+		$scope.flagger = new Flagger($scope, null, 'Revision', false);
 		$scope.submitFlag = function (revision) {
-			new Flagger($scope).submitFlag(revision, 'Revision');
+			$scope.flagger.createFlag(revision, 'Revision')
+			.$promise.then(function () {
+				$scope.$close();
+			});
 		}
 	}])
 	;

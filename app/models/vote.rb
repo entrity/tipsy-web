@@ -13,6 +13,7 @@ class Vote < ActiveRecord::Base
   validates :user, presence: true
   validates :votable, presence: true
   validates :sign, presence: true
+  validate  :voter_cannot_be_contributor
 
   def save
     if valid?
@@ -30,9 +31,18 @@ class Vote < ActiveRecord::Base
         prev_sign = results_hash['prev_sign'].to_i <=> 0 # should be in {-1,0,1}
         delta = sign - prev_sign
         if delta != 0
-          votable.increment_score!(delta)
-          votable.distribute_vote_points(prev_sign, sign)
+          votable.increment_score!(delta) # change points on votable itself
+          votable.distribute_vote_points(prev_sign, sign) # change points on user (contributor)
+          if votable.respond_to?(:up_vote_ct)
+            votable.pg_increment!(:up_vote_ct) if sign == 1
+            votable.pg_increment!(:up_vote_ct, -1) if prev_sign == 1
+          end
+          if votable.respond_to?(:dn_vote_ct)
+            votable.pg_increment!(:dn_vote_ct) if sign == -1
+            votable.pg_increment!(:dn_vote_ct, -1) if prev_sign == -1
+          end
         end
+
       end
       # return
       true
@@ -40,5 +50,17 @@ class Vote < ActiveRecord::Base
       false
     end
   end
+
+  private
+
+    def voter_cannot_be_contributor
+      contributor_id = nil
+      [:contributor_id, :user_id].each do |key|
+        if votable.respond_to?(key)
+          break contributor_id = votable.send(key)
+        end
+      end
+      errors.add(:base, "You cannot vote on your own contribution!") if contributor_id == self.user_id
+    end
 
 end

@@ -1,55 +1,49 @@
 <script>
   window.drink = <%= @drink.to_json.html_safe %>;
-  window.drink.photos = <%= @photos.to_json(methods:[:thumb]).html_safe %>;
-  window.drink.comments = <%= @comments.to_json.html_safe %>;
-  window.drink.userFlags = <%= @user_flags.to_json.html_safe %>;
-  window.drink.userVotes = <%= @user_votes.to_json.html_safe %>;
+  window.drink.photos       = <%= @photos.to_json(methods:[:thumb]).html_safe %>;
+  window.drink.comments     = <%= @comments.to_json.html_safe %>;
+  window.drink.userFlags    = <%= @user_flags.to_json.html_safe %>;
+  window.drink.userTipVotes = <%= @user_tips.to_json.html_safe %>;
+  window.drink.userVotes    = <%= @user_votes.to_json.html_safe %>;
+  window.drink._userFavId   = <%= @user_fav_id.to_json.html_safe %>;
 </script>
-<div id="drink-page" ng-controller="DrinkCtrl">
-  <div class="grid row photos">
+<div id="drink-page" ng-controller="DrinkCtrl" itemscope itemtype="http://schema.org/Recipe">
+  <div class="grid photos">
     <div class="grid-cell" ng-controller="Drink.PhotoGalleryCtrl">
       <noscript>
         <% @photos.each do |photo| %>
-          <%= image_tag photo.file.url, alt:"#{photo.alt}" %>
+          <%= image_tag photo.file.url, alt:"#{photo.alt}", itemprop:"image" %>
         <% end -%>
       </noscript>
       <div id="gallery" class="slider" ng-if="photos.length">
-        <img ng-repeat="photo in photos" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{photo.mediumUrl}}" />
+        <img ng-repeat="photo in photos" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{photo.activeUrl}}" />
         <div id="gallery-ctrl">
-          <a ng-click="votePhoto(1)"><i class="fa fa-thumbs-up" ng-class="getActivePhoto()._userVoteSign > 0 && 'highlight'"></i></a>
-          <span ng-bind="getActivePhoto().score"></span>
-          <a ng-click="votePhoto(-1)"><i class="fa fa-thumbs-down" ng-class="getActivePhoto()._userVoteSign < 0 && 'highlight'"></i></a>
-          <br>
-          <a ng-click="flagPhoto()"><i class="fa fa-flag" ng-class="isPhotoUserFlagged() && 'highlight'"></i></a>
-          <a ng-href="{{photos[photos.activeIndex].originalUrl}}" target="_blank"><i class="fa fa-search-plus"></i></a>
-          <a><i class="fa fa-share-alt"></i></a>
-          <br>
-          <a ng-click="openPhotoUploadModal()"><i class="fa fa-plus-square"></i> Upload your own photo!</a>
+          <a tooltip="Like" tooltip-append-to-body="true" ng-click="votePhoto(1)"><i class="fa fa-thumbs-up" ng-class="getActivePhoto()._userVoteSign > 0 &amp;&amp; 'highlight'"></i></a><a tooltip="Score" tooltip-append-to-body="true" class="votes"><span ng-bind="getActivePhoto().score"></span></a><a tooltip="Dislike" tooltip-append-to-body="true" ng-click="votePhoto(-1)"><i class="fa fa-thumbs-down" ng-class="getActivePhoto()._userVoteSign < 0 &amp;&amp; 'highlight'"></i></a><a tooltip="Report Photo" tooltip-append-to-body="true" ng-click="flagPhoto()"><i class="fa fa-flag" ng-class="isPhotoUserFlagged() &amp;&amp; 'highlight'"></i></a><a tooltip="Upload" tooltip-append-to-body="true" class="" ng-click="openPhotoUploadModal()"><i class="fa fa-camera"></i></a>
         </div>
-        <a class="arrow prev" ng-click="showPrevPhoto()"><i class="fa fa-arrow-left"></i></a>
-        <a class="arrow next" ng-click="showNextPhoto()"><i class="fa fa-arrow-right"></i></a>
+        <a class="arrow prev" ng-click="showPrevPhoto()"><i class="fa fa-angle-left"></i></a>
+        <a class="arrow next" ng-click="showNextPhoto()"><i class="fa fa-angle-right"></i></a>
         <ul class="nav">
           <li ng-repeat="photo in photos" ng-class="{'active':isActive($index)}">
             <img ng-src="{{photo.thumb}}" alt="{{photo.alt}}" title="{{photo.alt}}" ng-click="showPhoto($index);" />
           </li>
         </ul>
       </div>
-      <div ng-hide="photos.length">
-        No photos have been posted for this drink. <a ng-click="openPhotoUploadModal()">Add your own!</a>
+      <div ng-hide="photos.length" class="add-photo row text-center">
+        No photos have been posted for this drink.<br><button class="btn btn-default btn-small" ng-click="openPhotoUploadModal()">Add your own!</button>
       </div>
     </div>
   </div>
   <div class="grid grid--center row center">
     <div class="grid-cell name">
-      <h1><%= @drink.name %></h1>
+      <h1 itemprop="name"><%= @drink.name %> 
+      <a tooltip="Favorite" tooltip-append-to-body="true" role="button" class="favit" ng-click="favourite()"><i class="fa" ng-class="drink._userFavId==null ? 'fa-heart-o' : 'fa-heart'"></i></a></h1>
+      <%= tag :meta, content:@drink.comment_ct, itemprop:"commentCount" %>
       <div class="comments">
-        <a href="#">Comments (<%= @drink.comment_ct %>)</a>
+        <a ng-click="gotoFrag('comments')">Comments (<%= @drink.comment_ct %>)</a>
       </div>
     </div>
-    <div class="grid-cell votes">
-      <div class="arrow up" role="button" aria-label="upvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', 1)"><i class="fa fa-caret-up" ng-class="drink._userVoteSign > 0 && 'highlight'" ></i></a></div>
-      <div class="score"><noscript><%= @drink.score %></noscript>{{drink.score}}</div>
-      <div class="arrow down" role="button" aria-label="downvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', -1)"><i class="fa fa-caret-down" ng-class="drink._userVoteSign < 0 && 'highlight'" ></i></a></div>
+    <div class="votes grid-cell grid--shrink" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+      <div tooltip="Like" tooltip-append-to-body="true" class="arrow up" role="button" aria-label="upvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', 1)"><i class="fa fa-thumbs-up" ng-class="drink._userVoteSign > 0 &amp;&amp; 'highlight'" ></i></a></div><div tooltip="Score" tooltip-append-to-body="true" class="score" itemprop="ratingValue"><noscript><%= @drink.score %></noscript>{{drink.score}}</div><div tooltip="Dislike" tooltip-append-to-body="true" class="arrow down" role="button" aria-label="downvote" tabindex="0"><a class="nolink" ng-click="vote(drink, 'Drink', -1)"><i class="fa fa-thumbs-down" ng-class="drink._userVoteSign < 0 &amp;&amp; 'highlight'" ></i></a></div>
     </div>
   </div>
   <div class="grid row center">
@@ -57,9 +51,9 @@
       <div class="social-share-bar">
         <a href="javascript:window.print()" title="Print recipe"><i class="fa fa-print"></i></a>
         <a href="#" title="Mail recipe"><i class="fa fa-envelope-o"></i></a>
-        <a href="//www.facebook.com/sharer/sharer.php?u=" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank"  title="Share recipe on facebook"><i class="fa fa-facebook"></i></a>
+        <a href="//www.facebook.com/sharer/sharer.php?u=URLENCODED_URL&t=TITLE" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank"  title="Share recipe on facebook"><i class="fa fa-facebook"></i></a>
         <a href="https://plus.google.com/share?url=URLENCODED_URL" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;" target="_blank" title="Share recipe on google+"><i class="fa fa-google-plus"></i></a>
-        <a href="https://twitter.com/share?url=URLENCODED_URL&via=Tipsyology&text=TEXT" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Share recipe on twitter"><i class="fa fa-twitter"></i></a>
+        <a href="https://twitter.com/intent/tweet" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Share recipe on twitter"><i class="fa fa-twitter"></i></a>
         <a href="//pinterest.com/pin/create/link/?url=" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Share recipe on pinterest"><i class="fa fa-pinterest-p"></i></a>
         <a href="https://www.tumblr.com/widgets/share/tool" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=540,width=600');return false;" target="_blank" title="Share recipe on tumblr"><i class="fa fa-tumblr"></i></a>
       </div>
@@ -69,9 +63,9 @@
     <div class="grid-cell prep-time">
       <p>
         Prep time:
-        <a ng-click="loadEditView()" class="fa fa-pencil"></a>
+        <a tooltip="Edit" tooltip-append-to-body="true" ng-click="loadEditView()" class="fa fa-pencil"></a>
         <br>
-        <span>
+        <span itemprop="prepTime">
           <% if @drink.prep_time %>
             <%= @drink.prep_time %>
           <% else %>
@@ -80,12 +74,12 @@
         </span>
       </p>
     </div>
-    <div class="grid-cell calorie-count">
+    <div class="grid-cell calorie-count" itemprop="nutrition" itemscope itemtype="http://schema.org/NutritionInformation">
       <p>
         Calories:
-        <a ng-click="loadEditView()" class="fa fa-pencil"></a>
+        <a tooltip="Edit" tooltip-append-to-body="true" ng-click="loadEditView()" class="fa fa-pencil"></a>
         <br>
-        <span>
+        <span itemprop="calories">
           <% if @drink.calories %>
             <%= @drink.calories %>
           <% else %>
@@ -99,15 +93,17 @@
     <div class="grid-cell">
       <h3>
         Description
-        <a ng-click="loadEditView()" class="fa fa-pencil"></a>
-        <a ng-click="flag()" class="fa fa-flag"></a>
+        <a tooltip="Edit" tooltip-append-to-body="true" ng-click="loadEditView()" class="fa fa-pencil"></a>
+        <a tooltip="Report" tooltip-append-to-body="true" ng-click="flag()" class="fa fa-flag"></a>
       </h3>
       <div>
         <% if @drink.description.present? %>
-          <noscript><%= @drink.description %></noscript>
-          <script>Tipsy.writeMarkdown(window.drink.description)</script>
+          <p itemprop="description">
+            <noscript><%= @drink.description %></noscript>
+            <script>Tipsy.writeMarkdown(window.drink.description)</script>
+          </p>
         <% else %>
-          <p>
+          <p itemprop="description">
             <em>No description has been submitted for this drink yet.</em>
             <br>
             <a ng-click="loadEditView()">How would you describe this drink?</a>
@@ -122,21 +118,21 @@
         <div class="grid-cell">
           <h3>
             Ingredients
-            <a ng-click="loadEditView()" class="fa fa-pencil"></a>
+            <a tooltip="Edit" tooltip-append-to-body="true" ng-click="loadEditView()" class="fa fa-pencil"></a>
           </h3>
         </div>
       </div>
       <% @ingredients.each do |ingredient| %>
-        <div class="grid grid--center ingredient">
+        <div class="grid grid--center ingredient" itemprop="recipeIngredient">
           <div class="grid-cell actions">
-            <a ng-click="addToCabinet(<%= drink_ingredient_json ingredient %>)" title="Add to My Fridge">
+            <a tooltip="Add to fridge" tooltip-append-to-body="true" ng-click="addToCabinet(<%= drink_ingredient_json ingredient %>)" title="Add to My Fridge" ng-class="isInCabinet(<%= ingredient.ingredient_id %>) &amp;&amp; 'active'">
               <i class="sprite sprite-fridge"></i>
             </a>
-            <a ng-click="addToShoppingList(<%= drink_ingredient_json ingredient %>)" title="Add to Shopping List">
+            <a tooltip="Add to shopping list" tooltip-append-to-body="true" ng-click="addToShoppingList(<%= drink_ingredient_json ingredient %>)" title="Add to Shopping List" ng-class="isInShoppingList(<%= ingredient.ingredient_id %>) &amp;&amp; 'active'">
               <i class="sprite sprite-shopping-cart"></i>
             </a>
           </div>
-          <div class="grid-cell name"><%= ingredient.name %></div>
+          <div class="grid-cell name"><%= link_to ingredient.name, ingredient.url_path %></div>
           <div class="grid-cell amount">
             <% if ingredient.optional %><em>(optional)</em><% end -%>
             <%= ingredient.qty %>
@@ -151,51 +147,44 @@
         <div class="grid-cell">
           <h3>
             Recipe Directions
-            <a ng-click="loadEditView()" class="fa fa-pencil"></a>
-            <a ng-click="flag()" class="fa fa-flag"></a>
+            <a tooltip="Edit" tooltip-append-to-body="true" ng-click="loadEditView()" class="fa fa-pencil"></a>
+            <a tooltip="Report" tooltip-append-to-body="true" ng-click="flag()" class="fa fa-flag"></a>
           </h3>
-          <% if @drink.instructions.present? %>
-            <div>
+          <p itemprop="recipeInstructions">
+            <% if @drink.instructions.present? %>
               <noscript><%= @drink.instructions %></noscript>
               <script type="text/javascript">Tipsy.writeMarkdown(window.drink.instructions);</script>
-            </div>
-            <p>
               <em>Were these directions helpful?</em><br>
               <a ng-click="loadEditView()">Improve them!</a>
-            </p>
-          <% else %>
-            <p>
+            <% else %>
               <em>No instructions have been written yet.</em>
               <br>
               <a ng-click="loadEditView()">How would you prepare this drink?</a>
-            </p>
-          <% end %>
+            <% end %>
+          </p>
         </div>
       </div>
     </div>
   </div>
-  <!-- TIPS (COMMENTS) -->
+  <!-- TIPS -->
+  <ng-include src="'/drinks/comments.html'"></ng-include>
+  <!-- COMMENTS -->
   <div class="grid row tips center">
     <div class="grid-cell">
-      <h3><%= @drink.name %> tips? Comments? Join the discussion!</h3>
-      <textarea ng-model="newComment.text"></textarea>
-      <a ng-click="createComment(newComment)">Save</a>
-    </div>
-  </div>
-  <div class="grid row tips center">
-    <div class="grid-cell">
-      <ng-include src="'/drinks/comments.html'"></ng-include>
       <div id="static-comments" ng-show="!(comments && comments.length)">
         <% @comments.each do |comment| %>
-          <div class="grid grid--center tips">
+          <div class="grid grid--center tips" itemscope itemtype="https://schema.org/Comment">
             <div class="grid-cell">
               <%= comment.score %>
+              <%= tag :meta, content:comment.dnvote_ct,             itemprop:"downvoteCount" %>
+              <%= tag :meta, content:comment.upvote_ct,             itemprop:"upvoteCount" %>
+              <%= tag :meta, content:comment.created_at.to_s(:iso), itemprop:"dateCreated" %>
               <%= link_to user_path(id:comment.user_id), class:'avatar' do %>
                   <img ng-src="{{getUser().tinyAvatar}}">
               <% end -%>
               <%= comment.user_name %>
               <%= comment.created_at.to_s(:long) %>
-              <div><%= comment.text %></div>
+              <div itemprop="text"><%= comment.text %></div>
             </div>
           </div>
         <% end -%>
@@ -203,9 +192,32 @@
     </div>
   </div>
   <!-- SIMILAR DRINKS -->
-  <div class="grid row similar-drinks center">
-    <div class="grid-cell">
-      <h3>Drinks similar to a <%= @drink.name %></h3>
+  <div class="full-bleed">
+    <div class="grid similar-drinks center">
+      <div class="grid-cell">
+        <h3>Drinks similar to a <%= @drink.name %></h3>
+        <div class="grid grid--gutters">
+          <a class="grid-cell cards" ng-repeat="drink in relatedDrinks" ng-href="{{drink.getUrl()}}">
+            <div class="grid grid--center">
+              <div class="grid-cell">
+                <div class="image">
+                  <img ng-if="drink.photo_url" ng-src="{{drink.photo_url}}" height="146" width="172"></i>
+                  <i ng-hide="drink.photo_url" class="fa fa-glass"></i>
+                </div>
+              </div>
+              <div class="grid-cell">
+                <span class="name" ng-bind="drink.name"></span>
+              </div>
+              <div class="grid-cell">
+                <div class="grid grid--center">
+                  <div tooltip="Ingredients" tooltip-append-to-body="true" class="grid-cell"><i class="fa fa-flask"></i> <small>{{drink.ingredient_ct || 0}}</small></div>
+                  <div tooltip="Score" tooltip-append-to-body="true" class="grid-cell"><i class="fa fa-thumbs-up"></i> <small>{{drink.up_vote_ct || 0}}</small></div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

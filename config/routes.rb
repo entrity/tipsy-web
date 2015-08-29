@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   }
   as :user do
     get 'users', :to => 'users/registrations#edit', :as => :user_root # Rails 3
+    get '/user/edit(.format)', to: 'users/registrations#edit', defaults: {id: 0}
   end
 
   root 'home#home'
@@ -14,9 +15,17 @@ Rails.application.routes.draw do
 
   get 'fuzzy_find.json' => 'home#fuzzy_find', defaults:{format: :json}
 
-  resources :comments, only: [:create, :update]
+  resources :comments, only: [:create, :destroy] do
+    member do
+      post :unvote_tip
+      post :vote_tip
+    end
+  end
 
   resources :drinks do
+    collection do
+      get :suggestions
+    end
     member do
       get :ingredients
       get :revisions
@@ -24,6 +33,10 @@ Rails.application.routes.draw do
   end
 
   resources :drinks, path: 'recipe', only: [:show]
+
+  resources :favourites, only: [:index, :create, :update, :destroy]
+
+  resources :favourites_collections, only: [:index, :create, :update, :destroy]
   
   resources :flags, only: :create
 
@@ -31,7 +44,14 @@ Rails.application.routes.draw do
     collection do
       get :names
     end
+    member do
+      get :revisions
+    end
   end
+
+  resources :ingredients, path: 'ingredient', only: [:show]
+
+  resources :ingredient_revisions, only: [:create, :show]
 
   resources :photos, only: [:index, :create]
   
@@ -52,7 +72,13 @@ Rails.application.routes.draw do
       get :unviewed_point_distributions
       put :viewed_point_distributions
     end
+    member do
+      get :trophies
+    end
   end
+
+  get '/user(.format)', to: 'users#show', defaults: {id: 0}
+  get '/user/trophies(.format)', to: 'users#trophies', defaults: {id: 0}
 
   resources :votes, only: [:create]
 

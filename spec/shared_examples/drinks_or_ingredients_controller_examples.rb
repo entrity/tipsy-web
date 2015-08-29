@@ -25,7 +25,7 @@ shared_examples "drinks or ingredients controller" do
       end
       context 'with page param' do
         it 'should return 200' do
-          expect_any_instance_of(ActiveRecord::Relation).to receive(:paginate).with({page:3, per_page:DrinksController::MAX_RESULTS}).and_call_original
+          expect_any_instance_of(ActiveRecord::Relation).to receive(:paginate).with({page:3, per_page:controller.class::MAX_RESULTS}).and_call_original
           params[:page] = 3
           subject
           assert_response 200

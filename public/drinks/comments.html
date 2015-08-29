@@ -1,38 +1,103 @@
-<h3>Tips</h3>
-<div id="tips">
-	<div ng-repeat="comment in tips">
-		<div>
-			<a ng-click="vote(comment, 'Comment', 1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment._userVoteSign > 0) && 'highlight'"></i></a>
-			<a ng-click="vote(comment, 'Comment', -1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment._userVoteSign < 0) && 'highlight'"></i></a>
-			{{comment.score}}
-			<img ng-src="{{comment.user_avatar}}">
-			{{comment.user_name}}
-			{{comment.created_at | date}}
+<div id="comments" class="center row">
+	<div class="tips-cont">
+		<div class="grid tips">
+			<div class="grid-cell">
+				<h3>{{drink.name}} user tips</h3>
+			</div>
 		</div>
-		<div>
-			<a ng-click="flagComment(comment)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-flag" ng-class="comment._isUserFlagged && 'highlight'"></i></a>
-			<a ng-click="removeComment(comment)" ng-if="comment.user_id == getUser().id"><i class="fa fa-times-circle"></i></a>
-			<span ng-bind="comment.text"></span>
+		<div id="tips" ng-repeat="comment in tips">
+			<div class="grid">
+				<div class="grid-cell grid--shrink">
+					<img class="avatar" ng-src="{{comment.user_avatar}}">
+				</div>
+				<div class="grid-cell">
+					<div class="grid">
+						<div class="grid-cell">
+							<span class="name" itemprop="creator">{{comment.user_name}}</span>
+						</div>
+					</div>
+					<div class="grid">
+						<div class="grid-cell">
+							<span itemprop="commentText" ng-bind="comment.text"></span>
+							<div class="comment-actions">
+								<span class="comment-flag tip">
+									{{comment.flag_pts}} users flagged this as a tip
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
+		<p ng-show="!tips.length"><em>No tips have been created for this page. Submit a comment of your own and have it earmarked as a tip by community members!</em></p>
 	</div>
-	<p ng-show="!tips.length"><em>No tips have been created for this page. Submit a comment of your own and have it earmarked as a tip by community members!</em></p>
 </div>
-<h3>Comments</h3>
-<div id="comments">
-	<div ng-repeat="comment in comments">
-		<div>
-			<a ng-click="vote(comment, 'Comment', 1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment._userVoteSign > 0) && 'highlight'"></i></a>
-			<a ng-click="vote(comment, 'Comment', -1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment._userVoteSign < 0) && 'highlight'"></i></a>
-			{{comment.score}}
-			<img ng-src="{{comment.user_avatar}}">
-			{{comment.user_name}}
-			{{comment.created_at | date}}
+<!-- COMMENTS TEXTAREA -->
+<div class="center">
+	<div class="comments-cont">
+		<div class="grid">
+			<div class="grid-cell">
+				<h3>Tips? Comments? Join the discussion!</h3>
+			</div>
 		</div>
-		<div>
-			<a ng-click="flagComment(comment)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-flag" ng-class="comment._isUserFlagged && 'highlight'"></i></a>
-			<a ng-click="removeComment(comment)" ng-if="comment.user_id == getUser().id"><i class="fa fa-times-circle"></i></a>
-			<span ng-bind="comment.text"></span>
+		<div class="comment-box grid row">
+			<div class="grid-cell">
+				<div class="grid grid--gutters">
+					<div class="grid-cell grid--shrink">
+						<img class="avatar" ng-src="{{getUser().tinyAvatar}}">
+					</div>
+					<div class="grid-cell">
+						<textarea ng-model="newComment.text" ng-disabled="newComment._saving" placeholder="Leave a comment"></textarea>
+						<a class="btn btn-primary btn-sm pull-right" ng-click="createComment(newComment)" ng-hide="newComment._saving">Post</a>
+					</div>
+				</div>
+			</div>
 		</div>
+		<section id="comments" class="grid row" itemscope itemtype="https://schema.org/UserComments">
+			<div class="grid-cell">
+				<h3>Comments</h3>
+				<span class="no-comments" ng-hide="comments.length"><i class="fa fa-commenting-o"></i> This drink currently has no comments. Be the first to share your thoughts!</span>
+				<div class="comment" ng-repeat="comment in comments">
+					<div class="grid">
+						<div class="grid-cell grid--shrink">
+							<img class="avatar" ng-src="{{comment.user_avatar}}">
+						</div>
+						<div class="grid-cell comment-id">
+							<div class="grid">
+								<div class="grid-cell">
+									<span class="name" itemprop="creator">{{comment.user_name}}</span>
+									<span class="date" itemprop="commentTime"> {{comment.created_at | date}}</span>
+								</div>
+							</div>
+							<div class="grid">
+								<div class="grid-cell comment-text">
+									<span itemprop="commentText" ng-bind="comment.text"></span>
+									<div class="comment-actions">
+										<span class="comment-reply">
+											<a tooltip="Reply" tooltip-append-to-body="true" href=""> <i class="fa fa-reply"></i></a>
+										</span>
+										<span class="comment-vote">
+											<a tooltip="Like" tooltip-append-to-body="true" ng-click="vote(comment, 'Comment', 1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-up" ng-class="(comment._userVoteSign > 0) && 'highlight'"></i></a>
+											{{comment.score}}
+											<a tooltip="Dislike" tooltip-append-to-body="true" ng-click="vote(comment, 'Comment', -1)" ng-hide="comment.user_id == getUser().id"><i class="fa fa-thumbs-o-down" ng-class="(comment._userVoteSign < 0) && 'highlight'"></i></a>
+										</span>
+										<span ng-if="comment.user_id == getUser().id">
+											<a tooltip="Delete" ng-click="removeComment(comment)"> <i class="fa fa-trash-o"></i></a>
+										</span>
+										<span class="comment-flag tip" ng-hide="comment.user_id == getUser().id">
+											Helpful comment? Mark it as a tip <a tooltip="Helpful" tooltip-append-to-body="true" class="btn btn-default btn-xs" ng-click="tipComment(comment)" title="Mark as a useful tip (only actual tips should be voted)"><i class="fa fa-lightbulb-o"></i> Tip</a>
+										</span>
+										<span class="comment-flag inappropriate pull-right" ng-hide="comment.user_id == getUser().id">
+											<a tooltip="Report" tooltip-append-to-body="true" ng-click="flagComment(comment)" title="Flag comment as inappropriate"><i class="fa fa-flag" ng-class="comment._isUserFlagged &amp;&amp; 'highlight'"></i></a>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 	</div>
 </div>
 

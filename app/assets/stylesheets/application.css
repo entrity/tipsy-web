@@ -12,19 +12,37 @@
  *
  *= require 'angular-ui-select/dist/select.min'
  *= require image-resize-crop-canvas/component
+ *= require bootstrap-slider
  *= require_tree .
  *= require_self
  */
 
-
+html {
+  overflow-x: hidden;
+}
 body {
   background-color: #fff;
   font-family: 'Open Sans', sans-serif;
   font-size: 13px;
   margin: 0;
   overflow-x: hidden;
+  color: #212121;
+  position: relative;
+  transition-duration: 0.5s;
+  transition-property: top, bottom, left, right;
 }
-
+.disable-hover {
+  pointer-events: none;
+}
+.fa,
+.sprite,
+.actions {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 #fuzzy-finder .ui-select-match::before {
   font-family: 'FontAwesome';
   content: '\f002';
@@ -147,6 +165,7 @@ a:hover {
 }
 .wrapper {
   margin: 0 auto;
+  min-width: 300px;
 }
 .logged-out-nav {
   position: fixed;
@@ -172,16 +191,17 @@ a:hover {
   margin: 0;
   padding: 0 0 20px 0;
 }
-#find-results .filters {
-  padding: 10px 20px;
-  background-color: #f4f4f4;
-  border-bottom: 1px solid #ededed;
-  flex-wrap: wrap;
-}
-#find-results .results-list {
+#find-results .results-list,
+#find-results .suggestions-list {
   max-width: 600px;
   margin: 0 auto;
   padding: 40px 0 0 0;
+}
+#find-results .filters {
+  padding: 10px 20px;
+  background-color: #FBFBFB;
+  border-bottom: 1px solid #ededed;
+  flex-wrap: wrap;
 }
 #find-results .filters .grid-cell {
   flex: 0 1 auto;
@@ -193,12 +213,58 @@ a:hover {
 #find-results .filters .clear {
   padding-left: 10px;
 }
+
 #find-results .btn-group {
   margin: 4px;
 }
 #find-results .btn {
   font-size: 12px;
 }
+#find-results .btn-primary {
+  background-color: #267fdd;
+  border-color: #267fdd;  
+  box-shadow: 0 1px 0 rgba(0,0,0,.3);
+  transition: all .4s;
+}
+#find-results .btn-primary:hover {
+  background-color: #337ab7;
+  border-color: #337ab7;
+}
+#find-results .btn-primary {
+  box-shadow: none;
+  border-radius: 4px;
+  padding: 2px 21px;
+  -webkit-transition: .25s linear;
+  transition: .25s linear;
+}
+#find-results .btn-group:hover .btn-primary {
+  padding-right: 28px;
+  padding-left: 14px;
+  background-color: #337ab7;
+  border-color: #337ab7;
+}
+#find-results .btn-group:hover .btn-primary.dropdown-toggle {
+  right: 12px;
+  padding-right: 0;
+  padding-left: 0;
+  visibility: visible;
+  opacity: 1;
+}
+#find-results .btn-group .btn-primary.dropdown-toggle  {
+  position: absolute;
+  right: -8px;
+  padding-right: 0;
+  padding-left: 0;
+  top: 0;
+  visibility: hidden;
+  opacity: 0;
+  background-color: transparent;
+  border-color: transparent;
+  border-radius: 4px;
+  -webkit-transition: .25s linear;
+  transition: .25s linear;
+  z-index: 10;
+} 
 #find-results .dropdown-menu {
   width: 40px;
   min-width: 40px;
@@ -250,7 +316,8 @@ a:hover {
   height: 17px;
   background-position: -5px -5px;
 }
-a .sprite-fridge:hover {
+a .sprite-fridge:hover,
+a.active .sprite-fridge {
   background-position: -28px -5px;
 }
 .sprite-shopping-cart {
@@ -258,7 +325,8 @@ a .sprite-fridge:hover {
   height: 17px;
   background-position: -5px -32px;
 }
-a .sprite-shopping-cart:hover {
+a .sprite-shopping-cart:hover,
+a.active .sprite-shopping-cart {
   background-position: -51px -5px;
 }
 label {
@@ -276,11 +344,12 @@ img.hr {
 header {
   clear: both;
   min-height: 56px;
-  min-width: 100%;
-  position: fixed;
+  width: 100%;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: 20;
+  min-width: 300px;
   border-bottom: 1px solid #ddd;
 }
 nav {
@@ -311,7 +380,16 @@ nav .logo {
 }
 nav .search {
   max-width: 300px;
-  margin-right: 16px;
+  margin-right: auto;
+}
+nav > .grid-cell:first-child {
+  padding-right: 16px;
+}
+nav .fa-bars {
+  font-size: 14px;
+  line-height: 56px;
+  width: 58px;
+  text-align: center;
 }
 nav .search .input-group {
   width: 100%;
@@ -319,6 +397,10 @@ nav .search .input-group {
 nav .search .input-group .form-control {
   border-radius: 4px !important;
   border: 1px solid lightgray;
+}
+nav .logged-out,
+nav .logged-in {
+  flex: 0 1 auto;
 }
 nav .logged-out .grid-cell:first-child,
 nav .logged-in .grid-cell:first-child {
@@ -335,14 +417,10 @@ nav .logged-out .grid-cell:last-child,
 nav .logged-in .grid-cell:last-child {
   margin-right: 0;
 }
-nav .logged-out {
-
-}
-nav .logged-in {
-
-}
 nav .rep-cont .dropdown-menu {
-  right: -7px;
+  right: -50%;
+  margin-right: -8px;
+  padding: 5px;
 }
 nav .rep-cont a,
 nav .trophie-cont a {
@@ -372,17 +450,17 @@ nav .user {
   flex: 0 1 auto;
 }
 nav .user .avatar {
-  height: 28px;
-  width: 28px;
+  height: 32px;
+  width: 32px;
   overflow: hidden;
 }
 nav .user .avatar img {
-  height: 28px;
-  width: 28px;
+  height: 32px;
+  width: 32px;
   position: relative;
   display: block;
-  border-radius: 50%;
-  border: 2px solid lightgray;
+  border-radius: 4px;
+  background: #BFE0EC;
 }
 nav .user .rep-change {
   background: #8fc77e;
@@ -435,6 +513,11 @@ nav .user li .rep-change {
 .dropdown-menu > li > a {
   padding: 3px 14px;
 }
+.dropdown-menu > li > a .fa {
+  min-width: 16px;
+  display: inline-block;
+}
+
 
 /*** CONTENT GLOBAL STYLES ***/
 
@@ -539,7 +622,8 @@ nav .user li .rep-change {
   text-align: center;
   max-width: 30%;
 }
-.results-list .item {
+.results-list .item,
+.suggestions-list .item {
   height:40px;
   padding: 3px 20px;
   margin:5px 0;
@@ -548,117 +632,81 @@ nav .user li .rep-change {
   border:dashed 1px #fff;
   transition:border 100ms ease-in-out;
 }
-.results-list .item .fa {
+.results-list .item .fa,
+.suggestions-list .item .fa {
   margin-right: 3px;
 }
-.results-list .item .grid-cell {
+.results-list .item .grid-cell,
+.suggestions-list .item .grid-cell {
   padding: 0 12px;
 }
-.results-list .item .grid-cell {
+.results-list .item .grid-cell,
+.suggestions-list .item .grid-cell {
   flex: 0 1 auto;
 }
-.results-list .item .grid-cell:first-child {
+.results-list .item .grid-cell:first-child,
+.suggestions-list .item .grid-cell:first-child {
   flex: 1;
   padding: 0 12px 0 0;
 }
-.results-list .item .grid-cell:last-child {
+.results-list .item .grid-cell:last-child,
+.suggestions-list .item .grid-cell:last-child {
   padding: 0 0 0 12px;
 }
-.results-list .item:hover {
+.results-list .item:hover,
+.suggestions-list .item:hover {
   border:dashed 1px gray;
   cursor:pointer;
 }
-.results-list .item .checkmark {
+.results-list .item .checkmark,
+.suggestions-list .item .checkmark {
   max-width:40px;
   text-align: center;
 }
-.results-list .item .checkmark .fa-check-square {
+.results-list .item .checkmark .fa-check-square,
+.suggestions-list .item .checkmark .fa-check-square {
   color: #5cb85c;
 }
-.results-list .item .name {
+.results-list .item .name,,
+.suggestions-list .item .name {
   max-width:490px;
   font-size:14px;
 }
-.results-list .item .comments {
+.results-list .item .comments,
+.suggestions-list .item .comments {
   max-width:74px;
   font-size:13px;
   color:#939393;
   text-align: center;
 }
-.results-list .item .rating {
+.results-list .item .rating,
+.suggestions-list .item .rating {
   max-width:120px;
   font-size:13px;
   color:#939393;
   text-align: center;
 }
-.results-list .item .favorite {
+.results-list .item .favorite,
+.suggestions-list .item .favorite {
   max-width:17px;
   margin:0 0 0 8px;
   color:#939393;
   text-align: center;
 }
-.fancy-sidebar .sidebar-btn {
-  display: block;
-  height: 36px;
-  width: 40px;
-  position: absolute;
-  top: 0;
-  left: -40px;
-  border-radius: 4px 0 0 4px;
-  background-color: #fff;
-  transition: all .4s ease;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-}
-.fancy-sidebar .sidebar-btn:after {
-  content:'';
-  position: absolute;
-  width: 5px;
-  height: 41px;
-  top: 0;
-  right: -5px;
-  background-color: #267fdd;
-}
-.fancy-sidebar .sidebar-btn:hover {
-  background-color: #267fdd;
-}
-.fancy-sidebar .sidebar-btn .fa {
-  color: #000;
-  line-height: 36px;
-  width: 40px;
-  font-size: 14px;
-  text-align: center;
-  transition: all .4s ease;
-}
-.fancy-sidebar.open .sidebar-btn {
-  background-color: #267fdd;
-}
-.fancy-sidebar.open .sidebar-btn .fa {
-  color: #fff;
-  -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  transform: rotate(180deg);
-}
-.fancy-sidebar {
-  width:200px;
-  position: fixed;
-  top: 90px;
-  bottom: 36px;
-  right: -203px;
-  padding:10px;
-  background-color: #267fdd;
-  border-radius: 0 0 0 4px;
-  transition: all .4s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-}
-.fancy-sidebar.open {
-  right: 0;
+#sidebar-r,
+#sidebar-l {
+  background-color: #262D2D;
+  height: 100vh !important;  
+  box-sizing: border-box;
+  -webkit-transform: translateZ(0);
+  overflow-y: scroll;
 }
 .sidebar-controls {
-  height:40px;
-  margin-bottom: 18px;
+  height: 57px;
+  line-height: 57px;
+}
+.sidebar-controls .btn:first-child {
+  margin-left: 20px;
 }
 .ingredients-list {
   padding-bottom: 10px;
@@ -671,52 +719,59 @@ nav .user li .rep-change {
   color:#fff;
   border-radius: 4px;
 }
-.sidebar-list-first {
-  font-size:14px !important;
+#sidebar-r ul li:first-child {
+  font-size:16px !important;
   font-weight:600;
-  margin:0 10px;
-  padding: 3px 5px;
-  border-bottom: 1px dashed #fff;
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.05);
+}
+#sidebar-r ul li:first-child i {
+  float: right;
+  padding-right: 5px;
 }
 .ingredients-list ul li,
 .shopping-list ul li {
-  font-size:12px;
-  padding: 3px 5px;
-  margin: 2px 5px;
+  font-size:14px;
+  padding: 10px 20px;
 }
 .ingredients-list ul li.item,
 .shopping-list ul li.item {
   text-transform: capitalize;
-  border-radius: 4px;
   cursor: pointer;
   position: relative;
+  padding-right: 30px !important;
 }
 .ingredients-list ul li.item:hover,
 .shopping-list ul li.item:hover {
-  background: #fff;
-  color: #000;
+  background: rgba(0,0,0,0.2);
 }
 aside a {
   color: #fff;
   font-weight: bold;
 }
-aside a:hover {
-  color: #ddd;
+aside li:hover {
+  background: rgba(0,0,0,0.2);
 }
 aside li.item .fa {
   color: #000;
   position: absolute;
-  right: 5px;
+  right: 10px;
   top: 50%;
-  margin-top: -6px;
-  display: none;
+  text-align: center;
+  margin-top: -20px;
+  opacity: .5;
   transition: .3s;
+  width: 40px;
+  line-height: 40px;
+  font-size: 16px;
 }
 aside li.item:hover .fa {
-  display: initial;
+  color: #fff;
+  opacity: 1;
+  background: rgba(0,0,0,0.2);
 }
 aside li.item .fa:hover {
-  color: red;
+  background: rgba(0,0,0,0.5);
 }
 aside .btn-primary {
   background-color: #fff;
@@ -730,77 +785,39 @@ aside .btn-primary:hover {
   border-color: #ddd;
   color: #000;
 }
-#find-results .btn-primary {
-  background-color: #267fdd;
-  border-color: #267fdd;  
-  box-shadow: 0 1px 0 rgba(0,0,0,.3);
+aside .trophie-cont {
+  padding: 0 20px;
+  cursor: pointer;
   transition: all .4s;
 }
-#find-results .btn-primary:hover {
-  background-color: #337ab7;
-  border-color: #337ab7;
-}
-#find-results .btn-primary {
-  box-shadow: none;
-  border-radius: 4px;
-  padding: 2px 21px;
-  -webkit-transition: .25s linear;
-  transition: .25s linear;
-}
-#find-results .btn-group:hover .btn-primary {
-  padding-right: 28px;
-  padding-left: 14px;
-  background-color: #337ab7;
-  border-color: #337ab7;
-}
-#find-results .btn-group:hover .btn-primary.dropdown-toggle {
-  right: 12px;
-  padding-right: 0;
-  padding-left: 0;
-  visibility: visible;
-  opacity: 1;
-}
-#find-results .btn-group .btn-primary.dropdown-toggle  {
-  position: absolute;
-  right: -8px;
-  padding-right: 0;
-  padding-left: 0;
-  top: 0;
-  visibility: hidden;
-  opacity: 0;
-  background-color: transparent;
-  border-color: transparent;
-  border-radius: 4px;
-  -webkit-transition: .25s linear;
-  transition: .25s linear;
-  z-index: 10;
-}
-.sidebar-list-first i {
-  float: right;
+aside .trophie-cont:hover {
+  background: rgba(0,0,0,0.2);
 }
 .ingredients-list a,
 .shopping-list a {
   text-decoration: none;
   cursor: pointer;
 }
+#landing .search {
+  max-width: 300px;
+  margin: auto;
+}
 .signin.grid.modal-content {
   height: initial;
   padding: 32px;
 }
 .signin.grid {
-  height: calc(100% - 40px);
-  height: -o-calc(100% - 40px);
-  height: -webkit-calc(100% - 40px);
-  height: -moz-calc(100% - 40px);
+  height: 100vh;
   background-color: #2b334f;
   color: #fff;
+  flex-direction: column;
 }
-.signin.grid .grid-cell,
-.splash.grid .grid-cell {
-  margin: 0 auto 10% auto; 
+.signin.grid .grid-cell:first-child,
+.splash.grid .grid-cell:first-child {
+  margin: auto; 
   max-width: 260px;
-  border-radius: 4px; 
   box-sizing: border-box;
+  flex: 0 1 auto;
 }
 .signin.grid .grid-cell .logo,
 .splash.grid .grid-cell .logo {
@@ -867,8 +884,20 @@ aside .btn-primary:hover {
 .signin.grid .grid-cell .btn.facebook {
   display: block;
   background: #4E69A2;
-  color: #fff;
+  color: #ddd;
   border: 1px solid #3B5998;
+}
+.form-control {
+  border-color: #eee;
+  box-shadow: none;
+}
+.input-group-addon:last-child {
+  border-left: 1px solid #ccc;
+}
+.form-group-lg .form-control,
+.form-group textarea {
+  font-size: 17px;
+  line-height: 22px;
 }
 
 .grid {
@@ -879,10 +908,13 @@ aside .btn-primary:hover {
 }
 /* With gutters */
 .grid--gutters {
-  margin: -1em 0 0 -1em;
+  margin: -1em -1em -1em -1em;
 }
 .grid--gutters > .grid-cell {
-  padding: 1em 0 0 1em;
+  padding: 1em 1em 1em 1em;
+}
+.grid--shrink {
+  flex: 0 1 auto;
 }
 /* Alignment per row */
 .grid--top {
@@ -893,6 +925,9 @@ aside .btn-primary:hover {
 }
 .grid--center {
   align-items: center;
+}
+.grid--column {
+  flex-direction: column;
 }
 /* Alignment per cell */
 .grid-cell--top {
@@ -936,43 +971,162 @@ aside .btn-primary:hover {
 .fa-caret-down.highlight {
   color: orange;
 }
+/*** HOME STYLES ***/
 
-/*** DRINK PAGE STYLES ***/
+#home > .hero {
+  background: url('/images/drinks/summer-cocktails.jpg') center center;
+  min-height: 33vh;
+  position: relative;
+}
+#home > .hero:after {
+  content: '';
+  position: absolute;
+  background: rgba(0,0,0,0.3);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+.hero h1 {
+  color: #fff;
+  font-size: 3.6em;
+  font-weight: 600;
+  display: block;
+  text-align: center;
+  text-shadow: 0 3px 3px rgba(0,0,0,0.6);
+  position: relative;
+  z-index: 2;
+}
+.hero h4 {
+  color: #fff;
+  font-size: 2.1em;
+  font-weight: 600;
+  display: block;
+  text-align: center;
+  text-shadow: 0 3px 3px rgba(0,0,0,0.6);
+  position: relative;
+  z-index: 2;
+}
+#home h2 {
+  font-size: 2.1em;
+  padding-bottom: 10px;
+  border-bottom: 1px solid lightgray;
+  margin: 40px 0 10px 0;
+}
+#home .top-lists > .grid > .grid-cell {
+  margin-right: 60px;
+}
+#home .top-lists > .grid > .grid-cell:last-child {
+  margin-right: 0;
+}
+#home .item {
+  height: 40px;
+  padding: 3px 0;
+  margin: 5px 0;
+}
+#home .item .grid-cell {
+  padding-right: 15px;
+}
+#home .item .grid-cell:last-child {
+  padding-right: 0;
+}
 
-#drink-page h1 {
+/*** DRINK/INGREDIENT/RECIPE-EDITOR/TIPS STYLES ***/
+
+#drink-page h1,
+#ingredient-page h1 {
   font-weight: 600;
   margin: 0;
   padding: 0 0 6px 0;
 }
-#drink-page h3 {
-  font-size: 14px;
+#drink-page h3,
+#ingredient-page h3 {
+  font-size: 15px;
   font-weight: 600;
-  margin: 0;
+  margin: 0 0 8px 0;
 }
-#drink-page h3 {
-  margin-bottom: 8px;
-}
-#drink-page .center {
+#drink-page .center,
+#recipe-editor .center,
+#ingredient-page .center,
+#profile-page .center,
+#ingredient-page .center {
   max-width: 600px;
 }
 #drink-page .photos {
-  min-height: 300px;
+  min-height: 50vh;
   border-bottom: 1px solid #ededed;
-  background: url(/images/img-upload.png) no-repeat center #f4f4f4;
+  background: url(/images/img-upload.png) no-repeat center #FBFBFB;
+  background-position: calc(50% + 8px) calc(50% - 30px);
   margin-bottom: 30px;
+  overflow: hidden;
+  position: relative;
 }
-#drink-page .row {
+.info-wrap {
+  background-color: #fff;
+  position: relative;
+  z-index: 1;
+}
+#drink-page .add-photo {
+  position: absolute;
+  bottom: 12%;
+  width: 100%;
+}
+#drink-page .add-photo button {
+  margin-top: 14px;
+}
+#drink-page .row,
+#recipe-editor .row,
+#ingredient-page .row {
   padding: 0 0 40px 0;
 }
+#recipe-editor .row:first-child,
+#ingredient-page .row:first-child {
+  padding: 40px 0;
+}
 #drink-page .votes {
-  max-width: 34px;
   text-align: center;
+}
+#drink-page .votes > div {
+  display: inline-block;
+  padding: .5em;
+  border: 1px solid rgba(136, 153, 166, 0.5);
+}
+#drink-page .votes > div a {
+  color: #8899a6;
+}
+#drink-page .votes > div:nth-of-type(1) {
+  padding-left: .7em;
+  padding-right: .7em;
+  border-radius: 4px 0 0 4px;
+  border-right: none;
+}
+#drink-page .votes > div:nth-of-type(1):hover {
+  background: #E1E8ED;
+}
+#drink-page .votes > div:nth-of-type(2) {
+  padding-right: 1.2em;
+  padding-left: 1.2em;
+  position: relative;
+  margin-right: -1px;
+  margin-left: -1px;
+  border-left: none;
+  border-right: none;
+}
+#drink-page .votes > div:nth-of-type(3) {
+  padding-right: .7em;
+  padding-left: .7em;
+  border-radius: 0 4px 4px 0;
+  border-left: none;
+}
+#drink-page .votes > div:nth-of-type(3):hover {
+  background: #E1E8ED;
 }
 #drink-page .votes .fa {
   font-size: 16px;
 }
 #drink-page .votes .arrow:hover .fa {
-  color: orange;
+  color: #8899a6;
 }
 #drink-page .rating {
   display: inline-block;
@@ -1005,8 +1159,7 @@ aside .btn-primary:hover {
   color: #FF7300;
 }
 #drink-page .ingredients {
-  max-width: 50%;
-  margin-right: 60px;
+  max-width: 70%;
 }
 #drink-page .ingredients .ingredient {
   padding: 6px 0;
@@ -1020,7 +1173,7 @@ aside .btn-primary:hover {
   text-align: right;
 }
 #drink-page .ingredients .ingredient .actions {
-  max-width: 60px;
+  max-width: 80px;
 }
 #drink-page .grid-cell.actions a {
   text-decoration: none;
@@ -1029,13 +1182,6 @@ aside .btn-primary:hover {
 }
 #drink-page .grid-cell.actions a i {
   margin-bottom: -5px;
-}
-#drink-page .similar-drinks {
-  background-color: #f4f4f4;
-  margin: 0 auto 40px auto;
-  padding: 20px;
-  border-top: 1px solid lightgray;
-  border-bottom: 1px solid lightgray;
 }
 #drink-page a .fa-flag.highlight {
   color: goldenrod;
@@ -1051,12 +1197,296 @@ aside .btn-primary:hover {
   cursor: pointer;
 }
 #drink-flag-modal {
-  padding: 32px;
+  padding: 15px;
 }
 #drink-flag-modal .diff del,
 #drink-flag-modal .diff span {
   background: #ddd;
   color: #888;
+}
+#drink-page .similar-drinks {
+  max-width: 100%;
+  width: 100%;
+  padding: 0 40px;
+}
+#drink-page .similar-drinks h3 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+#drink-page .similar-drinks > .grid-cell > .grid {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell {
+  min-width: 200px;
+  max-width: 200px;
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid,
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid > .grid-cell {
+  width: 100%;
+  background-color: #E5F2F7
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child {
+  flex-direction: column;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #BFE0EC;
+  box-shadow: 0 0 0 4px rgba(191,224,236,0.0);
+  transition: all .3s;
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child:hover {
+  box-shadow: 0 0 0 4px rgba(191,224,236,0.8);
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child > .grid-cell:nth-of-type(2) {
+  background: #fff;
+  border-top: 1px solid #BFE0EC;
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child > .grid-cell:last-child {
+  background: #fff;
+  border-top: 1px solid #BFE0EC;
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child > .grid-cell:last-child .grid {
+  padding: 12px 0;
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child > .grid-cell:last-child .grid-cell {
+  text-align: center;
+  padding: 0 12px;
+}
+#drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child > .grid-cell:last-child .grid-cell:first-child {
+  border-right: 1px solid #BFE0EC;;
+}
+#drink-page .similar-drinks .grid .grid-cell .image {
+  min-width: 100%;
+}
+#drink-page .similar-drinks .grid .grid-cell .image .fa {
+  font-size: 46px;
+  display: block;
+  padding: 50px 0;
+  text-align: center;
+  color: #BFE0EC;
+}
+#drink-page .similar-drinks .grid .grid-cell .name {
+  display: block;
+  min-width: 100%;
+  text-align: center;
+  padding: 12px 12px;
+  font-size: 16px;
+  flex: 1 0 auto;    
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #292f33;
+}
+.full-bleed {
+  border-top: 1px solid #e1e8ed;
+  background: #FBFBFB;
+  padding: 40px 0;
+}
+#tips {
+  padding: 1em 0;
+}
+#tips .grid > .grid-cell:first-child {
+  margin-right: 1em;
+}
+#tips .grid > .grid-cell:last-child > .grid {
+  padding-bottom: 5px;
+}
+#drink-page .favit {
+  color: #29BC7A;
+}
+#drink-page .favit:hover .fa:before {
+  content: "\f004";
+}
+
+/*** RECIPE EDITOR ***/
+
+
+#recipe-editor h3 {
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 0;
+}
+#recipe-editor .form-group {
+  margin-bottom: 0;
+}
+#recipe-editor .description textarea {
+  max-width: 598px;
+}
+#recipe-editor .directions .step {
+  position: relative;
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+#recipe-editor .directions .step:before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -15px;
+  margin-top: -15px;
+  display: block;
+  border: 3px solid #212121;
+  border-radius: 50%;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  line-height: 24px;
+  font-weight: bold;
+  counter-increment: step;
+  content: counter(step);
+}
+#recipe-editor .directions textarea {
+  max-width: 504.84px;
+  width: 100%;
+}
+#recipe-editor .form-group .qty {
+  width: 160px;
+  flex: 0 1 auto;
+}
+#recipe-editor .ingredients .form-group .grid .grid-cell:nth-of-type(3),
+#recipe-editor .ingredients .form-group .grid .grid-cell:nth-of-type(4) {
+  flex: 0 1 auto;
+}
+#recipe-editor .ingredients li.grid .grid-cell:first-child {
+  cursor: move;
+  padding-left: 0;
+}
+#recipe-editor .ingredients li.grid .grid-cell:last-child {
+  padding-right: 0;
+}
+#recipe-editor .fa-times-circle {
+  opacity: 0.7;
+  font-size: 14px;
+  color: red;
+}
+#recipe-editor .ingredients li.grid .grid-cell:first-child:hover .fa {
+  opacity: 1;
+}
+#recipe-editor .directions .form-group {
+  counter-reset: step;
+}
+.slider .slider-handle:before {
+  content: '';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  z-index: 1;
+  box-shadow: 0 0 3px 2px rgb(171, 173, 172);
+  border-radius: 50%;
+  transition: all .4s;
+}
+.slider:hover .slider-handle:before {
+  opacity: 1;
+}
+.sliders .alcohol .slider-selection {
+  background-color: #7FC7AF;
+}
+.sliders .fruitiness .slider-selection {
+  background-color: #A5CD52;
+}
+.sliders .sweetness .slider-selection {
+  background-color: #FF4E50;
+}
+.sliders .spiciness .slider-selection {
+  background-color: #C4975C;
+}
+.sliders .bitterness .slider-selection {
+  background-color: #CDB7B5;
+}
+.sliders .sourness .slider-selection {
+  background-color: #B5C53D;
+}
+.sliders .saltiness .slider-selection {
+  background-color: #D8D8C0;
+}
+.sliders .creaminess .slider-selection {
+  background-color: #FFF8DB;
+}
+.sliders .bubbliness .slider-selection {
+  background-color: #F59982;
+}
+.sliders .dryness .slider-selection {
+  background-color: #BBEED9;
+}
+
+/*** DRAG-AND-DROP LISTS ***/
+
+/**
+ * For the correct positioning of the placeholder element, the dnd-list and
+ * it's children must have position: relative
+ */
+ul[dnd-list] {
+  margin: 0;
+}
+ul[dnd-list],
+ul[dnd-list] > li {
+  position: relative;
+}
+/**
+ * The dnd-list should always have a min-height,
+ * otherwise you can't drop to it once it's empty
+ */
+ul[dnd-list] {
+  min-height: 42px;
+  padding-left: 0px;
+}
+/**
+ * The dndDraggingSource class will be applied to
+ * the source element of a drag operation. It makes
+ * sense to hide it to give the user the feeling
+ * that he's actually moving it.
+ */
+ul[dnd-list] .dndDraggingSource {
+  display: none;
+}
+/**
+ * An element with .dndPlaceholder class will be
+ * added to the dnd-list while the user is dragging
+ * over it.
+ */
+ul[dnd-list] .dndPlaceholder {
+  display: block;
+  background-color: #efefef;
+  min-height: 72px;
+  border-radius: 6px;
+  border: dashed 1px #bbb;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+ul[dnd-list] .dndDragging {
+  background-color: #efefef !important;
+  border-radius: 6px !important;
+  border: dashed 1px #bbb !important;
+}
+/**
+ * The dnd-lists's child elements currently MUST have
+ * position: relative. Otherwise we can not determine
+ * whether the mouse pointer is in the upper or lower
+ * half of the element we are dragging over. In other
+ * browsers we can use event.offsetY for this.
+ */
+ul[dnd-list] li {
+  background-color: #fff;
+  border-radius: 6px;
+  transition: all 1s;
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0 15px;
+  border: dashed 1px transparent;
+}
+ul[dnd-list] li.hover {
+  background-color: #fefefe;
+  border: dashed 1px #efefef;
+}
+/**
+ * Show selected elements in green
+ */
+ul[dnd-list] li.selected {
 }
 
 /*** IMAGE EDITOR / UPLOADER ***/
@@ -1079,7 +1509,204 @@ tipsy-image-editor a.btn:hover {
   width: 90%;
 }
 .uploader {
-  padding: 10px 10px 0 10px;
+  padding: 0 20px 20px 20px;
+}
+.uploader .progress-striped {
+  margin-right: -20px;
+  margin-left: -20px;
+  border-radius: 0;
+}
+.uploader button {
+  margin-top: 20px;
+}
+.uploader div.upload {
+  display: block;
+  width: 220px !important;
+  margin: 20px auto 25px auto;
+  overflow: hidden;
+}
+/*** DRINK PAGE STYLES:Comments ***/
+
+#comments .comment:last-child {
+  margin-bottom: 0;
+}
+#comments .comment .comment-id {
+  flex: 0 1 auto;
+  width: 100%;
+}
+.comments-cont {
+  margin-right: -1em;
+  margin-left: -1em;
+}
+.comments-cont section {
+  padding: 0 !important;
+}
+.comments-cont section h3,
+.comments-cont #comments .comment {
+  padding: 1em;
+  margin-bottom: 0 !important;
+  border-bottom: 1px solid lightgray;
+}
+.comments-cont #comments .comment:last-child {
+  border-bottom: none;
+}
+.comments-cont #comments .comment > .grid .grid-cell:first-child {
+  padding-right: 1em;
+}
+.comments-cont #comments .comment .name,
+#tips .name {
+  font-weight: bold;
+}
+.comments-cont #comments .comment .date {
+    opacity: .6;
+}
+.comments-cont #comments .comment .date:before {
+    content: "\00b7";
+}
+.comments-cont .grid:first-child h3 {
+  margin-bottom: 0 !important;
+}
+.comments-cont .comment-box {
+  padding: 1em !important;
+}
+.comments-cont > .grid {
+  padding: 1em;
+  border: 1px solid lightgray;
+}
+.comments-cont > .grid {
+  border-radius: 4px 4px 0 0;
+  border-color: #BFE0EC;
+  background-color: #E5F2F7;
+}
+.comments-cont > .grid:nth-of-type(2) {
+  border-radius: 0;
+  border-top: none;
+}
+.comments-cont > .grid:last-child {
+  border-radius: 0 0 4px 4px;
+  border-top: none;
+  background-color: transparent;
+  border-color: lightgray;
+}
+.comments-cont .avatar,
+#tips .avatar {
+  height: 32px;
+  width: 32px;
+  position: relative;
+  display: block;
+  border-radius: 3px;
+  background: #BFE0EC;
+}
+.comment-box .grid-cell .grid .grid-cell:first-child {
+  padding-right: 0;
+}
+.no-comments {
+  display:block;
+  padding: 2em 1em;
+  font-style: italic;
+  opacity: .8;
+  text-align: center;
+}
+.no-comments .fa {
+  font-size: 30px;
+  display: block;
+  margin-bottom: 10px;
+  opacity: .8;
+}
+.comment-box textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  border: 1px solid #BFE0EC;
+  height: 60px;
+  transition: height .3s ease-out;
+}
+.comment-box textarea:focus {
+  height: 120px;
+}
+.comment-box .grid-cell .grid .grid-cell:last-child {
+  position: relative;
+}
+.comment-box .grid-cell .grid .grid-cell:last-child:before {
+  background-color: #fff;
+  box-shadow: -1px 1px 1px 0 #BFE0EC;
+  content: "\00a0";
+  display: block;
+  height: 10px;
+  left: 9px;
+  position: absolute;
+  top: 25px;
+  transform:             rotate( 45deg );
+      -moz-transform:    rotate( 45deg );
+      -ms-transform:     rotate( 45deg );
+      -o-transform:      rotate( 45deg );
+      -webkit-transform: rotate( 45deg );
+  width:  10px;
+}
+.comment-actions {
+  display: block;
+  padding-top: 18px;
+}
+.comment-actions a {
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+  border-radius: 50%;
+  color: #8899a6;
+  border: 1px solid rgba(136, 153, 166, 0.5);
+  text-align: center;
+}
+.comment-actions a:hover {
+  background-color: #E1E8ED;
+}
+.comment-actions span {
+  position: relative;
+  opacity: .8;
+  padding-left: 9px;
+  margin-left: 9px;
+  font-size: 88%;
+}
+.comment-actions span .fa {
+  font-size: 14px;
+  width: 14px;
+}
+.comment-actions span:first-child {
+  padding-left: 0;
+  margin-left: 0;
+}
+.comment-actions span:first-child:before,
+.comment-actions span:last-child:before {
+  display: none;
+}
+#comments .comment .comment-actions span:last-child a {
+  opacity: 0;
+  transition: all .4s;
+  color: #000;
+}
+#comments .comment:hover .comment-actions span:last-child a {
+  opacity: .5;
+  transition: all .4s;
+}
+#comments .comment:hover .comment-actions span:last-child a:hover {
+  opacity: 1;
+  transition: all .4s;
+}
+.comment-actions .comment-vote a:first-child {
+  margin-right: 4px;
+}
+.comment-actions .comment-vote a:last-child {
+  margin-left: 4px;
+}
+#comments .comment .comment-vote a:hover .fa-thumbs-o-up:before {
+  content:'\f164';
+}
+#comments .comment .comment-vote a:hover .fa-thumbs-o-down:before {
+  content:'\f165';
+}
+.comment-actions .tip .fa-lightbulb-o {
+  margin-right: 6px;
 }
 
 /*** ACCOUNT SETTINGS ***/
@@ -1116,7 +1743,7 @@ tipsy-image-editor a.btn:hover {
   max-width: 200px;
 }
 .account-settings .grid .grid-cell.form-item {
-  max-width: 186px;
+  max-width: 246px;
 }
 .account-settings .grid .grid-cell.avatar {
   max-width: 48px;
@@ -1127,8 +1754,18 @@ tipsy-image-editor a.btn:hover {
 .account-settings .profile {
   margin-bottom: 20px;
 }
+.account-settings input:not([type='checkbox']) {
+  height: 30px;
+  padding: 3px 6px;
+}
+.account-settings .form-control input:not([type='checkbox']),
+.account-settings .form-control textarea {
+  border-radius: 3px;
+  border: 1px solid lightgray;
+  width: 100%;
+}
 .account-settings .main .grid .grid-cell:first-child {
-  padding-right: 14px;
+  padding-right: 20px;
   text-align: right;
 }
 .account-settings .main .grid .avatar {
@@ -1145,7 +1782,7 @@ tipsy-image-editor a.btn:hover {
   height: 68px;
   display: block;
   margin: 0 auto;
-  border-radius: 50%;
+  border-radius: 4px;
   border: 1px solid #fff;
 }
 .account-settings .avatar img {
@@ -1153,7 +1790,7 @@ tipsy-image-editor a.btn:hover {
   height: 48px;
   position: relative;
   display: block;
-  border-radius: 50%;
+  border-radius: 4px;
   border: 1px solid #fff;
 }
 .account-settings h1 {
@@ -1181,6 +1818,17 @@ tipsy-image-editor a.btn:hover {
 .content a.fa-flag:hover {
   opacity: 1;
 }
+/*** NG-PAGESLIDE ***/
+.ng-pageslide {
+  background: #eee;
+}
+
+/*** FAVOURITES STYLES ***/
+
+.favourite-collection img {
+  width: 64px;
+  height: 64px;
+}
 
 /*** NANO SCROLL STYLES ***/
 
@@ -1191,11 +1839,11 @@ tipsy-image-editor a.btn:hover {
   position: absolute;
   overflow: scroll;
   overflow-x: hidden;
-  top: 10px;
-  right: 10px;
-  bottom: 10px;
-  left: 10px;
-  padding-right: 10px;
+  top: 0;
+  right: 20px;
+  bottom: 0;
+  left: 0;
+  padding-right: 0;
 }
 .nano > .nano-content:focus {
   outline: thin dotted;
@@ -1209,6 +1857,7 @@ tipsy-image-editor a.btn:hover {
 .nano > .nano-pane {
   background: rgba(0,0,0,.25);
   position: absolute;
+  display: block !important;
   width: 10px;
   right: 0;
   top: 0;
@@ -1246,14 +1895,13 @@ footer {
   text-align: center;
 }
 footer.fixed {
-  /*position: fixed;*/
   max-width: 100%;
   width: 100%;
-  bottom: 0;
   padding: 10px 0;
   text-align: center;
   background: transparent;
   color: #fff;
+  flex: 0 1 auto;
 }
 footer.fixed {
   background: #181a1a;
@@ -1261,6 +1909,7 @@ footer.fixed {
 footer.in-app {
   background: #263444;
   min-height: 120px;
+  padding: 40px 0;
 }
 footer.fixed .grid .grid-cell.socials,
 footer.in-app .grid .grid-cell.socials {
@@ -1270,17 +1919,159 @@ footer.in-app .grid .grid-cell.socials {
 footer.fixed .grid .grid-cell.socials .fa,
 footer.in-app .grid .grid-cell.socials .fa {
   margin-right: 6px;
-  opacity: 0.5;
+  font-size: 18px;
   color: #aaa;
 }
 footer.fixed .grid .grid-cell.copyright,
 footer.in-app .grid .grid-cell.copyright {
-  opacity: 0.5;
   color: #aaa;
+  font-size: 11px;
+}
+footer a:hover {
+  color: #00B3FF;
+}
+footer .fa:hover {
+  color: #00B3FF;
 }
 footer.fixed .grid .grid-cell.copyright {
   padding-right: 102px;
 }
-footer.in-app .grid .grid-cell.copyright {
-  padding-right: 317px;
+footer.in-app .row {
+  margin-bottom: 20px;
+}
+
+/* NOTICE STYLES */
+
+.notice-error,
+.notice-success {
+  padding: 10px 0;
+  display: block;
+  opacity: .8;
+  text-align: center;
+}
+.notice-error .fa,
+.notice-success .fa {
+  display: block;
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+.notice-error button,
+.notice-success button {
+  text-align: center;
+  margin-top: 20px;
+}
+.notice-success .fa {
+  font-size: 60px;
+  color: #51BE38;
+}
+
+/* BOOTSTRAP OVERRIIDES */
+
+.modal-content {
+  box-shadow: none;
+  border: none;
+  border-radius: 4px;
+}
+.modal-header {
+  background: #FBFBFB;
+  border-bottom: 1px solid #ededed;
+  padding: 6px 15px;
+  border-radius: 4px 4px 0 0;
+}
+.modal-header .close {
+  font-size: 30px;
+}
+.modal-content p {
+  margin-bottom: 0;
+}
+.checkbox input[type=checkbox], 
+.checkbox-inline input[type=checkbox], 
+.radio input[type=radio], 
+.radio-inline input[type=radio],
+input[type=checkbox], 
+input[type=radio] {
+  position: relative;
+  bottom: -2px;
+}
+@media screen and (max-width: 1165px) {
+  #gallery img.slide {
+    width: auto;
+    height: 50vh;
+    min-width:100%;
+    bottom: 0;
+  }
+}
+
+@media screen and (max-width: 785px) {
+  nav {
+    min-width: 100% !important;
+    min-height: 56px;
+    height: auto;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+  nav .logo {
+    margin-right: auto;
+    margin-left: auto;
+  }
+  nav .search {
+    display: none;
+  }
+  nav > .grid-cell:first-child {
+    margin-right: 0;
+    padding-right: 0;
+  }
+  nav .logged-out,
+  nav .logged-in .grid > .grid-cell {
+    display: none;
+  }
+  nav .logged-in .grid > .grid-cell:last-child {
+    display: flex !important;
+  }
+
+  #drink-page .photos {
+    margin-right: -10px;
+    margin-left: -10px;
+  }
+  #main-cont {
+    padding: 57px 10px 0 10px;
+  }
+  #drink-page .ingredients {
+    max-width: 100%;
+  }
+  .comments-cont {
+    margin-right: 0;
+    margin-left: 0;
+  }
+  .full-bleed {
+    margin-right: -10px;
+    margin-left: -10px;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .full-bleed .cards {
+    min-width: 100% !important;
+  }
+  .splash.grid,
+  .signin.grid {
+    flex-direction: column;
+  }
+  .logged-out-nav {
+    position: static;
+    display: block;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+  }
+  .signin.grid .grid-cell,
+  .splash.grid .grid-cell {
+    flex: 0 1 auto;
+  }
+  .splash.grid .grid-cell {
+    margin-top: 25%;
+   }
+  .signin.grid .grid-cell:first-child {
+    margin: auto;
+  }
 }
