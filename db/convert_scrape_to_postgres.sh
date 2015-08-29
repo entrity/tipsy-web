@@ -1,15 +1,21 @@
 #!/bin/bash
-CAMERON_SCRAPE=db/Dump20150525.sql
-INTERMEDIATE_DUMP=tmp/scrape.sql
-INTERMEDIATE_DUMP_2=tmp/utf8_scrape.sql
-MYSQL_TMP=tt
-PSQL_DST=$1
-mysql -e "drop database if exists $MYSQL_TMP;"
-mysql -e "create database $MYSQL_TMP;"
-mysql $MYSQL_TMP < $CAMERON_SCRAPE
-echo -e "SET standard_conforming_strings = 'off';\nSET backslash_quote = 'on';" > $INTERMEDIATE_DUMP
-mysqldump --compatible=postgresql $MYSQL_TMP \
-| sed -r \
+
+# This imports structure and data from the .sql and .txt files that result from
+# mysqldump -T
+
+DSTDB="tmp"
+CHARSET="utf-8" #your current database charset
+DATADIR="$1"
+
+do_format_struct ()
+{
+	TMP=$(basename "$1")
+	TABLE=${TMP%.*}
+	echo tmp $TMP
+	echo table $TABLE
+	TMPFILE="/tmp/$( basename "$1" ).tmp"
+	sed -r \
+	-e 's/`/"/g' \
 	-e 's/varchar\([0-9]+\)/text/g' \
 	-e 's/int\(11\)/int/g' \
 	-e '/^  KEY .*/d' \
@@ -18,7 +24,35 @@ mysqldump --compatible=postgresql $MYSQL_TMP \
 	-e '/^LOCK TABLES/d' \
 	-e '/^UNLOCK TABLES/d' \
 	-e "s/\\\'/''/g" \
->> $INTERMEDIATE_DUMP
-iconv -f CP1250 -t UTF-8 <$INTERMEDIATE_DUMP >$INTERMEDIATE_DUMP_2
+	-e '/ENGINE=\w/d' \
+	-e '/^\/\*.*\*\/;/d' \
+	-e '/^--/d' \
+	-e "s/(PRIMARY KEY .*)$/tmp int);\nALTER TABLE ONLY $TABLE ADD CONSTRAINT ""$TABLE""_pkey \1;\ALTER TABLE ONLY $TABLE DROP COLUMN tmp/g" \
+	"$1" > $TMPFILE
+	iconv -t $CHARSET -f $CHARSET -c < $TMPFILE > "$1.out"
+}
 
-psql $PSQL_DST < $INTERMEDIATE_DUMP_2 2> >(tee tmp/err.log >&2)
+do_load_struct ()
+{
+	OUT="$1.out"
+	echo importing structure for $2 from $OUT
+	psql $DSTDB < "$OUT"
+}
+
+do_load_data ()
+{
+	TABLE="$2"
+	TMPFILE=/tmp/$TABLE.export.tmp.out
+	iconv -t $CHARSET -f $CHARSET -c < "$1" > $TMPFILE
+	echo "Loading data for $TABLE from $TMPFILE"
+	psql $DSTDB -c "copy $TABLE from '$TMPFILE'"
+}
+
+for file in `ls "$DATADIR"/*.sql`; do
+	TMP=$(basename $file)
+	TABLE=${TMP%.*}
+	do_format_struct 	"$file" "$TABLE"
+	do_load_struct 		"$file" "$TABLE"
+	datafile="$TABLE".txt
+	do_load_data    "$datafile" "$TABLE"
+done
