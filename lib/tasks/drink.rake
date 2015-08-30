@@ -20,7 +20,7 @@ namespace :drink do
       ingredient_ids = drink.ingredients.pluck(:ingredient_id)
       candidates = Drink
         .joins(:ingredients)
-        .where('id != $1', drink.id)
+        .where('id != ?', drink.id)
         .where('drinks_ingredients.ingredient_id' => ingredient_ids)
         .includes(:ingredients)
         .distinct

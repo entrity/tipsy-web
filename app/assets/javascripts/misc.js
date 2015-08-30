@@ -1,5 +1,18 @@
 (function(){
 	angular.module('tipsy.misc', [])
+	.controller('Home.AuthedCtrl', ['$scope', '$http', 'Drink', function ($scope, $http, Drink) {
+		$http.get('/home/drinks.json').then(
+			function (response) {
+				$scope.topDrinks      = response.data.general.map(function (obj) { return new Drink(obj) });
+				$scope.topGinDrinks   = response.data.gin_drinks.map(function (obj) { return new Drink(obj) });
+				$scope.topVodkaDrinks = response.data.vodka_drinks.map(function (obj) { return new Drink(obj) });
+				$scope.topMargaritas  = response.data.margaritas.map(function (obj) { return new Drink(obj) });
+			},
+			function (response) {
+				console.error(response.status, response.data);
+			}
+		);
+	}])
 	.controller('LoginModalCtrl', ['$scope', 'message', '$location', function ($scope, message, $location) {
 		$scope.message = message;
 		$scope.redirect = $location.url();
