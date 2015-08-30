@@ -2,7 +2,8 @@ Rails.application.routes.draw do
 
   devise_for :users, sign_out_via: [:get, :post, :delete], controllers: {
     :registrations => "users/registrations",
-    :omniauth_callbacks => "users/omniauth_callbacks"
+    :omniauth_callbacks => "users/omniauth_callbacks",
+    :sessions => "users/sessions",
   }
   as :user do
     get 'users', :to => 'users/registrations#edit', :as => :user_root # Rails 3

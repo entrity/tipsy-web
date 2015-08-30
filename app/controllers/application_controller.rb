@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   before_action :set_xsrf_token_cookie
-  before_action :require_ssl_if_signed_in
 
   respond_to :json, :html
 
@@ -37,13 +36,6 @@ private
       else
         render status: 401, text: 'User session required. Please authenticate'
       end
-    end
-  end
-
-  def require_ssl_if_signed_in
-    if user_signed_in? && !request.ssl? && Rails.env.production?
-      flash[:error] = 'You must use an encrypted connection'
-      redirect_to root_url(protocol: :https)
     end
   end
 
