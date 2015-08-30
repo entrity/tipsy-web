@@ -48,6 +48,25 @@ class Drink < ActiveRecord::Base
     res.to_a
   end
 
+  def self.top required_canonical_ingredient_ids=nil, exclude_ids=nil
+    out = order('score DESC')
+    if exclude_ids.present?
+      if exclude_ids.is_a? Array
+        out = out.where("id not in (?)", exclude_ids)
+      else
+        out = out.where("id != ?", exclude_ids)
+      end
+    end
+    if required_canonical_ingredient_ids.present?
+      if required_canonical_ingredient_ids.is_a? Array
+        out = out.where("required_canonical_ingredient_ids OPERATOR(pg_catalog.@>) ARRAY[?]::int[]", required_canonical_ingredient_ids)
+      else
+        out = out.where("#{required_canonical_ingredient_ids.to_i} = ANY(required_canonical_ingredient_ids)")
+      end
+    end
+    out
+  end
+
   def top_photo
     @top_photo ||= photos.order(:score).last
   end
