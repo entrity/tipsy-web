@@ -1,4 +1,5 @@
 class Users::RegistrationsController < Devise::RegistrationsController
+  force_ssl only: [:create, :new], if: -> { Rails.env.production? }
 
   protected
 
