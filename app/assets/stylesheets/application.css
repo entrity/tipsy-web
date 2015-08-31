@@ -51,6 +51,7 @@ body {
   position: absolute;
   top: 8px;
   z-index: 3000;
+  color: #aaa;
 }
 /* This rule prevents the magnifying glass icon from overlapping the placeholder text when the select element is not focused */
 #fuzzy-finder .ui-select-match > span:first-child > span:first-child {
@@ -834,10 +835,15 @@ aside .trophie-cont:hover {
 .splash.grid .grid-cell .btn-primary {
   background-color: #2380af;
   border-color: #2380af;
+  padding-top: 9px;
+  padding-bottom: 9px;
 }
 .signin.grid .grid-cell form,
 .splash.grid .grid-cell form {
   padding: 10px 0;
+}
+.signin.grid .disc p {
+  text-align: left !important;
 }
 .splash.grid .btn {
   min-width: 128px;
@@ -848,32 +854,36 @@ aside .trophie-cont:hover {
   color: #fff;
 }
 .signin.grid .grid-cell a {
-  color: #fff;
+  color: #B7BAC3;
 }
-.signin.grid .grid-cell .links a {
-  font-size: 12px;
+.signin.grid .grid-cell a:hover {
+  text-decoration: underline;
 }
 .signin.grid .grid-cell label {
   font-size: 11px;
   margin-left: 4px;
 }
-.signin.grid .grid-cell .input-group {
-  margin-bottom: 10px;
+.signin.grid .grid-cell .input-group,
+.signin.grid .grid-cell .actions {
+  margin-top: 14px;
+}
+.signin.grid .grid-cell .input-group:first-of-type {
+  margin-top: 0;
 }
 .signin.grid .grid-cell .input-group-addon {
   min-width: 39px;
   border: none;
   background-color: #fff;
 }
-.signin.grid .grid-cell .input {
-
-}
 .signin.grid .grid-cell .input-group-addon .fa {
   font-size: 12px;
 }
 .signin.grid .grid-cell input[type="password"],
-.signin.grid .grid-cell input[type="email"] {
-  border: none;
+.signin.grid .grid-cell input[type="email"],
+.signin.grid .grid-cell input[type="text"] {
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
   background-color: #fff;
 }
 .signin.grid .grid-cell input[type="password"],
@@ -885,7 +895,12 @@ aside .trophie-cont:hover {
   display: block;
   background: #4E69A2;
   color: #ddd;
-  border: 1px solid #3B5998;
+  border: 1px solid #4E69A2;
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+.signin.grid .grid-cell .btn.facebook:hover {
+  text-decoration: none;
 }
 .form-control {
   border-color: #eee;
@@ -1993,6 +2008,9 @@ input[type=checkbox],
 input[type=radio] {
   position: relative;
   bottom: -2px;
+}
+.signin .form-control {
+  height: 40px;
 }
 @media screen and (max-width: 1165px) {
   #gallery img.slide {

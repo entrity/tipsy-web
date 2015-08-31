@@ -23,9 +23,8 @@
 }
 #drink-page #gallery #gallery-ctrl a {
   display: inline-block;
-  border: 1px solid rgba(136, 153, 166, 0.5);
   color: #8899a6;
-  line-height: 29px;
+  line-height: 32px;
   height:32px;
   text-align: center;
   font-size: 16px;
@@ -52,11 +51,9 @@
 }
 #drink-page #gallery #gallery-ctrl a:first-child {
   border-radius: 4px 0 0 4px;
-  border-left: 1px solid rgba(136, 153, 166, 0.5);
 }
 #drink-page #gallery #gallery-ctrl a:last-child {
   border-radius: 0 4px 4px 0;
-  border-right: 1px solid rgba(136, 153, 166, 0.5);
 }
 #gallery-ctrl {
   width: 50%;
