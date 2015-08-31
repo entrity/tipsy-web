@@ -14,6 +14,8 @@ Rails.application.routes.draw do
 
   get 'sitemap.xml' => 'home#sitemap', defaults:{format: :xml}
 
+  get 'tos.html' => 'home#tos', defaults:{format: :html}
+
   get 'fuzzy_find.json' => 'home#fuzzy_find', defaults:{format: :json}
 
   get 'home/drinks.json' => 'home#drinks', defaults:{format: :json}
