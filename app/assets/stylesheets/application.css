@@ -185,7 +185,9 @@ a:hover {
   border-color: transparent;
 }
 .logged-out-nav .btn {
-  padding: 6px 12px;
+  min-width: 128px;
+  max-width: 128px;
+  padding: 9px 12px;
   font-size: 12px;
 }
 .logged-out-nav .btn:first-child {
@@ -809,9 +811,12 @@ aside .trophie-cont:hover {
   max-width: 300px;
   margin: auto;
 }
+#landing .search > div {
+  border-radius: 3px;
+}
 .signin.grid.modal-content {
   height: initial;
-  padding: 32px;
+  padding: 16px;
 }
 .signin.grid {
   height: 100vh;
@@ -853,9 +858,6 @@ aside .trophie-cont:hover {
 .signin.grid .grid-cell form,
 .splash.grid .grid-cell form {
   padding: 0;
-}
-.splash.grid .btn {
-  min-width: 128px;
 }
 .signin .btn:hover,
 .splash .btn:hover {
@@ -1000,24 +1002,54 @@ aside .trophie-cont:hover {
 /*** HOME STYLES ***/
 
 #home > .hero {
-  background: url('/images/drinks/summer-cocktails.jpg') center center;
-  min-height: 33vh;
+  background: url('/images/drinks/summer-cocktails.jpg') no-repeat center center; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  min-height: 40vh;
   position: relative;
 }
-#home > .hero:after {
-  content: '';
+#home > .hero:before {
+  content: "";
   position: absolute;
-  background: rgba(0,0,0,0.3);
-  top: 0;
-  right: 0;
+  z-index: 1;
   bottom: 0;
   left: 0;
-  z-index: 1;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0,0,0,0.2);
+}
+#home > .hero:after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0.6;
+  filter: alpha(opacity=60);
+  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…gd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g");
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(100%, #000));
+  background-image: -moz-linear-gradient(transparent 50%, #000);
+  background-image: -webkit-linear-gradient(transparent 50%, #000);
+  background-image: linear-gradient(transparent 50%, #000);
+  -webkit-transition: opacity 0.25s ease 0s;
+  -o-transition: opacity 0.25s ease 0s;
+  transition: opacity 0.25s ease 0s;
+}
+#home h1,
+#home h2,
+#home h3,
+#home h4 {
+  text-align: center;
 }
 .hero h1 {
   color: #fff;
-  font-size: 3.6em;
-  font-weight: 600;
+  font-size: 2em;
+  font-weight: 100;
   display: block;
   text-align: center;
   text-shadow: 0 3px 3px rgba(0,0,0,0.6);
@@ -1026,8 +1058,8 @@ aside .trophie-cont:hover {
 }
 .hero h4 {
   color: #fff;
-  font-size: 2.1em;
-  font-weight: 600;
+  font-size: 2.6em;
+  font-weight: 700;
   display: block;
   text-align: center;
   text-shadow: 0 3px 3px rgba(0,0,0,0.6);
@@ -1040,7 +1072,10 @@ aside .trophie-cont:hover {
   border-bottom: 1px solid lightgray;
   margin: 40px 0 10px 0;
 }
-#home .top-lists > .grid > .grid-cell {
+#home .top-lists {
+  padding: 30px 0 80px 0;
+}
+#home .top-lists > .grid.favorites > .grid-cell {
   margin-right: 60px;
 }
 #home .top-lists > .grid > .grid-cell:last-child {
@@ -1056,6 +1091,87 @@ aside .trophie-cont:hover {
 }
 #home .item .grid-cell:last-child {
   padding-right: 0;
+}
+#home .picks {
+  padding: 40px 0;
+}
+#home .picks a.grid-cell {
+  position: relative;
+  color: #fff;
+  height: 320px;
+  margin-right: 10px;
+  background-color: #004052;
+  background-position: center center;
+  background-repeat: no-repeat;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  -webkit-background-size: cover;
+  background-size: cover;
+  transition: all 0.25s ease 0s;
+}
+#home .picks a.grid-cell:before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0,0,0,0.4);
+}
+#home .picks a.grid-cell:hover:after {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+#home .picks a.grid-cell:after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0.6;
+  filter: alpha(opacity=60);
+  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…gd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g");
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(100%, #000));
+  background-image: -moz-linear-gradient(transparent 50%, #000);
+  background-image: -webkit-linear-gradient(transparent 50%, #000);
+  background-image: linear-gradient(transparent 50%, #000);
+  -webkit-transition: opacity 0.25s ease 0s;
+  -o-transition: opacity 0.25s ease 0s;
+  transition: opacity 0.25s ease 0s;
+}
+#home .picks .grid-cell .title {
+  position: absolute;
+  z-index: 3;
+  top: 114px;
+  left: 0;
+  right: 0;
+  padding: 0 8px;
+  text-align: center;
+}
+#home .picks .grid-cell .title h4 {
+  font-weight: 400;
+  font-size: 2.2em;
+  margin-bottom: 4px;
+  letter-spacing: -0.03em;
+}
+#home .picks .grid-cell .title span {
+  color: #eaeaea;
+  font-weight: 400;
+  font-size: 16px;
+}
+#home .picks .grid-cell .faves {
+    position: absolute;
+    z-index: 3;
+    bottom: 8px;
+    right: 10px;
+}
+#home .picks .grid-cell .faves .votes {
+    font-size: 1.2em;
+    color: #20C57B;
 }
 
 /*** DRINK/INGREDIENT/RECIPE-EDITOR/TIPS STYLES ***/
@@ -1911,6 +2027,11 @@ tipsy-image-editor a.btn:hover {
   visibility: visible\9; /* Target only IE7 and IE8 with this hack */
   opacity: 0.99;
 }
+/*** REVIEW MODAL ***/
+
+.review-modal{
+  
+}
 
 /*** FOOTER STYLES ***/
 
@@ -1997,7 +2118,7 @@ footer.in-app .row {
 .modal-content {
   box-shadow: none;
   border: none;
-  border-radius: 4px;
+  border-radius: 0;
 }
 .modal-header {
   background: #FBFBFB;
@@ -2023,6 +2144,20 @@ input[type=radio] {
 .signin .form-control {
   height: 40px;
 }
+.badge {
+  display: inline-block;
+  padding: 5px;
+  border-radius: 3px;
+  line-height: inherit;
+  color: #3498db;
+  background-color: transparent;
+  font-size: 13px;
+}
+header .review:hover .badge {
+  background-color: #267fdd;
+  color: #fff;
+}
+
 @media screen and (max-width: 1165px) {
   #gallery img.slide {
     width: auto;
