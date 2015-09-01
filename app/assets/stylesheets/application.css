@@ -86,12 +86,18 @@ a.nolink {
 }
 .flash-notice {
   background: #cfc;
+  padding: 6px 30px;
+  text-align: center;
 }
 .flash-alert {
   background: #eec;
+  padding: 6px 30px;
+  text-align: center;
 }
 .flash-error {
   background: #fcc;
+  padding: 6px 30px;
+  text-align: center;
 }
 label {
   margin-bottom: 0;
@@ -179,7 +185,7 @@ a:hover {
   border-color: transparent;
 }
 .logged-out-nav .btn {
-  padding: 3px 12px;
+  padding: 6px 12px;
   font-size: 12px;
 }
 .logged-out-nav .btn:first-child {
@@ -336,7 +342,7 @@ label {
 img.hr {
   display: block;
   margin: 0 auto;
-  margin: 20px 0 12px 0;
+  margin: 20px 0 20px 0;
   width: 100%;
 }
 
@@ -813,6 +819,10 @@ aside .trophie-cont:hover {
   color: #fff;
   flex-direction: column;
 }
+.signin.grid .links,
+.splash.grid .links {
+  text-align: center;
+}
 .signin.grid .grid-cell:first-child,
 .splash.grid .grid-cell:first-child {
   margin: auto; 
@@ -831,30 +841,30 @@ aside .trophie-cont:hover {
   margin: 14px 0 14px 0;
   text-align: center;
 }
-.signin.grid .grid-cell .btn-primary,
-.splash.grid .grid-cell .btn-primary {
+.signin .btn-primary,
+.splash .btn-primary {
+  width: 100%;
+  color: #fff !important;
   background-color: #2380af;
-  border-color: #2380af;
+  border-color: transparent;
   padding-top: 9px;
   padding-bottom: 9px;
 }
 .signin.grid .grid-cell form,
 .splash.grid .grid-cell form {
-  padding: 10px 0;
-}
-.signin.grid .disc p {
-  text-align: left !important;
+  padding: 0;
 }
 .splash.grid .btn {
   min-width: 128px;
 }
-.splash.grid .btn:hover {
-  background-color: #fcb052;
-  border-color: #fcb052;
+.signin .btn:hover,
+.splash .btn:hover {
+  background-color: #166C98;
   color: #fff;
+  text-decoration: none !important;
 }
-.signin.grid .grid-cell a {
-  color: #B7BAC3;
+.signin.grid .grid-cell .links a {
+  font-weight: bold;
 }
 .signin.grid .grid-cell a:hover {
   text-decoration: underline;
@@ -895,12 +905,13 @@ aside .trophie-cont:hover {
   display: block;
   background: #4E69A2;
   color: #ddd;
-  border: 1px solid #4E69A2;
+  border: 1px solid transparent;
   padding-top: 9px;
   padding-bottom: 9px;
 }
 .signin.grid .grid-cell .btn.facebook:hover {
   text-decoration: none;
+  background: #4c6eb8;
 }
 .form-control {
   border-color: #eee;

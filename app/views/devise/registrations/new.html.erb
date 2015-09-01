@@ -12,45 +12,51 @@
 
     <%- if devise_mapping.omniauthable? %>
       <%- resource_class.omniauth_providers.each do |provider| %>
-        <%= link_to "Sign in with #{provider.to_s.titleize}", user_omniauth_authorize_path( provider), :class => 'btn facebook' %>
+        <%= link_to "Sign up with #{provider.to_s.titleize}", user_omniauth_authorize_path( provider), :class => 'btn facebook' %>
       <% end -%>
     <% end -%>
 
     <img class="hr" src="/images/hr-or.png">
 
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-      <%= devise_error_messages! %>
-      <div class="field input-group">
-        <div class="input-group-addon"><i class="fa fa-user"></i></div>
-        <%= f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => "Email" %>
-      </div>
+    <a class="btn btn-primary" ng-click="showForm = ! showForm">Sign up with Email</a>
 
-      <div class="field input-group">
-        <div class="input-group-addon"><i class="fa fa-lock"></i></div>
-        <% if @minimum_password_length %>
-        <% end %>
-        <%= f.password_field :password, autocomplete: "off", :class => 'form-control', :placeholder => "Password" %>
-      </div>
-        <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <div ng-show="showForm">
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
 
-      <div class="field input-group">
-        <div class="input-group-addon"><i class="fa fa-lock"></i></div>
-        <%= f.password_field  :password, autocomplete: "off", :class => 'form-control', :placeholder => "Confirm Password" %>
-      </div>
+        <div class="field input-group">
+          <div class="input-group-addon"><i class="fa fa-user"></i></div>
+          <%= f.text_field  :nickname, autocomplete: "off", :class => 'form-control', :placeholder => "Nickname (Optional)" %>
+        </div>
+        
+        <%= devise_error_messages! %>
+        <div class="field input-group">
+          <div class="input-group-addon"><i class="fa fa-user"></i></div>
+          <%= f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => "Email" %>
+        </div>
 
-      <div class="field input-group">
-        <div class="input-group-addon"><i class="fa fa-user"></i></div>
-        <%= f.text_field  :nickname, autocomplete: "off", :class => 'form-control', :placeholder => "Nickname (Optional)" %>
-      </div>
+        <div class="field input-group">
+          <div class="input-group-addon"><i class="fa fa-lock"></i></div>
+          <% if @minimum_password_length %>
+          <% end %>
+          <%= f.password_field :password, autocomplete: "off", :class => 'form-control', :placeholder => "Password" %>
+        </div>
+          <em>(<%= @minimum_password_length %> characters minimum)</em>
 
-      <div class="actions">
-        <%= f.submit "Sign up", :class => 'btn btn-primary' %>
-      </div>
-    <% end %>
+        <div class="field input-group">
+          <div class="input-group-addon"><i class="fa fa-lock"></i></div>
+          <%= f.password_field  :password, autocomplete: "off", :class => 'form-control', :placeholder => "Confirm Password" %>
+        </div>
+
+        <div class="actions">
+          <%= f.submit "Sign up", :class => 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
 
     <div class="disc">
-      <p>By signing up, you agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+      <p>By signing up, you agree to Tipsyology's <br><a href="/tos.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a>.</p>
     </div>
+    <hr>
     <%= render "devise/shared/links" %>
 
   </div>
