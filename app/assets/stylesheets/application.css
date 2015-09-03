@@ -1663,10 +1663,20 @@ tipsy-image-editor a.btn:hover {
 }
 .uploader div.upload {
   display: block;
-  width: 220px !important;
   margin: 20px auto 25px auto;
   overflow: hidden;
 }
+.uploader div.upload input[type=file] {
+  margin: auto;
+}
+.uploader #dnd-target {
+  border: 8px dashed grey;
+  padding: 32px;
+}
+.uploader #dnd-target.dragged-over {
+  border: 8px dashed red;
+}
+
 /*** DRINK PAGE STYLES:Comments ***/
 
 #comments .comment:last-child {
@@ -2113,6 +2123,83 @@ footer.in-app .row {
   color: #51BE38;
 }
 
+/* FULL MODAL + IMAGE CROPPER */
+
+.modal-full,
+.modal-full > .modal-content {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  position: relative;
+}
+.modal-full .modal-close-trigger {
+  padding: 16px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.modal-full .full-modal-content {
+  border-radius: 32px;
+  width: 100%;
+  min-height: 100%;
+  background-color: white;
+  position: relative;
+}
+.modal-full #cropper-controls {
+  padding: 12px;
+  background-color: #ddd;
+  border: 4px solid white;
+  border-radius: 32px 32px 0 0;
+}
+#cropper-proper {
+  position: relative;
+  overflow-x: auto;
+  cursor: -webkit-grab;
+}
+#cropper-proper > * {
+}
+#cropper-proper > .overlay-border {
+  position: absolute;
+  border: 2px solid yellow;
+}
+#cropper-proper > .overlay-tile {
+  position: absolute;
+  background-color: rgba(0,0,0,0.3);
+}
+#cropper-proper > .overlay-tile.ee:before,
+#cropper-proper > .overlay-tile.ww:before,
+#cropper-proper > .overlay-tile.nn:before,
+#cropper-proper > .overlay-tile.ss:before { 
+  position: absolute;
+  content: "";
+  z-index: 1051;
+}
+#cropper-proper > .overlay-tile.ee:before {
+  width: 24px;
+  left: -12px;
+  height: 100%;
+  cursor: e-resize;
+}
+#cropper-proper > .overlay-tile.ww:before {
+  width: 24px;
+  right: -12px;
+  height: 100%;
+  cursor: w-resize;
+}
+#cropper-proper > .overlay-tile.nn:before {
+  height: 24px;
+  bottom: -12px;
+  width: 100%;
+  cursor: n-resize;
+}
+#cropper-proper > .overlay-tile.ss:before {
+  height: 24px;
+  top: -12px;
+  width: 100%;
+  cursor: s-resize;
+}
 /* BOOTSTRAP OVERRIIDES */
 
 .modal-content {

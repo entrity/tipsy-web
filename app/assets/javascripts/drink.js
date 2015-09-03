@@ -194,7 +194,7 @@
 					animation: true,
 					controller: 'Drink.PhotoUploadCtrl',
 					templateUrl: '/drinks/photo-upload-modal.html',
-					size: 'medium',
+					size: 'full',
 					resolve: {
 						drink: function () { return $scope.drink }
 					},
