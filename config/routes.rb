@@ -22,6 +22,8 @@ Rails.application.routes.draw do
 
   get 'home/drinks.json' => 'home#drinks', defaults:{format: :json}
 
+  get 'discover' => 'home#home', defaults:{discover: true, format: :html}
+
   resources :comments, only: [:create, :destroy] do
     member do
       post :unvote_tip
