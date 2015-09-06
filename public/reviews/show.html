@@ -5,9 +5,9 @@
 		<a class="btn btn-default" ng-click="$close()">Maybe later</a>
 	</p>
 </div>
-<div ng-show="castVote.status==-1">
-	<p>Alas! It appears that there are no more reviews awaiting your vote at this time. We need to wait on other users to contribute further changes.</p>
-	<p><a class="btn btn-default" ng-click="$close()">Okee dokee</a></p>
+<div class="modal-body review-modal no-content" ng-show="castVote.status==-1">
+	<p class="text-center">Alas! It appears that there are no more reviews awaiting your vote at this time. We need to wait on other users to contribute further changes.</p><br>
+	<p class="text-center"><a class="btn btn-default" ng-click="$close()">Okee dokee</a></p>
 </div>
 <div ng-show="!castVote.status">
 	<h1 title="Review {{review.id}}">Review</h1>

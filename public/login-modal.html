@@ -1,6 +1,6 @@
 <div class="grid grid--center signin modal-content" stop-event="touchend">
   <div class="grid-cell">
-    <div>{{message}}</div>
+    <div style="text-align:center;padding:0 12px 12px 12px;">{{message}}</div>
 
     <a class="btn facebook" href="/users/auth/facebook">Sign in with Facebook</a>
 
@@ -26,8 +26,9 @@
         <input type="submit" name="commit" value="Log in" class="btn btn-primary">
       </div>
     </form>
+    <hr>
     <div class="links">
-      <a href="/users/sign_up">No account? Sign up</a><br>
+      No account? <a href="/users/sign_up">Sign up</a><br>
       <a href="/users/password/new">Forgot your password?</a><br>
       <a href="/users/confirmation/new">Didn't receive confirmation email?</a><br>
     </div>

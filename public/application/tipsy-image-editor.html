@@ -1,0 +1,9 @@
+<div ng-show="isFileReaderSupported" style="min-height:700px; position:relative" stop-event="touchend">
+	<!-- No NG binding support for file input. Therefore, we attach behaviour in the link fn. -->
+	<img ng-src="imageSrc">
+	<div class="overlay">
+		<div class="overlay-inner"></div>
+	</div>
+	<a class="btn btn-primary btn-tiny" ng-click="triggerSaveImage()" >Save</a>
+</div>
+<span ng-hide="isFileReaderSupported">Your browser does not support FileReader, so image uploads are disabled.</span>

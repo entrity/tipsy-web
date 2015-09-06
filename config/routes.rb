@@ -14,9 +14,15 @@ Rails.application.routes.draw do
 
   get 'sitemap.xml' => 'home#sitemap', defaults:{format: :xml}
 
+  get 'privacy.html' => 'home#privacy', defaults:{format: :html}
+
+  get 'tos.html' => 'home#tos', defaults:{format: :html}
+
   get 'fuzzy_find.json' => 'home#fuzzy_find', defaults:{format: :json}
 
   get 'home/drinks.json' => 'home#drinks', defaults:{format: :json}
+
+  get 'discover' => 'home#home', defaults:{discover: true, format: :html}
 
   resources :comments, only: [:create, :destroy] do
     member do

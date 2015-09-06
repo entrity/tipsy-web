@@ -12,7 +12,7 @@
 
     <%- if devise_mapping.omniauthable? %>
       <%- resource_class.omniauth_providers.each do |provider| %>
-        <%= link_to "Sign in with #{provider.to_s.titleize}", user_omniauth_authorize_url(provider, protocol:(Rails.env.production? ? :https : nil)), :class => 'btn facebook' %>
+        <%= link_to "Log in with #{provider.to_s.titleize}", user_omniauth_authorize_url(provider, protocol:(Rails.env.production? ? :https : nil)), :class => 'btn facebook' %>
       <% end -%>
     <% end -%>
 
@@ -40,20 +40,20 @@
         <%= f.submit "Log in", :class => 'btn btn-primary' %>
       </div>
     <% end %>
-
+    <hr>
     <%= render "devise/shared/links" %>
 
   </div>
   <footer class="grid-cell grid--center fixed">
     <div class="grid">
       <div class="grid-cell socials">
+        <a href="https://www.facebook.com/tipsyology" title="Tipsyology on Facebook"><i class="fa fa-facebook"></i></a>
         <a href="" title="Tipsyology on Google+"><i class="fa fa-google-plus"></i></a>
-        <a href="" title="Tipsyology on Facebook"><i class="fa fa-facebook"></i></a>
         <a href="" title="Tipsyology on Twitter"><i class="fa fa-twitter"></i></a>
         <a href="" title="Tipsyology on Linkedin"><i class="fa fa-linkedin"></i></a>
       </div>
       <div class="grid-cell copyright">
-        Copyright stuff
+        © 2015 Tipsyology
       </div>
     </div>
   </footer>
