@@ -95,7 +95,7 @@
 		Object.defineProperties(Revision.prototype, {
 			dumpSteps: { // set this.instructions from this.steps
 				value: function dumpSteps () {
-					var steps = this.steps.grep(function (stepObj) {
+					var steps = jQuery.grep(this.steps, function (stepObj) {
 						return stepObj.text && stepObj.text.length;
 					}).map(function (stepObj) {
 						return stepObj.text
