@@ -228,8 +228,10 @@
 					var t = scope.cropper.yCropZone;
 					var w = scope.cropper.widthCropZone;
 					var h = scope.cropper.heightCropZone;
+					var outputW = Math.min(1280, w);
+					var outputH = Math.min(720, h);
 					var canvas = document.createElement('canvas');
-					canvas.getContext('2d').drawImage(elem.find('img')[0], l, t, w, h, 0, 0, w, h);
+					canvas.getContext('2d').drawImage(elem.find('img')[0], l, t, w, h, 0, 0, outputW, outputH);
 					return canvas.toDataURL("image/png");
 				}
 				// Set position of crop zone
@@ -244,7 +246,7 @@
 				function sizeCropZone (width, height) {
 					if (width == null) width = scope.cropperProperEl.offsetWidth / 2;
 					if (height == null) height = scope.cropperProperEl.offsetHeight / 2;
-					scope.cropper.widthCropZone = width = Math.min(1280, Math.max(600, width));
+					scope.cropper.widthCropZone = width = Math.max(400, width);
 					scope.cropper.heightCropZone = width * scope.cropper.ratio[1] / scope.cropper.ratio[0];
 				}
 				// Either move or resize cropZone in response to touch
