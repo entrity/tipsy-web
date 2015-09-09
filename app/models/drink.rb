@@ -36,13 +36,13 @@ class Drink < ActiveRecord::Base
   # Find imperfect Drink matches for list of ingredients
   def self.suggestions canonical_ingredient_ids
     canonical_ids_txt = canonical_ingredient_ids.compact.join(',')
-    res = connection.execute %Q(SELECT id, name, required_canonical_ingredient_ids, ingredient_ct, prep_time, up_vote_ct
+    res = connection.execute %Q(SELECT id, name, required_canonical_ingredient_ids, ingredient_ct, prep_time, up_vote_ct,
+      ARRAY_LENGTH(
+        (SELECT ARRAY_AGG(i_id) FROM UNNEST(required_canonical_ingredient_ids) i_id WHERE i_id IS NOT NULL)
+        - ARRAY[#{canonical_ids_txt}]::int[], 1) as distance
       FROM drinks
         WHERE id IN (#{ids_for_ingredients_sql(canonical_ingredient_ids)})
-        AND ARRAY_LENGTH(
-            (SELECT ARRAY_AGG(i_id) FROM UNNEST(required_canonical_ingredient_ids) i_id WHERE i_id IS NOT NULL)
-            - ARRAY[#{canonical_ids_txt}]::int[], 1) = 1
-      ORDER BY ingredient_ct DESC
+      ORDER BY distance
       LIMIT 100
     )
     res.to_a
