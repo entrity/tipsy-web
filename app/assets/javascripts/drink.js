@@ -63,6 +63,10 @@
 				},
 				configurable: false,
 			},
+			loadSteps: {
+				value: loadSteps,
+				configurable: false,
+			},
 			setIsUserFlagged: {
 				value: function setIsUserFlagged (flaggable, flaggableType) {
 					var map;
@@ -130,12 +134,7 @@
 				},
 			},
 			loadSteps: { // set this.steps from this.instructions
-				value: function loadSteps () {
-					this.steps = JSON.parse(this.instructions||'[]').map(function (text) {
-						return {text:text}
-					});
-					if (!this.steps.length) this.steps = [{}];
-				},
+				value: loadSteps,
 				configurable: false,
 			},
 			steps: {
@@ -147,6 +146,7 @@
 	}])
 	.controller('DrinkCtrl', ['$scope', '$modal', '$http', 'Drink', 'Flagger', 'RailsSupport', function ($scope, $modal, $http, Drink, Flagger, RailsSupport) {
 		$scope.drink = new Drink(window.drink);
+		$scope.drink.loadSteps();
 		$scope.drink.setUserVoteSign($scope.drink, 'Drink');
 		$scope.drinkCtrl = new Object;
 		$scope.comments = window.drink.comments;
@@ -352,4 +352,13 @@
 			id = match[1];
 		return id;
 	}
+
+	// Included on prototype for Drink and Revision
+	function loadSteps () {
+		this.steps = JSON.parse(this.instructions||'[]').map(function (text) {
+			return {text:text}
+		});
+		if (!this.steps.length) this.steps = [{}];
+	}
+
 })();
