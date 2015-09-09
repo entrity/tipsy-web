@@ -1,6 +1,7 @@
 class DrinksController < ApplicationController
   respond_to :json, :html
   MAX_RESULTS = 50
+  MIN_INGREDIENT_CT_FOR_SUGGESTIONS = 1
 
   def index
     move_ingredient_id_params_to_canonical_ids
@@ -67,7 +68,7 @@ class DrinksController < ApplicationController
 
   def suggestions
     move_ingredient_id_params_to_canonical_ids
-    if params[:canonical_ingredient_id].is_a?(Array) && params[:canonical_ingredient_id].length >= 3
+    if params[:canonical_ingredient_id].is_a?(Array) && params[:canonical_ingredient_id].length >= MIN_INGREDIENT_CT_FOR_SUGGESTIONS
       @candidates = Drink.suggestions(params[:canonical_ingredient_id]).map{|hash| DrinkSuggestion.new(hash) }
       if @candidates.length > 0
         diffs = {} # map of diff (Array) to suggestions (Array of DrinkSuggestion)
