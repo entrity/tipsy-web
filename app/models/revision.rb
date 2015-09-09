@@ -34,25 +34,22 @@ class Revision < ActiveRecord::Base
     drink.ingredient_ct = drink.required_canonical_ingredient_ids.length
     user.increment_revision_ct! unless flags.limit(1).count > 0 # If any flags are present, then this has already been published once and doesn't merit distribution of counts/points
     # Create/destroy added/removed ingredients
-    if drink.revision.nil?
-      ingredients.each{|ing| drink.ingredients.create!(ing) }
-    else
-      prev_ingredients ||= drink.ingredients || parent.try(:ingredients)
-      deled_ingredients = Array.wrap(prev_ingredients) - Array.wrap(ingredients)
-      added_ingredients = Array.wrap(ingredients) - Array.wrap(prev_ingredients)
-      intsc_ingredients = Array.wrap(ingredients) & Array.wrap(prev_ingredients) # ingredients which have not changed
-      ingredients.each_with_index{|ing, idx| ing['sort'] = idx}
-      if deled_ingredients.present?
-        del_ingredient_ids = deled_ingredients.map{|ing| ing['ingredient_id'] }
-        DrinkIngredient.where(drink_id:drink_id, ingredient_id:del_ingredient_ids).delete_all
-      end
-      if added_ingredients.present?
-        added_ingredients.each{|ing| DrinkIngredient.create!(ing.merge(drink_id:drink_id)) }
-      end
-      if intsc_ingredients.present?
-        intsc_ingredients.each{|ing| DrinkIngredient.where(drink_id:drink_id, ingredient_id:ing['ingredient_id']).update_all(sort:ing['sort']) }
-      end
+    prev_ingredients ||= drink.ingredients || parent.try(:ingredients)
+    deled_ingredients = Array.wrap(prev_ingredients) - Array.wrap(ingredients)
+    added_ingredients = Array.wrap(ingredients) - Array.wrap(prev_ingredients)
+    intsc_ingredients = Array.wrap(ingredients) & Array.wrap(prev_ingredients) # ingredients which have not changed
+    ingredients.each_with_index{|ing, idx| ing['sort'] = idx}
+    if deled_ingredients.present?
+      del_ingredient_ids = deled_ingredients.map{|ing| ing['ingredient_id'] }
+      DrinkIngredient.where(drink_id:drink_id, ingredient_id:del_ingredient_ids).delete_all
     end
+    if added_ingredients.present?
+      added_ingredients.each{|ing| DrinkIngredient.create!(ing.merge(drink_id:drink_id)) }
+    end
+    if intsc_ingredients.present?
+      intsc_ingredients.each{|ing| DrinkIngredient.where(drink_id:drink_id, ingredient_id:ing['ingredient_id']).update_all(sort:ing['sort']) }
+    end
+    # Call super
     super
   end
 

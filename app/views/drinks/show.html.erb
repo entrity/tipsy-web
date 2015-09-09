@@ -153,7 +153,9 @@
           <p itemprop="recipeInstructions">
             <% if @drink.instructions.present? %>
               <noscript><%= @drink.instructions %></noscript>
-              <script type="text/javascript">Tipsy.writeMarkdown(window.drink.instructions);</script>
+              <ol>
+                <li ng-repeat="step in drink.steps" ng-bind="step.text"></li>
+              </ol>
               <em>Were these directions helpful?</em><br>
               <a ng-click="loadEditView()">Improve them!</a>
             <% else %>
