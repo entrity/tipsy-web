@@ -185,9 +185,9 @@ a:hover {
   border-color: transparent;
 }
 .logged-out-nav .btn {
-  min-width: 128px;
-  max-width: 128px;
-  padding: 9px 12px;
+  min-width: 100px;
+  max-width: 100px;
+  padding: 7px 10px;
   font-size: 12px;
 }
 .logged-out-nav .btn:first-child {
@@ -397,8 +397,8 @@ nav > .grid-cell:first-child {
 nav .fa-bars {
   font-size: 14px;
   line-height: 56px;
-  width: 58px;
-  text-align: center;
+  width: 28px;
+  text-align: right;
 }
 nav .search .input-group {
   width: 100%;
@@ -813,6 +813,7 @@ aside .trophie-cont:hover {
 }
 #landing .search > div {
   border-radius: 3px;
+  background-clip: padding-box;
 }
 .signin.grid.modal-content {
   height: initial;
@@ -852,8 +853,8 @@ aside .trophie-cont:hover {
   color: #fff !important;
   background-color: #2380af;
   border-color: transparent;
-  padding-top: 9px;
-  padding-bottom: 9px;
+  padding-top: 7px;
+  padding-bottom: 7px;
 }
 .signin.grid .grid-cell form,
 .splash.grid .grid-cell form {
@@ -864,6 +865,9 @@ aside .trophie-cont:hover {
   background-color: #166C98;
   color: #fff;
   text-decoration: none !important;
+}
+.splash .btn:hover .text-muted {
+  color: #fff;
 }
 .signin.grid .grid-cell .links a {
   font-weight: bold;
@@ -1009,6 +1013,7 @@ aside .trophie-cont:hover {
   background-size: cover;
   min-height: 40vh;
   position: relative;
+  display: flex;
 }
 #home > .hero:before {
   content: "";
@@ -1018,7 +1023,7 @@ aside .trophie-cont:hover {
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0,0,0,0.4);
 }
 #home > .hero:after {
   content: "";
@@ -1048,7 +1053,7 @@ aside .trophie-cont:hover {
 }
 .hero h1 {
   color: #fff;
-  font-size: 2em;
+  font-size: 1.8em;
   font-weight: 100;
   display: block;
   text-align: center;
@@ -1059,7 +1064,7 @@ aside .trophie-cont:hover {
 .hero h4 {
   color: #fff;
   font-size: 2.6em;
-  font-weight: 700;
+  font-weight: 600;
   display: block;
   text-align: center;
   text-shadow: 0 3px 3px rgba(0,0,0,0.6);
@@ -1071,6 +1076,67 @@ aside .trophie-cont:hover {
   padding-bottom: 10px;
   border-bottom: 1px solid lightgray;
   margin: 40px 0 10px 0;
+}
+#home .hero .grid {
+  position: relative;
+  top: -40px;
+}
+#home .hero .grid,
+#home .hero .grid .grid-cell,
+#home .hero .grid ng-include {
+  z-index: 5;
+}
+#home .hero .fuzzy-finder {
+  max-width: 660px;
+  margin: 40px auto;
+}
+#home .hero .grid .grid-cell {
+  margin: auto;
+}
+#home .hero .ui-select-search {
+
+}
+#home .hero .ui-select-search,
+#home .hero .ui-select-toggle {
+  background-color: transparent;
+  border-color: #fff;
+  color: #fff;
+  padding: 12px 18px;
+  height: 51px;
+}
+#home .hero #fuzzy-finder > div > div > span > span {
+  color: #fff;
+  font-size: 18px;
+  padding-left: 26px;
+}
+#home .hero .ui-select-match::before {
+  color: #fff;
+  font-size: 18px;
+  top: 14px;
+  left: 20px;
+}
+#home .hero input::-webkit-input-placeholder {
+  color: #fff;
+  font-size: 18px;
+  line-height: 18px;
+}
+#home .hero input:-moz-placeholder {
+  color: #fff;
+  font-size: 18px;
+  line-height: 18px;
+}
+#home .hero input::-moz-placeholder {
+  color: #fff;
+  font-size: 18px;
+  line-height: 18px;
+}
+#home .hero input:-ms-input-placeholder {
+  color: #fff;
+  font-size: 18px;
+  line-height: 18px;
+}
+#home .hero #fuzzy-finder ul.ui-select-choices {
+  top: 50px;
 }
 #home .top-lists {
   padding: 30px 0 80px 0;
@@ -2114,7 +2180,9 @@ footer.in-app .row {
 }
 
 /* BOOTSTRAP OVERRIIDES */
-
+.btn {
+  border-radius: 2px;
+}
 .modal-content {
   box-shadow: none;
   border: none;
