@@ -18,6 +18,7 @@
 //= require 'angular-resource/angular-resource.min'
 //= require 'angular-route/angular-route.min'
 //= require 'angular-sanitize/angular-sanitize.min'
+//= require 'angular-superswipe/superswipe'
 //= require 'angular-touch/angular-touch.min'
 //= require 'angular-ui-select/dist/select.min'
 //= require google-diff-match-patch/diff_match_patch

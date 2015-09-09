@@ -1,0 +1,19 @@
+<div id="cropper-controls" class="text-center">
+	<h3>Resize and/or Crop</h3>
+	<a class="btn btn-primary btn-tiny" ng-click="uploader.showCropper=false">Back</a>
+	<a class="btn btn-primary btn-tiny" ng-click="saveImage()">Save</a>
+	&nbsp; <i class="fa fa-camera retro"></i> &nbsp;
+	Alt text <input type="text" ng-model="uploader.data.alt">	
+</div>
+<div id="cropper-proper" ng-mousemove="handleMouse($event)">
+	<img ng-src="{{fileReader.result}}">
+	<div class="overlay-tile nw" ng-style="{'top': 0, 'left': 0, 'width': cropper.xCropZone + 'px', 'height': cropper.yCropZone + 'px'}"></div>
+	<div class="overlay-tile nn" ng-style="{'top': 0, 'left': cropper.xCropZone + 'px', 'width': cropper.widthCropZone + 'px', 'height': cropper.yCropZone + 'px'}"></div>
+	<div class="overlay-tile ne" ng-style="{'top': 0, 'left': cropper.xCropZone + cropper.widthCropZone + 'px', 'right': 0, 'height': cropper.yCropZone + 'px'}" style="top: 0px; left: 470px; right: 0px; height: 170px;"></div>
+	<div class="overlay-tile ee" ng-style="{'top': cropper.yCropZone + 'px', 'left': cropper.xCropZone + cropper.widthCropZone + 'px', 'right': 0, 'height': cropper.heightCropZone + 'px'}"></div>
+	<div class="overlay-tile se" ng-style="{'top': cropper.yCropZone + cropper.heightCropZone + 'px', 'left': cropper.xCropZone + cropper.widthCropZone + 'px', 'right': 0, 'bottom': 0}"></div>
+	<div class="overlay-tile ss" ng-style="{'top': cropper.yCropZone + cropper.heightCropZone + 'px', 'left': cropper.xCropZone + 'px', 'width': cropper.widthCropZone + 'px', 'bottom': 0}"></div>
+	<div class="overlay-tile sw" ng-style="{'top': cropper.yCropZone + cropper.heightCropZone + 'px', 'left': 0, 'width': cropper.xCropZone + 'px', 'bottom': 0}"></div>
+	<div class="overlay-tile ww" ng-style="{'top': cropper.yCropZone + 'px', 'left': 0, 'width': cropper.xCropZone + 'px', 'height': cropper.heightCropZone + 'px'}"></div>
+	<div class="overlay-border" ng-style="{'top': (cropper.yCropZone - 2) + 'px', 'left': (cropper.xCropZone - 2) + 'px', 'width': (cropper.widthCropZone + 2) + 'px', 'height': (cropper.heightCropZone + 2) + 'px'}"></div>
+</div>

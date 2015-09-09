@@ -4,7 +4,8 @@ layout nil
   def home
     # Presence of params[:ingredient_id] indicates that this request comes as a consequence
     # of the user selecting an ingredient from the fuzzy finder on the splash screen.
-    if user_signed_in? || params[:ingredient_id].present?
+    if user_signed_in? || params[:ingredient_id].present? || params[:discover]
+      @canonical_url = 'http://tipsyology.com/discover'
       render 'signed_in_home', layout: 'application'
     else
       render layout: nil
