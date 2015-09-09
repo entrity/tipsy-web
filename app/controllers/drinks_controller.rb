@@ -69,25 +69,8 @@ class DrinksController < ApplicationController
   def suggestions
     move_ingredient_id_params_to_canonical_ids
     if params[:canonical_ingredient_id].is_a?(Array) && params[:canonical_ingredient_id].length >= MIN_INGREDIENT_CT_FOR_SUGGESTIONS
-      @candidates = Drink.suggestions(params[:canonical_ingredient_id]).map{|hash| DrinkSuggestion.new(hash) }
-      if @candidates.length > 0
-        diffs = {} # map of diff (Array) to suggestions (Array of DrinkSuggestion)
-        max_diff_freq = 0
-        max_diff_drinks = nil
-        @candidates.each do |s|
-          s.diff = s.required_canonical_ingredient_ids - params[:canonical_ingredient_id]
-          diffs[s.diff] ||= []
-          diffs[s.diff] << s
-          if max_diff_freq < diffs[s.diff].length || (max_diff_freq == diffs[s.diff].length && rand.round != 0) # If current candidate `s` is equally as good a candidate as the current `max`, randomly determine which one to keep
-            max_diff_freq = diffs[s.diff].length
-            max_diff_drinks = diffs[s.diff]
-          end
-        end
-        if max_diff_drinks
-          needed_ingredients = Ingredient.where(id:max_diff_drinks.first.diff)
-          @suggestions = {drinks:max_diff_drinks, ingredients:needed_ingredients}
-        end
-      end
+      suggestion_set = DrinkSuggestionSet.new(params[:canonical_ingredient_id])
+      @suggestions = suggestion_set.output
     end
     respond_with @suggestions || []
   end

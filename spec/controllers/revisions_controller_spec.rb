@@ -6,7 +6,6 @@ describe RevisionsController, type: :controller do
   before do
       # @request.env["devise.mapping"] = Devise.mappings[:user]
     # sign_in FactoryGirl.create(:user)
-    # binding.pry
     @user = FactoryGirl.create(:user)
     @user.confirm!
     sign_in @user
