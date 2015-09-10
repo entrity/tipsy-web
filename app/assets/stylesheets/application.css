@@ -303,7 +303,9 @@ a:hover {
   background-color: rgb(53, 148, 148);
 }
 .logo a img {
-    width: 100%;
+  width: 100%;
+  max-width: 110px;
+  min-width: 110px;
 }
 .search .input-group-btn > .btn {
   border-color: #fff;
@@ -354,12 +356,14 @@ header {
   clear: both;
   min-height: 56px;
   width: 100%;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 20;
   min-width: 300px;
   border-bottom: 1px solid #ddd;
+  padding: 0;
+  transition: all .5s;
 }
 nav {
   height: 56px;
@@ -538,7 +542,6 @@ nav .user li .rep-change {
 .content {
   min-height: 100vh;
   background-color:#fff;
-  border-radius: 4px;
 }
 .center {
   max-width: 960px;
@@ -710,6 +713,9 @@ nav .user li .rep-change {
   -webkit-transform: translateZ(0);
   overflow-y: scroll;
 }
+.right-open {
+  padding-right: 300px;
+}
 .sidebar-controls {
   height: 57px;
   line-height: 57px;
@@ -812,8 +818,11 @@ aside .trophie-cont:hover {
   margin: auto;
 }
 #landing .search > div {
-  border-radius: 3px;
+  border-radius: 2px;
   background-clip: padding-box;
+}
+#landing .search > div * {
+  border-radius: 2px;
 }
 .signin.grid.modal-content {
   height: initial;
@@ -2327,7 +2336,7 @@ header .review:hover .badge {
     min-width: 100% !important;
     min-height: 56px;
     height: auto;
-    padding: 0;
+    padding: 0 20px;
     flex-wrap: wrap;
   }
   nav .logo {
@@ -2348,7 +2357,22 @@ header .review:hover .badge {
   nav .logged-in .grid > .grid-cell:last-child {
     display: flex !important;
   }
-
+  .content .grid.center {
+    flex-direction: column;
+  }
+  .content .grid.center > .grid-cell {
+    max-width: 100%;
+    min-width: 100%;
+    margin-right: -10px !important;
+    margin-left: -10px !important;
+  }
+  #home .picks {
+    padding: 10px 0;
+  }
+  #home .favorites .grid-cell .item {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
   #drink-page .photos {
     margin-right: -10px;
     margin-left: -10px;
