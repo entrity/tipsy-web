@@ -22,11 +22,11 @@ html {
 }
 body {
   background-color: #fff;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 13px;
   margin: 0;
   overflow-x: hidden;
-  color: #212121;
+  color: #565a5c;
   position: relative;
   transition-duration: 0.5s;
   transition-property: top, bottom, left, right;
@@ -359,7 +359,7 @@ header {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 20;
+  z-index: 1001;
   min-width: 300px;
   border-bottom: 1px solid #ddd;
   padding: 0;
@@ -428,7 +428,9 @@ nav .logged-in .grid-cell {
 }
 nav .logged-out .grid-cell:last-child,
 nav .logged-in .grid-cell:last-child {
-  margin-right: 0;
+  margin-right: -20px;
+  padding-right: 20px;
+  background: #fff;
 }
 nav .rep-cont .dropdown-menu {
   right: -50%;
@@ -712,9 +714,7 @@ nav .user li .rep-change {
   box-sizing: border-box;
   -webkit-transform: translateZ(0);
   overflow-y: scroll;
-}
-.right-open {
-  padding-right: 300px;
+  top: 58px !important;
 }
 .sidebar-controls {
   height: 57px;
@@ -735,8 +735,8 @@ nav .user li .rep-change {
   border-radius: 4px;
 }
 #sidebar-r ul li:first-child {
-  font-size:16px !important;
-  font-weight:600;
+  font-size: 14px !important;
+  font-weight: 600;
   padding: 10px 20px;
   background: rgba(255,255,255,0.05);
 }
@@ -746,7 +746,7 @@ nav .user li .rep-change {
 }
 .ingredients-list ul li,
 .shopping-list ul li {
-  font-size:14px;
+  font-size: 12px;
   padding: 10px 20px;
 }
 .ingredients-list ul li.item,
@@ -1057,7 +1057,8 @@ aside .trophie-cont:hover {
 #home h1,
 #home h2,
 #home h3,
-#home h4 {
+#home h4,
+#home h5 {
   text-align: center;
 }
 .hero h1 {
@@ -1081,14 +1082,18 @@ aside .trophie-cont:hover {
   z-index: 2;
 }
 #home h2 {
-  font-size: 2.1em;
+  font-size: 23px;
+  line-height: 23px;
   padding-bottom: 10px;
-  border-bottom: 1px solid lightgray;
-  margin: 40px 0 10px 0;
+  border-bottom: 1px solid #ededed;
+  margin: 0 0 10px 0;
+}
+#home h3 {
+  font-size: 33px;
+  font-weight: 600;
 }
 #home .hero .grid {
   position: relative;
-  top: -40px;
 }
 #home .hero .grid,
 #home .hero .grid .grid-cell,
@@ -1151,7 +1156,11 @@ aside .trophie-cont:hover {
   padding: 30px 0 80px 0;
 }
 #home .top-lists > .grid.favorites > .grid-cell {
-  margin-right: 60px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  background: #fbfbfb;
+  border: 1px solid #ededed;
+  padding: 20px;
 }
 #home .top-lists > .grid > .grid-cell:last-child {
   margin-right: 0;
@@ -1167,14 +1176,15 @@ aside .trophie-cont:hover {
 #home .item .grid-cell:last-child {
   padding-right: 0;
 }
-#home .picks {
+#home .picks,
+#home .favorites {
   padding: 40px 0;
 }
 #home .picks a.grid-cell {
   position: relative;
   color: #fff;
   height: 320px;
-  margin-right: 10px;
+  margin-right: 20px;
   background-color: #004052;
   background-position: center center;
   background-repeat: no-repeat;
@@ -1235,8 +1245,7 @@ aside .trophie-cont:hover {
 }
 #home .picks .grid-cell .title span {
   color: #eaeaea;
-  font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
 }
 #home .picks .grid-cell .faves {
     position: absolute;
@@ -1382,6 +1391,9 @@ aside .trophie-cont:hover {
   padding: 6px 0;
   text-transform: capitalize;
 }
+#drink-page .ingredients .ingredient > .grid-cell {
+  line-height: 22px;
+}
 #drink-page .ingredients .ingredient .name,
 #drink-page .ingredients .ingredient .amount {
   font-size: 11px;
@@ -1487,7 +1499,7 @@ aside .trophie-cont:hover {
   min-width: 100%;
   text-align: center;
   padding: 12px 12px;
-  font-size: 16px;
+  font-size: 12px;
   flex: 1 0 auto;    
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2067,7 +2079,7 @@ tipsy-image-editor a.btn:hover {
   overflow: scroll;
   overflow-x: hidden;
   top: 0;
-  right: 20px;
+  right: 10px;
   bottom: 0;
   left: 0;
   padding-right: 0;
@@ -2276,6 +2288,9 @@ footer.in-app .row {
   cursor: s-resize;
 }
 /* BOOTSTRAP OVERRIIDES */
+h1 {
+  font-size: 33px;
+}
 .btn {
   border-radius: 2px;
 }
@@ -2365,9 +2380,6 @@ header .review:hover .badge {
     min-width: 100%;
     margin-right: -10px !important;
     margin-left: -10px !important;
-  }
-  #home .picks {
-    padding: 10px 0;
   }
   #home .favorites .grid-cell .item {
     padding-left: 20px;

@@ -13,8 +13,8 @@
 	<div class="center top-lists">
 		<div class="grid grid--center center">
 			<div class="grid-cell">
-				<h1>Summers top picks</h1>
-				<h4>From the backyard barbecue to a tropical paradise</h4>
+				<h3>Summers top picks</h3>
+				<h5>From the backyard barbecue to a tropical paradise</h5>
 			</div>
 		</div>
 		<div class="grid center picks">
@@ -46,9 +46,15 @@
 				</div>
 			</a>
 		</div>
+		<div class="grid grid--center center">
+			<div class="grid-cell">
+				<h3>Popular cocktails</h3>
+				<h5>Discover, inspire, get tipsy!</h5>
+			</div>
+		</div>
 		<div class="grid center favorites">
 			<div class="grid-cell">
-				<h2>Most liked cocktails</h2>
+				<h2>Most liked</h2>
 				<div class="grid grid--center item" ng-repeat="drink in topDrinks">
 					<div class="grid-cell name"><a ng-href="{{drink.getUrl()}}" ng-bind="drink.name"></a></div>
 					<div class="grid-cell grid--shrink"><i class="fa fa-flask"></i> <small>{{drink.ingredient_ct}}</small></div>
@@ -56,25 +62,15 @@
 				</div>
 			</div>
 			<div class="grid-cell">
-				<h2>Popular drinks with Gin</h2>
+				<h2>Popular gin cocktails</h2>
 				<div class="grid grid--center item" ng-repeat="drink in topGinDrinks">
 					<div class="grid-cell name"><a ng-href="{{drink.getUrl()}}" ng-bind="drink.name"></a></div>
 					<div class="grid-cell grid--shrink"><i class="fa fa-flask"></i> <small>{{drink.ingredient_ct}}</small></div>
 					<div class="grid-cell grid--shrink"><i class="fa fa-thumbs-up"></i> <small>{{drink.score}}</small></div>
 				</div>
 			</div>
-		</div>
-		<div class="grid center favorites">
 			<div class="grid-cell">
-				<h2>Top Margaritas</h2>
-				<div class="grid grid--center item" ng-repeat="drink in topMargaritas">
-					<div class="grid-cell name"><a ng-href="{{drink.getUrl()}}" ng-bind="drink.name"></a></div>
-					<div class="grid-cell grid--shrink"><i class="fa fa-flask"></i> <small>{{drink.ingredient_ct}}</small></div>
-					<div class="grid-cell grid--shrink"><i class="fa fa-thumbs-up"></i> <small>{{drink.score}}</small></div>
-				</div>
-			</div>
-			<div class="grid-cell">
-				<h2>Popular drinks with Vodka</h2>
+				<h2>Popular vodka cocktails</h2>
 				<div class="grid grid--center item" ng-repeat="drink in topVodkaDrinks">
 					<div class="grid-cell name"><a ng-href="{{drink.getUrl()}}" ng-bind="drink.name"></a></div>
 					<div class="grid-cell grid--shrink"><i class="fa fa-flask"></i> <small>{{drink.ingredient_ct}}</small></div>
