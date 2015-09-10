@@ -28,6 +28,16 @@
 			</div>
 			<div ng-show="!finder.drinks || !finder.drinks.length &amp;&amp; (!finder.suggestions || !finder.suggestions.length)">
 				...Nothing yet. Try adding more ingredients.
+				<div class="fuzzy-finder">
+					<div id="fuzzy-finder" ng-controller="FindCtrl">
+						<ui-select theme="bootstrap" ng-model="finder.records" on-select="finder.selected($item, $select)" reset-search-input="false" search-enabled="true" close-on-select="false" autofocus="true">
+							<ui-select-match data-placeholder="Search drinks and ingredients" allow-clear="true"></ui-select-match>
+							<ui-select-choices repeat="item in finder.findables" refresh-delay="100" refresh="finder.fetchFindables($select)">
+								<div class="{{item | tipsyFindableClass}}" ng-bind-html="item.name | highlight: $select.search"></div>
+							</ui-select-choices>
+						</ui-select>
+					</div>
+				</div>
 			</div>
 			<div ng-show="finder.drinks.left">
 				<span>{{drinks.left}} more search results</span>
