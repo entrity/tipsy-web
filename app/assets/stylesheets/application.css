@@ -99,6 +99,11 @@ a.nolink {
   padding: 6px 30px;
   text-align: center;
 }
+.flash-notice:empty,
+.flash-alert:empty,
+.flash-error:empty {
+  display: none;
+}
 label {
   margin-bottom: 0;
 }
@@ -184,10 +189,13 @@ a:hover {
   background-color: #fff;
   border-color: transparent;
 }
+.btn.btn-white:hover {
+  background-color: #f0f0f0;
+}
 .logged-out-nav .btn {
   min-width: 100px;
   max-width: 100px;
-  padding: 7px 10px;
+  padding: 9px 10px;
   font-size: 12px;
 }
 .logged-out-nav .btn:first-child {
@@ -837,17 +845,21 @@ aside .trophie-cont:hover {
 .splash.grid .links {
   text-align: center;
 }
-.signin.grid .grid-cell:first-child,
-.splash.grid .grid-cell:first-child {
+.signin.grid > .grid-cell:first-child,
+.splash.grid > .grid-cell:first-child {
   margin: auto; 
-  max-width: 260px;
+  max-width: 360px;
   box-sizing: border-box;
   flex: 0 1 auto;
+  background-color: #fff;
+  padding: 30px;
+  color: #333;
+  border-radius: 7px;
 }
 .signin.grid .grid-cell .logo,
 .splash.grid .grid-cell .logo {
   display: block;
-  margin: 0 auto 12px auto;
+  margin: 0 auto 30px auto;
   width: 70%;
 }
 .signin.grid .grid-cell p,
@@ -858,24 +870,12 @@ aside .trophie-cont:hover {
 .signin .btn-primary,
 .splash .btn-primary {
   width: 100%;
-  color: #fff !important;
-  background-color: #2380af;
-  border-color: transparent;
-  padding-top: 7px;
-  padding-bottom: 7px;
+  padding-top: 9px;
+  padding-bottom: 9px;
 }
 .signin.grid .grid-cell form,
 .splash.grid .grid-cell form {
   padding: 0;
-}
-.signin .btn:hover,
-.splash .btn:hover {
-  background-color: #166C98;
-  color: #fff;
-  text-decoration: none !important;
-}
-.splash .btn:hover .text-muted {
-  color: #fff;
 }
 .signin.grid .grid-cell .links a {
   font-weight: bold;
@@ -896,7 +896,6 @@ aside .trophie-cont:hover {
 }
 .signin.grid .grid-cell .input-group-addon {
   min-width: 39px;
-  border: none;
   background-color: #fff;
 }
 .signin.grid .grid-cell .input-group-addon .fa {
@@ -905,9 +904,6 @@ aside .trophie-cont:hover {
 .signin.grid .grid-cell input[type="password"],
 .signin.grid .grid-cell input[type="email"],
 .signin.grid .grid-cell input[type="text"] {
-  border-top: none;
-  border-right: none;
-  border-bottom: none;
   background-color: #fff;
 }
 .signin.grid .grid-cell input[type="password"],
@@ -928,7 +924,6 @@ aside .trophie-cont:hover {
   background: #4c6eb8;
 }
 .form-control {
-  border-color: #eee;
   box-shadow: none;
 }
 .input-group-addon:last-child {
@@ -1121,13 +1116,13 @@ aside .trophie-cont:hover {
   left: 0;
   right: 0;
 }
-#home .hero #fuzzy-finder{
+#home .hero #fuzzy-finder {
   max-width: 660px;
   margin: 0 auto;
 }
 #home .hero .grid .grid-cell {
   margin: auto;
-  padding-bottom: 60px;
+  padding-bottom: 102px;
 }
 #home .hero .ui-select-search,
 #home .hero .ui-select-toggle {
@@ -2314,8 +2309,17 @@ h1 {
   border-radius: 2px;
 }
 .btn-primary {
-  background-color: #337ab7;
-  border-color: #337ab7;
+  background-color: #8bbf5a;
+  border-color: transparent;
+}
+.btn-primary:hover {
+  background-color: #9ACA6D;
+  border-color: transparent;
+  text-decoration: none !important;
+}
+body.modal-open {
+  height: 100vh;
+  overflow: hidden;
 }
 .modal-content {
   box-shadow: none;
@@ -2405,12 +2409,32 @@ header .review:hover .badge {
   .content .grid.center > .grid-cell {
     max-width: 100%;
     min-width: 100%;
+  }
+  .content #home .grid.center > .grid-cell {
     margin-right: -10px !important;
     margin-left: -10px !important;
+  }
+  .content .grid.center > .grid-cell .votes {
+    text-align: left;
+    margin-top: 20px;
+  }
+  #home .hero .grid .grid-cell {
+    padding-left: 20px;
+    padding-right: 20px;
   }
   #home .favorites .grid-cell .item {
     padding-left: 20px;
     padding-right: 20px;
+  }
+  #home .hero .fuzzy-finder {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  #home > .hero {
+    min-height: calc(100vh - 57px);
+  }
+  #home .hero h1 {
+    margin-top: 20vh;
   }
   #drink-page .photos {
     margin-right: -10px;
