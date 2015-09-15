@@ -22,11 +22,11 @@ html {
 }
 body {
   background-color: #fff;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 13px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
   margin: 0;
   overflow-x: hidden;
-  color: #565a5c;
+  color: #6f7c82;
   position: relative;
   transition-duration: 0.5s;
   transition-property: top, bottom, left, right;
@@ -190,7 +190,7 @@ a:hover {
   border-color: transparent;
 }
 .btn.btn-white:hover {
-  background-color: #f0f0f0;
+  background-color: #f8f9fb;
 }
 .logged-out-nav .btn {
   min-width: 100px;
@@ -354,7 +354,8 @@ label {
 img.hr {
   display: block;
   margin: 0 auto;
-  margin: 20px 0 20px 0;
+  margin: 20px auto;
+  max-width: 260px;
   width: 100%;
 }
 
@@ -821,8 +822,11 @@ aside .trophie-cont:hover {
   cursor: pointer;
 }
 #landing .search {
-  max-width: 300px;
+  max-width: 340px;
   margin: auto;
+}
+#landing .search p {
+  margin: 14px 0;
 }
 #landing .search > div {
   border-radius: 2px;
@@ -834,16 +838,18 @@ aside .trophie-cont:hover {
 .signin.grid.modal-content {
   height: initial;
   padding: 16px;
+  background: transparent;
 }
 .signin.grid {
   height: 100vh;
-  background-color: #2b334f;
+  background-color: #1d2c3f;
   color: #fff;
   flex-direction: column;
 }
 .signin.grid .links,
 .splash.grid .links {
   text-align: center;
+  font-size: 13px;
 }
 .signin.grid > .grid-cell:first-child,
 .splash.grid > .grid-cell:first-child {
@@ -851,7 +857,7 @@ aside .trophie-cont:hover {
   max-width: 360px;
   box-sizing: border-box;
   flex: 0 1 auto;
-  background-color: #fff;
+  background-color: #f8f9fb;
   padding: 30px;
   color: #333;
   border-radius: 7px;
@@ -914,7 +920,7 @@ aside .trophie-cont:hover {
 .signin.grid .grid-cell .btn.facebook {
   display: block;
   background: #4E69A2;
-  color: #ddd;
+  color: #fff;
   border: 1px solid transparent;
   padding-top: 9px;
   padding-bottom: 9px;
@@ -1194,6 +1200,9 @@ aside .trophie-cont:hover {
 #home .favorites {
   padding: 40px 0;
 }
+#home .favorites .grid-cell.name {
+  font-size: 14px;
+}
 #home .picks a.grid-cell {
   position: relative;
   color: #fff;
@@ -1279,12 +1288,14 @@ aside .trophie-cont:hover {
   font-weight: 600;
   margin: 0;
   padding: 0 0 6px 0;
+  color: #444;
 }
 #drink-page h3,
 #ingredient-page h3 {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
   margin: 0 0 8px 0;
+  color: #444;
 }
 #drink-page .center,
 #recipe-editor .center,
@@ -1392,14 +1403,13 @@ aside .trophie-cont:hover {
 #drink-page .social-share-bar a:hover {
   opacity: 1;
 }
-#drink-page .prep-time span,
-#drink-page .calorie-count span {
-  font-size: 16px;
-  font-weight: 600;
-  color: #FF7300;
+#drink-page .fa-clock-o,
+#drink-page .fa-fire {
+  font-size: 22px;
+  color: #0091CE;
 }
 #drink-page .ingredients {
-  max-width: 70%;
+  max-width: 100%;
 }
 #drink-page .ingredients .ingredient {
   padding: 6px 0;
@@ -1410,7 +1420,7 @@ aside .trophie-cont:hover {
 }
 #drink-page .ingredients .ingredient .name,
 #drink-page .ingredients .ingredient .amount {
-  font-size: 11px;
+  font-size: 14px;
 }
 #drink-page .ingredients .ingredient .amount {
   text-align: right;
@@ -1779,7 +1789,9 @@ tipsy-image-editor a.btn:hover {
 }
 
 /*** DRINK PAGE STYLES:Comments ***/
-
+#comments {
+  font-size: 14px;
+}
 #comments .comment:last-child {
   margin-bottom: 0;
 }
@@ -1808,6 +1820,7 @@ tipsy-image-editor a.btn:hover {
 }
 .comments-cont #comments .comment .name,
 #tips .name {
+  color: #444;
   font-weight: bold;
 }
 .comments-cont #comments .comment .date {
@@ -1887,7 +1900,7 @@ tipsy-image-editor a.btn:hover {
   content: "\00a0";
   display: block;
   height: 10px;
-  left: 9px;
+  left: 12px;
   position: absolute;
   top: 25px;
   transform:             rotate( 45deg );
@@ -1903,16 +1916,8 @@ tipsy-image-editor a.btn:hover {
 }
 .comment-actions a {
   display: inline-block;
-  width: 26px;
-  height: 26px;
-  line-height: 26px;
-  border-radius: 50%;
   color: #8899a6;
-  border: 1px solid rgba(136, 153, 166, 0.5);
   text-align: center;
-}
-.comment-actions a:hover {
-  background-color: #E1E8ED;
 }
 .comment-actions span {
   position: relative;
@@ -1922,12 +1927,15 @@ tipsy-image-editor a.btn:hover {
   font-size: 88%;
 }
 .comment-actions span .fa {
-  font-size: 14px;
-  width: 14px;
+  font-size: 16px;
+  width: 16px;
 }
 .comment-actions span:first-child {
   padding-left: 0;
   margin-left: 0;
+}
+.comment-actions span:first-child a:hover {
+  color: #7b57af;
 }
 .comment-actions span:first-child:before,
 .comment-actions span:last-child:before {
@@ -1949,6 +1957,9 @@ tipsy-image-editor a.btn:hover {
 .comment-actions .comment-vote a:first-child {
   margin-right: 4px;
 }
+.comment-actions a:hover {
+  color: #0091CE;
+}
 .comment-actions .comment-vote a:last-child {
   margin-left: 4px;
 }
@@ -1957,9 +1968,6 @@ tipsy-image-editor a.btn:hover {
 }
 #comments .comment .comment-vote a:hover .fa-thumbs-o-down:before {
   content:'\f165';
-}
-.comment-actions .tip .fa-lightbulb-o {
-  margin-right: 6px;
 }
 
 /*** ACCOUNT SETTINGS ***/
@@ -2312,7 +2320,9 @@ h1 {
   background-color: #8bbf5a;
   border-color: transparent;
 }
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
   background-color: #9ACA6D;
   border-color: transparent;
   text-decoration: none !important;

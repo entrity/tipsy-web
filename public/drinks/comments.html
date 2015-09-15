@@ -85,7 +85,7 @@
 											<a tooltip="Delete" tooltip-append-to-body="true" ng-click="removeComment(comment)"> <i class="fa fa-trash-o"></i></a>
 										</span>
 										<span class="comment-flag tip" ng-hide="comment.user_id == getUser().id">
-											Helpful comment? Mark it as a tip <a tooltip="Helpful" tooltip-append-to-body="true" class="btn btn-default btn-xs" ng-click="tipComment(comment)" title="Mark as a useful tip (only actual tips should be voted)"><i class="fa fa-lightbulb-o"></i> Tip</a>
+											Helpful comment? Mark it as a tip <a tooltip="Helpful" tooltip-append-to-body="true" ng-click="tipComment(comment)" title="Mark as a useful tip (only actual tips should be voted)"><i class="fa fa-lightbulb-o"></i> Tip</a>
 										</span>
 										<span class="comment-flag inappropriate pull-right" ng-hide="comment.user_id == getUser().id">
 											<a tooltip="Report" tooltip-append-to-body="true" ng-click="flagComment(comment)" title="Flag comment as inappropriate"><i class="fa fa-flag" ng-class="comment._isUserFlagged &amp;&amp; 'highlight'"></i></a>
