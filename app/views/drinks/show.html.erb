@@ -169,7 +169,7 @@
   <!-- TIPS -->
   <ng-include src="'/drinks/comments.html'"></ng-include>
   <!-- COMMENTS -->
-  <div class="grid row tips center">
+  <!-- <div class="grid row tips center">
     <div class="grid-cell">
       <div id="static-comments" ng-show="!(comments && comments.length)">
         <% @comments.each do |comment| %>
@@ -190,12 +190,12 @@
         <% end -%>
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- SIMILAR DRINKS -->
   <div class="full-bleed">
     <div class="grid similar-drinks center">
       <div class="grid-cell">
-        <h3>Drinks similar to a <%= @drink.name %></h3>
+        <h3>Drinks similar to a <%= @drink.name %> cocktail</h3>
         <div class="grid grid--gutters">
           <a class="grid-cell cards" ng-repeat="drink in relatedDrinks" ng-href="{{drink.getUrl()}}">
             <div class="grid grid--center">
