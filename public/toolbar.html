@@ -32,12 +32,13 @@
     <div class="logged-in grid-cell">
       <div class="grid grid--center">
         <div class="grid-cell review" ng-cloak ng-show="isLoggedIn()" ng-show="openReviewCt">
-          <a ng-click="openReviewModal()"><small>Review</small> <span class="badge">{{openReviewCt}}</span></a>
+          <a ng-click="openReviewModal()"><span class="badge" title="Review"><i class="fa fa-commenting-o"></i> {{openReviewCt}}</span></a>
         </div>
         <div class="grid-cell user rep-cont dropdown" ng-cloak ng-show="isLoggedIn()">
           <!-- REP SUMMARY -->
           <div id="rep-alerts">
-            <a ng-click="openRepChangesMenu($event)">
+            <a ng-click="openRepChangesMenu($event)" title="Alerts">
+              <span><i class="fa fa-bell-o"></i></span>
               <span class="reputation" title="{{getUser().points}} points of reputation ('tips')">{{getUser().points}}</span>
               <span class="rep-change {{change.points < 0 && 'negative'}}" ng-if="toolbar.repChangesDelta">{{toolbar.repChangesDeltaWithSign}}</span>
             </a>
@@ -69,7 +70,7 @@
             <li><a href="/users/sign_out" ng-click="visit('/users/sign_out', $event)"><i class="fa fa-sign-out"></i> Log out</a></li>
           </ul>
         </div>
-        <div class="grid-cell grid--shrink" ng-cloak ng-show="isLoggedIn()">
+        <div class="grid-cell grid--shrink">
           <a ng-click="toggle('rightbarOpen')"><i class="fa fa-bars"></i></a>
         </div>
       </div>

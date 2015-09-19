@@ -18,7 +18,7 @@
       <div id="gallery" class="slider" ng-if="photos.length">
         <img ng-repeat="photo in photos" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{photo.activeUrl}}" />
         <div id="gallery-ctrl">
-          <a tooltip="Like" tooltip-append-to-body="true" ng-click="votePhoto(1)"><i class="fa fa-thumbs-up" ng-class="getActivePhoto()._userVoteSign > 0 &amp;&amp; 'highlight'"></i></a><a tooltip="Score" tooltip-append-to-body="true" class="votes"><span ng-bind="getActivePhoto().score"></span></a><a tooltip="Dislike" tooltip-append-to-body="true" ng-click="votePhoto(-1)"><i class="fa fa-thumbs-down" ng-class="getActivePhoto()._userVoteSign < 0 &amp;&amp; 'highlight'"></i></a><a tooltip="Report Photo" tooltip-append-to-body="true" ng-click="flagPhoto()"><i class="fa fa-flag" ng-class="isPhotoUserFlagged() &amp;&amp; 'highlight'"></i></a><a tooltip="Upload" tooltip-append-to-body="true" class="" ng-click="openPhotoUploadModal()"><i class="fa fa-camera"></i></a>
+          <a tooltip="Zoom" tooltip-append-to-body="true"><i class="fa fa-search-plus"></i></a><a tooltip="Like" tooltip-append-to-body="true" ng-click="votePhoto(1)"><i class="fa fa-thumbs-up" ng-class="getActivePhoto()._userVoteSign > 0 &amp;&amp; 'highlight'"></i></a><a tooltip="Score" tooltip-append-to-body="true" class="votes"><span ng-bind="getActivePhoto().score"></span></a><a tooltip="Dislike" tooltip-append-to-body="true" ng-click="votePhoto(-1)"><i class="fa fa-thumbs-down" ng-class="getActivePhoto()._userVoteSign < 0 &amp;&amp; 'highlight'"></i></a><a tooltip="Report Photo" tooltip-append-to-body="true" ng-click="flagPhoto()"><i class="fa fa-flag" ng-class="isPhotoUserFlagged() &amp;&amp; 'highlight'"></i></a><a tooltip="Upload" tooltip-append-to-body="true" class="" ng-click="openPhotoUploadModal()"><i class="fa fa-camera"></i></a>
         </div>
         <a class="arrow prev" ng-click="showPrevPhoto()"><i class="fa fa-angle-left"></i></a>
         <a class="arrow next" ng-click="showNextPhoto()"><i class="fa fa-angle-right"></i></a>
@@ -50,21 +50,19 @@
     <div class="grid-cell">
       <div class="social-share-bar">
         <a href="javascript:window.print()" title="Print recipe"><i class="fa fa-print"></i></a>
-        <a href="#" title="Mail recipe"><i class="fa fa-envelope-o"></i></a>
-        <a href="//www.facebook.com/sharer/sharer.php?u=URLENCODED_URL&t=TITLE" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank"  title="Share recipe on facebook"><i class="fa fa-facebook"></i></a>
-        <a href="https://plus.google.com/share?url=URLENCODED_URL" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;" target="_blank" title="Share recipe on google+"><i class="fa fa-google-plus"></i></a>
-        <a href="https://twitter.com/intent/tweet" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Share recipe on twitter"><i class="fa fa-twitter"></i></a>
-        <a href="//pinterest.com/pin/create/link/?url=" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Share recipe on pinterest"><i class="fa fa-pinterest-p"></i></a>
-        <a href="https://www.tumblr.com/widgets/share/tool" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=540,width=600');return false;" target="_blank" title="Share recipe on tumblr"><i class="fa fa-tumblr"></i></a>
+        <a href="#" title="Mail recipe" style="display:none;"><i class="fa fa-envelope-o"></i></a>
+        <a href="//www.facebook.com/sharer/sharer.php?u=<%= @canonical_url %>&t=The <%= @drink.name %> Cocktail" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank"  title="Share recipe on facebook"><i class="fa fa-facebook"></i></a>
+        <a href="https://plus.google.com/share?url=<%= @canonical_url %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;" target="_blank" title="Share recipe on google+"><i class="fa fa-google-plus"></i></a>
+        <a href="http://twitter.com/share?url=<%= @canonical_url %>&text=Learn how to make a <%= @drink.name %> cocktail @Tipsyology.com" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Share recipe on twitter"><i class="fa fa-twitter"></i></a>
+        <a href="//pinterest.com/pin/create/link/?url=<%= @canonical_url %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Share recipe on pinterest"><i class="fa fa-pinterest-p"></i></a>
+        <a href="https://www.tumblr.com/share/link?url=<%= @canonical_url %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=540,width=600');return false;" target="_blank" title="Share recipe on tumblr"><i class="fa fa-tumblr"></i></a>
       </div>
     </div>
   </div>
   <div class="grid row center">
     <div class="grid-cell prep-time">
       <p>
-        Prep time:
-        <a tooltip="Edit" tooltip-append-to-body="true" ng-click="loadEditView()" class="fa fa-pencil"></a>
-        <br>
+        <i class="fa fa-clock-o"></i> 
         <span itemprop="prepTime">
           <% if @drink.prep_time %>
             <%= @drink.prep_time %>
@@ -72,13 +70,12 @@
             <em>unknown</em>
           <% end -%>
         </span>
+        <a tooltip="Edit" tooltip-append-to-body="true" ng-click="loadEditView()" class="fa fa-pencil"></a>
       </p>
     </div>
     <div class="grid-cell calorie-count" itemprop="nutrition" itemscope itemtype="http://schema.org/NutritionInformation">
       <p>
-        Calories:
-        <a tooltip="Edit" tooltip-append-to-body="true" ng-click="loadEditView()" class="fa fa-pencil"></a>
-        <br>
+        <i class="fa fa-fire"></i> 
         <span itemprop="calories">
           <% if @drink.calories %>
             <%= @drink.calories %>
@@ -86,6 +83,7 @@
             <em>unknown</em>
           <% end -%>
         </span>
+        <a tooltip="Edit" tooltip-append-to-body="true" ng-click="loadEditView()" class="fa fa-pencil"></a>
       </p>
     </div>
   </div>
@@ -171,7 +169,7 @@
   <!-- TIPS -->
   <ng-include src="'/drinks/comments.html'"></ng-include>
   <!-- COMMENTS -->
-  <div class="grid row tips center">
+  <!-- <div class="grid row tips center">
     <div class="grid-cell">
       <div id="static-comments" ng-show="!(comments && comments.length)">
         <% @comments.each do |comment| %>
@@ -192,12 +190,12 @@
         <% end -%>
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- SIMILAR DRINKS -->
   <div class="full-bleed">
     <div class="grid similar-drinks center">
       <div class="grid-cell">
-        <h3>Drinks similar to a <%= @drink.name %></h3>
+        <h3>Drinks similar to a <%= @drink.name %> cocktail</h3>
         <div class="grid grid--gutters">
           <a class="grid-cell cards" ng-repeat="drink in relatedDrinks" ng-href="{{drink.getUrl()}}">
             <div class="grid grid--center">

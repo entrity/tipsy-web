@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   before_action :set_xsrf_token_cookie
+  before_action -> { flash.keep unless request.format.html? }
 
   respond_to :json, :html
 
@@ -29,9 +30,10 @@ private
     request.referrer.nil? || URI::parse(request.referrer).host == request.host
   end
 
-  def require_signed_in
+  def require_signed_in msg=nil
     unless user_signed_in?
       if request.format.html?
+        flash[:alert] = msg || 'You must sign in to take that action'
         redirect_to :root
       else
         render status: 401, text: 'User session required. Please authenticate'

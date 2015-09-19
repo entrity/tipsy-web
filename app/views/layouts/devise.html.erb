@@ -25,9 +25,7 @@
 </head>
 <body ng-app='tipsy'>
 
-<div class="flash-alert">
-	<i class="fa fa-exclamation-triangle"></i> <%= flash[:alert] %>
-</div>
+<div class="flash-alert"><%= flash[:alert] %></div>
 
 <%= yield %>
 

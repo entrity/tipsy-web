@@ -23,10 +23,10 @@ html {
 body {
   background-color: #fff;
   font-family: 'Open Sans', sans-serif;
-  font-size: 13px;
+  font-size: 16px;
   margin: 0;
   overflow-x: hidden;
-  color: #212121;
+  color: #6f7c82;
   position: relative;
   transition-duration: 0.5s;
   transition-property: top, bottom, left, right;
@@ -98,6 +98,11 @@ a.nolink {
   background: #fcc;
   padding: 6px 30px;
   text-align: center;
+}
+.flash-notice:empty,
+.flash-alert:empty,
+.flash-error:empty {
+  display: none;
 }
 label {
   margin-bottom: 0;
@@ -184,10 +189,13 @@ a:hover {
   background-color: #fff;
   border-color: transparent;
 }
+.btn.btn-white:hover {
+  background-color: #f8f9fb;
+}
 .logged-out-nav .btn {
-  min-width: 128px;
-  max-width: 128px;
-  padding: 9px 12px;
+  min-width: 100px;
+  max-width: 100px;
+  padding: 9px 10px;
   font-size: 12px;
 }
 .logged-out-nav .btn:first-child {
@@ -303,7 +311,9 @@ a:hover {
   background-color: rgb(53, 148, 148);
 }
 .logo a img {
-    width: 100%;
+  width: 100%;
+  max-width: 110px;
+  min-width: 110px;
 }
 .search .input-group-btn > .btn {
   border-color: #fff;
@@ -344,7 +354,8 @@ label {
 img.hr {
   display: block;
   margin: 0 auto;
-  margin: 20px 0 20px 0;
+  margin: 20px auto;
+  max-width: 260px;
   width: 100%;
 }
 
@@ -352,14 +363,17 @@ img.hr {
 
 header {
   clear: both;
-  min-height: 56px;
+  padding: 0;
   width: 100%;
-  position: absolute;
+  min-height: 56px;
+  min-width: 300px;
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 20;
-  min-width: 300px;
+  z-index: 1001;
   border-bottom: 1px solid #ddd;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+  transition: all .5s;
 }
 nav {
   height: 56px;
@@ -397,8 +411,8 @@ nav > .grid-cell:first-child {
 nav .fa-bars {
   font-size: 14px;
   line-height: 56px;
-  width: 58px;
-  text-align: center;
+  width: 28px;
+  text-align: right;
 }
 nav .search .input-group {
   width: 100%;
@@ -424,11 +438,13 @@ nav .logged-in .grid-cell {
 }
 nav .logged-out .grid-cell:last-child,
 nav .logged-in .grid-cell:last-child {
-  margin-right: 0;
+  margin-right: -20px;
+  padding-right: 20px;
+  background: #fff;
 }
 nav .rep-cont .dropdown-menu {
   right: -50%;
-  margin-right: -8px;
+  margin-right: 10px;
   padding: 5px;
 }
 nav .rep-cont a,
@@ -527,7 +543,6 @@ nav .user li .rep-change {
   display: inline-block;
 }
 
-
 /*** CONTENT GLOBAL STYLES ***/
 
 #main-cont {
@@ -538,7 +553,6 @@ nav .user li .rep-change {
 .content {
   min-height: 100vh;
   background-color:#fff;
-  border-radius: 4px;
 }
 .center {
   max-width: 960px;
@@ -709,6 +723,7 @@ nav .user li .rep-change {
   box-sizing: border-box;
   -webkit-transform: translateZ(0);
   overflow-y: scroll;
+  top: 57px !important;
 }
 .sidebar-controls {
   height: 57px;
@@ -729,8 +744,8 @@ nav .user li .rep-change {
   border-radius: 4px;
 }
 #sidebar-r ul li:first-child {
-  font-size:16px !important;
-  font-weight:600;
+  font-size: 14px !important;
+  font-weight: 600;
   padding: 10px 20px;
   background: rgba(255,255,255,0.05);
 }
@@ -740,7 +755,7 @@ nav .user li .rep-change {
 }
 .ingredients-list ul li,
 .shopping-list ul li {
-  font-size:14px;
+  font-size: 12px;
   padding: 10px 20px;
 }
 .ingredients-list ul li.item,
@@ -808,37 +823,50 @@ aside .trophie-cont:hover {
   cursor: pointer;
 }
 #landing .search {
-  max-width: 300px;
+  max-width: 340px;
   margin: auto;
 }
+#landing .search p {
+  margin: 14px 0;
+}
 #landing .search > div {
-  border-radius: 3px;
+  border-radius: 2px;
+  background-clip: padding-box;
+}
+#landing .search > div * {
+  border-radius: 2px;
 }
 .signin.grid.modal-content {
   height: initial;
   padding: 16px;
+  background: transparent;
 }
 .signin.grid {
   height: 100vh;
-  background-color: #2b334f;
+  background-color: #1d2c3f;
   color: #fff;
   flex-direction: column;
 }
 .signin.grid .links,
 .splash.grid .links {
   text-align: center;
+  font-size: 13px;
 }
-.signin.grid .grid-cell:first-child,
-.splash.grid .grid-cell:first-child {
+.signin.grid > .grid-cell:first-child,
+.splash.grid > .grid-cell:first-child {
   margin: auto; 
-  max-width: 260px;
+  max-width: 360px;
   box-sizing: border-box;
   flex: 0 1 auto;
+  background-color: #f8f9fb;
+  padding: 30px;
+  color: #333;
+  border-radius: 7px;
 }
 .signin.grid .grid-cell .logo,
 .splash.grid .grid-cell .logo {
   display: block;
-  margin: 0 auto 12px auto;
+  margin: 0 auto 30px auto;
   width: 70%;
 }
 .signin.grid .grid-cell p,
@@ -849,21 +877,12 @@ aside .trophie-cont:hover {
 .signin .btn-primary,
 .splash .btn-primary {
   width: 100%;
-  color: #fff !important;
-  background-color: #2380af;
-  border-color: transparent;
   padding-top: 9px;
   padding-bottom: 9px;
 }
 .signin.grid .grid-cell form,
 .splash.grid .grid-cell form {
   padding: 0;
-}
-.signin .btn:hover,
-.splash .btn:hover {
-  background-color: #166C98;
-  color: #fff;
-  text-decoration: none !important;
 }
 .signin.grid .grid-cell .links a {
   font-weight: bold;
@@ -884,7 +903,6 @@ aside .trophie-cont:hover {
 }
 .signin.grid .grid-cell .input-group-addon {
   min-width: 39px;
-  border: none;
   background-color: #fff;
 }
 .signin.grid .grid-cell .input-group-addon .fa {
@@ -893,9 +911,6 @@ aside .trophie-cont:hover {
 .signin.grid .grid-cell input[type="password"],
 .signin.grid .grid-cell input[type="email"],
 .signin.grid .grid-cell input[type="text"] {
-  border-top: none;
-  border-right: none;
-  border-bottom: none;
   background-color: #fff;
 }
 .signin.grid .grid-cell input[type="password"],
@@ -906,7 +921,7 @@ aside .trophie-cont:hover {
 .signin.grid .grid-cell .btn.facebook {
   display: block;
   background: #4E69A2;
-  color: #ddd;
+  color: #fff;
   border: 1px solid transparent;
   padding-top: 9px;
   padding-bottom: 9px;
@@ -916,7 +931,6 @@ aside .trophie-cont:hover {
   background: #4c6eb8;
 }
 .form-control {
-  border-color: #eee;
   box-shadow: none;
 }
 .input-group-addon:last-child {
@@ -999,7 +1013,7 @@ aside .trophie-cont:hover {
 .fa-caret-down.highlight {
   color: orange;
 }
-/*** HOME STYLES ***/
+/*** DISCOVER STYLES+OVERRIDES ***/
 
 #home > .hero {
   background: url('/images/drinks/summer-cocktails.jpg') no-repeat center center; 
@@ -1009,6 +1023,9 @@ aside .trophie-cont:hover {
   background-size: cover;
   min-height: 40vh;
   position: relative;
+  display: flex;
+  border-top: 0;
+  padding: 0;
 }
 #home > .hero:before {
   content: "";
@@ -1018,7 +1035,7 @@ aside .trophie-cont:hover {
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0,0,0,0.4);
 }
 #home > .hero:after {
   content: "";
@@ -1040,26 +1057,32 @@ aside .trophie-cont:hover {
   -o-transition: opacity 0.25s ease 0s;
   transition: opacity 0.25s ease 0s;
 }
+#home > .hero .center {
+  max-width: 100%;
+  width: 100%;
+}
 #home h1,
 #home h2,
 #home h3,
-#home h4 {
+#home h4,
+#home h5 {
   text-align: center;
 }
 .hero h1 {
   color: #fff;
-  font-size: 2em;
+  font-size: 1.8em;
   font-weight: 100;
   display: block;
   text-align: center;
   text-shadow: 0 3px 3px rgba(0,0,0,0.6);
   position: relative;
   z-index: 2;
+  margin-top: 0;
 }
 .hero h4 {
   color: #fff;
   font-size: 2.6em;
-  font-weight: 700;
+  font-weight: 600;
   display: block;
   text-align: center;
   text-shadow: 0 3px 3px rgba(0,0,0,0.6);
@@ -1067,19 +1090,104 @@ aside .trophie-cont:hover {
   z-index: 2;
 }
 #home h2 {
-  font-size: 2.1em;
+  font-size: 20px;
+  line-height: 23px;
   padding-bottom: 10px;
-  border-bottom: 1px solid lightgray;
-  margin: 40px 0 10px 0;
+  border-bottom: 1px solid #ededed;
+  margin: 0 0 10px 0;
+}
+#home h3 {
+  font-size: 33px;
+  font-weight: 600;
+}
+#home .hero .grid {
+  position: relative;
+}
+#home .hero .grid,
+#home .hero .grid .grid-cell,
+#home .hero .grid ng-include {
+  z-index: 5;
+}
+#home .hero .grid-cell > .btn {
+  border-color: #fff;
+  margin: 20px 0 4px 0;
+  font-size: 16px;
+}
+#home .hero .fuzzy-finder {
+  width: 100%;
+  margin: 40px 0 0 0;
+  padding: 30px 0;
+  background: rgba(0,0,0,0.5);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+#home .hero #fuzzy-finder {
+  max-width: 660px;
+  margin: 0 auto;
+}
+#home .hero .grid .grid-cell {
+  margin: auto;
+  padding-bottom: 102px;
+}
+#home .hero .ui-select-search,
+#home .hero .ui-select-toggle {
+  background-color: #fff;
+  border-color: #fff;
+  padding: 9px 15px;
+  height: 42px;
+  border-radius: 3px;
+}
+#home .hero #fuzzy-finder > div > div > span > span {
+  color: #565a5c;
+  font-size: 16px;
+  padding-left: 26px;
+}
+#home .hero .ui-select-match::before {
+  color: #565a5c;
+  font-size: 16px;
+  top: 9px;
+  left: 17px;
+}
+#home .hero input::-webkit-input-placeholder {
+  color: #fff;
+  font-size: 16px;
+  line-height: 18px;
+}
+#home .hero input:-moz-placeholder {
+  color: #fff;
+  font-size: 16px;
+  line-height: 18px;
+}
+#home .hero input::-moz-placeholder {
+  color: #fff;
+  font-size: 16px;
+  line-height: 18px;
+}
+#home .hero input:-ms-input-placeholder {
+  color: #fff;
+  font-size: 16px;
+  line-height: 18px;
+}
+#home .hero #fuzzy-finder ul.ui-select-choices {
+  top: 46px;
 }
 #home .top-lists {
   padding: 30px 0 80px 0;
 }
 #home .top-lists > .grid.favorites > .grid-cell {
-  margin-right: 60px;
+  padding: 20px 20px 10px 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  background: #fdfdfd;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
 }
 #home .top-lists > .grid > .grid-cell:last-child {
   margin-right: 0;
+}
+#home .top-lists > .grid.favorites > .grid-cell .fa {
+  color: #0091ce;
 }
 #home .item {
   height: 40px;
@@ -1092,14 +1200,18 @@ aside .trophie-cont:hover {
 #home .item .grid-cell:last-child {
   padding-right: 0;
 }
-#home .picks {
+#home .picks,
+#home .favorites {
   padding: 40px 0;
+}
+#home .favorites .grid-cell.name {
+  font-size: 14px;
 }
 #home .picks a.grid-cell {
   position: relative;
   color: #fff;
   height: 320px;
-  margin-right: 10px;
+  margin-right: 20px;
   background-color: #004052;
   background-position: center center;
   background-repeat: no-repeat;
@@ -1108,6 +1220,15 @@ aside .trophie-cont:hover {
   -webkit-background-size: cover;
   background-size: cover;
   transition: all 0.25s ease 0s;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
+  position: relative;
+  top: 0;
+}
+#home .picks a.grid-cell:hover {
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.6);
+  top: -4px;
 }
 #home .picks a.grid-cell:before {
   content: "";
@@ -1118,6 +1239,8 @@ aside .trophie-cont:hover {
   height: 100%;
   width: 100%;
   background-color: rgba(0,0,0,0.4);
+  border-radius: 4px;
+  overflow: hidden;
 }
 #home .picks a.grid-cell:hover:after {
   opacity: 1;
@@ -1142,6 +1265,8 @@ aside .trophie-cont:hover {
   -webkit-transition: opacity 0.25s ease 0s;
   -o-transition: opacity 0.25s ease 0s;
   transition: opacity 0.25s ease 0s;
+  border-radius: 4px;
+  overflow: hidden;
 }
 #home .picks .grid-cell .title {
   position: absolute;
@@ -1160,8 +1285,7 @@ aside .trophie-cont:hover {
 }
 #home .picks .grid-cell .title span {
   color: #eaeaea;
-  font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
 }
 #home .picks .grid-cell .faves {
     position: absolute;
@@ -1181,12 +1305,14 @@ aside .trophie-cont:hover {
   font-weight: 600;
   margin: 0;
   padding: 0 0 6px 0;
+  color: #444;
 }
 #drink-page h3,
 #ingredient-page h3 {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
   margin: 0 0 8px 0;
+  color: #444;
 }
 #drink-page .center,
 #recipe-editor .center,
@@ -1200,9 +1326,11 @@ aside .trophie-cont:hover {
   border-bottom: 1px solid #ededed;
   background: url(/images/img-upload.png) no-repeat center #FBFBFB;
   background-position: calc(50% + 8px) calc(50% - 30px);
-  margin-bottom: 30px;
+  margin-bottom: 50px;
   overflow: hidden;
   position: relative;
+  margin-right: -10px;
+  margin-left: -10px;
 }
 .info-wrap {
   background-color: #fff;
@@ -1230,6 +1358,7 @@ aside .trophie-cont:hover {
   text-align: center;
 }
 #drink-page .votes > div {
+  font-size: 14px;
   display: inline-block;
   padding: .5em;
   border: 1px solid rgba(136, 153, 166, 0.5);
@@ -1294,22 +1423,24 @@ aside .trophie-cont:hover {
 #drink-page .social-share-bar a:hover {
   opacity: 1;
 }
-#drink-page .prep-time span,
-#drink-page .calorie-count span {
-  font-size: 16px;
-  font-weight: 600;
-  color: #FF7300;
+#drink-page .fa-clock-o,
+#drink-page .fa-fire {
+  font-size: 22px;
+  color: #0091CE;
 }
 #drink-page .ingredients {
-  max-width: 70%;
+  max-width: 100%;
 }
 #drink-page .ingredients .ingredient {
   padding: 6px 0;
   text-transform: capitalize;
 }
+#drink-page .ingredients .ingredient > .grid-cell {
+  line-height: 22px;
+}
 #drink-page .ingredients .ingredient .name,
 #drink-page .ingredients .ingredient .amount {
-  font-size: 11px;
+  font-size: 14px;
 }
 #drink-page .ingredients .ingredient .amount {
   text-align: right;
@@ -1346,14 +1477,21 @@ aside .trophie-cont:hover {
   background: #ddd;
   color: #888;
 }
+#drink-page .full-bleed {
+  padding: 90px 0;
+  margin-top: 70px;
+  background-image: radial-gradient(circle farthest-corner at right bottom, #1bc4bf 0%, #41a9cc 28%, #3597c2 57%, #41a9cc 100%);
+}
 #drink-page .similar-drinks {
   max-width: 100%;
   width: 100%;
   padding: 0 40px;
 }
 #drink-page .similar-drinks h3 {
-  margin-bottom: 20px;
+  font-size: 1.5em;
+  margin-bottom: 40px;
   text-align: center;
+  color: #fff;
 }
 #drink-page .similar-drinks > .grid-cell > .grid {
   justify-content: center;
@@ -1366,18 +1504,20 @@ aside .trophie-cont:hover {
 #drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid,
 #drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid > .grid-cell {
   width: 100%;
-  background-color: #E5F2F7
+  background-color: #fff;
 }
 #drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child {
   flex-direction: column;
   border-radius: 4px;
   overflow: hidden;
-  border: 1px solid #BFE0EC;
-  box-shadow: 0 0 0 4px rgba(191,224,236,0.0);
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
   transition: all .3s;
+  position: relative;
+  top: 0;
 }
 #drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child:hover {
-  box-shadow: 0 0 0 4px rgba(191,224,236,0.8);
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.6);
+  top: -4px;
 }
 #drink-page .similar-drinks > .grid-cell > .grid > .grid-cell > .grid:last-child > .grid-cell:nth-of-type(2) {
   background: #fff;
@@ -1412,7 +1552,7 @@ aside .trophie-cont:hover {
   min-width: 100%;
   text-align: center;
   padding: 12px 12px;
-  font-size: 16px;
+  font-size: 12px;
   flex: 1 0 auto;    
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1678,7 +1818,9 @@ tipsy-image-editor a.btn:hover {
 }
 
 /*** DRINK PAGE STYLES:Comments ***/
-
+#comments {
+  font-size: 14px;
+}
 #comments .comment:last-child {
   margin-bottom: 0;
 }
@@ -1689,6 +1831,8 @@ tipsy-image-editor a.btn:hover {
 .comments-cont {
   margin-right: -1em;
   margin-left: -1em;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
 }
 .comments-cont section {
   padding: 0 !important;
@@ -1707,6 +1851,7 @@ tipsy-image-editor a.btn:hover {
 }
 .comments-cont #comments .comment .name,
 #tips .name {
+  color: #444;
   font-weight: bold;
 }
 .comments-cont #comments .comment .date {
@@ -1786,7 +1931,7 @@ tipsy-image-editor a.btn:hover {
   content: "\00a0";
   display: block;
   height: 10px;
-  left: 9px;
+  left: 12px;
   position: absolute;
   top: 25px;
   transform:             rotate( 45deg );
@@ -1802,16 +1947,8 @@ tipsy-image-editor a.btn:hover {
 }
 .comment-actions a {
   display: inline-block;
-  width: 26px;
-  height: 26px;
-  line-height: 26px;
-  border-radius: 50%;
   color: #8899a6;
-  border: 1px solid rgba(136, 153, 166, 0.5);
   text-align: center;
-}
-.comment-actions a:hover {
-  background-color: #E1E8ED;
 }
 .comment-actions span {
   position: relative;
@@ -1821,12 +1958,15 @@ tipsy-image-editor a.btn:hover {
   font-size: 88%;
 }
 .comment-actions span .fa {
-  font-size: 14px;
-  width: 14px;
+  font-size: 16px;
+  width: 16px;
 }
 .comment-actions span:first-child {
   padding-left: 0;
   margin-left: 0;
+}
+.comment-actions span:first-child a:hover {
+  color: #7b57af;
 }
 .comment-actions span:first-child:before,
 .comment-actions span:last-child:before {
@@ -1848,6 +1988,9 @@ tipsy-image-editor a.btn:hover {
 .comment-actions .comment-vote a:first-child {
   margin-right: 4px;
 }
+.comment-actions a:hover {
+  color: #0091CE;
+}
 .comment-actions .comment-vote a:last-child {
   margin-left: 4px;
 }
@@ -1856,9 +1999,6 @@ tipsy-image-editor a.btn:hover {
 }
 #comments .comment .comment-vote a:hover .fa-thumbs-o-down:before {
   content:'\f165';
-}
-.comment-actions .tip .fa-lightbulb-o {
-  margin-right: 6px;
 }
 
 /*** ACCOUNT SETTINGS ***/
@@ -1992,7 +2132,7 @@ tipsy-image-editor a.btn:hover {
   overflow: scroll;
   overflow-x: hidden;
   top: 0;
-  right: 20px;
+  right: 10px;
   bottom: 0;
   left: 0;
   padding-right: 0;
@@ -2201,7 +2341,27 @@ footer.in-app .row {
   cursor: s-resize;
 }
 /* BOOTSTRAP OVERRIIDES */
-
+h1 {
+  font-size: 33px;
+}
+.btn {
+  border-radius: 2px;
+}
+.btn-primary {
+  background-color: #8bbf5a;
+  border-color: transparent;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: #9ACA6D;
+  border-color: transparent;
+  text-decoration: none !important;
+}
+body.modal-open {
+  height: 100vh;
+  overflow: hidden;
+}
 .modal-content {
   box-shadow: none;
   border: none;
@@ -2256,10 +2416,11 @@ header .review:hover .badge {
 
 @media screen and (max-width: 785px) {
   nav {
+    position: relative;
     min-width: 100% !important;
     min-height: 56px;
     height: auto;
-    padding: 0;
+    padding: 0 20px;
     flex-wrap: wrap;
   }
   nav .logo {
@@ -2278,12 +2439,43 @@ header .review:hover .badge {
     display: none;
   }
   nav .logged-in .grid > .grid-cell:last-child {
-    display: flex !important;
+    display: block !important;
+    position: absolute;
+    right: 20px;
+    top: 0;
   }
-
-  #drink-page .photos {
-    margin-right: -10px;
-    margin-left: -10px;
+  .content .grid.center {
+    flex-direction: column;
+  }
+  .content .grid.center > .grid-cell {
+    max-width: 100%;
+    min-width: 100%;
+  }
+  .content #home .grid.center > .grid-cell {
+    margin-right: -10px !important;
+    margin-left: -10px !important;
+  }
+  .content .grid.center > .grid-cell .votes {
+    text-align: left;
+    margin-top: 20px;
+  }
+  #home .hero .grid .grid-cell {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  #home .favorites .grid-cell .item {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  #home .hero .fuzzy-finder {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  #home > .hero {
+    min-height: calc(100vh - 57px);
+  }
+  #home .hero h1 {
+    margin-top: 20vh;
   }
   #main-cont {
     padding: 57px 10px 0 10px;

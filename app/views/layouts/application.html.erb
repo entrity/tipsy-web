@@ -3,13 +3,14 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="description" content="">
+	<meta name="description" content="Online Bartender">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tipsyology</title>
+  <title>Tipsyology - Discover, create and share all things tipsy!</title>
   <meta property="og:site_name" content="Tipsyology - Discover, create and share all things tipsy!">
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site"     content="@tipsyology" />
   <meta property="fb:app_id"    content="1586283884980033" />
+  <meta name="theme-color" content="#1d2c3f">
   <% if @canonical_url.present? %>
     <%= tag :link,   rel:      'canonical',           href: @canonical_url %>
     <%= tag :meta,   property: 'og:url',              content: @canonical_url %>
@@ -39,7 +40,7 @@
     ga('send', 'pageview');
   </script>
 </head>
-<body ng-app='tipsy' itemscope itemtype="http://schema.org/WebPage">
+<body ng-app='tipsy' itemscope itemtype="http://schema.org/WebPage" id="<%= @body_id %>">
   <% if @canonical_url.present? %>
     <%= tag :meta, itemprop: 'url', content: @canonical_url %>
   <% end %>
@@ -56,7 +57,7 @@
     </div>
   </div>
   <% unless @no_rightbar %>
-    <pageslide id="sidebar-r" ps-open="tipsyconfig.rightbarOpen" ps-squeeze="true" ps-side="right" ng-include='"/application/rightbar.html"'></pageslide>
+    <pageslide id="sidebar-r" ps-open="tipsyconfig.rightbarOpen" ps-squeeze="true" ps-side="right" onload="triggerNanoScroller()" ng-include='"/application/rightbar.html"'></pageslide>
   <% end %>
   <footer class="in-app">
     <div class="grid grid--center row center aligner">

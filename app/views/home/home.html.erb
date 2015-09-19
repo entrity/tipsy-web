@@ -30,33 +30,34 @@
 	  }
 	}
 	.cd-section {
-	  height: 100vh;
-	  color: #fff;
+		height: 100vh;
+		color: #fff;
 	}
 	.cd-section h2 {
-	  line-height: 100vh;
-	  text-align: center;
-	  font-size: 2.4rem;
-	  margin: 0;
-	  padding: 0;
+		line-height: 100vh;
+		text-align: center;
+		font-size: 2.4rem;
+		margin: 0;
+		padding: 0;
 	}
 	#first .grid {
-	  height: 100vh;
+		height: 100vh;
 	}
 	.cd-section:first-of-type > div {
-	  background-color: #17bb70;
+		background: #1d2c3f;
+		background: radial-gradient(circle farthest-side at right bottom,#1d2c3f 8%,#154866 70%,#154866);
 	}
 	.cd-section:nth-of-type(2) > div {
-	  background-color: #2e5367;
+		background: #2e5367;
 	}
 	.cd-section:nth-of-type(3) > div {
-	  background-color: #267481;
+		background: #267481;
 	}
 	.cd-section:nth-of-type(4) > div {
-	  background-color: #fcb052;
+		background: #fcb052;
 	}
 	.cd-section:nth-of-type(5) > div {
-	  background-color: #f06a59;
+		background: #f06a59;
 	}
 	@media only screen and (min-width: 1050px) {
 	  .cd-section h2 {
@@ -185,7 +186,13 @@
 	<section id="first" class="cd-section visible">
 		<div>
 			<div class="grid grid--center splash">
-				<p class="logged-out-nav"><a href="/users/sign_in" class="btn btn-primary">Log in</a> <a href="/users/sign_up" class="btn btn-white">Sign up</a></p>
+				<p class="logged-out-nav">
+					<% if flash[:alert].present? %>
+						<span class="alert alert-danger" role="alert"><%= flash[:alert] %></span>
+					<% end %>
+					<a href="/users/sign_in" class="btn btn-white">Log in</a>
+					<a href="/users/sign_up" class="btn btn-primary">Sign up</a>
+				</p>
 				<div class="search grid-cell">
 					<img class="logo" src="/images/tipsyology-logo-wht.png">
 					<p>Discover, create and share all things tipsy!</p>

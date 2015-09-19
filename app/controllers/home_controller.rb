@@ -6,6 +6,7 @@ layout nil
     # of the user selecting an ingredient from the fuzzy finder on the splash screen.
     if user_signed_in? || params[:ingredient_id].present? || params[:discover]
       @canonical_url = 'http://tipsyology.com/discover'
+      @body_id = 'discover'
       render 'signed_in_home', layout: 'application'
     else
       render layout: nil
