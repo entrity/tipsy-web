@@ -186,7 +186,13 @@
 	<section id="first" class="cd-section visible">
 		<div>
 			<div class="grid grid--center splash">
-				<p class="logged-out-nav"><a href="/users/sign_in" class="btn btn-white">Log in</a> <a href="/users/sign_up" class="btn btn-primary">Sign up</a></p>
+				<p class="logged-out-nav">
+					<% if flash[:alert].present? %>
+						<span class="alert alert-danger" role="alert"><%= flash[:alert] %></span>
+					<% end %>
+					<a href="/users/sign_in" class="btn btn-white">Log in</a>
+					<a href="/users/sign_up" class="btn btn-primary">Sign up</a>
+				</p>
 				<div class="search grid-cell">
 					<img class="logo" src="/images/tipsyology-logo-wht.png">
 					<p>Discover, create and share all things tipsy!</p>
