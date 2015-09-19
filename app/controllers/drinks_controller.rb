@@ -3,6 +3,8 @@ class DrinksController < ApplicationController
   MAX_RESULTS = 50
   MIN_INGREDIENT_CT_FOR_SUGGESTIONS = 1
 
+  before_action :require_signed_in, only: [:new, :edit, :update, :create, :destroy]
+
   def index
     move_ingredient_id_params_to_canonical_ids
     @drinks = Drink.default_scoped
