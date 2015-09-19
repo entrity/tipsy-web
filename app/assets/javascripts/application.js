@@ -277,6 +277,11 @@
 					localStorage.setItem('sidebar.open', this.sidebar.open);
 				}
 			},
+			triggerNanoScroller: {
+				value: function () {
+					jQuery('.nano').nanoScroller();
+				}
+			},
 			visit: {
 				configurable: false,
 				value: function visit (url, event) {
