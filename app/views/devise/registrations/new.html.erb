@@ -18,7 +18,7 @@
 
     <img class="hr" src="/images/hr-or-blk.png">
 
-    <a class="btn btn-primary" ng-click="showForm = ! showForm">Sign up with Email</a>
+    <a class="btn btn-primary" ng-hide="showForm" ng-click="showForm=!showForm">Sign up with Email</a>
 
     <div ng-show="showForm">
       <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
