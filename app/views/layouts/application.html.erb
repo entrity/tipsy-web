@@ -40,7 +40,7 @@
     ga('send', 'pageview');
   </script>
 </head>
-<body ng-app='tipsy' itemscope itemtype="http://schema.org/WebPage">
+<body ng-app='tipsy' itemscope itemtype="http://schema.org/WebPage" id="<%= @body_id %>">
   <% if @canonical_url.present? %>
     <%= tag :meta, itemprop: 'url', content: @canonical_url %>
   <% end %>
