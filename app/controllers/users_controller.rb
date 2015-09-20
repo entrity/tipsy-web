@@ -35,7 +35,7 @@ class UsersController < ApplicationController
         if params[:id] =~ /\d+/ || params[:id].is_a?(Fixnum)
           @user = params[:id].to_i == 0 ? current_user : User.find(params[:id])
         else
-          @user = User.find_by_nickname(params[:id])
+          @user = User.where('nickname ilike ?', params[:id]).first
         end
       end)
     end
