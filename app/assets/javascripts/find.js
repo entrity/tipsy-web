@@ -1,9 +1,11 @@
 (function () {
 	angular.module('tipsy.find', [])
 	.controller('FindCtrl', ['$rootScope', '$scope', '$resource', '$location', 'Drink', 'Ingredient', function ($rootScope, $scope, $resource, $location, Drink, Ingredient) {
-		$rootScope.finder = {findables:[]};
-		$scope.finder.ingredients = [];
-		$scope.finder.options = new Object;
+		if (!$rootScope.finder) {
+			$rootScope.finder = {findables:[], id:'rootfinder'};
+			$scope.finder.ingredients = [];
+			$scope.finder.options = new Object;
+		}
 		$scope.finder.fetchFindables = function ($select) {
 			var searchTerm = $select.search;
 			if (searchTerm && searchTerm.length > 0) {
@@ -111,7 +113,8 @@
 				$scope.finder.suggestions = $resource('/drinks/suggestions.json').get(
 					{'ingredient_id[]':ingredientIds,'canonical_ingredient_id[]':canonicalIngredientIds},
 					function (data) {
-						$scope.finder.suggestions.drinks = $scope.finder.suggestions.drinks.map(function (obj) { return new Drink(obj) })
+						if ($scope.finder.suggestions)
+							$scope.finder.suggestions.drinks = data && data.drinks && data.drinks.map(function (obj) { return new Drink(obj) })
 					}
 				);
 			} else {
