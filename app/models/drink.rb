@@ -26,7 +26,7 @@ class Drink < ActiveRecord::Base
 
   scope :for_exclusive_ingredients, -> canonical_ingredient_ids {
     where("id in #{Drink.ids_for_ingredients_sql(canonical_ingredient_ids)}")
-    .where('required_canonical_ingredient_ids <@ \'{?}\'', Array.wrap(canonical_ingredient_ids).map(&:to_i))
+    .where('required_canonical_ingredient_ids OPERATOR(pg_catalog.<@) \'{?}\'', Array.wrap(canonical_ingredient_ids).map(&:to_i))
   }
 
   def flag!
