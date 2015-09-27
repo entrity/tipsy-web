@@ -16,28 +16,32 @@ namespace :drink do
 
   task :set_related => :environment do
     start_time = Time.now
-    Drink.find_each do |drink|
-      ingredient_ids = drink.ingredients.pluck(:ingredient_id)
-      candidates = Drink
-        .joins(:ingredients)
-        .where('id != ?', drink.id)
-        .where('drinks_ingredients.ingredient_id' => ingredient_ids)
-        .includes(:ingredients)
-        .distinct
-      candidates.to_a.sort! do |a, b|
-        cda = common_ingredients(drink, a)
-        cdb = common_ingredients(drink, b)
-        if common_ingredients(drink, a) == common_ingredients(drink, b)
-          ingredient_ct_diff(drink, a) <=> ingredient_ct_diff(drink, b)
-        else
-          common_ingredients(drink, a) <=> common_ingredients(drink, b)
+    File.write('tmp/set-related.log', '')
+    ActiveRecord::Base.connection.uncached do
+      Drink.find_each do |drink|
+        ingredient_ids = drink.ingredients.pluck(:ingredient_id)
+        candidates = Drink
+          .joins(:ingredients)
+          .where('id != ?', drink.id)
+          .where('drinks_ingredients.ingredient_id' => ingredient_ids)
+          .includes(:ingredients)
+          .distinct
+        candidates.to_a.sort! do |a, b|
+          if common_ingredients(drink, a) == common_ingredients(drink, b)
+            ingredient_ct_diff(drink, a) <=> ingredient_ct_diff(drink, b)
+          else
+            common_ingredients(drink, a) <=> common_ingredients(drink, b)
+          end
         end
-      end
-      related_drinks = candidates[0...5]
-      drink.update_attributes! related_drink_ids:related_drinks.map(&:id)
-      puts drink.id
-      if drink.id % 20 == 0
-        puts "%05d seconds elapsed" % (Time.now - start_time)
+        related_drinks = candidates[0...5]
+        drink.update_attributes! related_drink_ids:related_drinks.map(&:id)
+        # Debug info
+        puts drink.id
+        if drink.id % 20 == 0
+          GC.start
+          File.open('tmp/set-related.log', 'a') {|f| f.write File.read("/proc/#{Process.pid}/statm") } if File.exist?("/proc/#{Process.pid}/statm")
+          puts "%05d seconds elapsed" % (Time.now - start_time)
+        end
       end
     end
   end
