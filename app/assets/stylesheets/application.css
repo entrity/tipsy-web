@@ -47,11 +47,14 @@ body {
   font-family: 'FontAwesome';
   content: '\f002';
   left: 8px;
+  top: 8px;
   margin-right: 0.5em;
   position: absolute;
-  top: 8px;
   z-index: 3000;
   color: #aaa;
+}
+#landing #fuzzy-finder .ui-select-match::before {
+  top: 4px;
 }
 /* This rule prevents the magnifying glass icon from overlapping the placeholder text when the select element is not focused */
 #fuzzy-finder .ui-select-match > span:first-child > span:first-child {
@@ -1021,7 +1024,7 @@ aside .trophie-cont:hover {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  min-height: 40vh;
+  min-height: 48vh;
   position: relative;
   display: flex;
   border-top: 0;
@@ -1221,7 +1224,6 @@ aside .trophie-cont:hover {
   background-size: cover;
   transition: all 0.25s ease 0s;
   border-radius: 4px;
-  overflow: hidden;
   box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
   position: relative;
   top: 0;
