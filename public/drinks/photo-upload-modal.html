@@ -13,10 +13,10 @@
 			</div>
 			<progressbar class="progress-striped active" type="{{uploader.progress == 100 ? (uploader.errors ? 'danger' : 'success') : null}}" value="uploader.progress"></progressbar>
 			<div ng-hide="uploader.success">
-				<form action="/file-upload" class="dropzone" id="my-awesome-dropzone"></form>
+				<form action="/file-upload" class="dropzone" id="my-awesome-dropzone" enctype="multipart/form-data"></form>
 				<h2 class="text-center"> Select images to upload</h2>
 				<div class="upload text-center">
-					<input type="file" ngf-select ng-model="uploader.file" ng-model-rejected="rejFiles" ngf-capture="'camera'" accept="image/*" ngf-accept="'image/*'">
+					<input type="file" ngf-select ng-model="uploader.file" ng-model-rejected="rejFiles" accept="image/*" ngf-accept="'image/*'">
 					<div>
 						<p>or</p>
 						<div id="dnd-target" ngf-drop="fileDropped($files)" ngf-drag-over-class="dragged-over" ngf-pattern="'image/*'" ng-model="files">Drag and Drop</div>
