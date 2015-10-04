@@ -24,6 +24,10 @@ class User < ActiveRecord::Base
   after_update :denormalize_avatar, if: :photo_updated_at_changed?
   after_update :denormalize_nickname_if_changed
 
+  def can_admin?
+    log_points > 3
+  end
+
   # @return order of magnitude of `self.points`
   def log_points
     Math.log([1 + points, 2].max, 10).ceil

@@ -107,6 +107,17 @@
 	.factory('User', ['$resource', function ($resource) {
 		var User = $resource('/users/:id.json');
 		Object.defineProperties(User.prototype, {
+			canAdmin: {
+				value: function canAdmin () {
+					return this.getLogPoints() > 3;
+				}
+			},
+			getLogPoints: {
+				value: function getLogPoints () {
+					var decimalPoints = (this.points||0);
+					return Math.ceil(Math.log(Math.max(1+decimalPoints, 2)) / Math.log(10))
+				}
+			},
 			getNickname: {
 				configurable: false,
 				value: function getNickname () {
