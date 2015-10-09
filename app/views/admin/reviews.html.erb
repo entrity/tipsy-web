@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-md-1" title="Review ID">RID</div>
+    <div class="col-md-3" title="Review created at"><i class="fa fa-calendar"></i></div>
+    <div class="col-md-2" title="Reviewable type"><i class="fa fa-object-group"></i></div>
+    <div class="col-md-1" title="Reviewable id">ID</div>
+    <div class="col-md-1" title="User (contributor) id"><i class="fa fa-user"></i></div>
+</div>
+
+<% @reviews.each do |review| %>
+    <div class="row <%= review.open ? 'review-open' : 'review-closed'  %>">
+        <div class="col-md-1"><%= review.id %></div>
+        <div class="col-md-3"><%= review.created_at %></div>
+        <div class="col-md-2"><%= review.reviewable_type %></div>
+        <div class="col-md-1"><%= review.reviewable_id %></div>
+        <div class="col-md-1"><%= review.contributor_id %></div>
+    </div>
+<% end %>
+<div><%= will_paginate @reviews %></div>
