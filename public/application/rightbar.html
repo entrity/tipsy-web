@@ -3,6 +3,7 @@
 		<div class="sidebar-controls">
 			<a class="btn btn-primary" title="Create a cocktail" href="/drinks/new" ng-click="visit('/drinks/new')"><i class="fa fa-plus-square"></i></a>
 			<a class="btn btn-primary" title="Collections" ng-click="openFavourites()"><i class="fa fa-heart"></i></a>
+			<a ng-if="currentUser.canAdmin()" class="btn btn-info" title="Admin" href="/admin/revisions"><i class="fa fa-key"></i></a>
 			<!-- TROPHIES SUMMARY -->
 			<a class="user trophie-cont pull-right" href="/user/trophies.html">
 				<i class="fa fa-trophy gold"></i>   {{getUser().gold_trophy_ct||0}}
