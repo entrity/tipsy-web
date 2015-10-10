@@ -55,7 +55,7 @@ class AdminController < ApplicationController
     def require_user_can_admin
       unless current_user.can_admin?
         if request.format.html?
-          flash[:alert] = msg || 'You must have admin privilege take that action'
+          flash[:alert] = 'You must have admin privilege take that action'
           redirect_to :root
         else
           render status: 401, text: 'Admin privilege required'
