@@ -24,6 +24,19 @@ Rails.application.routes.draw do
 
   get 'discover' => 'home#home', defaults:{discover: true, format: :html}
 
+  resources :admin, only: [] do
+    collection do
+      get :comments
+      get :ingredient_revisions
+      get :photos
+      get :reviews
+      get :revisions
+    end
+    member do
+      post :publish, action: 'publish'
+    end
+  end
+
   resources :comments, only: [:create, :destroy] do
     member do
       post :unvote_tip

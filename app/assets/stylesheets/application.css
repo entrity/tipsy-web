@@ -2003,6 +2003,17 @@ tipsy-image-editor a.btn:hover {
   content:'\f165';
 }
 
+/*** ADMIN ***/
+
+.row.admin-published,
+.row.review-open {
+  background: #ffd;
+}
+.row.admin-unpublished,
+.row.review-closed {
+  background: #ddd;
+}
+
 /*** ACCOUNT SETTINGS ***/
 
 .account-settings {

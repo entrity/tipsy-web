@@ -1,5 +1,15 @@
 module ApplicationHelper
 
+  def admin_resource_preview_text resource
+    if resource.respond_to? :text
+      resource.text
+    elsif resource.respond_to? :description
+      resource.description
+    elsif resource.respond_to? :alt
+      resource.alt
+    end
+  end
+
   def glass_image_tag glass_id, background_color
     image_tag "/images/glass-#{glass_id}.png", style:"background-color:#{background_color}"
   end
