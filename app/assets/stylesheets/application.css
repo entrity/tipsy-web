@@ -285,7 +285,7 @@ a:hover {
   transition: .25s linear;
   z-index: 10;
 } 
-#find-results .dropdown-menu {
+#find-results .filters .dropdown-menu {
   width: 40px;
   min-width: 40px;
   left: inherit;
@@ -428,21 +428,12 @@ nav .logged-out,
 nav .logged-in {
   flex: 0 1 auto;
 }
-nav .logged-out .grid-cell:first-child,
-nav .logged-in .grid-cell:first-child {
-  flex: 0 1 auto;
-  padding-right: 16px;
-  margin-right: auto;
-}
 nav .logged-out .grid-cell,
 nav .logged-in .grid-cell {
   flex: 0 1 auto;
-  margin-right: 16px;
 }
 nav .logged-out .grid-cell:last-child,
 nav .logged-in .grid-cell:last-child {
-  margin-right: -20px;
-  padding-right: 20px;
   background: #fff;
 }
 nav .rep-cont .dropdown-menu {
@@ -474,7 +465,8 @@ nav .trophie-cont a i:first-child {
 }
 nav .user {
   cursor: pointer;
-  padding: 0 0 0 16px;
+  padding: 0 4px;
+  margin: 0 10px;
   flex: 0 1 auto;
 }
 nav .user .avatar {
