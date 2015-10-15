@@ -1,0 +1,29 @@
+<style>
+	html,body {
+		height: calc(100%);
+		height: -o-calc(100%);
+		height: -webkit-calc(100%);
+		height: -moz-calc(100%);
+		}
+</style>
+<div class="grid grid--center signin">
+	<div class="grid-cell">
+		<img class="logo" src="/images/tipsyology-logo-blk.png">
+
+		<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+			<%= devise_error_messages! %>
+			<p style="text-align:left;">To reset your password, enter the email address used to sign up with Tipsyology and reset instructions will be sent to you.</p>
+			<div class="field input-group">
+				<div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+				<%= f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => "Email" %>
+      		</div>
+
+			<div class="actions">
+				<%= f.submit "Send me reset password instructions", :class => 'btn btn-primary' %>
+			</div>
+		<% end %>
+		<hr>
+		<%= render "devise/shared/links" %>
+
+	</div>
+</div>
