@@ -838,7 +838,7 @@ aside .trophie-cont:hover {
 }
 .signin.grid {
   height: 100vh;
-  background-color: #1d2c3f;
+  background: radial-gradient(circle farthest-side at right bottom,#1d2c3f 8%,#154866 70%,#154866);
   color: #fff;
   flex-direction: column;
 }
@@ -2204,9 +2204,6 @@ footer.fixed {
   background: transparent;
   color: #fff;
   flex: 0 1 auto;
-}
-footer.fixed {
-  background: #181a1a;
 }
 footer.in-app {
   background: #263444;
