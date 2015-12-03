@@ -36,7 +36,12 @@
             <% end %>
         </div>
         <div class="col-md-2" style="overflow:hidden; white-space:nowrap" title="<%= admin_resource_preview_text(resource) %>">
-            <% if resource.respond_to?(:url) && resource.url.present? %><%= link_to 'View', resource.url %><% end %>
+            <% if resource.respond_to?(:url) && resource.url.present? %>
+                <%= link_to "View #{resource.class.name}", resource.url %>
+            <% end %>
+            <% if resource.respond_to?(:drink_id) && resource.drink_id.present? %>
+                <%= link_to "View Drink", drink_path(resource.drink_id) %>
+            <% end -%>
             <%= admin_resource_preview_text(resource) %>
         </div>
     </div>
