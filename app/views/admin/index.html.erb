@@ -18,7 +18,7 @@
     <div class="row <%= resource.status != Flaggable::APPROVED ? 'admin-unpublished' : 'admin-published'  %>">
         <div class="col-md-1"><%= resource.id %></div>
         <div class="col-md-3"><%= resource.created_at %></div>
-        <div class="col-md-1"><%= resource.user_id %></div>
+        <div class="col-md-1"><%= resource.user_id %> <%= resource.user.name %></div>
         <div class="col-md-1"><%= resource.status %></div>
         <div class="col-md-1">
             <% case resource.status; when Flaggable::REJECTED %>
