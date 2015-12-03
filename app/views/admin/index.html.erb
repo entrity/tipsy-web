@@ -36,6 +36,7 @@
             <% end %>
         </div>
         <div class="col-md-2" style="overflow:hidden; white-space:nowrap" title="<%= admin_resource_preview_text(resource) %>">
+            <% if resource.respond_to?(:url) && resource.url.present? %><%= link_to 'View', resource.url %><% end %>
             <%= admin_resource_preview_text(resource) %>
         </div>
     </div>
