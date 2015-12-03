@@ -27,7 +27,7 @@
 				<div class="grid-cell"><i class="fa fa-heart"></i></div>
 			</div>
 			<div ng-show="!finder.drinks || !finder.drinks.length &amp;&amp; (!finder.suggestions || !finder.suggestions.length)">
-				...Nothing yet. Try adding more ingredients.
+				<p>...Nothing yet. Try adding more ingredients.</p>
 				<div class="fuzzy-finder">
 					<div id="fuzzy-finder" ng-controller="FindCtrl">
 						<ui-select theme="bootstrap" ng-model="finder.records" on-select="finder.selected($item, $select)" reset-search-input="false" search-enabled="true" close-on-select="false" autofocus="true">

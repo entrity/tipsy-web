@@ -285,7 +285,7 @@ a:hover {
   transition: .25s linear;
   z-index: 10;
 } 
-#find-results .dropdown-menu {
+#find-results .filters .dropdown-menu {
   width: 40px;
   min-width: 40px;
   left: inherit;
@@ -428,21 +428,12 @@ nav .logged-out,
 nav .logged-in {
   flex: 0 1 auto;
 }
-nav .logged-out .grid-cell:first-child,
-nav .logged-in .grid-cell:first-child {
-  flex: 0 1 auto;
-  padding-right: 16px;
-  margin-right: auto;
-}
 nav .logged-out .grid-cell,
 nav .logged-in .grid-cell {
   flex: 0 1 auto;
-  margin-right: 16px;
 }
 nav .logged-out .grid-cell:last-child,
 nav .logged-in .grid-cell:last-child {
-  margin-right: -20px;
-  padding-right: 20px;
   background: #fff;
 }
 nav .rep-cont .dropdown-menu {
@@ -474,7 +465,8 @@ nav .trophie-cont a i:first-child {
 }
 nav .user {
   cursor: pointer;
-  padding: 0 0 0 16px;
+  padding: 0 4px;
+  margin: 0 10px;
   flex: 0 1 auto;
 }
 nav .user .avatar {
@@ -846,7 +838,7 @@ aside .trophie-cont:hover {
 }
 .signin.grid {
   height: 100vh;
-  background-color: #1d2c3f;
+  background: radial-gradient(circle farthest-side at right bottom,#1d2c3f 8%,#154866 70%,#154866);
   color: #fff;
   flex-direction: column;
 }
@@ -2213,9 +2205,6 @@ footer.fixed {
   color: #fff;
   flex: 0 1 auto;
 }
-footer.fixed {
-  background: #181a1a;
-}
 footer.in-app {
   background: #263444;
   min-height: 120px;
@@ -2495,6 +2484,13 @@ header .review:hover .badge {
   }
   #drink-page .ingredients {
     max-width: 100%;
+  }
+  #drink-page .votes {
+    margin-top: 30px;
+    margin-left: -10px;
+    margin-right: -10px;
+    border-top: 1px solid rgba(136, 153, 166, 0.5);
+    border-bottom: 1px solid rgba(136, 153, 166, 0.5);
   }
   .comments-cont {
     margin-right: 0;
