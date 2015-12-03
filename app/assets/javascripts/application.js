@@ -51,6 +51,7 @@
 		'tipsy.image',
 		'tipsy.ingredient',
 		'tipsy.misc',
+		'tipsy.patchable',
 		'tipsy.rails',
 		'tipsy.review',
 		'tipsy.toolbar',

@@ -1,5 +1,6 @@
 (function () {
 	angular.module('tipsy.review', [])
+	// factory ReviewDiff is deprecated. Please use factory TipsyDiffable
 	.factory('ReviewDiff', ['Differ', function (Differ) {
 		var ReviewDiff = function (prevObj, postObj) {
 			this._prevObj = prevObj;

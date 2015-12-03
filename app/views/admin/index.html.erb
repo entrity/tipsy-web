@@ -15,6 +15,7 @@
 </div>
 
 <% @resources.each do |resource| %>
+<div ng-controller="PatchableCtrl">
     <div class="row <%= resource.status != Flaggable::APPROVED ? 'admin-unpublished' : 'admin-published'  %>">
         <div class="col-md-1"><%= resource.id %></div>
         <div class="col-md-3"><%= resource.created_at %></div>
@@ -42,9 +43,15 @@
             <% if resource.respond_to?(:drink_id) && resource.drink_id.present? %>
                 <%= link_to "View Drink", drink_path(resource.drink_id) %>
             <% end -%>
+            <% if resource.class < Patchable %>
+                <a ng-hide="diffableLoaded" ng-click="fetchDiffable('<%=j polymorphic_path(resource, format: :json) %>')">Show Diff</a>
+                <a ng-show="diffableLoaded" ng-click="diffableLoaded=false">Hide</a>
+            <% end -%>
             <%= admin_resource_preview_text(resource) %>
         </div>
     </div>
+    <div ng-if="diffableLoaded" ng-include="'/application/revision.html'"></div>
+</div>
 <% end %>
 
 <div><%= will_paginate @resources %></div>

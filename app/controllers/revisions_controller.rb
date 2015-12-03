@@ -14,6 +14,11 @@ class RevisionsController < ApplicationController
     respond_with @revision
   end
 
+  def show
+    @model = controller_path.classify.constantize
+    respond_with @model.find(params[:id])
+  end
+
   private
 
     def revision_params
