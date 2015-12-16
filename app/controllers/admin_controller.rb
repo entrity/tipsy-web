@@ -48,7 +48,7 @@ class AdminController < ApplicationController
     end
 
     def index resource_klass
-      @resources = paginated_resource resource_klass.where(params[:scope])
+      @resources = paginated_resource resource_klass.where(params[:scope]).includes(:user)
       render 'index'
     end
 

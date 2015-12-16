@@ -10,9 +10,10 @@
 		};
 		Object.defineProperties(Differ.prototype, {
 			prettyHtml: {
-				value: function () {
+				value: function (post) {
+					if (post == null) post = this.post;
 					var differ = new diff_match_patch();
-					var diffs = differ.diff_main(this.prev, this.post);
+					var diffs = differ.diff_main(this.prev, post);
 					differ.diff_cleanupEfficiency(diffs);
 					var html = [];
 					diffs.forEach(function (diff) {
