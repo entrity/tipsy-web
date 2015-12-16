@@ -25,7 +25,7 @@
 				</div>
 				<div class="faves">
 					<span class="votes"><i class="fa fa-thumbs-up"></i></span>
-					<span class="counter">33</span>
+					<span class="counter"><%= Drink.find(2817).try(:up_vote_ct) %></span>
 				</div>
 			</a>
 			<a class="grid-cell" href="/recipe/11273-mojito" style="background-image:url(/images/drinks/mojito-2.jpg);">
@@ -34,7 +34,7 @@
 				</div>
 				<div class="faves">
 					<span class="votes"><i class="fa fa-thumbs-up"></i></span>
-					<span class="counter">33</span>
+					<span class="counter"><%= Drink.find(11273).try(:up_vote_ct) %></span>
 				</div>
 			</a>
 			<a class="grid-cell" href="/recipe/5055-pina-colada" style="background-image:url(/images/drinks/pina-colada-cocktail.jpg);">
@@ -43,7 +43,7 @@
 				</div>
 				<div class="faves">
 					<span class="votes"><i class="fa fa-thumbs-up"></i></span>
-					<span class="counter">33</span>
+					<span class="counter"><%= Drink.find(5055).try(:up_vote_ct) %></span>
 				</div>
 			</a>
 		</div>
